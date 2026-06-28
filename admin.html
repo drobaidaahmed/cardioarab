@@ -233,7 +233,6 @@
         .strength-fill { height: 100%; border-radius: 2px; width: 0; transition: all 0.3s; }
     </style>
 </head>
-    <script src="protection.js"></script>
 <body>
 
 <header class="header">
@@ -290,26 +289,58 @@
     </div>
 
     <!-- ══════════════════════════════════
-         المستخدمون
+         إدارة المستخدمين
     ══════════════════════════════════ -->
     <div class="section">
         <div class="section-title">👥 إدارة المستخدمين</div>
-        <input class="search-bar" type="text" placeholder="🔍 بحث بالاسم أو البريد..." oninput="filterUsers(this.value)">
+
+        <!-- تنبيه مرحلة 1 -->
+        <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.875rem;color:#f59e0b;">
+            <strong>⚠️ المرحلة الحالية:</strong> المستخدمون يسجلون من أجهزتهم — بياناتهم محفوظة على أجهزتهم لا على سيرفر مركزي. لرؤية المستخدمين وتفعيلهم، استخدم نظام كود التفعيل أدناه. المرحلة 2 (Supabase) ستحل هذا نهائياً.
+        </div>
+
+        <!-- توليد كود تفعيل -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1.5rem;">
+            <div style="font-size:.9rem;font-weight:700;color:#fff;margin-bottom:1rem;">🔑 توليد كود تفعيل للمستخدم</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+                <div class="form-group" style="margin:0">
+                    <label>البريد الإلكتروني للمستخدم</label>
+                    <input type="email" id="activateEmail" placeholder="user@email.com" dir="ltr">
+                </div>
+                <div class="form-group" style="margin:0">
+                    <label>مدة الاشتراك</label>
+                    <select id="activateDuration" style="width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:.95rem;">
+                        <option value="30">شهر واحد (30 يوم)</option>
+                        <option value="60">شهران</option>
+                        <option value="90">3 أشهر</option>
+                        <option value="365">سنة كاملة</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="generateCode()">⚡ توليد كود التفعيل</button>
+            <div id="generatedCode" style="display:none;margin-top:1rem;background:var(--bg2);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:1rem;">
+                <div style="font-size:.8rem;color:var(--text2);margin-bottom:.4rem;">أرسل هذا الكود للمستخدم:</div>
+                <div id="codeDisplay" style="font-size:1.4rem;font-weight:700;color:var(--green);letter-spacing:.15em;font-family:monospace;"></div>
+                <div id="codeInfo" style="font-size:.78rem;color:var(--text2);margin-top:.4rem;"></div>
+            </div>
+        </div>
+
+        <!-- قائمة الأكواد النشطة -->
+        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.05em;">الأكواد النشطة</div>
         <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>الاسم</th>
-                        <th>البريد الإلكتروني</th>
-                        <th>الخطة</th>
+                        <th>الكود</th>
+                        <th>البريد</th>
+                        <th>المدة</th>
+                        <th>تاريخ الإنشاء</th>
                         <th>الحالة</th>
-                        <th>تاريخ التسجيل</th>
-                        <th>إجراءات</th>
+                        <th>إجراء</th>
                     </tr>
                 </thead>
-                <tbody id="usersTableBody">
-                    <tr><td colspan="7" class="empty">جارٍ التحميل...</td></tr>
+                <tbody id="codesTableBody">
+                    <tr><td colspan="6" class="empty">لا توجد أكواد بعد</td></tr>
                 </tbody>
             </table>
         </div>
@@ -330,6 +361,7 @@
 
 </div>
 
+<script src="supabase.js"></script>
 <script>
 // ══════════════════════════════════════════════════════
 // الكود السري للتحقق (غيّره هنا فقط)
@@ -337,34 +369,11 @@
 const VERIFY_CODE = 'o200811547';
 
 // ══════════════════════════════════════════════════════
-// أدوات localStorage
-// ══════════════════════════════════════════════════════
-function getUsers() {
-    try { return JSON.parse(localStorage.getItem('users')) || []; }
-    catch { return []; }
-}
-function saveUsers(u) { localStorage.setItem('users', JSON.stringify(u)); }
-function getCurrentUser() {
-    try { return JSON.parse(localStorage.getItem('currentUser')); }
-    catch { return null; }
-}
-function getLog() {
-    try { return JSON.parse(localStorage.getItem('securityLog')) || []; }
-    catch { return []; }
-}
-function saveLog(l) { localStorage.setItem('securityLog', JSON.stringify(l)); }
-function addLog(msg, email = '') {
-    const l = getLog();
-    l.unshift({ msg, email, time: new Date().toLocaleString('ar-SA') });
-    saveLog(l.slice(0, 100)); // keep last 100
-}
-
-// ══════════════════════════════════════════════════════
 // التحقق من صلاحية المالك
 // ══════════════════════════════════════════════════════
 (function guard() {
-    const u = getCurrentUser();
-    if (!u || u.email !== 'obaida@cardioarab.com') {
+    const u = session.get();
+    if (!u || !u.is_admin) {
         alert('⛔ غير مصرح لك بدخول هذه الصفحة!');
         window.location.href = 'index.html';
     }
@@ -374,7 +383,7 @@ function addLog(msg, email = '') {
 // تسجيل خروج
 // ══════════════════════════════════════════════════════
 function doLogout() {
-    localStorage.removeItem('currentUser');
+    session.clear();
     window.location.href = 'login.html';
 }
 
@@ -397,7 +406,7 @@ function checkStrength(v) {
 // ══════════════════════════════════════════════════════
 // تغيير كلمة المرور
 // ══════════════════════════════════════════════════════
-function changePassword() {
+async function changePassword() {
     const alertEl = document.getElementById('passAlert');
     function showAlert(msg, type) {
         alertEl.textContent = msg;
@@ -405,157 +414,235 @@ function changePassword() {
         setTimeout(() => alertEl.className = 'alert', 4000);
     }
 
-    const code       = document.getElementById('verifyCode').value.trim();
-    const currentP   = document.getElementById('currentPass').value.trim();
-    const newP       = document.getElementById('newPass').value.trim();
-    const confirmP   = document.getElementById('confirmPass').value.trim();
+    const code     = document.getElementById('verifyCode').value.trim();
+    const currentP = document.getElementById('currentPass').value.trim();
+    const newP     = document.getElementById('newPass').value.trim();
+    const confirmP = document.getElementById('confirmPass').value.trim();
 
-    if (!code || !currentP || !newP || !confirmP) {
-        return showAlert('⚠️ يرجى تعبئة جميع الحقول', 'danger');
-    }
-    if (code !== VERIFY_CODE) {
-        return showAlert('❌ الكود السري غير صحيح', 'danger');
-    }
+    if (!code || !currentP || !newP || !confirmP) return showAlert('⚠️ يرجى تعبئة جميع الحقول', 'danger');
+    if (code !== VERIFY_CODE) return showAlert('❌ الكود السري غير صحيح', 'danger');
+    if (newP.length < 6) return showAlert('⚠️ كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل', 'danger');
+    if (newP !== confirmP) return showAlert('❌ كلمتا المرور غير متطابقتين', 'danger');
+    if (newP === currentP) return showAlert('⚠️ كلمة المرور الجديدة مطابقة للحالية', 'danger');
 
-    // التحقق من كلمة المرور الحالية
-    const users = getUsers();
-    const adminIdx = users.findIndex(u => u.email === 'obaida@cardioarab.com');
-    if (adminIdx === -1) {
-        return showAlert('❌ لم يُعثر على حساب المالك', 'danger');
-    }
-    if (users[adminIdx].password !== currentP) {
-        return showAlert('❌ كلمة المرور الحالية غير صحيحة', 'danger');
-    }
-    if (newP.length < 6) {
-        return showAlert('⚠️ كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل', 'danger');
-    }
-    if (newP !== confirmP) {
-        return showAlert('❌ كلمتا المرور الجديدتان غير متطابقتين', 'danger');
-    }
-    if (newP === currentP) {
-        return showAlert('⚠️ كلمة المرور الجديدة مطابقة للحالية', 'danger');
-    }
+    try {
+        const admin = session.get();
+        const check = await db.select('users', `?id=eq.${admin.id}&password=eq.${currentP}`);
+        if (!check.length) return showAlert('❌ كلمة المرور الحالية غير صحيحة', 'danger');
 
-    users[adminIdx].password = newP;
-    saveUsers(users);
-
-    // تحديث الجلسة الحالية
-    const cur = getCurrentUser();
-    if (cur) { cur.password = newP; localStorage.setItem('currentUser', JSON.stringify(cur)); }
-
-    addLog('تم تغيير كلمة مرور المالك بنجاح');
-    showAlert('✅ تم تغيير كلمة المرور بنجاح!', 'success');
-
-    // مسح الحقول
-    ['verifyCode','currentPass','newPass','confirmPass'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('strengthFill').style.width = '0';
+        await db.update('users', `?id=eq.${admin.id}`, { password: newP });
+        admin.password = newP;
+        session.set(admin);
+        await addLog('تم تغيير كلمة مرور المالك بنجاح', admin.email);
+        showAlert('✅ تم تغيير كلمة المرور بنجاح!', 'success');
+        ['verifyCode','currentPass','newPass','confirmPass'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('strengthFill').style.width = '0';
+    } catch (e) {
+        showAlert('❌ خطأ في الاتصال', 'danger');
+    }
 }
 
 // ══════════════════════════════════════════════════════
-// عرض المستخدمين
+// نظام أكواد التفعيل
 // ══════════════════════════════════════════════════════
-let allUsers = [];
+async function generateCode() {
+    const email = document.getElementById('activateEmail').value.trim().toLowerCase();
+    const days  = parseInt(document.getElementById('activateDuration').value);
+    if (!email) return alert('يرجى إدخال البريد الإلكتروني');
 
-function loadUsers() {
-    allUsers = getUsers();
-    renderUsers(allUsers);
-    renderStats(allUsers);
+    const code = Math.random().toString(36).substring(2,6).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + days);
+
+    try {
+        // حفظ الكود في Supabase
+        await db.insert('activation_codes', {
+            code, email, days,
+            end_date: endDate.toISOString(),
+            used: false
+        });
+
+        // تطبيق الاشتراك فوراً على المستخدم إذا كان موجوداً
+        const users = await db.select('users', `?email=eq.${email}`);
+        if (users.length) {
+            const plan = days >= 365 ? 'yearly' : 'monthly';
+            const subs = await db.select('subscriptions', `?user_id=eq.${users[0].id}`);
+            if (subs.length) {
+                await db.update('subscriptions', `?user_id=eq.${users[0].id}`, {
+                    plan, active: true, end_date: endDate.toISOString(), days
+                });
+            } else {
+                await db.insert('subscriptions', {
+                    user_id: users[0].id, plan, active: true,
+                    end_date: endDate.toISOString(), days
+                });
+            }
+        }
+
+        await addLog('تم توليد كود تفعيل للبريد ' + email, email);
+        document.getElementById('codeDisplay').textContent = code;
+        document.getElementById('codeInfo').textContent = 'للبريد: ' + email + ' | مدة: ' + days + ' يوم | ينتهي: ' + endDate.toLocaleDateString('ar-SA');
+        document.getElementById('generatedCode').style.display = 'block';
+        loadCodes();
+        loadStats();
+    } catch (e) {
+        console.error(e);
+        alert('❌ خطأ في إنشاء الكود');
+    }
 }
 
-function renderStats(users) {
-    document.getElementById('statTotal').textContent   = users.length;
-    document.getElementById('statActive').textContent  = users.filter(u => u.subscription?.active).length;
-    document.getElementById('statYearly').textContent  = users.filter(u => u.subscription?.plan === 'yearly').length;
-    document.getElementById('statBlocked').textContent = users.filter(u => u.blocked).length;
+async function deleteCode(id) {
+    if (!confirm('حذف هذا الكود؟')) return;
+    try {
+        await db.delete('activation_codes', `?id=eq.${id}`);
+        loadCodes();
+    } catch (e) { alert('خطأ في الحذف'); }
+}
+
+async function loadCodes() {
+    const tbody = document.getElementById('codesTableBody');
+    tbody.innerHTML = '<tr><td colspan="6" class="empty">⏳ جاري التحميل...</td></tr>';
+    try {
+        const codes = await db.select('activation_codes', '?order=created_at.desc&limit=50');
+        if (!codes.length) {
+            tbody.innerHTML = '<tr><td colspan="6" class="empty">لا توجد أكواد بعد</td></tr>';
+            return;
+        }
+        tbody.innerHTML = codes.map(c => `<tr>
+            <td style="font-family:monospace;font-size:1rem;font-weight:700;color:${c.used ? 'var(--text2)' : 'var(--green)'};">${c.code}</td>
+            <td dir="ltr" style="text-align:left;font-size:.82rem;">${c.email}</td>
+            <td>${c.days} يوم</td>
+            <td style="font-size:.8rem;color:var(--text2);">${new Date(c.created_at).toLocaleDateString('ar-SA')}</td>
+            <td><span class="badge-plan ${c.used ? 'badge-free' : 'badge-active'}">${c.used ? '✅ مُستخدم' : '⏳ بانتظار'}</span></td>
+            <td><button class="btn btn-danger btn-sm" onclick="deleteCode('${c.id}')">حذف</button></td>
+        </tr>`).join('');
+    } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty">❌ خطأ في التحميل</td></tr>';
+    }
+}
+
+async function loadStats() {
+    try {
+        const [users, codes, activeSubs, blocked] = await Promise.all([
+            db.select('users', '?select=count'),
+            db.select('activation_codes', '?select=count'),
+            db.select('subscriptions', '?active=eq.true&select=count'),
+            db.select('users', '?blocked=eq.true&select=count')
+        ]);
+        document.getElementById('statTotal').textContent   = users[0]?.count ?? 0;
+        document.getElementById('statActive').textContent  = activeSubs[0]?.count ?? 0;
+        document.getElementById('statYearly').textContent  = codes[0]?.count ?? 0;
+        document.getElementById('statBlocked').textContent = blocked[0]?.count ?? 0;
+    } catch (e) { console.warn('Stats error', e); }
+}
+
+async function loadUsers(q = '') {
+    const tbody = document.getElementById('usersTableBody');
+    tbody.innerHTML = '<tr><td colspan="7" class="empty">⏳ جاري التحميل...</td></tr>';
+    try {
+        let query = '?order=created_at.desc';
+        if (q) query += `&or=(name.ilike.*${q}*,email.ilike.*${q}*)`;
+        const users = await db.select('users', query);
+        renderUsers(users);
+    } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="7" class="empty">❌ خطأ في التحميل</td></tr>';
+    }
 }
 
 function filterUsers(q) {
-    const f = q.trim().toLowerCase();
-    renderUsers(f ? allUsers.filter(u =>
-        (u.name||'').toLowerCase().includes(f) ||
-        (u.email||'').toLowerCase().includes(f)
-    ) : allUsers);
+    clearTimeout(window._filterTimer);
+    window._filterTimer = setTimeout(() => loadUsers(q), 400);
 }
 
-function renderUsers(users) {
+async function renderUsers(users) {
     const tbody = document.getElementById('usersTableBody');
     if (!users.length) {
         tbody.innerHTML = '<tr><td colspan="7" class="empty">لا يوجد مستخدمون</td></tr>';
         return;
     }
+    // جلب الاشتراكات
+    const subs = await db.select('subscriptions', '?select=user_id,plan,active,end_date');
+    const subMap = {};
+    subs.forEach(s => subMap[s.user_id] = s);
+
+    const now = new Date();
     tbody.innerHTML = users.map((u, i) => {
-        const plan = u.subscription?.plan || 'free';
-        const active = u.subscription?.active;
-        const isAdmin = u.email === 'obaida@cardioarab.com';
+        const sub = subMap[u.id] || {};
+        const plan = sub.plan || 'free';
+        const endDate = sub.end_date ? new Date(sub.end_date) : null;
+        let active = sub.active;
+        if (active && endDate && now > endDate && !u.is_admin) active = false;
+        const daysLeft = endDate && active ? Math.ceil((endDate - now) / 86400000) : null;
+        const endLabel = endDate ? endDate.toLocaleDateString('ar-SA') : '—';
+
         return `<tr>
             <td>${i + 1}</td>
-            <td>${u.name || '—'} ${isAdmin ? '<span class="badge-plan badge-admin">مالك</span>' : ''}</td>
+            <td>${u.name || '—'} ${u.is_admin ? '<span class="badge-plan badge-admin">مالك</span>' : ''}</td>
             <td dir="ltr" style="text-align:left;">${u.email}</td>
-            <td>
-                <span class="badge-plan ${plan === 'yearly' ? 'badge-yearly' : plan === 'monthly' ? 'badge-monthly' : 'badge-free'}">
-                    ${plan === 'yearly' ? 'سنوي' : plan === 'monthly' ? 'شهري' : 'مجاني'}
-                </span>
-            </td>
+            <td><span class="badge-plan ${plan === 'yearly' ? 'badge-yearly' : plan === 'monthly' ? 'badge-monthly' : 'badge-free'}">
+                ${plan === 'yearly' ? 'سنوي' : plan === 'monthly' ? 'شهري' : 'مجاني'}
+            </span></td>
             <td>
                 <span class="badge-plan ${u.blocked ? 'badge-blocked' : active ? 'badge-active' : 'badge-free'}">
-                    ${u.blocked ? '🚫 محظور' : active ? '✅ نشط' : '⏸ غير نشط'}
+                    ${u.blocked ? '🚫 محظور' : active ? `✅ نشط${daysLeft !== null ? ' · ' + daysLeft + ' يوم' : ''}` : '⏸ منتهي'}
                 </span>
+                ${endDate && !u.is_admin ? `<div style="font-size:.72rem;color:var(--text2);margin-top:2px;">ينتهي: ${endLabel}</div>` : ''}
             </td>
-            <td style="font-size:0.8rem; color:var(--text2);">${u.date || '—'}</td>
-            <td>
-                ${isAdmin ? '<span style="color:var(--text2);font-size:0.8rem;">—</span>' : `
-                    ${u.blocked
-                        ? `<button class="btn btn-success btn-sm" onclick="toggleBlock('${u.email}', false)">رفع الحظر</button>`
-                        : `<button class="btn btn-danger btn-sm" onclick="toggleBlock('${u.email}', true)">حظر</button>`
-                    }
-                    <button class="btn btn-sm" style="background:rgba(239,68,68,0.08);color:#ef4444;border:1px solid rgba(239,68,68,0.2);margin-right:4px;" onclick="confirmDelete('${u.email}')">حذف</button>
-                `}
-            </td>
+            <td style="font-size:0.8rem;color:var(--text2);">${new Date(u.created_at).toLocaleDateString('ar-SA')}</td>
+            <td>${u.is_admin ? '<span style="color:var(--text2);font-size:0.8rem;">—</span>' : `
+                ${u.blocked
+                    ? `<button class="btn btn-success btn-sm" onclick="toggleBlock('${u.id}', false)">رفع الحظر</button>`
+                    : `<button class="btn btn-danger btn-sm" onclick="toggleBlock('${u.id}', true)">حظر</button>`}
+                <button class="btn btn-sm" style="background:rgba(239,68,68,0.08);color:#ef4444;border:1px solid rgba(239,68,68,0.2);margin-right:4px;" onclick="confirmDelete('${u.id}', '${u.email}')">حذف</button>
+            `}</td>
         </tr>`;
     }).join('');
 }
 
-function toggleBlock(email, block) {
-    const users = getUsers();
-    const idx = users.findIndex(u => u.email === email);
-    if (idx === -1) return;
-    users[idx].blocked = block;
-    if (block) { users[idx].blockDate = new Date().toISOString(); }
-    else { delete users[idx].blockDate; }
-    saveUsers(users);
-    addLog(block ? `تم حظر المستخدم ${email}` : `تم رفع الحظر عن ${email}`, email);
-    loadUsers();
+async function toggleBlock(id, block) {
+    try {
+        await db.update('users', `?id=eq.${id}`, { blocked: block, block_date: block ? new Date().toISOString() : null });
+        await addLog(block ? 'تم حظر المستخدم' : 'تم رفع الحظر');
+        loadUsers();
+    } catch (e) { alert('خطأ في العملية'); }
 }
 
-function confirmDelete(email) {
+async function confirmDelete(id, email) {
     if (!confirm(`هل أنت متأكد من حذف الحساب:\n${email}؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) return;
-    let users = getUsers().filter(u => u.email !== email);
-    saveUsers(users);
-    addLog(`تم حذف المستخدم ${email}`, email);
-    loadUsers();
+    try {
+        await db.delete('users', `?id=eq.${id}`);
+        await addLog(`تم حذف المستخدم ${email}`, email);
+        loadUsers();
+    } catch (e) { alert('خطأ في الحذف'); }
 }
 
 // ══════════════════════════════════════════════════════
 // سجل الأمان
 // ══════════════════════════════════════════════════════
-function loadLog() {
-    const log = getLog();
+async function loadLog() {
     const list = document.getElementById('logList');
-    if (!log.length) {
-        list.innerHTML = '<li><span class="msg">لا توجد سجلات بعد.</span></li>';
-        return;
+    try {
+        const log = await db.select('activity_log', '?order=created_at.desc&limit=30');
+        if (!log.length) {
+            list.innerHTML = '<li><span class="msg">لا توجد سجلات بعد.</span></li>';
+            return;
+        }
+        list.innerHTML = log.map(l => `
+            <li>
+                <span class="msg">${l.message} ${l.email ? `<span style="color:var(--text2)">(${l.email})</span>` : ''}</span>
+                <span class="time">${new Date(l.created_at).toLocaleString('ar-SA')}</span>
+            </li>
+        `).join('');
+    } catch (e) {
+        list.innerHTML = '<li><span class="msg">❌ خطأ في تحميل السجل</span></li>';
     }
-    list.innerHTML = log.slice(0, 30).map(l => `
-        <li>
-            <span class="msg">${l.msg} ${l.email ? `<span style="color:var(--text2)">(${l.email})</span>` : ''}</span>
-            <span class="time">${l.time}</span>
-        </li>
-    `).join('');
 }
 
-function clearLog() {
+async function clearLog() {
     if (!confirm('هل تريد مسح سجل الأمان كاملاً؟')) return;
-    saveLog([]);
+    try {
+        await db.delete('activity_log', '?id=gt.0');
+    } catch {}
     loadLog();
 }
 
@@ -563,12 +650,14 @@ function clearLog() {
 // تهيئة
 // ══════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', function () {
+    loadStats();
+    loadCodes();
     loadUsers();
     loadLog();
-    // تحديث تلقائي كل 30 ثانية
-    setInterval(() => { loadUsers(); loadLog(); }, 30000);
+    setInterval(() => { loadStats(); loadUsers(); loadLog(); }, 30000);
 });
 </script>
 
+<script src="protection.js"></script>
 </body>
 </html>

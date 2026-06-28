@@ -21,6 +21,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .form-group input[dir="ltr"]{text-align:left;direction:ltr}
 .btn{width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;font-family:var(--font);font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;margin-top:.5rem}
 .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(139,92,246,.4)}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .alert{padding:10px 14px;border-radius:8px;margin-bottom:1rem;font-size:.875rem;font-weight:600;display:none}
 .alert.show{display:block}
 .alert-success{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
@@ -34,15 +35,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 </style>
 </head>
 <body>
-
 <div class="card">
   <div class="logo">
     <h1>📝 <span>CardioArab</span></h1>
     <p>إنشاء حساب جديد</p>
   </div>
-
   <div class="alert" id="msg"></div>
-
   <div class="form-group">
     <label>👤 الاسم الكامل</label>
     <input type="text" id="regName" placeholder="د. الاسم الكامل">
@@ -55,65 +53,73 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     <label>🔑 كلمة المرور</label>
     <input type="password" id="regPass" placeholder="6 أحرف على الأقل" dir="ltr">
   </div>
-
-  <button class="btn" onclick="handleRegister()">إنشاء الحساب</button>
-
+  <button class="btn" id="regBtn" onclick="handleRegister()">إنشاء الحساب</button>
   <div class="note">
     <strong>ملاحظة:</strong> بعد التسجيل، أرسل إيصال الدفع عبر شام كاش وسيتم تفعيل حسابك خلال 24 ساعة.
   </div>
-
   <div class="links">
     <p>لديك حساب؟ <a href="login.html">تسجيل الدخول</a></p>
     <p><a href="index.html">🏠 العودة للرئيسية</a></p>
   </div>
 </div>
 
+<script src="supabase.js"></script>
 <script>
-function getUsers(){try{return JSON.parse(localStorage.getItem('users'))||[];}catch{return[];}}
-function saveUsers(u){localStorage.setItem('users',JSON.stringify(u));}
+function showMsg(txt, type) {
+  const el = document.getElementById('msg');
+  el.textContent = txt;
+  el.className = 'alert show alert-' + type;
+}
 
-// init admin
-(function(){
-  const users=getUsers();
-  if(!users.find(u=>u.email==='obaida@cardioarab.com')){
-    users.push({name:'المالك',email:'obaida@cardioarab.com',password:'cardio2026',
-      subscription:{plan:'yearly',active:true},blocked:false,
-      date:new Date().toLocaleDateString('ar-SA'),isAdmin:true});
-    saveUsers(users);
+async function handleRegister() {
+  const name  = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim().toLowerCase();
+  const pass  = document.getElementById('regPass').value.trim();
+  const btn   = document.getElementById('regBtn');
+
+  if (!name || !email || !pass) return showMsg('⚠️ يرجى تعبئة جميع الحقول', 'danger');
+  if (pass.length < 6) return showMsg('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'danger');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showMsg('⚠️ البريد الإلكتروني غير صحيح', 'danger');
+
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري الإنشاء...';
+
+  try {
+    // تحقق إذا الإيميل موجود
+    const existing = await db.select('users', `?email=eq.${email}`);
+    if (existing.length > 0) {
+      showMsg('❌ هذا البريد مسجل مسبقاً', 'danger');
+      btn.disabled = false;
+      btn.textContent = 'إنشاء الحساب';
+      return;
+    }
+
+    // إنشاء المستخدم
+    const newUser = await db.insert('users', {
+      name, email, password: pass,
+      is_admin: false, blocked: false
+    });
+
+    // إنشاء اشتراك مجاني
+    await db.insert('subscriptions', {
+      user_id: newUser[0].id,
+      plan: 'free', active: false
+    });
+
+    await addLog('تسجيل حساب جديد: ' + name, email);
+    showMsg('✅ تم إنشاء الحساب! سيتم تفعيله بعد التحقق من الدفع.', 'success');
+    setTimeout(() => { window.location.href = 'index.html'; }, 2500);
+
+  } catch (e) {
+    console.error(e);
+    showMsg('❌ خطأ في الاتصال، حاول مرة أخرى', 'danger');
+    btn.disabled = false;
+    btn.textContent = 'إنشاء الحساب';
   }
-})();
-
-function showMsg(txt, type){
-  const el=document.getElementById('msg');
-  el.textContent=txt;
-  el.className='alert show alert-'+type;
 }
 
-function handleRegister(){
-  const name=document.getElementById('regName').value.trim();
-  const email=document.getElementById('regEmail').value.trim();
-  const pass=document.getElementById('regPass').value.trim();
-
-  if(!name||!email||!pass) return showMsg('⚠️ يرجى تعبئة جميع الحقول','danger');
-  if(pass.length<6) return showMsg('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل','danger');
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showMsg('⚠️ البريد الإلكتروني غير صحيح','danger');
-
-  const users=getUsers();
-  if(users.find(u=>u.email===email)) return showMsg('❌ هذا البريد مسجل مسبقاً','danger');
-
-  users.push({
-    name, email, password: pass,
-    subscription:{plan:'free',active:false},
-    blocked:false,
-    date:new Date().toLocaleDateString('ar-SA')
-  });
-  saveUsers(users);
-
-  showMsg('✅ تم إنشاء الحساب! سيتم تفعيله بعد التحقق من الدفع.','success');
-  setTimeout(()=>{ window.location.href='index.html'; }, 2500);
-}
-
-document.addEventListener('keydown', e=>{ if(e.key==='Enter') handleRegister(); });
+document.addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });
 </script>
+<script src="protection.js"></script>
 </body>
 </html>
