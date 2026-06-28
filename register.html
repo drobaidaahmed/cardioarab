@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إنشاء حساب — CardioArab</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#8b5cf6;--green:#10b981;--red:#ef4444;--font:'IBM Plex Sans Arabic',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem}
+.card{width:100%;max-width:440px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:2.25rem 2rem}
+.logo{text-align:center;margin-bottom:2rem}
+.logo h1{font-size:1.5rem;font-weight:700;color:#fff}
+.logo h1 span{color:var(--accent)}
+.logo p{color:var(--text2);font-size:.88rem;margin-top:.35rem}
+.form-group{margin-bottom:1.1rem}
+.form-group label{display:block;font-size:.83rem;color:var(--text2);margin-bottom:.4rem;font-weight:600}
+.form-group input{width:100%;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:.95rem;transition:.2s}
+.form-group input:focus{outline:none;border-color:var(--accent)}
+.form-group input[dir="ltr"]{text-align:left;direction:ltr}
+.btn{width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;font-family:var(--font);font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;margin-top:.5rem}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(139,92,246,.4)}
+.alert{padding:10px 14px;border-radius:8px;margin-bottom:1rem;font-size:.875rem;font-weight:600;display:none}
+.alert.show{display:block}
+.alert-success{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.alert-danger{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.links{text-align:center;margin-top:1.25rem}
+.links a{color:var(--accent);text-decoration:none;font-weight:600;font-size:.88rem}
+.links a:hover{text-decoration:underline}
+.links p{margin:.4rem 0;color:var(--text2);font-size:.85rem}
+.note{background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);border-radius:10px;padding:.9rem 1rem;margin-top:1.25rem;font-size:.8rem;color:var(--text2);line-height:1.6}
+.note strong{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">
+    <h1>📝 <span>CardioArab</span></h1>
+    <p>إنشاء حساب جديد</p>
+  </div>
+
+  <div class="alert" id="msg"></div>
+
+  <div class="form-group">
+    <label>👤 الاسم الكامل</label>
+    <input type="text" id="regName" placeholder="د. الاسم الكامل">
+  </div>
+  <div class="form-group">
+    <label>📧 البريد الإلكتروني</label>
+    <input type="email" id="regEmail" placeholder="example@email.com" dir="ltr">
+  </div>
+  <div class="form-group">
+    <label>🔑 كلمة المرور</label>
+    <input type="password" id="regPass" placeholder="6 أحرف على الأقل" dir="ltr">
+  </div>
+
+  <button class="btn" onclick="handleRegister()">إنشاء الحساب</button>
+
+  <div class="note">
+    <strong>ملاحظة:</strong> بعد التسجيل، أرسل إيصال الدفع عبر شام كاش وسيتم تفعيل حسابك خلال 24 ساعة.
+  </div>
+
+  <div class="links">
+    <p>لديك حساب؟ <a href="login.html">تسجيل الدخول</a></p>
+    <p><a href="index.html">🏠 العودة للرئيسية</a></p>
+  </div>
+</div>
+
+<script>
+function getUsers(){try{return JSON.parse(localStorage.getItem('users'))||[];}catch{return[];}}
+function saveUsers(u){localStorage.setItem('users',JSON.stringify(u));}
+
+// init admin
+(function(){
+  const users=getUsers();
+  if(!users.find(u=>u.email==='obaida@cardioarab.com')){
+    users.push({name:'المالك',email:'obaida@cardioarab.com',password:'cardio2026',
+      subscription:{plan:'yearly',active:true},blocked:false,
+      date:new Date().toLocaleDateString('ar-SA'),isAdmin:true});
+    saveUsers(users);
+  }
+})();
+
+function showMsg(txt, type){
+  const el=document.getElementById('msg');
+  el.textContent=txt;
+  el.className='alert show alert-'+type;
+}
+
+function handleRegister(){
+  const name=document.getElementById('regName').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const pass=document.getElementById('regPass').value.trim();
+
+  if(!name||!email||!pass) return showMsg('⚠️ يرجى تعبئة جميع الحقول','danger');
+  if(pass.length<6) return showMsg('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل','danger');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showMsg('⚠️ البريد الإلكتروني غير صحيح','danger');
+
+  const users=getUsers();
+  if(users.find(u=>u.email===email)) return showMsg('❌ هذا البريد مسجل مسبقاً','danger');
+
+  users.push({
+    name, email, password: pass,
+    subscription:{plan:'free',active:false},
+    blocked:false,
+    date:new Date().toLocaleDateString('ar-SA')
+  });
+  saveUsers(users);
+
+  showMsg('✅ تم إنشاء الحساب! سيتم تفعيله بعد التحقق من الدفع.','success');
+  setTimeout(()=>{ window.location.href='index.html'; }, 2500);
+}
+
+document.addEventListener('keydown', e=>{ if(e.key==='Enter') handleRegister(); });
+</script>
+</body>
+</html>

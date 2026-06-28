@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - CardioArab</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #f0f2f5, #e2e8f0);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .login-container {
+            max-width: 420px;
+            width: 100%;
+            padding: 35px 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+        }
+        .login-container .logo { text-align: center; margin-bottom: 30px; }
+        .login-container .logo h1 { font-size: 28px; color: #2d3748; }
+        .login-container .logo h1 span { color: #4299e1; }
+        .login-container .logo p { color: #718096; font-size: 16px; margin-top: 5px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; font-size: 14px; }
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            background: #f7fafc;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #4299e1;
+            background: white;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(66,153,225,0.4);
+        }
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .alert-success { background: #c6f6d5; color: #22543d; border-right: 4px solid #38a169; }
+        .alert-danger { background: #fed7d7; color: #9b2c2c; border-right: 4px solid #e53e3e; }
+        .links { text-align: center; margin-top: 20px; }
+        .links a { color: #4299e1; text-decoration: none; font-weight: 600; }
+        .links a:hover { text-decoration: underline; }
+        .links p { margin: 8px 0; color: #4a5568; }
+        .demo-info {
+            background: #f7fafc;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+            border: 1px dashed #cbd5e0;
+        }
+        .demo-info p { font-size: 14px; color: #4a5568; margin: 4px 0; }
+        .demo-info strong { color: #2d3748; }
+        .demo-info .admin-badge {
+            display: inline-block;
+            background: #f6ad55;
+            color: #744210;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>🔐 <span>CardioArab</span></h1>
+            <p>تسجيل الدخول إلى حسابك</p>
+        </div>
+        <div id="loginMessage"></div>
+        <div class="form-group">
+            <label>📧 البريد الإلكتروني</label>
+            <input type="email" id="loginEmail" placeholder="example@email.com" dir="ltr">
+        </div>
+        <div class="form-group">
+            <label>🔑 كلمة المرور</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" dir="ltr">
+        </div>
+        <button class="btn-primary" onclick="handleLogin()">🚀 تسجيل الدخول</button>
+        <div class="links">
+            <p>ليس لديك حساب؟ <a href="register.html">إنشاء حساب جديد</a></p>
+            <p><a href="index.html">🏠 العودة إلى الرئيسية</a></p>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 🔧 نظام تسجيل الدخول المدمج
+        // ==========================================
+
+        // حل مشكلة file:// protocol
+        var _store = {};
+        var storage = (function() {
+            try { localStorage.setItem('_t', '1'); localStorage.removeItem('_t'); return localStorage; }
+            catch(e) {
+                return {
+                    getItem: function(k) { return _store[k] || null; },
+                    setItem: function(k, v) { _store[k] = v; },
+                    removeItem: function(k) { delete _store[k]; }
+                };
+            }
+        })();
+
+        function getUsers() {
+            try { return JSON.parse(storage.getItem('users')) || []; } 
+            catch (e) { return []; }
+        }
+
+        function saveUsers(users) {
+            storage.setItem('users', JSON.stringify(users));
+        }
+
+        // إنشاء حساب المالك تلقائياً عند فتح الصفحة
+        (function createAdminAccount() {
+            let users = getUsers();
+            const adminExists = users.find(u => u.email === 'obaida@cardioarab.com');
+            if (!adminExists) {
+                users.push({
+                    name: 'المالك',
+                    email: 'obaida@cardioarab.com',
+                    password: 'cardio2026',
+                    subscription: { plan: 'yearly', active: true },
+                    blocked: false,
+                    date: new Date().toLocaleString('ar-SA'),
+                    isAdmin: true
+                });
+                saveUsers(users);
+                console.log('✅ تم إنشاء حساب المالك تلقائياً');
+            }
+        })();
+
+        // دالة تسجيل الدخول
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const messageEl = document.getElementById('loginMessage');
+
+            if (!email || !password) {
+                messageEl.innerHTML = '<div class="alert alert-danger">⚠️ الرجاء تعبئة جميع الحقول</div>';
+                return;
+            }
+
+            const users = getUsers();
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (!user) {
+                messageEl.innerHTML = '<div class="alert alert-danger">❌ البريد الإلكتروني أو كلمة المرور غير صحيحة</div>';
+                return;
+            }
+
+            if (user.blocked) {
+                messageEl.innerHTML = '<div class="alert alert-danger">🚫 هذا الحساب محظور. يرجى التواصل مع المالك</div>';
+                return;
+            }
+
+            // تسجيل الدخول الناجح
+            storage.setItem('currentUser', JSON.stringify(user));
+            messageEl.innerHTML = '<div class="alert alert-success">✅ تم تسجيل الدخول بنجاح!</div>';
+            
+            setTimeout(() => {
+                if (user.email === 'obaida@cardioarab.com') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }, 1500);
+        }
+
+        // السماح بالضغط على Enter
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { handleLogin(); }
+        });
+    </script>
+</body>
+</html>
