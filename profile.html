@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ملفي — CardioArab</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#8b5cf6;--green:#10b981;--red:#ef4444;--gold:#f59e0b;--font:'IBM Plex Sans Arabic',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
+.header{background:linear-gradient(135deg,#1a0a3a,#0b1220);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;position:sticky;top:0;z-index:100}
+.logo{font-size:1.2rem;font-weight:700}.logo span{color:var(--accent)}
+nav{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+nav a{color:var(--text2);text-decoration:none;padding:6px 14px;border-radius:8px;font-size:.875rem;transition:.2s;border:1px solid transparent}
+nav a:hover{color:var(--text);border-color:var(--border);background:var(--bg3)}
+.btn-logout{background:rgba(239,68,68,.15)!important;color:var(--red)!important;border-color:rgba(239,68,68,.3)!important;cursor:pointer}
+.container{max-width:600px;margin:0 auto;padding:2rem 1.5rem}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:2rem;margin-bottom:1.5rem}
+.avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1rem}
+.user-name{text-align:center;font-size:1.3rem;font-weight:700;margin-bottom:.25rem}
+.user-email{text-align:center;color:var(--text2);font-size:.88rem;margin-bottom:1.5rem}
+
+/* بطاقة الاشتراك */
+.sub-card{border-radius:16px;padding:1.5rem;text-align:center;margin-bottom:0}
+.sub-card.active{background:rgba(16,185,129,.1);border:2px solid rgba(16,185,129,.4)}
+.sub-card.inactive{background:rgba(239,68,68,.1);border:2px solid rgba(239,68,68,.4)}
+.sub-status{font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+.sub-card.active .sub-status{color:var(--green)}
+.sub-card.inactive .sub-status{color:var(--red)}
+.sub-detail{font-size:.85rem;color:var(--text2);line-height:1.8}
+.days-badge{display:inline-block;padding:6px 20px;border-radius:30px;font-size:1.5rem;font-weight:700;margin:1rem 0}
+.sub-card.active .days-badge{background:rgba(16,185,129,.2);color:var(--green)}
+.sub-card.inactive .days-badge{background:rgba(239,68,68,.2);color:var(--red)}
+
+/* تغيير كلمة المرور */
+.section-title{font-size:1rem;font-weight:700;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:.83rem;color:var(--text2);margin-bottom:.4rem;font-weight:600}
+.form-group input{width:100%;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:.95rem;transition:.2s}
+.form-group input:focus{outline:none;border-color:var(--accent)}
+.btn{width:100%;padding:11px;border:none;border-radius:10px;font-family:var(--font);font-size:.95rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(139,92,246,.4)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.alert{padding:10px 14px;border-radius:8px;margin-top:1rem;font-size:.875rem;font-weight:600;display:none}
+.alert.show{display:block}
+.alert-success{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.alert-danger{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.strength-bar{height:4px;border-radius:2px;margin-top:6px;background:var(--border);overflow:hidden}
+.strength-fill{height:100%;border-radius:2px;width:0;transition:all .3s}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.88rem}
+.info-row:last-child{border-bottom:none}
+.info-row .label{color:var(--text2)}
+.info-row .value{font-weight:600}
+</style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">💓 <span>CardioArab</span></div>
+    <nav>
+        <a href="index.html">🏠 الرئيسية</a>
+        <a href="guidelines.html">📚 المرشدات</a>
+        <a href="#" class="btn-logout" onclick="doLogout()">🚪 خروج</a>
+    </nav>
+</header>
+
+<div class="container">
+
+    <!-- معلومات المستخدم -->
+    <div class="card">
+        <div class="avatar" id="avatarEl">👤</div>
+        <div class="user-name" id="userName">—</div>
+        <div class="user-email" id="userEmail">—</div>
+
+        <!-- حالة الاشتراك -->
+        <div class="sub-card inactive" id="subCard">
+            <div class="sub-status" id="subStatus">⏸ الاشتراك غير نشط</div>
+            <div class="days-badge" id="daysBadge">—</div>
+            <div class="sub-detail" id="subDetail">لم يتم تفعيل اشتراكك بعد</div>
+        </div>
+    </div>
+
+    <!-- معلومات الحساب -->
+    <div class="card">
+        <div class="section-title">📋 معلومات الحساب</div>
+        <div class="info-row"><span class="label">الاسم</span><span class="value" id="infoName">—</span></div>
+        <div class="info-row"><span class="label">البريد الإلكتروني</span><span class="value" id="infoEmail" dir="ltr">—</span></div>
+        <div class="info-row"><span class="label">نوع الحساب</span><span class="value" id="infoType">—</span></div>
+        <div class="info-row"><span class="label">تاريخ التسجيل</span><span class="value" id="infoDate">—</span></div>
+    </div>
+
+    <!-- تغيير كلمة المرور -->
+    <div class="card">
+        <div class="section-title">🔑 تغيير كلمة المرور</div>
+        <div class="form-group">
+            <label>كلمة المرور الحالية</label>
+            <input type="password" id="curPass" placeholder="••••••••" dir="ltr">
+        </div>
+        <div class="form-group">
+            <label>كلمة المرور الجديدة</label>
+            <input type="password" id="newPass" placeholder="6 أحرف على الأقل" dir="ltr" oninput="checkStr(this.value)">
+            <div class="strength-bar"><div class="strength-fill" id="sf"></div></div>
+        </div>
+        <div class="form-group">
+            <label>تأكيد كلمة المرور الجديدة</label>
+            <input type="password" id="cfmPass" placeholder="••••••••" dir="ltr">
+        </div>
+        <button class="btn btn-primary" id="changeBtn" onclick="changePass()">🔐 تغيير كلمة المرور</button>
+        <div class="alert" id="passAlert"></div>
+    </div>
+
+</div>
+
+<script>
+const SB_URL = 'https://ikisgwnsxadiujueeava.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlraXNnd25zeGFkaXVqdWVlYXZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NzU5ODYsImV4cCI6MjA5ODI1MTk4Nn0.Ar45kQJPOgJ9ITqGVv9XeSxpGgyx53s6CTmFCNDBa-g';
+const H = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+
+async function sbGet(t, q='') { const r=await fetch(`${SB_URL}/rest/v1/${t}${q}`,{headers:H}); return r.json(); }
+async function sbPatch(t, q, d) { const r=await fetch(`${SB_URL}/rest/v1/${t}${q}`,{method:'PATCH',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(d)}); return r.json(); }
+
+// Auth
+const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+if (!user) { location.href = 'login.html'; }
+
+function doLogout() { localStorage.removeItem('currentUser'); location.href = 'login.html'; }
+
+// تحميل البيانات
+async function loadProfile() {
+    // معلومات المستخدم
+    document.getElementById('userName').textContent = user.name || '—';
+    document.getElementById('userEmail').textContent = user.email || '—';
+    document.getElementById('avatarEl').textContent = user.is_admin ? '👑' : '👤';
+    document.getElementById('infoName').textContent = user.name || '—';
+    document.getElementById('infoEmail').textContent = user.email || '—';
+    document.getElementById('infoType').textContent = user.is_admin ? '👑 مالك' : '👤 مستخدم';
+    document.getElementById('infoDate').textContent = new Date(user.created_at).toLocaleDateString('ar-SA');
+
+    // حالة الاشتراك
+    if (user.is_admin) {
+        const card = document.getElementById('subCard');
+        card.className = 'sub-card active';
+        document.getElementById('subStatus').textContent = '✅ حساب المالك';
+        document.getElementById('daysBadge').textContent = '♾️ دائم';
+        document.getElementById('subDetail').textContent = 'وصول كامل وغير محدود';
+        return;
+    }
+
+    try {
+        const subs = await sbGet('subscriptions', `?user_id=eq.${user.id}&order=created_at.desc&limit=1`);
+        const sub = subs[0];
+        const card = document.getElementById('subCard');
+        const now = new Date();
+
+        if (sub && sub.active && sub.end_date && new Date(sub.end_date) > now) {
+            const endDate = new Date(sub.end_date);
+            const daysLeft = Math.ceil((endDate - now) / 86400000);
+            card.className = 'sub-card active';
+            document.getElementById('subStatus').textContent = '✅ الاشتراك نشط';
+            document.getElementById('daysBadge').textContent = daysLeft + ' يوم متبقي';
+            document.getElementById('subDetail').textContent = 'ينتهي في: ' + endDate.toLocaleDateString('ar-SA');
+        } else {
+            card.className = 'sub-card inactive';
+            document.getElementById('subStatus').textContent = '🔴 الاشتراك غير نشط';
+            document.getElementById('daysBadge').textContent = 'غير مفعّل';
+            document.getElementById('subDetail').textContent = 'أرسل إيصال الدفع عبر شام كاش للتفعيل';
+        }
+    } catch (e) {
+        document.getElementById('subDetail').textContent = 'خطأ في تحميل بيانات الاشتراك';
+    }
+}
+
+// قوة كلمة المرور
+function checkStr(v) {
+    let s=0;
+    if(v.length>=6)s++;if(v.length>=10)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;
+    const f=document.getElementById('sf');
+    f.style.width=(s*20)+'%';
+    f.style.background=['#ef4444','#f59e0b','#f59e0b','#10b981','#10b981'][s-1]||'#1e2d45';
+}
+
+// تغيير كلمة المرور
+async function changePass() {
+    const el = document.getElementById('passAlert');
+    const show = (m,t) => { el.textContent=m; el.className='alert show alert-'+t; setTimeout(()=>el.className='alert',4000); };
+    const cur = document.getElementById('curPass').value.trim();
+    const nw  = document.getElementById('newPass').value.trim();
+    const cf  = document.getElementById('cfmPass').value.trim();
+    if (!cur||!nw||!cf) return show('⚠️ يرجى تعبئة جميع الحقول','danger');
+    if (nw.length<6) return show('⚠️ كلمة المرور قصيرة جداً','danger');
+    if (nw!==cf) return show('❌ كلمتا المرور غير متطابقتين','danger');
+    if (nw===cur) return show('⚠️ كلمة المرور مطابقة للحالية','danger');
+
+    const btn = document.getElementById('changeBtn');
+    btn.disabled=true; btn.textContent='⏳ جاري...';
+    try {
+        const check = await sbGet('users', `?id=eq.${user.id}&password=eq.${cur}`);
+        if (!check.length) { show('❌ كلمة المرور الحالية غير صحيحة','danger'); btn.disabled=false; btn.textContent='🔐 تغيير كلمة المرور'; return; }
+        await sbPatch('users', `?id=eq.${user.id}`, {password: nw});
+        user.password = nw;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        show('✅ تم تغيير كلمة المرور بنجاح!','success');
+        ['curPass','newPass','cfmPass'].forEach(id=>document.getElementById(id).value='');
+        document.getElementById('sf').style.width='0';
+    } catch { show('❌ خطأ في الاتصال','danger'); }
+    btn.disabled=false; btn.textContent='🔐 تغيير كلمة المرور';
+}
+
+loadProfile();
+</script>
+<script src="protection.js"></script>
+</body>
+</html>

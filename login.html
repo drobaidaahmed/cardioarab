@@ -52,6 +52,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
 <script src="supabase.js"></script>
 <script>
 function showMsg(txt, type) {
@@ -71,14 +72,24 @@ async function handleLogin() {
   btn.textContent = '⏳ جاري الدخول...';
 
   try {
-    const users = await db.select('users', `?email=eq.${email}&password=eq.${pass}`);
+    // جلب المستخدم عبر الإيميل فقط (المقارنة ستتم بـ bcrypt)
+    const users = await db.select('users', `?email=eq.${email}`);
     if (!users.length) {
       showMsg('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة', 'danger');
       btn.disabled = false; btn.textContent = 'تسجيل الدخول';
       return;
     }
 
+    // التحقق من كلمة المرور بـ bcrypt
+    const isMatch = bcrypt.compareSync(pass, users[0].password);
+    if (!isMatch) {
+      showMsg('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة', 'danger');
+      btn.disabled = false; btn.textContent = 'تسجيل الدخول';
+      return;
+    }
+
     const user = users[0];
+
 
     if (user.blocked) {
       showMsg('🚫 هذا الحساب محظور. يرجى التواصل مع المالك', 'danger');

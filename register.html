@@ -63,6 +63,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
 <script src="supabase.js"></script>
 <script>
 function showMsg(txt, type) {
@@ -94,9 +95,13 @@ async function handleRegister() {
       return;
     }
 
-    // إنشاء المستخدم
+    // تشفير كلمة المرور قبل الحفظ
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(pass, salt);
+
+    // إنشاء المستخدم مع كلمة المرور المشفرة
     const newUser = await db.insert('users', {
-      name, email, password: pass,
+      name, email, password: hashedPassword,
       is_admin: false, blocked: false
     });
 
