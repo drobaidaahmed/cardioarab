@@ -524,15 +524,15 @@ async function loadCodes() {
 async function loadStats() {
     try {
         const [users, codes, activeSubs, blocked] = await Promise.all([
-            db.select('users', '?select=count'),
-            db.select('activation_codes', '?select=count'),
-            db.select('subscriptions', '?active=eq.true&select=count'),
-            db.select('users', '?blocked=eq.true&select=count')
+            db.select('users', ''),
+            db.select('activation_codes', ''),
+            db.select('subscriptions', '?active=eq.true'),
+            db.select('users', '?blocked=eq.true')
         ]);
-        document.getElementById('statTotal').textContent   = users[0]?.count ?? 0;
-        document.getElementById('statActive').textContent  = activeSubs[0]?.count ?? 0;
-        document.getElementById('statYearly').textContent  = codes[0]?.count ?? 0;
-        document.getElementById('statBlocked').textContent = blocked[0]?.count ?? 0;
+        document.getElementById('statTotal').textContent   = users.length;
+        document.getElementById('statActive').textContent  = activeSubs.length;
+        document.getElementById('statYearly').textContent  = codes.length;
+        document.getElementById('statBlocked').textContent = blocked.length;
     } catch (e) { console.warn('Stats error', e); }
 }
 
@@ -543,9 +543,11 @@ async function loadUsers(q = '') {
         let query = '?order=created_at.desc';
         if (q) query += `&or=(name.ilike.*${q}*,email.ilike.*${q}*)`;
         const users = await db.select('users', query);
+        console.log('Users loaded:', users);
         renderUsers(users);
     } catch (e) {
-        tbody.innerHTML = '<tr><td colspan="7" class="empty">❌ خطأ في التحميل</td></tr>';
+        console.error('loadUsers error:', e);
+        tbody.innerHTML = '<tr><td colspan="7" class="empty">❌ خطأ: ' + JSON.stringify(e) + '</td></tr>';
     }
 }
 
