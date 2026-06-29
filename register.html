@@ -107,6 +107,17 @@ async function handleRegister() {
     });
 
     await addLog('تسجيل حساب جديد: ' + name, email);
+
+    // إشعار تيليغرام
+    try {
+      const msg = `🆕 مستخدم جديد في CardioArab\n👤 الاسم: ${name}\n📧 البريد: ${email}\n⏰ ${new Date().toLocaleString('ar-SA')}`;
+      await fetch(`https://api.telegram.org/bot8900525496:AAE8ZeCd3AHPG8P0F9CWLrhGqz0o9zzRsVI/sendMessage`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ chat_id: 792639380, text: msg })
+      });
+    } catch(_) {}
+
     showMsg('✅ تم إنشاء الحساب! سيتم تفعيله بعد التحقق من الدفع.', 'success');
     setTimeout(() => { window.location.href = 'index.html'; }, 2500);
 
