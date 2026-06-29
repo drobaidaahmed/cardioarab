@@ -160,12 +160,14 @@ async function loadProfile() {
             card.className = 'sub-card active';
             document.getElementById('subStatus').textContent = '✅ الاشتراك نشط';
             document.getElementById('daysBadge').textContent = daysLeft + ' يوم متبقي';
-            document.getElementById('subDetail').textContent = 'ينتهي في: ' + endDate.toLocaleDateString('ar-SA');
+            document.getElementById('subDetail').innerHTML = 'ينتهي في: ' + endDate.toLocaleDateString('ar-SA') +
+              (daysLeft <= 7 ? `<br><a href="subscription.html" style="display:inline-block;margin-top:.75rem;background:#f59e0b;color:#fff;padding:.5rem 1.25rem;border-radius:8px;text-decoration:none;font-weight:700;font-size:.85rem">🔄 جدد اشتراكك قبل الانتهاء</a>` : '');
         } else {
             card.className = 'sub-card inactive';
-            document.getElementById('subStatus').textContent = '🔴 الاشتراك غير نشط';
-            document.getElementById('daysBadge').textContent = 'غير مفعّل';
-            document.getElementById('subDetail').textContent = 'أرسل إيصال الدفع عبر شام كاش للتفعيل';
+            document.getElementById('subStatus').textContent = '🔴 انتهى اشتراكك';
+            document.getElementById('daysBadge').textContent = 'منتهي';
+            document.getElementById('subDetail').innerHTML = `انتهت صلاحية اشتراكك. جدد الآن لاستمرار الوصول.<br>
+              <a href="subscription.html" style="display:inline-block;margin-top:.75rem;background:#8b5cf6;color:#fff;padding:.6rem 1.5rem;border-radius:10px;text-decoration:none;font-weight:700;font-size:.9rem">🔄 تجديد الاشتراك</a>`;
         }
     } catch (e) {
         document.getElementById('subDetail').textContent = 'خطأ في تحميل بيانات الاشتراك';
