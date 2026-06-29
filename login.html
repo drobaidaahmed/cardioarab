@@ -52,7 +52,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js" crossorigin="anonymous"></script>
 <script src="supabase.js"></script>
 <script>
 function showMsg(txt, type) {
@@ -68,6 +68,11 @@ async function handleLogin() {
 
   if (!email || !pass) return showMsg('⚠️ يرجى تعبئة جميع الحقول', 'danger');
 
+  // تأكد من تحميل bcrypt
+  if (typeof bcrypt === 'undefined') {
+    return showMsg('⚠️ خطأ في تحميل الصفحة، أعد التحديث', 'danger');
+  }
+
   btn.disabled = true;
   btn.textContent = '⏳ جاري الدخول...';
 
@@ -80,8 +85,12 @@ async function handleLogin() {
       return;
     }
 
-    // التحقق من كلمة المرور بـ bcrypt
-    const isMatch = bcrypt.compareSync(pass, users[0].password);
+    // التحقق من كلمة المرور بـ bcrypt (مع دعم $2y$ من PHP)
+    let storedHash = users[0].password;
+    if (storedHash.startsWith('$2y$')) {
+      storedHash = '$2a$' + storedHash.slice(4);
+    }
+    const isMatch = bcrypt.compareSync(pass, storedHash);
     if (!isMatch) {
       showMsg('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة', 'danger');
       btn.disabled = false; btn.textContent = 'تسجيل الدخول';
