@@ -542,12 +542,25 @@ async function loadUsers(q = '') {
     try {
         let query = '?order=created_at.desc';
         if (q) query += `&or=(name.ilike.*${q}*,email.ilike.*${q}*)`;
-        const users = await db.select('users', query);
-        console.log('Users loaded:', users);
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/users${query}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': SUPABASE_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_KEY
+            }
+        });
+        const users = await res.json();
+        if (!res.ok) {
+            tbody.innerHTML = `<tr><td colspan="7" class="empty">❌ خطأ: ${JSON.stringify(users)}</td></tr>`;
+            return;
+        }
+        if (!users.length) {
+            tbody.innerHTML = '<tr><td colspan="7" class="empty">لا يوجد مستخدمون</td></tr>';
+            return;
+        }
         renderUsers(users);
     } catch (e) {
-        console.error('loadUsers error:', e);
-        tbody.innerHTML = '<tr><td colspan="7" class="empty">❌ خطأ: ' + JSON.stringify(e) + '</td></tr>';
+        tbody.innerHTML = `<tr><td colspan="7" class="empty">❌ خطأ في الاتصال: ${e.message}</td></tr>`;
     }
 }
 
@@ -562,17 +575,20 @@ async function renderUsers(users) {
         tbody.innerHTML = '<tr><td colspan="7" class="empty">لا يوجد مستخدمون</td></tr>';
         return;
     }
+
     // جلب الاشتراكات
-    const subs = await db.select('subscriptions', '?select=user_id,plan,active,end_date');
-    const subMap = {};
-    subs.forEach(s => subMap[s.user_id] = s);
+    let subMap = {};
+    try {
+        const subs = await db.select('subscriptions', '?select=user_id,plan,active,end_date');
+        subs.forEach(s => subMap[s.user_id] = s);
+    } catch (e) { console.warn('subs error', e); }
 
     const now = new Date();
     tbody.innerHTML = users.map((u, i) => {
         const sub = subMap[u.id] || {};
         const plan = sub.plan || 'free';
         const endDate = sub.end_date ? new Date(sub.end_date) : null;
-        let active = sub.active;
+        let active = sub.active || false;
         if (active && endDate && now > endDate && !u.is_admin) active = false;
         const daysLeft = endDate && active ? Math.ceil((endDate - now) / 86400000) : null;
         const endLabel = endDate ? endDate.toLocaleDateString('ar-SA') : '—';
