@@ -5,7 +5,7 @@
  */
 
 const SUPABASE_URL = 'https://ikisgwnsxadiujueeava.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_OMWeV5NY4sla53_UNojVmA_obrzCA8_';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlraXNnd25zeGFkaXVqdWVlYXZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NzU5ODYsImV4cCI6MjA5ODI1MTk4Nn0.Ar45kQJPOgJ9ITqGVv9XeSxpGgyx53s6CTmFCNDBa-g';
 
 // ─── Supabase REST API Helper ────────────────────────────────────────────────
 const db = {
