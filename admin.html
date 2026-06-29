@@ -6,267 +6,101 @@
     <title>لوحة التحكم - CardioArab</title>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #0b1220;
-            --bg2: #111827;
-            --bg3: #1a2235;
-            --border: #1e2d45;
-            --text: #e2e8f0;
-            --text2: #94a3b8;
-            --accent: #8b5cf6;
-            --green: #10b981;
-            --red: #ef4444;
-            --gold: #f59e0b;
-            --blue: #3b82f6;
-            --font: 'IBM Plex Sans Arabic', sans-serif;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: var(--font);
-            min-height: 100vh;
-        }
-
-        /* ─── Header ─── */
-        .header {
-            background: linear-gradient(135deg, #1a0a3a, #0b1220);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .header .logo { font-size: 1.2rem; font-weight: 700; }
-        .header .logo span { color: var(--accent); }
-        .header .badge {
-            background: linear-gradient(135deg, var(--gold), #d97706);
-            color: #1a0a00;
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-        .header nav { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
-        .header nav a {
-            color: var(--text2);
-            text-decoration: none;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-        .header nav a:hover { color: var(--text); border-color: var(--border); background: var(--bg3); }
-        .btn-logout {
-            background: rgba(239,68,68,0.15) !important;
-            color: var(--red) !important;
-            border-color: rgba(239,68,68,0.3) !important;
-            cursor: pointer;
-        }
-        .btn-logout:hover { background: rgba(239,68,68,0.25) !important; }
-
-        /* ─── Layout ─── */
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
-
-        /* ─── Stats Row ─── */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: var(--bg3);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.25rem;
-            text-align: center;
-        }
-        .stat-card .num { font-size: 2rem; font-weight: 700; margin-bottom: 4px; }
-        .stat-card .lbl { font-size: 0.8rem; color: var(--text2); }
-        .stat-card.purple .num { color: var(--accent); }
-        .stat-card.green .num { color: var(--green); }
-        .stat-card.gold .num { color: var(--gold); }
-        .stat-card.red .num { color: var(--red); }
-
-        /* ─── Section ─── */
-        .section {
-            background: var(--bg3);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 1.75rem;
-            margin-bottom: 1.5rem;
-        }
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
-        }
-
-        /* ─── Form ─── */
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        @media(max-width:600px){ .form-row { grid-template-columns: 1fr; } }
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; font-size: 0.85rem; color: var(--text2); margin-bottom: 6px; font-weight: 600; }
-        .form-group input {
-            width: 100%;
-            padding: 10px 14px;
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            font-family: var(--font);
-            font-size: 0.95rem;
-            transition: border-color 0.2s;
-        }
-        .form-group input:focus { outline: none; border-color: var(--accent); }
-        .form-group input[dir="ltr"] { text-align: left; direction: ltr; }
-
-        /* ─── Buttons ─── */
-        .btn {
-            padding: 10px 22px;
-            border: none;
-            border-radius: 10px;
-            font-family: var(--font);
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-primary { background: linear-gradient(135deg, var(--accent), #7c3aed); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(139,92,246,0.4); }
-        .btn-danger { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
-        .btn-danger:hover { background: rgba(239,68,68,0.25); }
-        .btn-success { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
-        .btn-success:hover { background: rgba(16,185,129,0.25); }
-        .btn-sm { padding: 6px 14px; font-size: 0.8rem; border-radius: 8px; }
-
-        /* ─── Alert ─── */
-        .alert {
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            font-weight: 600;
-            display: none;
-        }
-        .alert.show { display: block; }
-        .alert-success { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
-        .alert-danger { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
-
-        /* ─── Users Table ─── */
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-        thead th {
-            background: var(--bg2);
-            color: var(--text2);
-            padding: 10px 14px;
-            text-align: right;
-            font-weight: 600;
-            border-bottom: 1px solid var(--border);
-        }
-        tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
-        tbody tr:hover { background: rgba(255,255,255,0.03); }
-        tbody td { padding: 10px 14px; vertical-align: middle; }
-        .badge-plan {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-        .badge-yearly { background: rgba(245,158,11,0.2); color: var(--gold); }
-        .badge-monthly { background: rgba(59,130,246,0.2); color: var(--blue); }
-        .badge-free { background: rgba(148,163,184,0.2); color: var(--text2); }
-        .badge-blocked { background: rgba(239,68,68,0.2); color: var(--red); }
-        .badge-active { background: rgba(16,185,129,0.2); color: var(--green); }
-        .badge-admin { background: rgba(245,158,11,0.2); color: var(--gold); }
-
-        /* ─── Search ─── */
-        .search-bar {
-            width: 100%;
-            padding: 10px 14px;
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            font-family: var(--font);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-        .search-bar:focus { outline: none; border-color: var(--accent); }
-
-        /* ─── Log ─── */
-        .log-list { list-style: none; }
-        .log-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.85rem;
-            color: var(--text2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-        }
-        .log-list li:last-child { border-bottom: none; }
-        .log-list li .msg { color: var(--text); }
-        .log-list li .time { white-space: nowrap; font-size: 0.75rem; }
-
-        /* ─── Empty ─── */
-        .empty { text-align: center; padding: 2rem; color: var(--text2); font-size: 0.9rem; }
-
-        /* ─── Password strength ─── */
-        .strength-bar { height: 4px; border-radius: 2px; margin-top: 6px; background: var(--border); overflow: hidden; }
-        .strength-fill { height: 100%; border-radius: 2px; width: 0; transition: all 0.3s; }
+        :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#8b5cf6;--green:#10b981;--red:#ef4444;--gold:#f59e0b;--blue:#3b82f6;--font:'IBM Plex Sans Arabic',sans-serif}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
+        .header{background:linear-gradient(135deg,#1a0a3a,#0b1220);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;position:sticky;top:0;z-index:100}
+        .header .logo{font-size:1.2rem;font-weight:700}
+        .header .logo span{color:var(--accent)}
+        .badge-top{background:linear-gradient(135deg,var(--gold),#d97706);color:#1a0a00;padding:4px 14px;border-radius:20px;font-size:.75rem;font-weight:700}
+        nav{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+        nav a{color:var(--text2);text-decoration:none;padding:6px 14px;border-radius:8px;font-size:.875rem;transition:.2s;border:1px solid transparent}
+        nav a:hover{color:var(--text);border-color:var(--border);background:var(--bg3)}
+        .btn-logout{background:rgba(239,68,68,.15)!important;color:var(--red)!important;border-color:rgba(239,68,68,.3)!important;cursor:pointer}
+        .container{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+        .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:2rem}
+        .stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:1.25rem;text-align:center}
+        .stat-card .num{font-size:2rem;font-weight:700;margin-bottom:4px}
+        .stat-card.purple .num{color:var(--accent)}
+        .stat-card.green .num{color:var(--green)}
+        .stat-card.gold .num{color:var(--gold)}
+        .stat-card.red .num{color:var(--red)}
+        .stat-card .lbl{font-size:.8rem;color:var(--text2)}
+        .section{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:1.75rem;margin-bottom:1.5rem}
+        .section-title{font-size:1.1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;border-bottom:1px solid var(--border);padding-bottom:1rem}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+        @media(max-width:600px){.form-row{grid-template-columns:1fr}}
+        .form-group{margin-bottom:1rem}
+        .form-group label{display:block;font-size:.85rem;color:var(--text2);margin-bottom:6px;font-weight:600}
+        .form-group input,.form-group select{width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:.95rem;transition:.2s}
+        .form-group input:focus{outline:none;border-color:var(--accent)}
+        .btn{padding:10px 22px;border:none;border-radius:10px;font-family:var(--font);font-size:.9rem;font-weight:700;cursor:pointer;transition:.2s}
+        .btn-primary{background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(139,92,246,.4)}
+        .btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+        .btn-danger{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+        .btn-success{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+        .btn-sm{padding:6px 14px;font-size:.8rem;border-radius:8px}
+        .alert{padding:12px 16px;border-radius:10px;margin-top:1rem;font-size:.9rem;font-weight:600;display:none}
+        .alert.show{display:block}
+        .alert-success{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+        .alert-danger{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+        .table-wrap{overflow-x:auto}
+        table{width:100%;border-collapse:collapse;font-size:.875rem}
+        thead th{background:var(--bg2);color:var(--text2);padding:10px 14px;text-align:right;font-weight:600;border-bottom:1px solid var(--border)}
+        tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+        tbody tr:hover{background:rgba(255,255,255,.03)}
+        tbody td{padding:10px 14px;vertical-align:middle}
+        .bp{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700}
+        .bp-yearly{background:rgba(245,158,11,.2);color:var(--gold)}
+        .bp-monthly{background:rgba(59,130,246,.2);color:var(--blue)}
+        .bp-free{background:rgba(148,163,184,.2);color:var(--text2)}
+        .bp-blocked{background:rgba(239,68,68,.2);color:var(--red)}
+        .bp-active{background:rgba(16,185,129,.2);color:var(--green)}
+        .bp-admin{background:rgba(245,158,11,.2);color:var(--gold)}
+        .search-bar{width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:.9rem;margin-bottom:1rem}
+        .search-bar:focus{outline:none;border-color:var(--accent)}
+        .log-list{list-style:none}
+        .log-list li{padding:8px 0;border-bottom:1px solid var(--border);font-size:.85rem;color:var(--text2);display:flex;justify-content:space-between;gap:1rem}
+        .log-list li:last-child{border-bottom:none}
+        .log-list li .msg{color:var(--text)}
+        .log-list li .time{white-space:nowrap;font-size:.75rem}
+        .empty{text-align:center;padding:2rem;color:var(--text2);font-size:.9rem}
+        .strength-bar{height:4px;border-radius:2px;margin-top:6px;background:var(--border);overflow:hidden}
+        .strength-fill{height:100%;border-radius:2px;width:0;transition:all .3s}
     </style>
 </head>
 <body>
 
 <header class="header">
-    <div style="display:flex; align-items:center; gap:0.75rem;">
+    <div style="display:flex;align-items:center;gap:.75rem">
         <div class="logo">💓 <span>CardioArab</span></div>
-        <span class="badge">👑 لوحة التحكم</span>
+        <span class="badge-top">👑 لوحة التحكم</span>
     </div>
     <nav>
         <a href="index.html">🏠 الرئيسية</a>
         <a href="guidelines.html">📚 المرشدات</a>
-        <a href="profile.html">👤 ملفي</a>
         <a href="#" class="btn-logout" onclick="doLogout()">🚪 تسجيل خروج</a>
     </nav>
 </header>
 
 <div class="container">
 
-    <!-- Stats -->
-    <div class="stats-row" id="statsRow">
+    <!-- إحصائيات -->
+    <div class="stats-row">
         <div class="stat-card purple"><div class="num" id="statTotal">—</div><div class="lbl">إجمالي المستخدمين</div></div>
         <div class="stat-card green"><div class="num" id="statActive">—</div><div class="lbl">اشتراك نشط</div></div>
-        <div class="stat-card gold"><div class="num" id="statYearly">—</div><div class="lbl">اشتراك سنوي</div></div>
+        <div class="stat-card gold"><div class="num" id="statCodes">—</div><div class="lbl">أكواد صادرة</div></div>
         <div class="stat-card red"><div class="num" id="statBlocked">—</div><div class="lbl">محظورون</div></div>
     </div>
 
-    <!-- ══════════════════════════════════
-         تغيير كلمة السر
-    ══════════════════════════════════ -->
+    <!-- تغيير كلمة المرور -->
     <div class="section">
         <div class="section-title">🔑 تغيير كلمة مرور المالك</div>
         <div class="form-row">
             <div class="form-group">
                 <label>🛡️ الكود السري للتحقق</label>
-                <input type="password" id="verifyCode" placeholder="أدخل كود التحقق" dir="ltr">
+                <input type="password" id="verifyCode" placeholder="كود التحقق" dir="ltr">
             </div>
             <div class="form-group">
                 <label>🔑 كلمة المرور الحالية</label>
@@ -280,7 +114,7 @@
                 <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
             </div>
             <div class="form-group">
-                <label>✅ تأكيد كلمة المرور الجديدة</label>
+                <label>✅ تأكيد كلمة المرور</label>
                 <input type="password" id="confirmPass" placeholder="أعد كتابة كلمة المرور" dir="ltr">
             </div>
         </div>
@@ -288,394 +122,324 @@
         <div class="alert" id="passAlert"></div>
     </div>
 
-    <!-- ══════════════════════════════════
-         إدارة المستخدمين
-    ══════════════════════════════════ -->
+    <!-- توليد كود تفعيل -->
     <div class="section">
-        <div class="section-title">👥 إدارة المستخدمين</div>
-
-        <!-- تنبيه مرحلة 1 -->
-        <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.875rem;color:#f59e0b;">
-            <strong>⚠️ المرحلة الحالية:</strong> المستخدمون يسجلون من أجهزتهم — بياناتهم محفوظة على أجهزتهم لا على سيرفر مركزي. لرؤية المستخدمين وتفعيلهم، استخدم نظام كود التفعيل أدناه. المرحلة 2 (Supabase) ستحل هذا نهائياً.
-        </div>
-
-        <!-- توليد كود تفعيل -->
-        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1.5rem;">
-            <div style="font-size:.9rem;font-weight:700;color:#fff;margin-bottom:1rem;">🔑 توليد كود تفعيل للمستخدم</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-                <div class="form-group" style="margin:0">
-                    <label>البريد الإلكتروني للمستخدم</label>
-                    <input type="email" id="activateEmail" placeholder="user@email.com" dir="ltr">
-                </div>
-                <div class="form-group" style="margin:0">
-                    <label>مدة الاشتراك</label>
-                    <select id="activateDuration" style="width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:.95rem;">
-                        <option value="30">شهر واحد (30 يوم)</option>
-                        <option value="60">شهران</option>
-                        <option value="90">3 أشهر</option>
-                        <option value="365">سنة كاملة</option>
-                    </select>
-                </div>
+        <div class="section-title">⚡ توليد كود تفعيل</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>📧 البريد الإلكتروني للمستخدم</label>
+                <input type="email" id="activateEmail" placeholder="user@email.com" dir="ltr">
             </div>
-            <button class="btn btn-primary" onclick="generateCode()">⚡ توليد كود التفعيل</button>
-            <div id="generatedCode" style="display:none;margin-top:1rem;background:var(--bg2);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:1rem;">
-                <div style="font-size:.8rem;color:var(--text2);margin-bottom:.4rem;">أرسل هذا الكود للمستخدم:</div>
-                <div id="codeDisplay" style="font-size:1.4rem;font-weight:700;color:var(--green);letter-spacing:.15em;font-family:monospace;"></div>
-                <div id="codeInfo" style="font-size:.78rem;color:var(--text2);margin-top:.4rem;"></div>
+            <div class="form-group">
+                <label>📅 مدة الاشتراك</label>
+                <select id="activateDuration">
+                    <option value="30">شهر واحد (30 يوم)</option>
+                    <option value="60">شهران</option>
+                    <option value="90">3 أشهر</option>
+                    <option value="365">سنة كاملة</option>
+                </select>
             </div>
         </div>
+        <button class="btn btn-primary" id="genBtn" onclick="generateCode()">⚡ توليد الكود</button>
+        <div id="generatedCode" style="display:none;margin-top:1rem;background:var(--bg2);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:1rem">
+            <div style="font-size:.8rem;color:var(--text2);margin-bottom:.4rem">أرسل هذا الكود للمستخدم:</div>
+            <div id="codeDisplay" style="font-size:1.4rem;font-weight:700;color:var(--green);letter-spacing:.15em;font-family:monospace"></div>
+            <div id="codeInfo" style="font-size:.78rem;color:var(--text2);margin-top:.4rem"></div>
+        </div>
 
-        <!-- قائمة الأكواد النشطة -->
-        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.05em;">الأكواد النشطة</div>
+        <!-- جدول الأكواد -->
+        <div style="margin-top:1.5rem;font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:.75rem">الأكواد الصادرة</div>
         <div class="table-wrap">
             <table>
-                <thead>
-                    <tr>
-                        <th>الكود</th>
-                        <th>البريد</th>
-                        <th>المدة</th>
-                        <th>تاريخ الإنشاء</th>
-                        <th>الحالة</th>
-                        <th>إجراء</th>
-                    </tr>
-                </thead>
-                <tbody id="codesTableBody">
-                    <tr><td colspan="6" class="empty">لا توجد أكواد بعد</td></tr>
-                </tbody>
+                <thead><tr><th>الكود</th><th>البريد</th><th>المدة</th><th>تاريخ الإنشاء</th><th>الحالة</th><th>حذف</th></tr></thead>
+                <tbody id="codesTableBody"><tr><td colspan="6" class="empty">⏳ جاري التحميل...</td></tr></tbody>
             </table>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════
-         سجل الأمان
-    ══════════════════════════════════ -->
+    <!-- إدارة المستخدمين -->
     <div class="section">
-        <div class="section-title" style="justify-content:space-between;">
+        <div class="section-title">👥 إدارة المستخدمين</div>
+        <input class="search-bar" type="text" placeholder="🔍 بحث بالاسم أو البريد..." oninput="filterUsers(this.value)">
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>#</th><th>الاسم</th><th>البريد</th><th>الخطة</th><th>الحالة</th><th>تاريخ التسجيل</th><th>إجراء</th></tr></thead>
+                <tbody id="usersTableBody"><tr><td colspan="7" class="empty">⏳ جاري التحميل...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- سجل الأمان -->
+    <div class="section">
+        <div class="section-title">
             <span>📋 سجل الأمان</span>
-            <button class="btn btn-danger btn-sm" onclick="clearLog()">🗑️ مسح السجل</button>
+            <button class="btn btn-danger btn-sm" onclick="clearLog()">🗑️ مسح</button>
         </div>
         <ul class="log-list" id="logList">
-            <li><span class="msg">لا توجد سجلات بعد.</span></li>
+            <li><span class="msg">⏳ جاري التحميل...</span></li>
         </ul>
     </div>
 
 </div>
 
-<script src="supabase.js"></script>
 <script>
-// ══════════════════════════════════════════════════════
-// الكود السري للتحقق (غيّره هنا فقط)
-// ══════════════════════════════════════════════════════
+// ─── Supabase ────────────────────────────────────────
+const SB_URL = 'https://ikisgwnsxadiujueeava.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlraXNnd25zeGFkaXVqdWVlYXZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NzU5ODYsImV4cCI6MjA5ODI1MTk4Nn0.Ar45kQJPOgJ9ITqGVv9XeSxpGgyx53s6CTmFCNDBa-g';
+
+const H = {
+    'Content-Type': 'application/json',
+    'apikey': SB_KEY,
+    'Authorization': 'Bearer ' + SB_KEY
+};
+
+async function sbGet(table, query = '') {
+    const r = await fetch(`${SB_URL}/rest/v1/${table}${query}`, { headers: H });
+    if (!r.ok) throw await r.json();
+    return r.json();
+}
+async function sbPost(table, data) {
+    const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
+        method: 'POST', headers: { ...H, 'Prefer': 'return=representation' },
+        body: JSON.stringify(data)
+    });
+    if (!r.ok) throw await r.json();
+    return r.json();
+}
+async function sbPatch(table, query, data) {
+    const r = await fetch(`${SB_URL}/rest/v1/${table}${query}`, {
+        method: 'PATCH', headers: { ...H, 'Prefer': 'return=representation' },
+        body: JSON.stringify(data)
+    });
+    if (!r.ok) throw await r.json();
+    return r.json();
+}
+async function sbDelete(table, query) {
+    const r = await fetch(`${SB_URL}/rest/v1/${table}${query}`, { method: 'DELETE', headers: H });
+    if (!r.ok) throw await r.json();
+}
+async function log(msg, email = '') {
+    try { await sbPost('activity_log', { message: msg, email }); } catch {}
+}
+
+// ─── Auth Guard ──────────────────────────────────────
 const VERIFY_CODE = 'o200811547';
-
-// ══════════════════════════════════════════════════════
-// التحقق من صلاحية المالك
-// ══════════════════════════════════════════════════════
-(function guard() {
-    const u = session.get();
-    if (!u || !u.is_admin) {
-        alert('⛔ غير مصرح لك بدخول هذه الصفحة!');
-        window.location.href = 'index.html';
-    }
-})();
-
-// ══════════════════════════════════════════════════════
-// تسجيل خروج
-// ══════════════════════════════════════════════════════
-function doLogout() {
-    session.clear();
-    window.location.href = 'login.html';
+const adminUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+if (!adminUser || !adminUser.is_admin) {
+    alert('⛔ غير مصرح لك!');
+    location.href = 'index.html';
 }
+function doLogout() { localStorage.removeItem('currentUser'); location.href = 'login.html'; }
 
-// ══════════════════════════════════════════════════════
-// قوة كلمة المرور
-// ══════════════════════════════════════════════════════
+// ─── Password ────────────────────────────────────────
 function checkStrength(v) {
-    const fill = document.getElementById('strengthFill');
-    let score = 0;
-    if (v.length >= 6) score++;
-    if (v.length >= 10) score++;
-    if (/[A-Z]/.test(v)) score++;
-    if (/[0-9]/.test(v)) score++;
-    if (/[^A-Za-z0-9]/.test(v)) score++;
-    const colors = ['#ef4444','#f59e0b','#f59e0b','#10b981','#10b981'];
-    fill.style.width = (score * 20) + '%';
-    fill.style.background = colors[score - 1] || '#1e2d45';
+    let s = 0;
+    if (v.length >= 6) s++;
+    if (v.length >= 10) s++;
+    if (/[A-Z]/.test(v)) s++;
+    if (/[0-9]/.test(v)) s++;
+    if (/[^A-Za-z0-9]/.test(v)) s++;
+    const f = document.getElementById('strengthFill');
+    f.style.width = (s * 20) + '%';
+    f.style.background = ['#ef4444','#f59e0b','#f59e0b','#10b981','#10b981'][s - 1] || '#1e2d45';
 }
 
-// ══════════════════════════════════════════════════════
-// تغيير كلمة المرور
-// ══════════════════════════════════════════════════════
 async function changePassword() {
-    const alertEl = document.getElementById('passAlert');
-    function showAlert(msg, type) {
-        alertEl.textContent = msg;
-        alertEl.className = 'alert show alert-' + type;
-        setTimeout(() => alertEl.className = 'alert', 4000);
-    }
-
-    const code     = document.getElementById('verifyCode').value.trim();
-    const currentP = document.getElementById('currentPass').value.trim();
-    const newP     = document.getElementById('newPass').value.trim();
-    const confirmP = document.getElementById('confirmPass').value.trim();
-
-    if (!code || !currentP || !newP || !confirmP) return showAlert('⚠️ يرجى تعبئة جميع الحقول', 'danger');
-    if (code !== VERIFY_CODE) return showAlert('❌ الكود السري غير صحيح', 'danger');
-    if (newP.length < 6) return showAlert('⚠️ كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل', 'danger');
-    if (newP !== confirmP) return showAlert('❌ كلمتا المرور غير متطابقتين', 'danger');
-    if (newP === currentP) return showAlert('⚠️ كلمة المرور الجديدة مطابقة للحالية', 'danger');
-
+    const el = document.getElementById('passAlert');
+    const show = (m, t) => { el.textContent = m; el.className = 'alert show alert-' + t; setTimeout(() => el.className = 'alert', 4000); };
+    const code = document.getElementById('verifyCode').value.trim();
+    const cur  = document.getElementById('currentPass').value.trim();
+    const nw   = document.getElementById('newPass').value.trim();
+    const cf   = document.getElementById('confirmPass').value.trim();
+    if (!code || !cur || !nw || !cf) return show('⚠️ يرجى تعبئة جميع الحقول', 'danger');
+    if (code !== VERIFY_CODE) return show('❌ الكود السري غير صحيح', 'danger');
+    if (nw.length < 6) return show('⚠️ كلمة المرور قصيرة جداً', 'danger');
+    if (nw !== cf) return show('❌ كلمتا المرور غير متطابقتين', 'danger');
+    if (nw === cur) return show('⚠️ كلمة المرور مطابقة للحالية', 'danger');
     try {
-        const admin = session.get();
-        const check = await db.select('users', `?id=eq.${admin.id}&password=eq.${currentP}`);
-        if (!check.length) return showAlert('❌ كلمة المرور الحالية غير صحيحة', 'danger');
-
-        await db.update('users', `?id=eq.${admin.id}`, { password: newP });
-        admin.password = newP;
-        session.set(admin);
-        await addLog('تم تغيير كلمة مرور المالك بنجاح', admin.email);
-        showAlert('✅ تم تغيير كلمة المرور بنجاح!', 'success');
+        const check = await sbGet('users', `?id=eq.${adminUser.id}&password=eq.${cur}`);
+        if (!check.length) return show('❌ كلمة المرور الحالية غير صحيحة', 'danger');
+        await sbPatch('users', `?id=eq.${adminUser.id}`, { password: nw });
+        adminUser.password = nw;
+        localStorage.setItem('currentUser', JSON.stringify(adminUser));
+        await log('تم تغيير كلمة المرور', adminUser.email);
+        show('✅ تم تغيير كلمة المرور بنجاح!', 'success');
         ['verifyCode','currentPass','newPass','confirmPass'].forEach(id => document.getElementById(id).value = '');
         document.getElementById('strengthFill').style.width = '0';
-    } catch (e) {
-        showAlert('❌ خطأ في الاتصال', 'danger');
-    }
+    } catch (e) { show('❌ خطأ في الاتصال', 'danger'); }
 }
 
-// ══════════════════════════════════════════════════════
-// نظام أكواد التفعيل
-// ══════════════════════════════════════════════════════
+// ─── Activation Codes ────────────────────────────────
 async function generateCode() {
     const email = document.getElementById('activateEmail').value.trim().toLowerCase();
     const days  = parseInt(document.getElementById('activateDuration').value);
     if (!email) return alert('يرجى إدخال البريد الإلكتروني');
-
-    const code = Math.random().toString(36).substring(2,6).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
-    const endDate = new Date();
-    endDate.setDate(endDate.getDate() + days);
-
+    const btn = document.getElementById('genBtn');
+    btn.disabled = true; btn.textContent = '⏳ جاري...';
     try {
-        // حفظ الكود في Supabase
-        await db.insert('activation_codes', {
-            code, email, days,
-            end_date: endDate.toISOString(),
-            used: false
-        });
+        const code = Math.random().toString(36).substring(2,6).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() + days);
 
-        // تطبيق الاشتراك فوراً على المستخدم إذا كان موجوداً
-        const users = await db.select('users', `?email=eq.${email}`);
+        await sbPost('activation_codes', { code, email, days, end_date: endDate.toISOString(), used: false });
+
+        // تطبيق الاشتراك فوراً على المستخدم
+        const users = await sbGet('users', `?email=eq.${email}`);
         if (users.length) {
             const plan = days >= 365 ? 'yearly' : 'monthly';
-            const subs = await db.select('subscriptions', `?user_id=eq.${users[0].id}`);
+            const subs = await sbGet('subscriptions', `?user_id=eq.${users[0].id}`);
             if (subs.length) {
-                await db.update('subscriptions', `?user_id=eq.${users[0].id}`, {
-                    plan, active: true, end_date: endDate.toISOString(), days
-                });
+                await sbPatch('subscriptions', `?user_id=eq.${users[0].id}`, { plan, active: true, end_date: endDate.toISOString(), days });
             } else {
-                await db.insert('subscriptions', {
-                    user_id: users[0].id, plan, active: true,
-                    end_date: endDate.toISOString(), days
-                });
+                await sbPost('subscriptions', { user_id: users[0].id, plan, active: true, end_date: endDate.toISOString(), days });
             }
         }
 
-        await addLog('تم توليد كود تفعيل للبريد ' + email, email);
+        await log('كود تفعيل للبريد ' + email, email);
         document.getElementById('codeDisplay').textContent = code;
         document.getElementById('codeInfo').textContent = 'للبريد: ' + email + ' | مدة: ' + days + ' يوم | ينتهي: ' + endDate.toLocaleDateString('ar-SA');
         document.getElementById('generatedCode').style.display = 'block';
-        loadCodes();
-        loadStats();
+        loadCodes(); loadStats();
     } catch (e) {
-        console.error(e);
-        alert('❌ خطأ في إنشاء الكود');
+        alert('❌ خطأ: ' + JSON.stringify(e));
     }
-}
-
-async function deleteCode(id) {
-    if (!confirm('حذف هذا الكود؟')) return;
-    try {
-        await db.delete('activation_codes', `?id=eq.${id}`);
-        loadCodes();
-    } catch (e) { alert('خطأ في الحذف'); }
+    btn.disabled = false; btn.textContent = '⚡ توليد الكود';
 }
 
 async function loadCodes() {
     const tbody = document.getElementById('codesTableBody');
-    tbody.innerHTML = '<tr><td colspan="6" class="empty">⏳ جاري التحميل...</td></tr>';
     try {
-        const codes = await db.select('activation_codes', '?order=created_at.desc&limit=50');
-        if (!codes.length) {
-            tbody.innerHTML = '<tr><td colspan="6" class="empty">لا توجد أكواد بعد</td></tr>';
-            return;
-        }
+        const codes = await sbGet('activation_codes', '?order=created_at.desc&limit=50');
+        if (!codes.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">لا توجد أكواد بعد</td></tr>'; return; }
         tbody.innerHTML = codes.map(c => `<tr>
-            <td style="font-family:monospace;font-size:1rem;font-weight:700;color:${c.used ? 'var(--text2)' : 'var(--green)'};">${c.code}</td>
-            <td dir="ltr" style="text-align:left;font-size:.82rem;">${c.email}</td>
+            <td style="font-family:monospace;font-weight:700;color:${c.used ? 'var(--text2)' : 'var(--green)'}">${c.code}</td>
+            <td dir="ltr" style="text-align:left;font-size:.82rem">${c.email}</td>
             <td>${c.days} يوم</td>
-            <td style="font-size:.8rem;color:var(--text2);">${new Date(c.created_at).toLocaleDateString('ar-SA')}</td>
-            <td><span class="badge-plan ${c.used ? 'badge-free' : 'badge-active'}">${c.used ? '✅ مُستخدم' : '⏳ بانتظار'}</span></td>
+            <td style="font-size:.8rem;color:var(--text2)">${new Date(c.created_at).toLocaleDateString('ar-SA')}</td>
+            <td><span class="bp ${c.used ? 'bp-free' : 'bp-active'}">${c.used ? '✅ مُستخدم' : '⏳ بانتظار'}</span></td>
             <td><button class="btn btn-danger btn-sm" onclick="deleteCode('${c.id}')">حذف</button></td>
         </tr>`).join('');
-    } catch (e) {
-        tbody.innerHTML = '<tr><td colspan="6" class="empty">❌ خطأ في التحميل</td></tr>';
-    }
+    } catch (e) { tbody.innerHTML = '<tr><td colspan="6" class="empty">❌ خطأ في التحميل</td></tr>'; }
 }
 
-async function loadStats() {
-    try {
-        const [users, codes, activeSubs, blocked] = await Promise.all([
-            db.select('users', ''),
-            db.select('activation_codes', ''),
-            db.select('subscriptions', '?active=eq.true'),
-            db.select('users', '?blocked=eq.true')
-        ]);
-        document.getElementById('statTotal').textContent   = users.length;
-        document.getElementById('statActive').textContent  = activeSubs.length;
-        document.getElementById('statYearly').textContent  = codes.length;
-        document.getElementById('statBlocked').textContent = blocked.length;
-    } catch (e) { console.warn('Stats error', e); }
+async function deleteCode(id) {
+    if (!confirm('حذف هذا الكود؟')) return;
+    try { await sbDelete('activation_codes', `?id=eq.${id}`); loadCodes(); }
+    catch (e) { alert('خطأ في الحذف'); }
 }
 
+// ─── Users ───────────────────────────────────────────
 async function loadUsers(q = '') {
     const tbody = document.getElementById('usersTableBody');
     tbody.innerHTML = '<tr><td colspan="7" class="empty">⏳ جاري التحميل...</td></tr>';
     try {
         let query = '?order=created_at.desc';
         if (q) query += `&or=(name.ilike.*${q}*,email.ilike.*${q}*)`;
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/users${query}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': SUPABASE_KEY,
-                'Authorization': 'Bearer ' + SUPABASE_KEY
-            }
-        });
-        const users = await res.json();
-        if (!res.ok) {
-            tbody.innerHTML = `<tr><td colspan="7" class="empty">❌ خطأ: ${JSON.stringify(users)}</td></tr>`;
-            return;
-        }
-        if (!users.length) {
-            tbody.innerHTML = '<tr><td colspan="7" class="empty">لا يوجد مستخدمون</td></tr>';
-            return;
-        }
-        renderUsers(users);
+        const users = await sbGet('users', query);
+        if (!users.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">لا يوجد مستخدمون</td></tr>'; return; }
+
+        let subMap = {};
+        try {
+            const subs = await sbGet('subscriptions', '?select=user_id,plan,active,end_date');
+            subs.forEach(s => subMap[s.user_id] = s);
+        } catch {}
+
+        const now = new Date();
+        tbody.innerHTML = users.map((u, i) => {
+            const sub = subMap[u.id] || {};
+            const plan = sub.plan || 'free';
+            const endDate = sub.end_date ? new Date(sub.end_date) : null;
+            let active = sub.active || false;
+            if (active && endDate && now > endDate && !u.is_admin) active = false;
+            const daysLeft = endDate && active ? Math.ceil((endDate - now) / 86400000) : null;
+            const endLabel = endDate ? endDate.toLocaleDateString('ar-SA') : '—';
+            return `<tr>
+                <td>${i+1}</td>
+                <td>${u.name || '—'} ${u.is_admin ? '<span class="bp bp-admin">مالك</span>' : ''}</td>
+                <td dir="ltr" style="text-align:left">${u.email}</td>
+                <td><span class="bp ${plan==='yearly'?'bp-yearly':plan==='monthly'?'bp-monthly':'bp-free'}">${plan==='yearly'?'سنوي':plan==='monthly'?'شهري':'مجاني'}</span></td>
+                <td>
+                    <span class="bp ${u.blocked?'bp-blocked':active?'bp-active':'bp-free'}">${u.blocked?'🚫 محظور':active?'✅ نشط '+(daysLeft!==null?'· '+daysLeft+' يوم':''):'⏸ منتهي'}</span>
+                    ${endDate&&!u.is_admin?`<div style="font-size:.72rem;color:var(--text2);margin-top:2px">ينتهي: ${endLabel}</div>`:''}
+                </td>
+                <td style="font-size:.8rem;color:var(--text2)">${new Date(u.created_at).toLocaleDateString('ar-SA')}</td>
+                <td>${u.is_admin?'<span style="color:var(--text2);font-size:.8rem">—</span>':`
+                    ${u.blocked
+                        ?`<button class="btn btn-success btn-sm" onclick="toggleBlock('${u.id}',false)">رفع الحظر</button>`
+                        :`<button class="btn btn-danger btn-sm" onclick="toggleBlock('${u.id}',true)">حظر</button>`}
+                    <button class="btn btn-sm" style="background:rgba(239,68,68,.08);color:#ef4444;border:1px solid rgba(239,68,68,.2);margin-right:4px" onclick="confirmDelete('${u.id}','${u.email}')">حذف</button>
+                `}</td>
+            </tr>`;
+        }).join('');
     } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="7" class="empty">❌ خطأ في الاتصال: ${e.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="empty">❌ خطأ: ${e.message || JSON.stringify(e)}</td></tr>`;
     }
 }
 
 function filterUsers(q) {
-    clearTimeout(window._filterTimer);
-    window._filterTimer = setTimeout(() => loadUsers(q), 400);
-}
-
-async function renderUsers(users) {
-    const tbody = document.getElementById('usersTableBody');
-    if (!users.length) {
-        tbody.innerHTML = '<tr><td colspan="7" class="empty">لا يوجد مستخدمون</td></tr>';
-        return;
-    }
-
-    // جلب الاشتراكات
-    let subMap = {};
-    try {
-        const subs = await db.select('subscriptions', '?select=user_id,plan,active,end_date');
-        subs.forEach(s => subMap[s.user_id] = s);
-    } catch (e) { console.warn('subs error', e); }
-
-    const now = new Date();
-    tbody.innerHTML = users.map((u, i) => {
-        const sub = subMap[u.id] || {};
-        const plan = sub.plan || 'free';
-        const endDate = sub.end_date ? new Date(sub.end_date) : null;
-        let active = sub.active || false;
-        if (active && endDate && now > endDate && !u.is_admin) active = false;
-        const daysLeft = endDate && active ? Math.ceil((endDate - now) / 86400000) : null;
-        const endLabel = endDate ? endDate.toLocaleDateString('ar-SA') : '—';
-
-        return `<tr>
-            <td>${i + 1}</td>
-            <td>${u.name || '—'} ${u.is_admin ? '<span class="badge-plan badge-admin">مالك</span>' : ''}</td>
-            <td dir="ltr" style="text-align:left;">${u.email}</td>
-            <td><span class="badge-plan ${plan === 'yearly' ? 'badge-yearly' : plan === 'monthly' ? 'badge-monthly' : 'badge-free'}">
-                ${plan === 'yearly' ? 'سنوي' : plan === 'monthly' ? 'شهري' : 'مجاني'}
-            </span></td>
-            <td>
-                <span class="badge-plan ${u.blocked ? 'badge-blocked' : active ? 'badge-active' : 'badge-free'}">
-                    ${u.blocked ? '🚫 محظور' : active ? `✅ نشط${daysLeft !== null ? ' · ' + daysLeft + ' يوم' : ''}` : '⏸ منتهي'}
-                </span>
-                ${endDate && !u.is_admin ? `<div style="font-size:.72rem;color:var(--text2);margin-top:2px;">ينتهي: ${endLabel}</div>` : ''}
-            </td>
-            <td style="font-size:0.8rem;color:var(--text2);">${new Date(u.created_at).toLocaleDateString('ar-SA')}</td>
-            <td>${u.is_admin ? '<span style="color:var(--text2);font-size:0.8rem;">—</span>' : `
-                ${u.blocked
-                    ? `<button class="btn btn-success btn-sm" onclick="toggleBlock('${u.id}', false)">رفع الحظر</button>`
-                    : `<button class="btn btn-danger btn-sm" onclick="toggleBlock('${u.id}', true)">حظر</button>`}
-                <button class="btn btn-sm" style="background:rgba(239,68,68,0.08);color:#ef4444;border:1px solid rgba(239,68,68,0.2);margin-right:4px;" onclick="confirmDelete('${u.id}', '${u.email}')">حذف</button>
-            `}</td>
-        </tr>`;
-    }).join('');
+    clearTimeout(window._ft);
+    window._ft = setTimeout(() => loadUsers(q), 400);
 }
 
 async function toggleBlock(id, block) {
     try {
-        await db.update('users', `?id=eq.${id}`, { blocked: block, block_date: block ? new Date().toISOString() : null });
-        await addLog(block ? 'تم حظر المستخدم' : 'تم رفع الحظر');
+        await sbPatch('users', `?id=eq.${id}`, { blocked: block, block_date: block ? new Date().toISOString() : null });
+        await log(block ? 'حظر مستخدم' : 'رفع حظر مستخدم');
         loadUsers();
-    } catch (e) { alert('خطأ في العملية'); }
+    } catch { alert('خطأ في العملية'); }
 }
 
 async function confirmDelete(id, email) {
-    if (!confirm(`هل أنت متأكد من حذف الحساب:\n${email}؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) return;
+    if (!confirm(`حذف الحساب:\n${email}؟`)) return;
     try {
-        await db.delete('users', `?id=eq.${id}`);
-        await addLog(`تم حذف المستخدم ${email}`, email);
+        await sbDelete('users', `?id=eq.${id}`);
+        await log('حذف مستخدم: ' + email, email);
         loadUsers();
-    } catch (e) { alert('خطأ في الحذف'); }
+    } catch { alert('خطأ في الحذف'); }
 }
 
-// ══════════════════════════════════════════════════════
-// سجل الأمان
-// ══════════════════════════════════════════════════════
+// ─── Stats ───────────────────────────────────────────
+async function loadStats() {
+    try {
+        const [users, codes, active, blocked] = await Promise.all([
+            sbGet('users', ''),
+            sbGet('activation_codes', ''),
+            sbGet('subscriptions', '?active=eq.true'),
+            sbGet('users', '?blocked=eq.true')
+        ]);
+        document.getElementById('statTotal').textContent   = users.length;
+        document.getElementById('statActive').textContent  = active.length;
+        document.getElementById('statCodes').textContent   = codes.length;
+        document.getElementById('statBlocked').textContent = blocked.length;
+    } catch {}
+}
+
+// ─── Log ─────────────────────────────────────────────
 async function loadLog() {
     const list = document.getElementById('logList');
     try {
-        const log = await db.select('activity_log', '?order=created_at.desc&limit=30');
-        if (!log.length) {
-            list.innerHTML = '<li><span class="msg">لا توجد سجلات بعد.</span></li>';
-            return;
-        }
-        list.innerHTML = log.map(l => `
-            <li>
-                <span class="msg">${l.message} ${l.email ? `<span style="color:var(--text2)">(${l.email})</span>` : ''}</span>
-                <span class="time">${new Date(l.created_at).toLocaleString('ar-SA')}</span>
-            </li>
-        `).join('');
-    } catch (e) {
-        list.innerHTML = '<li><span class="msg">❌ خطأ في تحميل السجل</span></li>';
-    }
+        const logs = await sbGet('activity_log', '?order=created_at.desc&limit=30');
+        if (!logs.length) { list.innerHTML = '<li><span class="msg">لا توجد سجلات بعد.</span></li>'; return; }
+        list.innerHTML = logs.map(l => `<li>
+            <span class="msg">${l.message} ${l.email ? `<span style="color:var(--text2)">(${l.email})</span>` : ''}</span>
+            <span class="time">${new Date(l.created_at).toLocaleString('ar-SA')}</span>
+        </li>`).join('');
+    } catch { list.innerHTML = '<li><span class="msg">❌ خطأ في تحميل السجل</span></li>'; }
 }
 
 async function clearLog() {
-    if (!confirm('هل تريد مسح سجل الأمان كاملاً؟')) return;
-    try {
-        await db.delete('activity_log', '?id=gt.0');
-    } catch {}
+    if (!confirm('مسح سجل الأمان كاملاً؟')) return;
+    try { await sbDelete('activity_log', '?created_at=gte.1970-01-01'); } catch {}
     loadLog();
 }
 
-// ══════════════════════════════════════════════════════
-// تهيئة
-// ══════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', function () {
-    loadStats();
-    loadCodes();
-    loadUsers();
-    loadLog();
-    setInterval(() => { loadStats(); loadUsers(); loadLog(); }, 30000);
-});
+// ─── Init ────────────────────────────────────────────
+loadStats();
+loadCodes();
+loadUsers();
+loadLog();
+setInterval(() => { loadStats(); loadUsers(); loadLog(); }, 30000);
 </script>
-
 <script src="protection.js"></script>
 </body>
 </html>
