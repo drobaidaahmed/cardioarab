@@ -112,16 +112,75 @@ footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
   <span class="tr">منصة كارديو عرب 2026 — موجهة لأطباء القلب</span>
 </footer>
 
-<script>
-try{
-  const u=JSON.parse(localStorage.getItem('currentUser'));
-  if(u&&u.email==='obaida@cardioarab.com'){
-    const tb=document.querySelector('.top-bar');
-    tb.innerHTML=`<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="admin.html" style="color:#f59e0b;border-color:#f59e0b;">🎛️ لوحة التحكم</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" style="color:#ef4444;border-color:#ef4444;">خروج</a>`;
-  }
-}catch(e){}
-</script>
 <script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+
+    // شريط التنقل
+    const tb = document.querySelector('.top-bar');
+
+    if(u && u.is_admin){
+      // مالك
+      tb.innerHTML=`<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="admin.html" style="color:#f59e0b;border-color:#f59e0b;">🎛️ لوحة التحكم</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" style="color:#ef4444;border-color:#ef4444;">خروج</a>`;
+      return; // المالك يرى كل شيء
+    }
+
+    if(u){
+      // مسجل — تحقق من الاشتراك
+      const isSubscribed = await session.isSubscribed();
+      if(isSubscribed){
+        // مفعّل — شريط خاص بالمستخدم
+        tb.innerHTML=`<a href="subscription.html" class="btn-primary">📋 اشتراكي</a><a href="profile.html" class="lnk">👤 ${u.name}</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" style="color:#ef4444;border-color:#ef4444;text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid;border-radius:8px;">خروج</a>`;
+        return; // مفعّل يرى كل شيء
+      }
+    }
+
+    // غير مسجل أو غير مفعّل — أخفِ كل الكروت عدا الرجفان
+    const cards = document.querySelectorAll('.grid .card');
+    cards.forEach(card => {
+      if(!card.querySelector('a[href="guidelines.html"]') && card !== cards[0]){
+        card.style.opacity = '0.35';
+        card.style.pointerEvents = 'none';
+        card.style.cursor = 'default';
+      }
+    });
+
+    // أضف رسالة انتظار التفعيل
+    const container = document.querySelector('.container');
+    const notice = document.createElement('div');
+    notice.style.cssText = `
+      background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);
+      border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;
+      text-align:center;direction:rtl;
+    `;
+    notice.innerHTML = u
+      ? `<div style="font-size:1.1rem;font-weight:700;color:#8b5cf6;margin-bottom:.5rem">⏳ حسابك قيد التفعيل</div>
+         <div style="color:#94a3b8;font-size:.9rem;line-height:1.7">
+           بعد إرسال إيصال الدفع عبر <strong style="color:#e2e8f0">شام كاش</strong> سيتم تفعيل حسابك خلال 24 ساعة.<br>
+           يمكنك الآن تصفح <strong style="color:#8b5cf6">غايدلاين الرجفان الأذيني</strong> مجاناً.
+         </div>
+         <a href="guidelines.html" style="display:inline-block;margin-top:1rem;background:#8b5cf6;color:#fff;padding:.6rem 1.5rem;border-radius:10px;text-decoration:none;font-weight:700;font-size:.9rem">📘 تصفح غايدلاين الرجفان مجاناً</a>`
+      : `<div style="font-size:1.1rem;font-weight:700;color:#8b5cf6;margin-bottom:.5rem">🎁 تصفح مجاني</div>
+         <div style="color:#94a3b8;font-size:.9rem;line-height:1.7">
+           يمكنك تصفح <strong style="color:#8b5cf6">غايدلاين الرجفان الأذيني</strong> مجاناً بدون تسجيل.<br>
+           للوصول لكامل المحتوى، سجّل حساباً وفعّله.
+         </div>
+         <div style="margin-top:1rem;display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+           <a href="guidelines.html" style="background:#8b5cf6;color:#fff;padding:.6rem 1.5rem;border-radius:10px;text-decoration:none;font-weight:700;font-size:.9rem">📘 تصفح الرجفان مجاناً</a>
+           <a href="register.html" style="background:transparent;color:#8b5cf6;padding:.6rem 1.5rem;border-radius:10px;text-decoration:none;font-weight:700;font-size:.9rem;border:1px solid #8b5cf6">📝 إنشاء حساب</a>
+         </div>`;
+    container.insertBefore(notice, container.firstChild);
+
+    // تحديث شريط التنقل
+    tb.innerHTML = u
+      ? `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" style="color:#ef4444;border-color:#ef4444;text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid;border-radius:8px;background:#111827;">خروج</a>`
+      : `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="login.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #1e2d45;border-radius:8px;background:#111827;color:#94a3b8;">🔐 دخول</a><a href="register.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #1e2d45;border-radius:8px;background:#111827;color:#94a3b8;">📝 تسجيل</a>`;
+
+  }catch(e){ console.error(e); }
+})();
+</script>
 <script src="protection.js"></script>
 </body>
 </html>

@@ -297,6 +297,52 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 </footer>
 
 <script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    const hasAccess = isAdmin || isSubscribed;
+
+    // تحديث شريط التنقل
+    const links = document.querySelector('.top-bar .links');
+    if(u){
+      links.innerHTML = hasAccess
+        ? `<a href="index.html" class="lnk">🏠 الرئيسية</a><a href="profile.html" class="lnk">👤 ${u.name}</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" class="lnk" style="color:#ef4444;border-color:#ef4444;">خروج</a>`
+        : `<a href="index.html" class="lnk">🏠 الرئيسية</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" class="lnk" style="color:#ef4444;border-color:#ef4444;">خروج</a>`;
+    } else {
+      links.innerHTML = `<a href="index.html" class="lnk">🏠 الرئيسية</a><a href="login.html" class="lnk">🔐 دخول</a><a href="register.html" class="lnk">📝 تسجيل</a>`;
+    }
+
+    if(!hasAccess){
+      // غير مفعّل — أظهر رسالة وأغلق الكروت غير الرجفان
+      const main = document.querySelector('.main');
+      const notice = document.createElement('div');
+      notice.style.cssText = `background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;text-align:center;direction:rtl`;
+      notice.innerHTML = u
+        ? `<div style="font-size:1rem;font-weight:700;color:#8b5cf6;margin-bottom:.4rem">⏳ حسابك قيد التفعيل</div>
+           <div style="color:#94a3b8;font-size:.85rem;line-height:1.7">يمكنك الآن تصفح <strong style="color:#8b5cf6">غايدلاين الرجفان الأذيني</strong> مجاناً. باقي المحتوى يتطلب اشتراكاً مفعّلاً.</div>`
+        : `<div style="font-size:1rem;font-weight:700;color:#8b5cf6;margin-bottom:.4rem">🎁 وصول مجاني جزئي</div>
+           <div style="color:#94a3b8;font-size:.85rem;line-height:1.7">غايدلاين الرجفان الأذيني متاح مجاناً. <a href="register.html" style="color:#8b5cf6">سجّل الآن</a> للوصول لكامل المحتوى.</div>`;
+      main.insertBefore(notice, main.firstChild);
+
+      // أغلق كل الكروت المتاحة عدا الرجفان الأذيني
+      document.querySelectorAll('.g-card.available').forEach(card => {
+        if(!card.href || !card.href.includes('af-index')){
+          card.classList.remove('available');
+          card.classList.add('locked');
+          card.removeAttribute('href');
+          card.style.opacity = '0.4';
+          card.style.pointerEvents = 'none';
+          const badge = card.querySelector('.card-badge');
+          if(badge){ badge.textContent = '🔒 مدفوع'; badge.className = 'card-badge badge-soon'; }
+        }
+      });
+    }
+  }catch(e){ console.error(e); }
+})();
+</script>
 <script src="protection.js"></script>
 </body>
 </html>
