@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACS — الجزء الثالث: NSTEMI — الإدارة والتدخل | ESC 2023</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--green:#10b981;--blue:#3b82f6;--gold:#f59e0b;--red:#ef4444;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--red));z-index:9999;transition:width .2s;width:0}
+  header{background:linear-gradient(135deg,#3a2a0a,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);color:var(--gold);padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+  .back-btn:hover{background:rgba(245,158,11,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:#fff}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .part-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2rem;overflow-x:auto}
+  .part-nav-inner{max-width:1400px;margin:0 auto;display:flex;gap:.5rem}
+  .part-btn{padding:.4rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text2);background:transparent;white-space:nowrap;transition:all .2s}
+  .part-btn:hover{border-color:var(--gold);color:var(--gold)}
+  .part-btn.active{background:var(--gold);border-color:var(--gold);color:#000}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:var(--gold);border-right-color:var(--gold);background:rgba(245,158,11,.1)}
+  .toc .toc-sub{padding-right:1rem;font-size:.78rem}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:var(--gold);color:#000;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;flex-shrink:0}
+  .section h2{font-size:1.25rem;font-weight:700;color:#fff}
+  .section h3{font-size:1.05rem;font-weight:600;color:var(--gold);margin:1.5rem 0 .75rem}
+  .section h4{font-size:.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 .5rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul,.section ol{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
+  .badge-i{background:var(--green);color:#fff}
+  .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
+  .rec-iia{background:rgba(59,130,246,.12);border-color:var(--blue)}
+  .badge-iia{background:var(--blue);color:#fff}
+  .rec-iib{background:rgba(245,158,11,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#000}
+  .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
+  .badge-iii{background:var(--red);color:#fff}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .highlight strong{color:var(--gold)}
+  .warning{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .warning strong{color:var(--gold)}
+  .danger{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .danger strong{color:var(--red)}
+  .success{background:rgba(16,185,129,.1);border-color:var(--green)}
+  .success strong{color:var(--green)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(245,158,11,.15);color:var(--gold);padding:.75rem 1rem;text-align:right;font-weight:600;white-space:nowrap}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:rgba(255,255,255,.03)}
+  .algo-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+  .algo-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  .algo-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .algo-num{background:var(--gold);color:#000;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:.2rem}
+  .algo-content h4{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:.3rem}
+  .algo-content p{font-size:.83rem;color:var(--text2);margin:0}
+  .key-points{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(239,68,68,.06));border:1px solid rgba(245,158,11,.3);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+  .key-points h4{color:var(--gold);margin-bottom:1rem;font-size:1rem}
+  .key-points ul{list-style:none;padding:0}
+  .key-points li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem}
+  .key-points li::before{content:'🔑';flex-shrink:0}
+  .next-prev{display:flex;justify-content:space-between;margin-top:2rem;gap:1rem}
+  .nav-btn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;text-decoration:none;transition:all .25s;flex:1;max-width:260px}
+  .nav-btn:hover{border-color:var(--gold);background:rgba(245,158,11,.08)}
+  .nav-btn .dir{font-size:.75rem;color:var(--text2);margin-bottom:.25rem}
+  .nav-btn .title{font-size:.9rem;font-weight:700;color:#fff}
+  .nav-btn.next{text-align:left}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:2rem}
+  footer a{color:var(--gold);text-decoration:none}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="acs-index.html" class="back-btn">← ACS Overview</a>
+    <div class="header-title">
+      <h1>الجزء الثالث — NSTEMI: الإدارة والتدخل</h1>
+      <p>ESC Guidelines 2023 · Acute Coronary Syndromes</p>
+    </div>
+  </div>
+</header>
+
+<div class="part-nav">
+  <div class="part-nav-inner">
+    <a href="acs-part1.html" class="part-btn">١ · التشخيص</a>
+    <a href="acs-part2.html" class="part-btn">٢ · STEMI</a>
+    <a href="acs-part3.html" class="part-btn active">٣ · NSTEMI</a>
+    <a href="acs-part4.html" class="part-btn">٤ · مضادات التخثر</a>
+    <a href="acs-part5.html" class="part-btn">٥ · ما بعد ACS</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h3>محتويات الجزء الثالث</h3>
+    <a href="#s1">١ · استراتيجيات إعادة التروية</a>
+    <a href="#s2" class="toc-sub">· Immediate vs Early vs Selective</a>
+    <a href="#s3">٢ · GRACE والقرار الجراحي</a>
+    <a href="#s4">٣ · PCI vs CABG</a>
+    <a href="#s5">٤ · Cardiogenic Shock في NSTEMI</a>
+    <a href="#s6">٥ · HEART Score</a>
+    <a href="#s7">٦ · المرضى عالي الخطر</a>
+    <a href="#keys">النقاط المفتاحية</a>
+  </nav>
+
+  <div class="content">
+
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">١</div>
+        <h2>استراتيجيات إعادة التروية في NSTEMI</h2>
+      </div>
+
+      <p>على عكس STEMI، التوقيت في NSTEMI ليس طارئاً مطلقاً لكنه يعتمد على درجة الخطر — كلما زاد الخطر زاد الإلحاح.</p>
+
+      <h3 id="s2">Immediate vs Early vs Selective Invasive</h3>
+      <div class="algo-box">
+        <div class="algo-step">
+          <div class="algo-num">1</div>
+          <div class="algo-content">
+            <h4>Immediate Invasive (≤2 ساعة)</h4>
+            <p>Very High Risk: عدم استقرار ديناميكي، ألم مقاوم، VT/VF، مضاعفات ميكانيكية، HF حادة مرتبطة بـ NSTEMI، ST depression منتشر + aVR elevation</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">2</div>
+          <div class="algo-content">
+            <h4>Early Invasive (≤24 ساعة)</h4>
+            <p>High Risk: تشخيص NSTEMI مؤكد، GRACE > 140، تغيرات ST/T ديناميكية</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">3</div>
+          <div class="algo-content">
+            <h4>Selective Invasive (حسب الحالة)</h4>
+            <p>Low/Intermediate Risk: GRACE < 109 — يُقيَّم أولاً بفحوصات غير جراحية (Stress Test، CT Angio) قبل القرار</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">استراتيجية Immediate Invasive (≤2 ساعة) مُوصى بها في مرضى NSTEMI ذوي الخطر العالي جداً (Very High Risk)</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">استراتيجية Early Invasive (≤24 ساعة) مُوصى بها في مرضى NSTEMI مؤكَّد التشخيص أو GRACE > 140</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ تغيير 2023 — لا فائدة من Routine Very Early</strong>
+        دراسات حديثة (VERDICT، RIDDLE-NSTEMI) لم تُظهر فائدة إضافية واضحة لـ Immediate Invasive (&lt;2h) مقارنة بـ Early (&lt;24h) في غير High-Risk جداً — التمييز الدقيق للفئة الصحيحة مهم.
+      </div>
+    </div>
+
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">٢</div>
+        <h2>GRACE Score والقرار الجراحي</h2>
+      </div>
+
+      <p>راجعنا GRACE Score بالتفصيل في الجزء الأول. هنا نركز على كيفية استخدامه في اتخاذ قرار التدخل.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>GRACE</th><th>التصنيف</th><th>التوقيت</th><th>المكان المناسب</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--red)">&gt;140</td><td>Very High / High</td><td>≤24 ساعة</td><td>مركز PCI</td></tr>
+            <tr><td style="color:var(--gold)">109–140</td><td>Intermediate</td><td>≤72 ساعة</td><td>مركز PCI خلال 72h</td></tr>
+            <tr><td style="color:var(--green)">&lt;109</td><td>Low</td><td>اختياري</td><td>تقييم غير جراحي أولاً</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>المرضى الذين لا يحتاجون GRACE</h3>
+      <p>المرضى ذوو الخطر العالي جداً (Very High Risk Criteria) يحتاجون Immediate Invasive بصرف النظر عن قيمة GRACE — عدم الاستقرار الديناميكي يتجاوز أي حساب رقمي.</p>
+    </div>
+
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">٣</div>
+        <h2>PCI vs CABG في NSTEMI</h2>
+      </div>
+
+      <p>القرار بين PCI و CABG يعتمد على تعقيد الآفة (SYNTAX Score)، عدد الأوعية المصابة، ووجود سكري أو ضعف وظيفة البطين.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>المعيار</th><th>يفضّل PCI</th><th>يفضّل CABG</th></tr></thead>
+          <tbody>
+            <tr><td>عدد الأوعية</td><td>1–2 وعاء بدون LM معقّد</td><td>3 أوعية + سكري، أو LM معقّد</td></tr>
+            <tr><td>SYNTAX Score</td><td>منخفض (&lt;23)</td><td>عالٍ (&gt;32)</td></tr>
+            <tr><td>السكري</td><td>غير مفضّل في multivessel</td><td>مفضّل — FREEDOM Trial</td></tr>
+            <tr><td>EF منخفض</td><td>مقبول حسب التشريح</td><td>مفضّل إذا multivessel + LM</td></tr>
+            <tr><td>حالة المريض الحادة</td><td>مفضّل — أسرع</td><td>يتطلب استقراراً أولاً</td></tr>
+            <tr><td>Heart Team</td><td colspan="2" style="text-align:center;color:var(--gold)">القرار يجب أن يكون عبر فريق متعدد التخصصات</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بمناقشة استراتيجية إعادة التروية (PCI vs CABG) عبر Heart Team في الحالات المعقّدة، خصوصاً LM أو 3-vessel disease مع سكري</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <h2>Cardiogenic Shock في NSTEMI</h2>
+      </div>
+
+      <p>أقل شيوعاً من STEMI لكن يحمل نفس الخطورة. يحدث غالباً في مرضى multivessel disease متقدّم أو مضاعفات ميكانيكية.</p>
+
+      <div class="rec rec-i">
+        <div class="rec-text">Immediate Invasive Strategy مُوصى بها في NSTEMI المصحوب بـ Cardiogenic Shock أو عدم استقرار ديناميكي</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="info-box danger">
+        <strong>🚨 نفس مبادئ STEMI Shock</strong>
+        Culprit-only PCI، Norepinephrine كخط أول، تجنّب IABP الروتيني — راجع الجزء الثاني للتفاصيل الكاملة.
+      </div>
+    </div>
+
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <h2>HEART Score في الطوارئ</h2>
+      </div>
+
+      <p>أداة سريعة في الطوارئ لتقييم خطر MACE خلال 6 أسابيع — تُستخدم جنباً إلى جنب مع hs-Troponin.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>العنصر</th><th>0 نقطة</th><th>1 نقطة</th><th>2 نقطة</th></tr></thead>
+          <tbody>
+            <tr><td><strong>H</strong>istory</td><td>غير مشتبه</td><td>متوسط الشك</td><td>شديد الشك</td></tr>
+            <tr><td><strong>E</strong>CG</td><td>طبيعي</td><td>اضطراب إعادة استقطاب غير محدد</td><td>انخفاض ST معنوي</td></tr>
+            <tr><td><strong>A</strong>ge</td><td>&lt;45</td><td>45–65</td><td>&gt;65</td></tr>
+            <tr><td><strong>R</strong>isk factors</td><td>0</td><td>1–2</td><td>≥3 أو تاريخ CAD</td></tr>
+            <tr><td><strong>T</strong>roponin</td><td>طبيعي</td><td>1–3× الحد الطبيعي</td><td>&gt;3× الحد الطبيعي</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>المجموع</th><th>الخطر</th><th>خطر MACE 6 أسابيع</th><th>القرار</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--green)">0–3</td><td>منخفض</td><td>0.9–1.7%</td><td>خروج آمن</td></tr>
+            <tr><td style="color:var(--gold)">4–6</td><td>متوسط</td><td>12–16.6%</td><td>دخول ومراقبة</td></tr>
+            <tr><td style="color:var(--red)">7–10</td><td>عالٍ</td><td>50–65%</td><td>إدارة جراحية مبكرة</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">٦</div>
+        <h2>المرضى عالي الخطر — متى نتدخل فوراً</h2>
+      </div>
+
+      <h3>معايير Very High Risk — تستوجب تدخلاً فورياً</h3>
+      <ul>
+        <li>عدم استقرار ديناميكي أو Cardiogenic Shock</li>
+        <li>ألم صدري مستمر مقاوم للعلاج الدوائي</li>
+        <li>اضطرابات نظم خطيرة مهدّدة للحياة (VT/VF) أو توقف القلب بعد الإنعاش</li>
+        <li>مضاعفات ميكانيكية لـ MI (قصور صمام تاجي حاد، VSD، تمزق جدار)</li>
+        <li>قصور قلب حاد مرتبط بشكل واضح بـ NSTEMI</li>
+        <li>ST depression منتشر &gt;1mm في ≥6 خيوط + ارتفاع ST في aVR و/أو V1 (يشير لـ Left Main أو Triple Vessel)</li>
+      </ul>
+
+      <div class="info-box danger">
+        <strong>🚨 لا تنتظر GRACE في هذه الحالات</strong>
+        المعايير السريرية أعلاه تتجاوز أي حساب رقمي — التدخل الفوري مطلوب بصرف النظر عن GRACE Score.
+      </div>
+    </div>
+
+    <div class="key-points" id="keys">
+      <h4>🔑 نقاط المفتاح — NSTEMI</h4>
+      <ul>
+        <li>Very High Risk → Immediate Invasive ≤2 ساعة بصرف النظر عن GRACE</li>
+        <li>High Risk (GRACE&gt;140 أو NSTEMI مؤكَّد) → Early Invasive ≤24 ساعة</li>
+        <li>Low/Intermediate Risk → تقييم غير جراحي أولاً ثم قرار انتقائي</li>
+        <li>Heart Team إلزامي في القرارات المعقّدة بين PCI و CABG</li>
+        <li>السكري + 3-vessel disease → CABG مفضّل (FREEDOM Trial)</li>
+        <li>HEART Score أداة سريعة للطوارئ — مكمّلة لا بديلة عن GRACE</li>
+        <li>Cardiogenic Shock في NSTEMI: نفس مبادئ STEMI تماماً</li>
+      </ul>
+    </div>
+
+    <div class="next-prev">
+      <a href="acs-part2.html" class="nav-btn">
+        <div class="dir">← الجزء السابق</div>
+        <div class="title">STEMI — إعادة التروية</div>
+      </a>
+      <a href="acs-part4.html" class="nav-btn next">
+        <div class="dir">الجزء التالي ←</div>
+        <div class="title">العلاج المضاد للتخثر</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>مبني على غايدلاين ESC 2023 لـ ACS — للأغراض التعليمية | <a href="acs-index.html">← ACS Overview</a></p>
+</footer>
+
+<script>
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+});
+const toc = document.querySelectorAll('.toc a');
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      toc.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector(`.toc a[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACS — الجزء الثاني: STEMI — إعادة التروية | ESC 2023</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#ef4444;--green:#10b981;--blue:#3b82f6;--gold:#f59e0b;--red:#ef4444;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--blue));z-index:9999;transition:width .2s;width:0}
+  header{background:linear-gradient(135deg,#3a0a0a,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:var(--red);padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+  .back-btn:hover{background:rgba(239,68,68,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:#fff}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .part-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2rem;overflow-x:auto}
+  .part-nav-inner{max-width:1400px;margin:0 auto;display:flex;gap:.5rem}
+  .part-btn{padding:.4rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text2);background:transparent;white-space:nowrap;transition:all .2s}
+  .part-btn:hover{border-color:var(--red);color:var(--red)}
+  .part-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:var(--blue);border-right-color:var(--blue);background:rgba(59,130,246,.1)}
+  .toc .toc-sub{padding-right:1rem;font-size:.78rem}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:var(--blue);color:#fff;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;flex-shrink:0}
+  .section h2{font-size:1.25rem;font-weight:700;color:#fff}
+  .section h3{font-size:1.05rem;font-weight:600;color:var(--blue);margin:1.5rem 0 .75rem}
+  .section h4{font-size:.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 .5rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul,.section ol{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
+  .badge-i{background:var(--green);color:#fff}
+  .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
+  .rec-iia{background:rgba(59,130,246,.12);border-color:var(--blue)}
+  .badge-iia{background:var(--blue);color:#fff}
+  .rec-iib{background:rgba(245,158,11,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#000}
+  .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
+  .badge-iii{background:var(--red);color:#fff}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(59,130,246,.1);border-color:var(--blue)}
+  .highlight strong{color:var(--blue)}
+  .warning{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .warning strong{color:var(--gold)}
+  .danger{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .danger strong{color:var(--red)}
+  .success{background:rgba(16,185,129,.1);border-color:var(--green)}
+  .success strong{color:var(--green)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(59,130,246,.15);color:var(--blue);padding:.75rem 1rem;text-align:right;font-weight:600;white-space:nowrap}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:rgba(255,255,255,.03)}
+  .algo-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+  .algo-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  .algo-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .algo-num{background:var(--blue);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:.2rem}
+  .algo-content h4{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:.3rem}
+  .algo-content p{font-size:.83rem;color:var(--text2);margin:0}
+  .timing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:1rem 0}
+  .timing-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;border-top:3px solid var(--red)}
+  .timing-time{font-size:1.8rem;font-weight:700;font-family:var(--mono);color:var(--red)}
+  .timing-label{font-size:.82rem;color:var(--text2);margin-top:.3rem}
+  .key-points{background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(239,68,68,.06));border:1px solid rgba(59,130,246,.3);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+  .key-points h4{color:var(--blue);margin-bottom:1rem;font-size:1rem}
+  .key-points ul{list-style:none;padding:0}
+  .key-points li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem}
+  .key-points li::before{content:'🔑';flex-shrink:0}
+  .next-prev{display:flex;justify-content:space-between;margin-top:2rem;gap:1rem}
+  .nav-btn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;text-decoration:none;transition:all .25s;flex:1;max-width:260px}
+  .nav-btn:hover{border-color:var(--blue);background:rgba(59,130,246,.08)}
+  .nav-btn .dir{font-size:.75rem;color:var(--text2);margin-bottom:.25rem}
+  .nav-btn .title{font-size:.9rem;font-weight:700;color:#fff}
+  .nav-btn.next{text-align:left}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:2rem}
+  footer a{color:var(--red);text-decoration:none}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="acs-index.html" class="back-btn">← ACS Overview</a>
+    <div class="header-title">
+      <h1>الجزء الثاني — STEMI: إعادة التروية الطارئة</h1>
+      <p>ESC Guidelines 2023 · Acute Coronary Syndromes</p>
+    </div>
+  </div>
+</header>
+
+<div class="part-nav">
+  <div class="part-nav-inner">
+    <a href="acs-part1.html" class="part-btn">١ · التشخيص</a>
+    <a href="acs-part2.html" class="part-btn active">٢ · STEMI</a>
+    <a href="acs-part3.html" class="part-btn">٣ · NSTEMI</a>
+    <a href="acs-part4.html" class="part-btn">٤ · مضادات التخثر</a>
+    <a href="acs-part5.html" class="part-btn">٥ · ما بعد ACS</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h3>محتويات الجزء الثاني</h3>
+    <a href="#s1">١ · Primary PCI</a>
+    <a href="#s2" class="toc-sub">· أهداف التوقيت</a>
+    <a href="#s3">٢ · الأسبرين والـ P2Y12</a>
+    <a href="#s4">٣ · Fibrinolysis</a>
+    <a href="#s5" class="toc-sub">· موانع الاستعمال</a>
+    <a href="#s6">٤ · Pharmacoinvasive</a>
+    <a href="#s7">٥ · Multivessel Disease</a>
+    <a href="#s8" class="toc-sub">· COMPLETE Trial</a>
+    <a href="#s9">٦ · Cardiogenic Shock</a>
+    <a href="#s10">٧ · No-Reflow</a>
+    <a href="#s11">٨ · علاج آخر</a>
+    <a href="#keys">النقاط المفتاحية</a>
+  </nav>
+
+  <div class="content">
+
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">١</div>
+        <h2>Primary PCI — إعادة التروية المثلى في STEMI</h2>
+      </div>
+
+      <p>Primary PCI هو الأسلوب المفضّل لإعادة التروية في STEMI عند توفر مختبر قسطرة في الوقت المناسب. يُحقق معدلات فتح أعلى وإعادة انسداد أقل مقارنة بالـ Fibrinolysis.</p>
+
+      <h3 id="s2">أهداف التوقيت — مطلقة</h3>
+      <div class="timing-grid">
+        <div class="timing-card">
+          <div class="timing-time">10'</div>
+          <div class="timing-label">FMC → ECG تشخيصي</div>
+        </div>
+        <div class="timing-card">
+          <div class="timing-time">120'</div>
+          <div class="timing-label">FMC → Balloon Inflation</div>
+        </div>
+        <div class="timing-card">
+          <div class="timing-time">60'</div>
+          <div class="timing-label">Door-to-Balloon (نقل مباشر)</div>
+        </div>
+        <div class="timing-card">
+          <div class="timing-time">10'</div>
+          <div class="timing-label">FMC → Fibrinolysis (إذا لا PCI)</div>
+        </div>
+        <div class="timing-card">
+          <div class="timing-time">12h</div>
+          <div class="timing-label">حد أقصى Symptom onset → PCI</div>
+        </div>
+        <div class="timing-card">
+          <div class="timing-time">48h</div>
+          <div class="timing-label">Late presentation → يُقيَّم</div>
+        </div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">Primary PCI مفضّل على Fibrinolysis في STEMI إذا أمكن إجراؤه خلال 120 دقيقة من FMC</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يجب الحفاظ على FMC-to-balloon time أقل من 120 دقيقة — وأقل من 60 دقيقة للنقل المباشر لمركز PCI</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+
+      <h3>تقنيات Primary PCI</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>التقنية</th><th>التوصية</th><th>الأدلة</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Radial Access</strong></td><td>مفضّل على Femoral</td><td>↓ نزيف، ↓ وفيات</td></tr>
+            <tr><td><strong>Drug-Eluting Stent (DES)</strong></td><td>مفضّل على BMS</td><td>↓ إعادة تضيّق</td></tr>
+            <tr><td><strong>Thrombus Aspiration</strong></td><td>روتيني غير موصى به</td><td>TASTE، TOTAL: لا فائدة</td></tr>
+            <tr><td><strong>Intracoronary Imaging</strong></td><td>يُفكر فيه في حالات محددة</td><td>PLAQUE Erosion، SCAD</td></tr>
+            <tr><td><strong>GP IIb/IIIa في PCI</strong></td><td>انتقائي — خثرة ضخمة</td><td>لا روتيني</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">٢</div>
+        <h2>Antiplatelet في STEMI — قبل وأثناء PCI</h2>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">Aspirin 150–300mg فورياً عند تشخيص STEMI، ثم 75–100mg يومياً مدى الحياة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">Ticagrelor (180mg ثم 90mg ×2) هو P2Y12 المفضّل في STEMI المُعالج بـ Primary PCI</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">Prasugrel (60mg ثم 10mg ×1) بديل مفضّل للـ Ticagrelor في STEMI — PCI فقط، لا Fibrinolysis</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الدواء</th><th>جرعة التحميل</th><th>الصيانة</th><th>ملاحظات</th></tr></thead>
+          <tbody>
+            <tr><td><strong style="color:var(--green)">Ticagrelor</strong></td><td>180mg</td><td>90mg ×2 يومياً</td><td>مفضّل — يعمل بدون تحوّل</td></tr>
+            <tr><td><strong style="color:var(--blue)">Prasugrel</strong></td><td>60mg</td><td>10mg ×1 يومياً</td><td>ممنوع: سكتة سابقة، ≥75 سنة، &lt;60 كغ</td></tr>
+            <tr><td><strong style="color:var(--text2)">Clopidogrel</strong></td><td>600mg</td><td>75mg ×1 يومياً</td><td>بديل عند منع الأفضل</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ متى تُعطي P2Y12؟</strong>
+        في Primary PCI: أعطِ فوراً عند التشخيص (Pre-hospital أو في الطوارئ). في Fibrinolysis: Clopidogrel فقط مع الليزر — لا Ticagrelor ولا Prasugrel.
+      </div>
+    </div>
+
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">٣</div>
+        <h2>Fibrinolysis — متى نلجأ إليها؟</h2>
+      </div>
+
+      <p>Fibrinolysis تبقى خياراً مهماً عندما لا يمكن إجراء Primary PCI في الوقت المناسب (FMC → Balloon > 120 دقيقة).</p>
+
+      <div class="rec rec-i">
+        <div class="rec-text">Fibrinolysis تُوصى به في STEMI إذا كان Primary PCI غير متاح في 120 دقيقة من FMC ولا توجد موانع</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <h3>الأدوية المتاحة</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الدواء</th><th>الجرعة</th><th>طريقة الإعطاء</th><th>الميزة</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Tenecteplase (TNK)</strong></td><td>حسب الوزن: 30–50mg</td><td>Bolus IV واحد</td><td>الأسهل — Bolus واحد</td></tr>
+            <tr><td><strong>Alteplase (tPA)</strong></td><td>15mg bolus + 0.75mg/kg + 0.5mg/kg</td><td>90 دقيقة</td><td>أكثر دراسةً</td></tr>
+            <tr><td><strong>Reteplase (rPA)</strong></td><td>10U + 10U IV</td><td>Bolus مزدوج فاصل 30 دقيقة</td><td>سهل الإعطاء</td></tr>
+            <tr><td><strong>Streptokinase</strong></td><td>1.5 مليون وحدة</td><td>60 دقيقة IV</td><td>أرخص — أقفل فعالية</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="s5">موانع Fibrinolysis</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>مطلقة</th><th>نسبية</th></tr></thead>
+          <tbody>
+            <tr><td>نزيف داخل الجمجمة في أي وقت</td><td>TIA خلال 6 أشهر</td></tr>
+            <tr><td>سكتة إقفارية خلال 6 أشهر</td><td>مضادات تخثر فموية</td></tr>
+            <tr><td>تشريح الأبهر</td><td>ضغط دم &gt; 180/110 ثابت</td></tr>
+            <tr><td>ورم دماغي أو AVM</td><td>حمل أو أسبوع بعد الولادة</td></tr>
+            <tr><td>صدمة رأسية / جراحة دماغية &lt; 3 أشهر</td><td>قرحة هضمية نشطة</td></tr>
+            <tr><td>نزيف هضمي &lt; شهر</td><td>Endocarditis معدية</td></tr>
+            <tr><td>اضطراب تخثر معروف</td><td>Refractory resuscitation</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box danger">
+        <strong>🚨 علامات فشل Fibrinolysis — Rescue PCI</strong>
+        إذا لم ينخفض ST بنسبة &gt;50% بعد 60–90 دقيقة من الليزر → Rescue PCI فوراً. لا تنتظر أعراضاً سريرية.
+      </div>
+    </div>
+
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <h2>Pharmacoinvasive Strategy</h2>
+      </div>
+
+      <p>استراتيجية مهمة في المناطق التي لا يتوفر فيها مركز PCI — الليزر أولاً ثم النقل للـ Angio.</p>
+
+      <div class="algo-box">
+        <div class="algo-step">
+          <div class="algo-num">1</div>
+          <div class="algo-content"><h4>STEMI في مستشفى بدون PCI</h4><p>FMC → Balloon > 120 دقيقة متوقعة</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">2</div>
+          <div class="algo-content"><h4>Fibrinolysis فوراً (≤10 دقائق)</h4><p>Tenecteplase أو Alteplase + Aspirin + Clopidogrel + Anticoagulation</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">3</div>
+          <div class="algo-content"><h4>نقل فوري لمركز PCI</h4><p>ابدأ النقل فوراً — لا تنتظر نتيجة الليزر</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">4</div>
+          <div class="algo-content"><h4>Angio خلال 2–24 ساعة</h4><p>إذا نجح الليزر: Angio روتيني خلال 2–24 ساعة<br>إذا فشل: Rescue PCI فوراً</p></div>
+        </div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">عند نجاح Fibrinolysis، يُجرى تصوير شريان تاجي روتيني خلال 2–24 ساعة من الليزر</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+    </div>
+
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <h2>Multivessel Disease في STEMI</h2>
+      </div>
+
+      <p>يُصاب 40–65% من مرضى STEMI بمرض متعدد الأوعية (Multivessel CAD). القرار: هل ننظر إلى الإناء المسؤول فقط أم نعالج الكل؟</p>
+
+      <div class="info-box highlight" id="s8">
+        <strong>🆕 تغيير 2023 — دراسة COMPLETE</strong>
+        أثبتت COMPLETE أن Complete Revascularization (علاج كل الضيوق المعنوية) يُقلل وفيات CV + MI بنسبة 26% مقارنة بـ Culprit-only. هذا غيّر توصية ESC 2023.
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بالـ Complete Revascularization في مرضى STEMI غير المصابين بـ Cardiogenic Shock (إما أثناء Primary PCI أو في نفس الدخول)</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الوضع</th><th>التوصية 2023</th><th>الدليل</th></tr></thead>
+          <tbody>
+            <tr><td>Multivessel CAD بدون Shock</td><td style="color:var(--green)">Complete Revascularization — Class I 🆕</td><td>COMPLETE Trial</td></tr>
+            <tr><td>توقيت Non-Culprit PCI</td><td>أثناء Primary PCI أو نفس الدخول</td><td>كلاهما مقبول</td></tr>
+            <tr><td>Cardiogenic Shock + Multivessel</td><td style="color:var(--red)">Culprit-only فقط — Class I</td><td>CULPRIT-SHOCK</td></tr>
+            <tr><td>Left Main + STEMI</td><td>PCI للـ LM + Culprit أثناء Primary PCI</td><td>حسب التشريح</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="s9">
+      <div class="section-header">
+        <div class="section-num">٦</div>
+        <h2>Cardiogenic Shock في STEMI</h2>
+      </div>
+
+      <p>Cardiogenic Shock يحدث في 5–10% من STEMI ويحمل وفيات 40–50%. Emergency revascularization أفضل علاج.</p>
+
+      <div class="rec rec-i">
+        <div class="rec-text">Emergency revascularization بـ Primary PCI مُوصى به في STEMI مع Cardiogenic Shock بصرف النظر عن وقت بدء الأعراض</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">Culprit-only PCI مُوصى به في Cardiogenic Shock مع Multivessel Disease (لا تُعالج non-culprit في نفس الجلسة)</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <h3>إدارة Cardiogenic Shock</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الإجراء</th><th>التوصية</th><th>الأدلة</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Primary PCI</strong></td><td>فوراً — Class I</td><td>الأساس</td></tr>
+            <tr><td><strong>Norepinephrine</strong></td><td>Vasopressor أول</td><td>SOAP II: أفضل من Dopamine</td></tr>
+            <tr><td><strong>IABP</strong></td><td>لا روتيني — Class III</td><td>IABP-SHOCK II: لا فائدة</td></tr>
+            <tr><td><strong>Impella / ECMO</strong></td><td>يُفكر فيه في مراكز خبرة</td><td>ECMO-CS قيد الدراسة</td></tr>
+            <tr><td><strong>CABG</strong></td><td>عند عدم ملاءمة PCI + Shock</td><td>انتقائي</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box danger">
+        <strong>🚨 IABP — ليس روتينياً بعد الآن</strong>
+        أثبتت IABP-SHOCK II أن IABP الروتيني لا يُحسّن البقيا في Cardiogenic Shock. استخدمه فقط كجسر للـ MCS أعلى أو انتظار ECMO.
+      </div>
+    </div>
+
+    <div class="section" id="s10">
+      <div class="section-header">
+        <div class="section-num">٧</div>
+        <h2>No-Reflow — ماذا نفعل؟</h2>
+      </div>
+
+      <p>No-Reflow: عدم عودة التدفق الطبيعي بعد فتح الشريان الناجح. يحدث في 5–50% ويرتبط بنتائج أسوأ.</p>
+
+      <h3>الأسباب</h3>
+      <ul>
+        <li>Microvascular obstruction — انسداد أوعية دموية دقيقة بخثرات وجزيئات</li>
+        <li>Reperfusion injury — تلف عند عودة التدفق</li>
+        <li>Distal embolization — ترحّل جزيئات الخثرة</li>
+        <li>Microvascular spasm</li>
+      </ul>
+
+      <h3>الإدارة</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>التدخل</th><th>الدور</th></tr></thead>
+          <tbody>
+            <tr><td>Intracoronary Adenosine</td><td>خيار أول — يُحسّن TIMI Flow</td></tr>
+            <tr><td>Intracoronary Verapamil / Nitroprusside</td><td>بديل — Vasospasm</td></tr>
+            <tr><td>GP IIb/IIIa Intracoronary</td><td>خثرة ضخمة واضحة</td></tr>
+            <tr><td>Thrombus Aspiration</td><td>انتقائي — لا روتيني</td></tr>
+            <tr><td>تقليل Balloon Inflation</td><td>تقليل Distal Embolization</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="s11">
+      <div class="section-header">
+        <div class="section-num">٨</div>
+        <h2>علاج إضافي في STEMI</h2>
+      </div>
+
+      <h3>Anticoagulation أثناء Primary PCI</h3>
+      <div class="rec rec-i">
+        <div class="rec-text">UFH (70–100 U/kg IV) هو الـ Anticoagulant المفضّل أثناء Primary PCI</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">B</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">Bivalirudin بديل مقبول خاصة في خطر نزيف عالٍ أو HIT</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">A</span></div>
+      </div>
+
+      <h3>علاجات أثناء STEMI</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الدواء</th><th>التوصية</th><th>الملاحظة</th></tr></thead>
+          <tbody>
+            <tr><td>Oxygen</td><td>فقط إذا SpO₂ &lt; 90%</td><td>Hyperoxia ضار</td></tr>
+            <tr><td>Nitrates IV</td><td>ألم مستمر أو HF أو HTN</td><td>ممنوع إذا BP &lt; 90</td></tr>
+            <tr><td>Morphine</td><td>تحفّظ — يؤخر امتصاص P2Y12</td><td>انتقائي جداً</td></tr>
+            <tr><td>Beta-Blocker IV</td><td>Tachycardia بدون HF فقط</td><td>لا روتيني</td></tr>
+            <tr><td>Statin شدة عالية</td><td>فوراً</td><td>Atorvastatin 80mg</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ Morphine في STEMI — تحذير</strong>
+        Morphine يؤخر امتصاص P2Y12 الفموي عبر تأخير إفراغ المعدة. إذا لزم تسكين الألم — فكّر في Fentanyl IV (أسرع بداية، أقل تأثيراً على الامتصاص).
+      </div>
+    </div>
+
+    <div class="key-points" id="keys">
+      <h4>🔑 نقاط المفتاح — STEMI</h4>
+      <ul>
+        <li>FMC → Balloon &lt; 120 دقيقة — هدف مطلق لا تفاوض فيه</li>
+        <li>Ticagrelor أو Prasugrel مفضّلان على Clopidogrel في Primary PCI</li>
+        <li>Complete Revascularization (COMPLETE 2023) — Class I الآن بدون Shock</li>
+        <li>Cardiogenic Shock: Culprit-only فقط + Norepinephrine + لا IABP روتيني</li>
+        <li>Pharmacoinvasive: ليزر ثم Angio خلال 2–24 ساعة</li>
+        <li>Radial Access مفضّل على Femoral — أقل نزيفاً</li>
+        <li>Oxygen فقط إذا SpO₂ &lt; 90% — Hyperoxia ضار</li>
+        <li>Thrombus Aspiration روتيني غير موصى به — TASTE وTOTAL</li>
+      </ul>
+    </div>
+
+    <div class="next-prev">
+      <a href="acs-part1.html" class="nav-btn">
+        <div class="dir">← الجزء السابق</div>
+        <div class="title">التشخيص والتقييم</div>
+      </a>
+      <a href="acs-part3.html" class="nav-btn next">
+        <div class="dir">الجزء التالي ←</div>
+        <div class="title">NSTEMI — الإدارة والتدخل</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>مبني على غايدلاين ESC 2023 لـ ACS — للأغراض التعليمية | <a href="acs-index.html">← ACS Overview</a></p>
+</footer>
+
+<script>
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+});
+const toc = document.querySelectorAll('.toc a');
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      toc.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector(`.toc a[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+</body>
+</html>
