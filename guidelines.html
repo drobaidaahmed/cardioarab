@@ -64,11 +64,56 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   </div>
 </div>
 
+<style>
+/* SEARCH */
+.search-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:.9rem 1.5rem;position:sticky;top:0;z-index:200}
+.search-inner{max-width:720px;margin:0 auto;position:relative}
+.search-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:.75rem 2.8rem .75rem 2.6rem;color:var(--text);font-family:var(--font);font-size:.95rem;outline:none;transition:.2s;direction:rtl}
+.search-input::placeholder{color:var(--text2)}
+.search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,.15)}
+.search-icon{position:absolute;right:.95rem;top:50%;transform:translateY(-50%);color:var(--text2);font-size:1.05rem;pointer-events:none}
+.search-clear{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);color:var(--text2);cursor:pointer;font-size:.85rem;display:none;background:none;border:none;padding:.2rem .4rem;border-radius:5px}
+.search-clear:hover{color:var(--text);background:var(--bg3)}
+.search-results{position:absolute;top:calc(100% + 8px);right:0;left:0;background:var(--bg2);border:1px solid var(--border);border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.6);max-height:440px;overflow-y:auto;z-index:300;display:none}
+.search-results.show{display:block}
+.result-head{font-size:.72rem;color:var(--text2);padding:.45rem 1rem;border-bottom:1px solid var(--border);background:rgba(255,255,255,.03);border-radius:14px 14px 0 0}
+.result-item{display:flex;gap:.75rem;padding:.7rem 1rem;border-bottom:1px solid var(--border);text-decoration:none;transition:.15s;align-items:flex-start}
+.result-item:last-child{border-bottom:none}
+.result-item:hover{background:rgba(139,92,246,.07)}
+.result-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;margin-top:.1rem}
+.ri-af{background:rgba(139,92,246,.25)}
+.ri-acs{background:rgba(239,68,68,.2)}
+.ri-pm{background:rgba(20,184,166,.2)}
+.ri-vhd{background:rgba(245,158,11,.2)}
+.result-body{flex:1;min-width:0}
+.result-topic{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:.15rem}
+.result-topic mark{background:rgba(139,92,246,.4);color:#fff;border-radius:3px;padding:0 2px;font-style:normal}
+.result-meta{font-size:.73rem;color:var(--text2);display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:.15rem}
+.guide-tag{padding:.1rem .45rem;border-radius:5px;font-weight:700;font-size:.68rem}
+.tag-af{background:rgba(139,92,246,.2);color:#a78bfa}
+.tag-acs{background:rgba(239,68,68,.15);color:#f87171}
+.tag-pm{background:rgba(20,184,166,.15);color:#2dd4bf}
+.tag-vhd{background:rgba(245,158,11,.15);color:#fbbf24}
+.result-context{font-size:.77rem;color:var(--text2);line-height:1.55}
+.no-results{padding:2rem;text-align:center;color:var(--text2);font-size:.88rem}
+</style>
+
 <div class="hero">
   <div class="hero-badge">ESC Guidelines</div>
   <h1>المرشدات <span>الأوروبية</span></h1>
   <p>35 مرشداً من الجمعية الأوروبية لأمراض القلب — يُضاف المحتوى تدريجياً</p>
 </div>
+
+<div class="search-wrap">
+  <div class="search-inner">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="searchInput" type="text"
+      placeholder="ابحث في كل الغايدلاينات… مثال: Colchicine، TAVI، Troponin، Ablation" autocomplete="off">
+    <button class="search-clear" id="searchClear" title="مسح">✕</button>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
 
 <div class="main">
 
@@ -339,13 +384,201 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
           card.style.opacity = '0.4';
           card.style.pointerEvents = 'none';
           const badge = card.querySelector('.card-badge');
-          if(badge){ badge.textContent = '🔒 مدفوع'; badge.className = 'card-badge badge-soon'; }
+          if(badge){ badge.textContent = '\u{1F512} مدفوع'; badge.className = 'card-badge badge-soon'; }
         }
       });
-    }
+
+      // أخفِ البحث الذكي لغير المشتركين وأظهر رسالة بديلة
+      const sw = document.querySelector('.search-wrap');
+      if(sw){
+        const loginLink = u
+          ? 'فعّل اشتراكك للوصول للبحث في جميع الغايدلاينات'
+          : '<a href="register.html" style="color:#8b5cf6;text-decoration:none">سجّل الآن</a> أو <a href="login.html" style="color:#8b5cf6;text-decoration:none">سجّل دخولك</a>';
+        sw.innerHTML = '<div style="max-width:720px;margin:0 auto;background:rgba(139,92,246,.08);border:1px dashed rgba(139,92,246,.35);border-radius:12px;padding:.8rem 1.25rem;display:flex;align-items:center;gap:.75rem;direction:rtl">'
+          + '<span style="font-size:1.2rem">🔒</span>'
+          + '<div><span style="color:#a78bfa;font-weight:700;font-size:.9rem">البحث الذكي متاح للمشتركين فقط</span>'
+          + '<span style="color:#64748b;font-size:.82rem;margin-right:.5rem"> — ' + loginLink + '</span></div></div>';
+      }
+    }    }
   }catch(e){ console.error(e); }
 })();
 </script>
+<script>
+// =====================================================================
+//  فهرس البحث الذكي — CardioArab ESC Guidelines
+//  كل مدخل: { ar, en, tag, icon, guide, part, link, ctx }
+// =====================================================================
+const IDX = [
+
+// ───────── الرجفان الأذيني ESC 2024 ─────────
+{ar:'الرجفان الأذيني',en:'Atrial Fibrillation AF',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الصفحة الرئيسية',link:'af-index.html',ctx:'نظرة عامة على غايدلاين الرجفان الأذيني ESC 2024'},
+{ar:'AF-CARE',en:'AF-CARE pathway',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الأول',link:'af-part1.html',ctx:'منهج AF-CARE: Comorbidity، Avoid stroke، Reduce symptoms، Evaluate'},
+{ar:'CHA2DS2-VA تقييم الجلطة',en:'CHA2DS2-VA stroke risk score',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الأول',link:'af-part1.html',ctx:'تقييم خطر السكتة — حُذف الجنس الأنثوي من النقاط'},
+{ar:'EHRA تصنيف الأعراض',en:'EHRA symptom score',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الأول',link:'af-part1.html',ctx:'EHRA I–IIs–IIm–III–IV: تصنيف أعراض الرجفان'},
+{ar:'تصنيف الرجفان الأذيني',en:'AF classification paroxysmal persistent long-standing permanent',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الأول',link:'af-part1.html',ctx:'انتيابي / مستمر / طويل الأمد / دائم'},
+{ar:'مضادات التخثر DOAC OAC',en:'Anticoagulation DOAC OAC warfarin',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الثاني',link:'af-part2.html',ctx:'DOACs مفضّلة على Warfarin — Apixaban Rivaroxaban Dabigatran Edoxaban'},
+{ar:'إيقاع القلب التحكم Rate Control',en:'Rate control beta blocker digoxin',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الثاني',link:'af-part2.html',ctx:'هدف معدل القلب <110/دقيقة — Beta-blocker خط أول'},
+{ar:'تحويل الإيقاع Cardioversion',en:'Cardioversion electrical chemical',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الثاني',link:'af-part2.html',ctx:'Electrical cardioversion أو Flecainide/Amiodarone للتحويل الكيميائي'},
+{ar:'إزالة الرجفان بالقسطرة Ablation',en:'Catheter ablation pulmonary vein isolation PVI',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الثالث',link:'af-part3.html',ctx:'Ablation Class I في الانتيابي الفاشل على الأدوية — Cryoablation أو RF'},
+{ar:'عزل الأوردة الرئوية PVI',en:'Pulmonary vein isolation PVI',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الثالث',link:'af-part3.html',ctx:'الهدف الأساسي للـ Ablation: عزل الأوردة الرئوية الأربعة'},
+{ar:'Amiodarone Flecainide Propafenone',en:'Antiarrhythmic drugs AAD rhythm control',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الثاني',link:'af-part2.html',ctx:'Flecainide/Propafenone بدون اعتلال عضلة — Amiodarone في HFrEF'},
+{ar:'الرجفان وقصور القلب HFrEF',en:'AF heart failure HFrEF',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الرابع',link:'af-part4.html',ctx:'تحكم في الإيقاع يُحسّن الأعراض — Amiodarone الأكثر أماناً'},
+{ar:'Edoxaban Rivaroxaban Apixaban Dabigatran',en:'DOAC direct oral anticoagulant',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الثاني',link:'af-part2.html',ctx:'الأربعة موصى بها — اختيار الدواء حسب وظائف الكلى والتداخلات'},
+{ar:'WPW والرجفان',en:'WPW pre-excitation atrial fibrillation',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الخامس',link:'af-part5.html',ctx:'WPW + AF: خطر VF — تجنب AV node blockers، قسطرة إلغاء المسار الشاذ'},
+{ar:'الرجفان والحمل',en:'AF pregnancy anticoagulation',tag:'af',icon:'💜',guide:'الرجفان الأذيني',part:'الجزء الخامس',link:'af-part5.html',ctx:'LMWH خلال الحمل — DOACs ممنوعة — Heparin عند الولادة'},
+
+// ───────── الإكليلية الحادة ESC 2023 ─────────
+{ar:'متلازمة الإكليلية الحادة ACS',en:'Acute coronary syndrome ACS',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الصفحة الرئيسية',link:'acs-index.html',ctx:'STEMI وNSTEMI والذبحة غير المستقرة — غايدلاين ESC 2023'},
+{ar:'STEMI احتشاء ST مرتفع',en:'STEMI ST elevation myocardial infarction',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الثاني',link:'acs-part2.html',ctx:'Primary PCI خلال 120 دقيقة — Fibrinolysis عند تعذّر PCI'},
+{ar:'NSTEMI',en:'NSTEMI non-ST elevation',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الثالث',link:'acs-part3.html',ctx:'استراتيجية غازية فورية/مبكرة/انتقائية — HEART Score'},
+{ar:'Troponin التروبونين',en:'Troponin high-sensitivity 0h 1h algorithm',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الأول',link:'acs-part1.html',ctx:'خوارزمية 0h/1h للـ hs-Troponin: Rule-In وRule-Out في ساعة'},
+{ar:'GRACE Score خطر STEMI',en:'GRACE score risk stratification ACS',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الأول',link:'acs-part1.html',ctx:'GRACE ≥140: عالي الخطر — استراتيجية غازية مبكرة'},
+{ar:'HEART Score',en:'HEART score NSTEMI risk',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الثالث',link:'acs-part3.html',ctx:'HEART 0–3: منخفض — 4–6: متوسط — 7–10: عالي'},
+{ar:'Primary PCI قسطرة طارئة',en:'Primary PCI percutaneous coronary intervention STEMI',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الثاني',link:'acs-part2.html',ctx:'Door-to-balloon <90 دقيقة — Class I A'},
+{ar:'Fibrinolysis تحليل الجلطة',en:'Fibrinolysis thrombolysis Tenecteplase Alteplase',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الثاني',link:'acs-part2.html',ctx:'عند تعذّر Primary PCI خلال 120 دقيقة — Tenecteplase الأشيع'},
+{ar:'COMPLETE Trial',en:'COMPLETE trial complete revascularization',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الثاني',link:'acs-part2.html',ctx:'إعادة التوعية الكاملة في STEMI تُقلّل MACE — Class I B'},
+{ar:'الصدمة القلبية Cardiogenic Shock',en:'Cardiogenic shock STEMI',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الثاني',link:'acs-part2.html',ctx:'PCI فوري + دعم ميكانيكي — تجنب روتين IABP'},
+{ar:'DAPT مضادات الصفيحات المزدوجة',en:'DAPT dual antiplatelet P2Y12 aspirin',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الرابع',link:'acs-part4.html',ctx:'Aspirin + Ticagrelor أو Prasugrel — 12 شهراً بعد ACS'},
+{ar:'Ticagrelor Prasugrel Clopidogrel',en:'P2Y12 inhibitor antiplatelet',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الرابع',link:'acs-part4.html',ctx:'Ticagrelor/Prasugrel مفضّلان على Clopidogrel في ACS'},
+{ar:'Triple Therapy AUGUSTUS تثليث',en:'Triple therapy anticoagulation antiplatelet AF ACS AUGUSTUS',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الرابع',link:'acs-part4.html',ctx:'AUGUSTUS: DAPT + OAC — تقليل للثلاثي بعد أسبوع واحد'},
+{ar:'Beta blocker بعد احتشاء ABYSS',en:'Beta blocker post MI ABYSS trial',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الخامس',link:'acs-part5.html',ctx:'ABYSS 2023: إيقاف Beta-blocker بعد سنة عند EF محفوظ — آمن'},
+{ar:'SGLT2 DAPA-MI',en:'SGLT2 inhibitor DAPA-MI post MI',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الخامس',link:'acs-part5.html',ctx:'DAPA-MI: Dapagliflozin بعد احتشاء ↓ HF وأحداث قلبية'},
+{ar:'Statin الستاتين بعد ACS',en:'Statin high intensity rosuvastatin atorvastatin post ACS',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء الخامس',link:'acs-part5.html',ctx:'Statin مكثّف Class I — هدف LDL <1.4 mmol/L أو ↓ 50%'},
+{ar:'MINOCA',en:'MINOCA myocardial infarction non-obstructive coronary arteries',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء السادس',link:'acs-part6.html',ctx:'احتشاء بشرايين تاجية غير مسدودة — CMR لاستبعاد Myocarditis'},
+{ar:'SCAD تشريح الشرايين التلقائي',en:'SCAD spontaneous coronary artery dissection',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء السادس',link:'acs-part6.html',ctx:'أشيع في النساء الشابات — تحفظي بدون Stenting في الغالب'},
+{ar:'Takotsubo متلازمة القلب المكسور',en:'Takotsubo stress cardiomyopathy broken heart',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء السادس',link:'acs-part6.html',ctx:'تشنج قمي عابر — CMR يُفرّق عن الاحتشاء — شفاء تلقائي'},
+{ar:'ACS والحمل والكلى والسكري',en:'ACS special populations diabetes CKD pregnancy elderly',tag:'acs',icon:'❤️',guide:'الإكليلية الحادة',part:'الجزء السادس',link:'acs-part6.html',ctx:'حالات خاصة: سكري، كلى، حمل، مسنون، ACS بدون انسداد'},
+
+// ───────── التامور والعضلة القلبية ESC 2025 ─────────
+{ar:'التهاب التامور الحاد',en:'Acute pericarditis',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الأول',link:'peri-myo-part1.html',ctx:'≥2 معايير من 4: ألم، احتكاك، ECG منتشر، انصباب جديد'},
+{ar:'معايير تشخيص التامور',en:'Pericarditis diagnostic criteria',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الأول',link:'peri-myo-part1.html',ctx:'ألم نموذجي + احتكاك + ST/PR منتشر + انصباب — يكفي 2 من 4'},
+{ar:'ECG التهاب التامور مراحل',en:'ECG pericarditis stages ST elevation PR depression',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الأول',link:'peri-myo-part1.html',ctx:'4 مراحل: ST مقعّر منتشر → طبيعي → T مقلوب → طبيعي'},
+{ar:'تفريق التامور عن STEMI',en:'Pericarditis vs STEMI differentiation ECG',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الأول',link:'peri-myo-part1.html',ctx:'ST مقعّر+منتشر+PR↓ = تامور | محدّب+إقليمي+Reciprocal = STEMI'},
+{ar:'Tamponade انسداد قلبي دموي',en:'Cardiac tamponade pericardial effusion Beck triad',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الأول',link:'peri-myo-part1.html',ctx:'ثالوث Beck: هبوط ضغط + وداجي منتفخ + أصوات مكتومة — إيكو فوري'},
+{ar:'Colchicine التامور الجرعة',en:'Colchicine pericarditis dose duration COPE ICAP',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الأول',link:'peri-myo-part1.html',ctx:'0.5mg×2 لمدة 3 أشهر في النوبة الأولى — Class I A (COPE/ICAP)'},
+{ar:'NSAIDs Ibuprofen Aspirin التامور',en:'NSAIDs aspirin ibuprofen pericarditis first line',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الأول',link:'peri-myo-part1.html',ctx:'Ibuprofen 600mg×3 أو Aspirin 750-1000mg×3 — خط أول Class I A'},
+{ar:'الستيروئيدات التامور ممنوعة',en:'Corticosteroids pericarditis not first line',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الأول',link:'peri-myo-part1.html',ctx:'Class III في النوبة الأولى — تزيد خطر الانتكاس'},
+{ar:'التهاب التامور الناكس',en:'Recurrent pericarditis relapse',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثاني',link:'peri-myo-part2.html',ctx:'15-30% بدون Colchicine — ينخفض لـ 5-10% معه'},
+{ar:'CORP CORP-2 Colchicine ناكس',en:'CORP CORP-2 colchicine recurrent pericarditis',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثاني',link:'peri-myo-part2.html',ctx:'CORP/CORP-2: Colchicine ↓ انتكاس 50% في التامور الناكس'},
+{ar:'IL-1 Anakinra Rilonacept مثبط',en:'IL-1 blocker anakinra rilonacept recurrent pericarditis',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثاني',link:'peri-myo-part2.html',ctx:'Class IIa في التبعية الستيروئيدية — AIRTRIP وRHAPSODY'},
+{ar:'RHAPSODY Rilonacept',en:'RHAPSODY trial rilonacept IL-1 trap pericarditis',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثاني',link:'peri-myo-part2.html',ctx:'RHAPSODY: Rilonacept ↓ انتكاس 96% (0% vs 74%) — نتيجة استثنائية'},
+{ar:'Anakinra AIRTRIP تبعية ستيروئيدية',en:'Anakinra AIRTRIP steroid dependent pericarditis',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثاني',link:'peri-myo-part2.html',ctx:'AIRTRIP: Anakinra 100mg يومياً — Class IIa في التبعية الستيروئيدية'},
+{ar:'التضيق التاموري Constrictive',en:'Constrictive pericarditis Kussmaul pericardial knock',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثاني',link:'peri-myo-part2.html',ctx:'قصور أيمن + علامة Kussmaul + Pericardial Knock + Septal Bounce'},
+{ar:'Constrictive vs Restrictive تفريق',en:'Constrictive vs restrictive cardiomyopathy Doppler',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثاني',link:'peri-myo-part2.html',ctx:'Respiratory variation Doppler >25% + e\' محفوظ = Constrictive'},
+{ar:'Pericardiectomy تقشير التامور',en:'Pericardiectomy constrictive pericarditis surgery',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثاني',link:'peri-myo-part2.html',ctx:'Class I في التضيق المزمن العرَضي NYHA III–IV — مركز متخصص'},
+{ar:'التهاب العضلة القلبية Myocarditis',en:'Myocarditis diagnosis',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثالث',link:'peri-myo-part3.html',ctx:'4 أشكال: خفيف-إقفاري، قصور قلب، إيقاعي، Fulminant'},
+{ar:'Lake Louise معايير CMR',en:'Lake Louise criteria CMR myocarditis 2018',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثالث',link:'peri-myo-part3.html',ctx:'T2 (وذمة) AND T1 (أذية) = تشخيص داعم — تحديث 2018'},
+{ar:'T1 T2 Mapping CMR قلب',en:'T1 T2 mapping cardiac MRI myocarditis',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثالث',link:'peri-myo-part3.html',ctx:'T2 Mapping: وذمة | T1 Mapping+ECV: أذية+تليف خلالي مبكر'},
+{ar:'LGE Late Gadolinium Enhancement نمط',en:'LGE pattern myocarditis non-ischemic',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثالث',link:'peri-myo-part3.html',ctx:'جانبي/حشوي/تحت-شغافي غير إقليمي — يختلف عن نمط الاحتشاء'},
+{ar:'خزعة العضلة EMB',en:'Endomyocardial biopsy EMB Dallas WHO',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الثالث',link:'peri-myo-part3.html',ctx:'Class I في Fulminant — Class IIa عند VT/حصار كامل — حساسية 50%'},
+{ar:'Fulminant Myocarditis الخاطف',en:'Fulminant myocarditis cardiogenic shock',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الرابع',link:'peri-myo-part4.html',ctx:'صدمة حادة خلال أيام — إنذار متناقض — تحويل فوري لمركز MCS'},
+{ar:'ECMO Impella دعم ميكانيكي',en:'ECMO Impella mechanical circulatory support MCS',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الرابع',link:'peri-myo-part4.html',ctx:'VA-ECMO + Impella = ECPELLA في الأشد — Class I لتحويل فوري'},
+{ar:'Giant Cell Myocarditis',en:'Giant cell myocarditis GCM cyclosporine',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الرابع',link:'peri-myo-part4.html',ctx:'أخطر أنواعه — EMB إلزامي — Cyclosporine+Steroids — تقييم زرع'},
+{ar:'Cardiac Sarcoidosis',en:'Cardiac sarcoidosis FDG-PET steroid',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الرابع',link:'peri-myo-part4.html',ctx:'FDG-PET + CMR للتشخيص — Steroids Class I — ICD في معظم الحالات'},
+{ar:'Return to Play عودة الرياضة',en:'Return to play sport myocarditis athlete',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الرابع',link:'peri-myo-part4.html',ctx:'توقف 3–6 أشهر — EF>50% + Troponin طبيعي + Holter — Class I'},
+{ar:'Myopericarditis',en:'Myopericarditis perimyocarditis overlap',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الخامس',link:'peri-myo-part5.html',ctx:'Myopericarditis: التامور قائد — Perimyocarditis: العضلة قائد'},
+{ar:'لقاح mRNA التهاب عضلة',en:'mRNA vaccine myocarditis COVID vaccine',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الخامس',link:'peri-myo-part5.html',ctx:'نادر — شباب ذكور — جرعة 2 — إنذار ممتاز — إدارة داعمة'},
+{ar:'ICI Checkpoint Myocarditis مثبطات نقاط التفتيش',en:'ICI immune checkpoint inhibitor myocarditis anti-PD1',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الخامس',link:'peri-myo-part5.html',ctx:'1% حدوث — وفيات 25-50% بدون علاج مبكر — وقف ICI + Steroids فوراً'},
+{ar:'MIS-C الأطفال كوفيد',en:'MIS-C multisystem inflammatory syndrome children COVID',tag:'pm',icon:'🩵',guide:'التامور والعضلة',part:'الجزء الخامس',link:'peri-myo-part5.html',ctx:'IVIG 2g/kg + Aspirin ± Steroids — بروتوكول مختلف عن Myocarditis'},
+
+// ───────── أمراض الصمامات ESC 2025 ─────────
+{ar:'أمراض الصمامات VHD',en:'Valvular heart disease VHD',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الصفحة الرئيسية',link:'vhd-index.html',ctx:'غايدلاين أمراض الصمامات ESC 2025 — 6 أجزاء'},
+{ar:'تضيق الأبهر Aortic Stenosis',en:'Aortic stenosis AS severe TAVR TAVI',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء الأول',link:'vhd-part1.html',ctx:'تضيق شديد: AVA <1cm² أو Vmax >4m/s — TAVI أو SAVR'},
+{ar:'TAVI TAVR تغيير صمام الأبهر بالقسطرة',en:'TAVI TAVR transcatheter aortic valve replacement',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء الأول',link:'vhd-part1.html',ctx:'TAVI مفضّل عند عمر >75 أو خطر جراحي مرتفع — Class I'},
+{ar:'قصور الأبهر Aortic Regurgitation',en:'Aortic regurgitation AR EF surgery',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء الثاني',link:'vhd-part2.html',ctx:'جراحة عند EF<50% أو LVESD>50mm أو أعراض شديدة'},
+{ar:'قصور الميترال Primary MR',en:'Mitral regurgitation primary MR repair',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء الثالث',link:'vhd-part3.html',ctx:'Mitral repair مفضّل على Replacement — Class I عند EF>30%'},
+{ar:'قصور الميترال الثانوي Secondary MR',en:'Secondary functional mitral regurgitation HF',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء الثالث',link:'vhd-part3.html',ctx:'علاج قصور القلب أولاً — MitraClip عند معايير محددة'},
+{ar:'MitraClip TEER',en:'MitraClip TEER transcatheter edge-to-edge repair',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء الثالث',link:'vhd-part3.html',ctx:'TEER بالقسطرة في Secondary MR عند خطر جراحي مرتفع'},
+{ar:'تضيق الميترال Mitral Stenosis',en:'Mitral stenosis PMC PTMC rheumatic',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء الثالث',link:'vhd-part3.html',ctx:'PMC (بالون) مفضّل عند Wilkins ≤8 وبدون تجلط أذيني'},
+{ar:'صمام ثلاثي الشرف Tricuspid',en:'Tricuspid regurgitation TR repair surgery TTVI',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء الرابع',link:'vhd-part4.html',ctx:'إصلاح Tricuspid أثناء جراحة جانب أيسر — TTVI بالقسطرة ناشئ'},
+{ar:'الصمامات الاصطناعية Prosthetic Valves',en:'Prosthetic valve mechanical bioprosthetic anticoagulation',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء الخامس',link:'vhd-part5.html',ctx:'Mechanical: Warfarin مدى الحياة — Bioprosthetic: مدة محدودة DOAC'},
+{ar:'تخثر الصمام Prosthetic Valve Thrombosis',en:'Prosthetic valve thrombosis thrombolysis anticoagulation',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء الخامس',link:'vhd-part5.html',ctx:'أعراض خفيفة: تكثيف OAC — Thrombolysis إذا خطر جراحي عالٍ'},
+{ar:'التهاب الشغاف Endocarditis والصمامات',en:'Infective endocarditis prosthetic valve surgery',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء السادس',link:'vhd-part6.html',ctx:'فريق Endocarditis Team — جراحة مبكرة في الحالات الخطيرة'},
+{ar:'VHD والحمل',en:'Valvular heart disease pregnancy',tag:'vhd',icon:'🔶',guide:'أمراض الصمامات',part:'الجزء السادس',link:'vhd-part6.html',ctx:'تقييم قبل الحمل إلزامي — Warfarin خطر في الثلث الأول'},
+];
+
+// =====================================================================
+//  محرك البحث
+// =====================================================================
+const inp = document.getElementById('searchInput');
+const res = document.getElementById('searchResults');
+const clr = document.getElementById('searchClear');
+
+function highlight(text, q){
+  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return text.replace(re,'<mark>$1</mark>');
+}
+
+function search(q){
+  q = q.trim();
+  if(q.length < 2){ res.innerHTML=''; res.classList.remove('show'); return; }
+  const ql = q.toLowerCase();
+  const hits = IDX.filter(e =>
+    e.ar.toLowerCase().includes(ql) ||
+    e.en.toLowerCase().includes(ql) ||
+    e.ctx.toLowerCase().includes(ql)
+  ).slice(0, 14);
+
+  if(!hits.length){
+    res.innerHTML = `<div class="no-results">🔍 لا نتائج لـ "<strong>${q}</strong>" — جرّب مصطلحاً آخر</div>`;
+    res.classList.add('show'); return;
+  }
+
+  const tagMap={af:'tag-af',acs:'tag-acs',pm:'tag-pm',vhd:'tag-vhd'};
+  const tagLbl={af:'الرجفان',acs:'الإكليلية',pm:'التامور/العضلة',vhd:'الصمامات'};
+  res.innerHTML =
+    `<div class="result-head">${hits.length} نتيجة لـ "${q}"</div>` +
+    hits.map(e=>`
+      <a href="${e.link}" class="result-item">
+        <div class="result-icon ri-${e.tag}">${e.icon}</div>
+        <div class="result-body">
+          <div class="result-topic">${highlight(e.ar, q)}${e.en !== e.ar ? ' <span style="color:var(--text2);font-weight:400;font-size:.78rem">'+highlight(e.en,q)+'</span>' : ''}</div>
+          <div class="result-meta">
+            <span class="guide-tag ${tagMap[e.tag]}">${tagLbl[e.tag]}</span>
+            <span>›</span>
+            <span>${e.part}</span>
+          </div>
+          <div class="result-context">${highlight(e.ctx, q)}</div>
+        </div>
+      </a>`).join('');
+  res.classList.add('show');
+}
+
+inp.addEventListener('input', e => {
+  const v = e.target.value;
+  clr.style.display = v ? 'block' : 'none';
+  search(v);
+});
+
+clr.addEventListener('click', ()=>{
+  inp.value = ''; clr.style.display='none';
+  res.innerHTML=''; res.classList.remove('show');
+  inp.focus();
+});
+
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.search-inner')) res.classList.remove('show');
+});
+
+inp.addEventListener('focus', ()=>{ if(inp.value.length>=2) res.classList.add('show'); });
+
+// كي-بورد: Escape يغلق، ArrowDown/Up للتنقل
+inp.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ res.classList.remove('show'); inp.blur(); }
+  if(e.key==='ArrowDown'){ e.preventDefault();
+    const first = res.querySelector('.result-item');
+    if(first) first.focus();
+  }
+});
+res.addEventListener('keydown', e=>{
+  const items=[...res.querySelectorAll('.result-item')];
+  const cur=items.indexOf(document.activeElement);
+  if(e.key==='ArrowDown'&&cur<items.length-1){ e.preventDefault(); items[cur+1].focus(); }
+  if(e.key==='ArrowUp'){ e.preventDefault(); cur>0 ? items[cur-1].focus() : inp.focus(); }
+  if(e.key==='Escape'){ res.classList.remove('show'); inp.focus(); }
+});
+</script>
+
 <script src="protection.js"></script>
 </body>
 </html>
