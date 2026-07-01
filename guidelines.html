@@ -346,76 +346,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 
 <script src="supabase.js"></script>
 <script>
-(async function(){
-  try{
-    const u = JSON.parse(localStorage.getItem('currentUser'));
-    const isAdmin = u && u.is_admin;
-    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
-    const hasAccess = isAdmin || isSubscribed;
-
-    // تحديث شريط التنقل
-    const links = document.querySelector('.top-bar .links');
-    if(u){
-      links.innerHTML = hasAccess
-        ? `<a href="index.html" class="lnk">🏠 الرئيسية</a><a href="profile.html" class="lnk">👤 ${u.name}</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" class="lnk" style="color:#ef4444;border-color:#ef4444;">خروج</a>`
-        : `<a href="index.html" class="lnk">🏠 الرئيسية</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" class="lnk" style="color:#ef4444;border-color:#ef4444;">خروج</a>`;
-    } else {
-      links.innerHTML = `<a href="index.html" class="lnk">🏠 الرئيسية</a><a href="login.html" class="lnk">🔐 دخول</a><a href="register.html" class="lnk">📝 تسجيل</a>`;
-    }
-
-    if(!hasAccess){
-      // غير مفعّل — أظهر رسالة وأغلق الكروت غير الرجفان
-      const main = document.querySelector('.main');
-      const notice = document.createElement('div');
-      notice.style.cssText = `background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;text-align:center;direction:rtl`;
-      notice.innerHTML = u
-        ? `<div style="font-size:1rem;font-weight:700;color:#8b5cf6;margin-bottom:.4rem">⏳ حسابك قيد التفعيل</div>
-           <div style="color:#94a3b8;font-size:.85rem;line-height:1.7">يمكنك الآن تصفح <strong style="color:#8b5cf6">غايدلاين الرجفان الأذيني</strong> مجاناً. غايدلاين التهاب التامور والعضلة القلبية وأمراض الصمامات والإكليلية الحادة وباقي المحتوى تتطلب اشتراكاً مفعّلاً.</div>`
-        : `<div style="font-size:1rem;font-weight:700;color:#8b5cf6;margin-bottom:.4rem">🎁 وصول مجاني جزئي</div>
-           <div style="color:#94a3b8;font-size:.85rem;line-height:1.7">غايدلاين الرجفان الأذيني متاح مجاناً. <a href="register.html" style="color:#8b5cf6">سجّل الآن</a> للوصول لكامل المحتوى بما فيه غايدلاينات 2025.</div>`;
-      main.insertBefore(notice, main.firstChild);
-
-      // أغلق كل الكروت المتاحة عدا الرجفان الأذيني
-      document.querySelectorAll('.g-card.available').forEach(card => {
-        if(!card.href || !card.href.includes('af-index')){
-          card.classList.remove('available');
-          card.classList.add('locked');
-          card.removeAttribute('href');
-          card.style.opacity = '0.4';
-          card.style.pointerEvents = 'none';
-          const badge = card.querySelector('.card-badge');
-          if(badge){ badge.textContent = '\u{1F512} مدفوع'; badge.className = 'card-badge badge-soon'; }
-        }
-      });
-
-      // أخفِ البحث الذكي لغير المشتركين وأظهر رسالة بديلة
-      const sw = document.getElementById('searchWrap');
-      if(sw){
-        const loginLink = u
-          ? 'فعّل اشتراكك للوصول للبحث في جميع الغايدلاينات'
-          : '<a href="register.html" style="color:#8b5cf6;text-decoration:none">سجّل الآن</a> أو <a href="login.html" style="color:#8b5cf6;text-decoration:none">سجّل دخولك</a>';
-        sw.innerHTML = '<div style="max-width:720px;margin:0 auto;background:rgba(139,92,246,.08);border:1px dashed rgba(139,92,246,.35);border-radius:12px;padding:.8rem 1.25rem;display:flex;align-items:center;gap:.75rem;direction:rtl">'
-          + '<span style="font-size:1.2rem">🔒</span>'
-          + '<div><span style="color:#a78bfa;font-weight:700;font-size:.9rem">البحث الذكي متاح للمشتركين فقط</span>'
-          + '<span style="color:#64748b;font-size:.82rem;margin-right:.5rem"> — ' + loginLink + '</span></div></div>';
-      }
-    }
-
-    // فعّل محرك البحث فقط إذا كان الوصول حقيقياً (العناصر الأصلية موجودة بعد بالـ DOM)
-    if(hasAccess && typeof initSearchUI === 'function') initSearchUI();
-
-    // اكشف شريط البحث الآن بعد ما اتأكدنا من صلاحية الوصول (سواء الحقيقي أو رسالة القفل)
-    const swFinal = document.getElementById('searchWrap');
-    if(swFinal) swFinal.style.visibility = 'visible';
-  }catch(e){
-    console.error(e);
-    // بحال صار خطأ بالتحقق، ما نظهر شريط البحث الحقيقي احتياطاً
-    const swErr = document.getElementById('searchWrap');
-    if(swErr) swErr.style.display = 'none';
-  }
-})();
-</script>
-<script>
 // =====================================================================
 //  فهرس البحث الذكي — CardioArab ESC Guidelines
 //  كل مدخل: { ar, en, tag, icon, guide, part, link, ctx }
@@ -595,6 +525,76 @@ res.addEventListener('keydown', e=>{
 });
 
 } // نهاية initSearchUI
+</script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    const hasAccess = isAdmin || isSubscribed;
+
+    // تحديث شريط التنقل
+    const links = document.querySelector('.top-bar .links');
+    if(u){
+      links.innerHTML = hasAccess
+        ? `<a href="index.html" class="lnk">🏠 الرئيسية</a><a href="profile.html" class="lnk">👤 ${u.name}</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" class="lnk" style="color:#ef4444;border-color:#ef4444;">خروج</a>`
+        : `<a href="index.html" class="lnk">🏠 الرئيسية</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" class="lnk" style="color:#ef4444;border-color:#ef4444;">خروج</a>`;
+    } else {
+      links.innerHTML = `<a href="index.html" class="lnk">🏠 الرئيسية</a><a href="login.html" class="lnk">🔐 دخول</a><a href="register.html" class="lnk">📝 تسجيل</a>`;
+    }
+
+    if(!hasAccess){
+      // غير مفعّل — أظهر رسالة وأغلق الكروت غير الرجفان
+      const main = document.querySelector('.main');
+      const notice = document.createElement('div');
+      notice.style.cssText = `background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;text-align:center;direction:rtl`;
+      notice.innerHTML = u
+        ? `<div style="font-size:1rem;font-weight:700;color:#8b5cf6;margin-bottom:.4rem">⏳ حسابك قيد التفعيل</div>
+           <div style="color:#94a3b8;font-size:.85rem;line-height:1.7">يمكنك الآن تصفح <strong style="color:#8b5cf6">غايدلاين الرجفان الأذيني</strong> مجاناً. غايدلاين التهاب التامور والعضلة القلبية وأمراض الصمامات والإكليلية الحادة وباقي المحتوى تتطلب اشتراكاً مفعّلاً.</div>`
+        : `<div style="font-size:1rem;font-weight:700;color:#8b5cf6;margin-bottom:.4rem">🎁 وصول مجاني جزئي</div>
+           <div style="color:#94a3b8;font-size:.85rem;line-height:1.7">غايدلاين الرجفان الأذيني متاح مجاناً. <a href="register.html" style="color:#8b5cf6">سجّل الآن</a> للوصول لكامل المحتوى بما فيه غايدلاينات 2025.</div>`;
+      main.insertBefore(notice, main.firstChild);
+
+      // أغلق كل الكروت المتاحة عدا الرجفان الأذيني
+      document.querySelectorAll('.g-card.available').forEach(card => {
+        if(!card.href || !card.href.includes('af-index')){
+          card.classList.remove('available');
+          card.classList.add('locked');
+          card.removeAttribute('href');
+          card.style.opacity = '0.4';
+          card.style.pointerEvents = 'none';
+          const badge = card.querySelector('.card-badge');
+          if(badge){ badge.textContent = '\u{1F512} مدفوع'; badge.className = 'card-badge badge-soon'; }
+        }
+      });
+
+      // أخفِ البحث الذكي لغير المشتركين وأظهر رسالة بديلة
+      const sw = document.getElementById('searchWrap');
+      if(sw){
+        const loginLink = u
+          ? 'فعّل اشتراكك للوصول للبحث في جميع الغايدلاينات'
+          : '<a href="register.html" style="color:#8b5cf6;text-decoration:none">سجّل الآن</a> أو <a href="login.html" style="color:#8b5cf6;text-decoration:none">سجّل دخولك</a>';
+        sw.innerHTML = '<div style="max-width:720px;margin:0 auto;background:rgba(139,92,246,.08);border:1px dashed rgba(139,92,246,.35);border-radius:12px;padding:.8rem 1.25rem;display:flex;align-items:center;gap:.75rem;direction:rtl">'
+          + '<span style="font-size:1.2rem">🔒</span>'
+          + '<div><span style="color:#a78bfa;font-weight:700;font-size:.9rem">البحث الذكي متاح للمشتركين فقط</span>'
+          + '<span style="color:#64748b;font-size:.82rem;margin-right:.5rem"> — ' + loginLink + '</span></div></div>';
+      }
+    }
+
+    // فعّل محرك البحث فقط إذا كان الوصول حقيقياً (العناصر الأصلية موجودة بعد بالـ DOM)
+    if(hasAccess && typeof initSearchUI === 'function') initSearchUI();
+
+    // اكشف شريط البحث الآن بعد ما اتأكدنا من صلاحية الوصول (سواء الحقيقي أو رسالة القفل)
+    const swFinal = document.getElementById('searchWrap');
+    if(swFinal) swFinal.style.visibility = 'visible';
+  }catch(e){
+    console.error(e);
+    // بحال صار خطأ بالتحقق، ما نظهر شريط البحث الحقيقي احتياطاً
+    const swErr = document.getElementById('searchWrap');
+    if(swErr) swErr.style.display = 'none';
+  }
+})();
 </script>
 
 <script src="protection.js"></script>
