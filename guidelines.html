@@ -104,7 +104,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <p>35 مرشداً من الجمعية الأوروبية لأمراض القلب — يُضاف المحتوى تدريجياً</p>
 </div>
 
-<div class="search-wrap">
+<div class="search-wrap" id="searchWrap" style="visibility:hidden">
   <div class="search-inner">
     <span class="search-icon">🔍</span>
     <input class="search-input" id="searchInput" type="text"
@@ -389,7 +389,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
       });
 
       // أخفِ البحث الذكي لغير المشتركين وأظهر رسالة بديلة
-      const sw = document.querySelector('.search-wrap');
+      const sw = document.getElementById('searchWrap');
       if(sw){
         const loginLink = u
           ? 'فعّل اشتراكك للوصول للبحث في جميع الغايدلاينات'
@@ -399,8 +399,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
           + '<div><span style="color:#a78bfa;font-weight:700;font-size:.9rem">البحث الذكي متاح للمشتركين فقط</span>'
           + '<span style="color:#64748b;font-size:.82rem;margin-right:.5rem"> — ' + loginLink + '</span></div></div>';
       }
-    }    }
-  }catch(e){ console.error(e); }
+    }
+
+    // فعّل محرك البحث فقط إذا كان الوصول حقيقياً (العناصر الأصلية موجودة بعد بالـ DOM)
+    if(hasAccess && typeof initSearchUI === 'function') initSearchUI();
+
+    // اكشف شريط البحث الآن بعد ما اتأكدنا من صلاحية الوصول (سواء الحقيقي أو رسالة القفل)
+    const swFinal = document.getElementById('searchWrap');
+    if(swFinal) swFinal.style.visibility = 'visible';
+  }catch(e){
+    console.error(e);
+    // بحال صار خطأ بالتحقق، ما نظهر شريط البحث الحقيقي احتياطاً
+    const swErr = document.getElementById('searchWrap');
+    if(swErr) swErr.style.display = 'none';
+  }
 })();
 </script>
 <script>
@@ -498,11 +510,15 @@ const IDX = [
 ];
 
 // =====================================================================
-//  محرك البحث
+//  محرك البحث — ما بيشتغل إلا بعد التأكد من صلاحية الوصول (initSearchUI)
 // =====================================================================
-const inp = document.getElementById('searchInput');
-const res = document.getElementById('searchResults');
-const clr = document.getElementById('searchClear');
+let inp, res, clr;
+
+function initSearchUI(){
+  inp = document.getElementById('searchInput');
+  res = document.getElementById('searchResults');
+  clr = document.getElementById('searchClear');
+  if(!inp || !res || !clr) return; // العناصر مش موجودة (مثلاً مستخدم غير مصرّح له)
 
 function highlight(text, q){
   const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
@@ -577,6 +593,8 @@ res.addEventListener('keydown', e=>{
   if(e.key==='ArrowUp'){ e.preventDefault(); cur>0 ? items[cur-1].focus() : inp.focus(); }
   if(e.key==='Escape'){ res.classList.remove('show'); inp.focus(); }
 });
+
+} // نهاية initSearchUI
 </script>
 
 <script src="protection.js"></script>
