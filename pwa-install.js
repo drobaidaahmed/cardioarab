@@ -7,17 +7,6 @@
 (function () {
   'use strict';
 
-  // لا تُظهر البانر إذا كان التطبيق يعمل أصلاً بوضع standalone (مثبّت فعلاً)
-  const isStandalone =
-    window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone === true;
-  if (isStandalone) return;
-
-  // لا تُزعج المستخدم لو رفض البانر مؤخراً (إخفاء لمدة 7 أيام)
-  const DISMISS_KEY = 'ca_pwa_dismissed_at';
-  const dismissedAt = localStorage.getItem(DISMISS_KEY);
-  if (dismissedAt && (Date.now() - Number(dismissedAt)) < 7 * 86400000) return;
-
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   const isAndroid = /android/i.test(navigator.userAgent);
 
@@ -29,8 +18,19 @@
     }
   }
 
-  // إتاحة الدالة لأي زر يدوي بالصفحة (مثلاً زر "ثبّت التطبيق" بالهيدر)
+  // إتاحة الدالة لأي زر يدوي بالصفحة (مثلاً زر "ثبّت التطبيق" بالهيدر) — دائماً متاحة بغض النظر عن حالة البانر
   window.caShowInstallInstructions = showInstructions;
+
+  // لا تُظهر البانر إذا كان التطبيق يعمل أصلاً بوضع standalone (مثبّت فعلاً)
+  const isStandalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
+  if (isStandalone) return;
+
+  // لا تُزعج المستخدم لو رفض البانر مؤخراً (إخفاء لمدة 7 أيام) — هذا يتحكم بالبانر فقط، وليس بالزر اليدوي
+  const DISMISS_KEY = 'ca_pwa_dismissed_at';
+  const dismissedAt = localStorage.getItem(DISMISS_KEY);
+  if (dismissedAt && (Date.now() - Number(dismissedAt)) < 7 * 86400000) return;
 
   function buildBanner(btnText, onInstallClick) {
     const bar = document.createElement('div');
