@@ -55,6 +55,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     <label>🔑 كلمة المرور</label>
     <input type="password" id="regPass" placeholder="6 أحرف على الأقل" dir="ltr">
   </div>
+  <div class="form-group">
+    <label>📱 رقم الهاتف (واتساب)</label>
+    <input type="tel" id="regPhone" placeholder="09xxxxxxxx" dir="ltr">
+  </div>
   <button class="btn" id="regBtn" onclick="handleRegister()">إنشاء الحساب</button>
   <div class="note">
     <strong>ملاحظة:</strong> بعد التسجيل، أرسل إيصال الدفع عبر شام كاش وسيتم تفعيل حسابك خلال 24 ساعة.
@@ -77,11 +81,13 @@ async function handleRegister() {
   const name  = document.getElementById('regName').value.trim();
   const email = document.getElementById('regEmail').value.trim().toLowerCase();
   const pass  = document.getElementById('regPass').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
   const btn   = document.getElementById('regBtn');
 
-  if (!name || !email || !pass) return showMsg('⚠️ يرجى تعبئة جميع الحقول', 'danger');
+  if (!name || !email || !pass || !phone) return showMsg('⚠️ يرجى تعبئة جميع الحقول', 'danger');
   if (pass.length < 6) return showMsg('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'danger');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showMsg('⚠️ البريد الإلكتروني غير صحيح', 'danger');
+  if (!/^[0-9+\s]{8,15}$/.test(phone)) return showMsg('⚠️ رقم الهاتف غير صحيح', 'danger');
 
   btn.disabled = true;
   btn.textContent = '⏳ جاري الإنشاء...';
@@ -98,7 +104,7 @@ async function handleRegister() {
 
     // إنشاء المستخدم
     const newUser = await db.insert('users', {
-      name, email, password: pass,
+      name, email, password: pass, phone,
       is_admin: false, blocked: false
     });
 
@@ -112,7 +118,7 @@ async function handleRegister() {
 
     // إشعار تيليغرام
     try {
-      const msg = encodeURIComponent(`🆕 مستخدم جديد في CardioArab\n👤 الاسم: ${name}\n📧 البريد: ${email}\n⏰ ${new Date().toLocaleString('ar-SA')}`);
+      const msg = encodeURIComponent(`🆕 مستخدم جديد في CardioArab\n👤 الاسم: ${name}\n📧 البريد: ${email}\n📱 الهاتف: ${phone}\n⏰ ${new Date().toLocaleString('ar-SA')}`);
       await fetch(`https://api.telegram.org/bot8900525496:AAE8ZeCd3AHPG8P0F9CWLrhGqz0o9zzRsVI/sendMessage?chat_id=792639380&text=${msg}`);
     } catch(_) {}
 
