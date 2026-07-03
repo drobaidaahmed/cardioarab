@@ -19,10 +19,9 @@
   if (dismissedAt && (Date.now() - Number(dismissedAt)) < 7 * 86400000) return;
 
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isAndroid = /android/i.test(navigator.userAgent);
 
-  let deferredPrompt = null;
-
-  function buildBanner(onInstallClick) {
+  function buildBanner(btnText, onInstallClick) {
     const bar = document.createElement('div');
     bar.id = 'ca-install-banner';
     bar.style.cssText = `
@@ -35,10 +34,10 @@
     bar.innerHTML = `
       <div style="font-size:1.6rem;line-height:1">🫀</div>
       <div style="flex:1;color:#e2e8f0;font-size:.85rem;line-height:1.5">
-        <div id="ca-install-text" style="font-weight:700;margin-bottom:2px">ثبّت CardioArab على جهازك</div>
+        <div style="font-weight:700;margin-bottom:2px">ثبّت CardioArab على جهازك</div>
         <div style="color:#94a3b8;font-size:.78rem">وصول أسرع، بدون فتح المتصفح في كل مرة</div>
       </div>
-      <button id="ca-install-btn" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-family:inherit;font-size:.85rem;font-weight:700;white-space:nowrap;cursor:pointer">تثبيت</button>
+      <button id="ca-install-btn" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-family:inherit;font-size:.85rem;font-weight:700;white-space:nowrap;cursor:pointer">${btnText}</button>
       <button id="ca-install-close" style="background:transparent;color:#94a3b8;border:none;font-size:1.2rem;cursor:pointer;padding:0 4px">✕</button>
     `;
     document.body.appendChild(bar);
@@ -53,31 +52,14 @@
   }
 
   if (isIOS) {
-    // آيفون: ما في API تلقائي — نعرض تعليمات يدوية فقط
-    const bar = buildBanner(() => {
+    buildBanner('كيف؟', () => {
       alert('لتثبيت التطبيق:\n1️⃣ اضغط زر المشاركة (⬆️) بالأسفل\n2️⃣ اختر "إضافة إلى الشاشة الرئيسية"');
     });
-    document.getElementById('ca-install-btn').textContent = 'كيف؟';
-  } else {
-    // أندرويد/كروم: ننتظر الحدث الحقيقي القابل للتثبيت
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const bar = buildBanner(async () => {
-        bar.remove();
-        if (!deferredPrompt) return;
-        deferredPrompt.prompt();
-        const choice = await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        if (choice.outcome !== 'accepted') {
-          localStorage.setItem(DISMISS_KEY, Date.now().toString());
-        }
-      });
-    });
-
-    window.addEventListener('appinstalled', () => {
-      const bar = document.getElementById('ca-install-banner');
-      if (bar) bar.remove();
+  } else if (isAndroid) {
+    // لا نعتمد على beforeinstallprompt لأنه غير موثوق في بعض المناطق (قيود Play Services)
+    // نعرض تعليمات يدوية واضحة دائماً
+    buildBanner('كيف؟', () => {
+      alert('لتثبيت التطبيق:\n1️⃣ اضغط النقاط الثلاث ⋮ أعلى المتصفح\n2️⃣ اختر "إضافة إلى الشاشة الرئيسية"\n(تجنّب خيار "تثبيت التطبيق" إن وُجد منفصلاً، فقد لا يعمل بسبب قيود إقليمية)');
     });
   }
 
