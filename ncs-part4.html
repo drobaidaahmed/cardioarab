@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NCS — الجزء الرابع — إدارة الأدوية حول الجراحة | ESC 2022</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#ef4444;--green:#10b981;--blue:#3b82f6;--gold:#f59e0b;--red:#ef4444;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));z-index:9999;transition:width .2s;width:0}
+  header{background:linear-gradient(135deg,#3a0a0a,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:var(--red);padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+  .back-btn:hover{background:rgba(239,68,68,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:#fff}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .part-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2rem;overflow-x:auto}
+  .part-nav-inner{max-width:1400px;margin:0 auto;display:flex;gap:.5rem}
+  .part-btn{padding:.4rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text2);background:transparent;white-space:nowrap;transition:all .2s}
+  .part-btn:hover{border-color:var(--red);color:var(--red)}
+  .part-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:var(--red);border-right-color:var(--red);background:rgba(239,68,68,.1)}
+  .toc .toc-sub{padding-right:1rem;font-size:.78rem}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:var(--red);color:#fff;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;flex-shrink:0}
+  .section h2{font-size:1.25rem;font-weight:700;color:#fff}
+  .section h3{font-size:1.05rem;font-weight:600;color:var(--red);margin:1.5rem 0 .75rem}
+  .section h4{font-size:.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 .5rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul,.section ol{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
+  .badge-i{background:var(--green);color:#fff}
+  .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
+  .rec-iia{background:rgba(59,130,246,.12);border-color:var(--blue)}
+  .badge-iia{background:var(--blue);color:#fff}
+  .rec-iib{background:rgba(245,158,11,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#000}
+  .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
+  .badge-iii{background:var(--red);color:#fff}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .highlight strong{color:var(--red)}
+  .warning{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .warning strong{color:var(--gold)}
+  .danger{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .danger strong{color:var(--red)}
+  .success{background:rgba(16,185,129,.1);border-color:var(--green)}
+  .success strong{color:var(--green)}
+  .info-blue{background:rgba(59,130,246,.1);border-color:var(--blue)}
+  .info-blue strong{color:var(--blue)}
+  .info-purple{background:rgba(139,92,246,.1);border-color:var(--purple)}
+  .info-purple strong{color:var(--purple)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(239,68,68,.15);color:var(--red);padding:.75rem 1rem;text-align:right;font-weight:600;white-space:nowrap}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:rgba(255,255,255,.03)}
+  .algo-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+  .algo-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  .algo-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .algo-num{background:var(--red);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:.2rem}
+  .algo-content h4{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:.3rem}
+  .algo-content p{font-size:.83rem;color:var(--text2);margin:0}
+  .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0}
+  .type-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:3px solid var(--red)}
+  .type-card.t2{border-top-color:var(--gold)}
+  .type-card.t3{border-top-color:var(--blue)}
+  .type-name{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.5rem}
+  .type-def{font-size:.82rem;color:var(--text2);margin-bottom:.75rem}
+  .type-row{display:flex;justify-content:space-between;font-size:.8rem;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .type-row:last-child{border-bottom:none}
+  .type-label{color:var(--text2)}
+  .type-val{color:var(--text);font-weight:500}
+  .key-points{background:linear-gradient(135deg,rgba(239,68,68,.1),rgba(245,158,11,.06));border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+  .key-points h4{color:var(--red);margin-bottom:1rem;font-size:1rem}
+  .key-points ul{list-style:none;padding:0}
+  .key-points li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem}
+  .key-points li::before{content:'🔑';flex-shrink:0}
+  .next-prev{display:flex;justify-content:space-between;margin-top:2rem;gap:1rem}
+  .nav-btn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;text-decoration:none;transition:all .25s;flex:1;max-width:260px}
+  .nav-btn:hover{border-color:var(--red);background:rgba(239,68,68,.08)}
+  .nav-btn .dir{font-size:.75rem;color:var(--text2);margin-bottom:.25rem}
+  .nav-btn .title{font-size:.9rem;font-weight:700;color:#fff}
+  .nav-btn.next{text-align:left}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:2rem}
+  footer a{color:var(--red);text-decoration:none}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="ncs-index.html" class="back-btn">← NCS Overview</a>
+    <div class="header-title">
+      <h1>الجزء الرابع — إدارة الأدوية حول الجراحة</h1>
+      <p>ESC Guidelines 2022 · Non-Cardiac Surgery</p>
+    </div>
+  </div>
+</header>
+
+<div class="part-nav">
+  <div class="part-nav-inner">
+    <a href="ncs-part1.html" class="part-btn">١ · التقييم الأولي</a>
+    <a href="ncs-part2.html" class="part-btn">٢ · الفحوصات</a>
+    <a href="ncs-part3.html" class="part-btn">٣ · حالات خاصة</a>
+    <a href="ncs-part4.html" class="part-btn active">٤ · الأدوية</a>
+    <a href="ncs-part5.html" class="part-btn">٥ · التخدير والطوارئ</a>
+    <a href="ncs-part6.html" class="part-btn">٦ · المضاعفات</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h3>محتويات الجزء الرابع</h3>
+    <a href="#s1">١ · مضادات الصفيحات</a>
+    <a href="#s2" class="toc-sub">· Aspirin و P2Y12</a>
+    <a href="#s3">٢ · مضادات التخثر الفموية</a>
+    <a href="#s4" class="toc-sub">· VKA و DOACs</a>
+    <a href="#s5">٣ · حاصرات بيتا والستاتين</a>
+    <a href="#s6">٤ · ACEi / ARB</a>
+    <a href="#s7">٥ · أدوية السكري</a>
+    <a href="#s8">٦ · جدول شامل: استمرار أم إيقاف؟</a>
+    <a href="#keys">نقاط المفتاحية</a>
+  </nav>
+
+  <div class="content">
+
+    <!-- Section 1 -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">١</div>
+        <h2>مضادات الصفيحات (Antiplatelets)</h2>
+      </div>
+
+      <p>القرار حول إيقاف أو استمرار مضادات الصفيحات هو توازن دقيق بين خطر النزيف الجراحي وخطر التخثر داخل الدعامة التاجية أو الحدث الإقفاري.</p>
+
+      <h3 id="s2">Aspirin</h3>
+      <ul>
+        <li>يُستمر به في معظم الجراحات — خطر النزيف الإضافي منه محدود في أغلب الإجراءات</li>
+        <li>يُوقف فقط في الجراحات ذات خطر النزيف العالي جداً (داخل القحف، بعض جراحات النخاع الشوكي، غرفة العين الخلفية)</li>
+        <li>عند الإيقاف: 5–7 أيام قبل الجراحة</li>
+      </ul>
+
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنصح باستمرار Aspirin حول الجراحة في معظم الإجراءات غير القلبية، باستثناء الجراحات ذات خطر النزيف العالي جداً</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+
+      <h3>مثبطات P2Y12</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الدواء</th><th>مدة الإيقاف قبل الجراحة</th><th>ملاحظات</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Clopidogrel</strong></td><td>5 أيام</td><td>الأكثر استخداماً كبديل مرن</td></tr>
+            <tr><td><strong>Ticagrelor</strong></td><td>3–5 أيام</td><td>ارتباط عكوس، استعادة الوظيفة أسرع</td></tr>
+            <tr><td><strong>Prasugrel</strong></td><td>7 أيام</td><td>أطول مدة إيقاف — تثبيط أقوى وأطول</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ الدعامة التاجية الحديثة تغيّر كل شيء</strong>
+        في المريض الذي وضع دعامة قبل أقل من المدة الدنيا الموصى بها لـ DAPT، إيقاف P2Y12 يحمل خطر تخثر حاد داخل الدعامة قد يكون قاتلاً — القرار يُتخذ حصراً ضمن Heart Team، وغالباً بتأجيل الجراحة الاختيارية.
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بالحفاظ على العلاج المزدوج المضاد للصفيحات كاملاً في المرضى ضمن المدة الدنيا الحرجة بعد وضع الدعامة التاجية، وتأجيل أي جراحة اختيارية إلى ما بعد انتهاء هذه المدة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">٢</div>
+        <h2>مضادات التخثر الفموية</h2>
+      </div>
+
+      <h3 id="s4">مضادات التخثر المباشرة (DOACs)</h3>
+      <p>توقيت إيقاف DOAC قبل الجراحة يعتمد على نوع الدواء، وظيفة الكلى، وخطر النزيف الجراحي — دون حاجة لقياس مستوى الدواء في معظم الحالات.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>خطر النزيف الجراحي</th><th>وظيفة الكلى طبيعية</th><th>قصور كلوي متوسط</th></tr></thead>
+          <tbody>
+            <tr><td><strong style="color:var(--green)">منخفض</strong></td><td>إيقاف 24 ساعة قبل</td><td>إيقاف 24–48 ساعة قبل</td></tr>
+            <tr><td><strong style="color:var(--red)">مرتفع</strong></td><td>إيقاف 48 ساعة قبل</td><td>إيقاف 48–72 ساعة قبل (خصوصاً Dabigatran)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإدارة DOAC حول الجراحة اعتماداً على توقيت ثابت مبني على وظيفة الكلى ونوع الدواء وخطر النزيف الجراحي، دون الحاجة الروتينية للجسر بالهيبارين</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+
+      <h3>مضادات فيتامين K (Warfarin)</h3>
+      <ul>
+        <li>يُوقف 3–5 أيام قبل الجراحة بهدف INR &lt; 1.5</li>
+        <li>الجسر بالهيبارين (Bridging) يُحجز فقط لخطر صمّي عالٍ جداً: صمام ميكانيكي، رجفان أذيني مع CHA₂DS₂-VASc مرتفع جداً وسكتة حديثة، صمة وريدية حديثة جداً</li>
+        <li>في معظم مرضى الرجفان الأذيني العاديين، الجسر الروتيني يزيد النزيف دون فائدة إضافية واضحة</li>
+      </ul>
+
+      <div class="rec rec-iii">
+        <div class="rec-text">لا يُوصى بالجسر الروتيني بالهيبارين في معظم مرضى الرجفان الأذيني ذوي الخطر الصمّي غير العالي جداً الموقوف لديهم Warfarin قبل الجراحة</div>
+        <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+
+      <h3>استئناف مضادات التخثر بعد الجراحة</h3>
+      <p>يُستأنف العلاج عادة خلال 24–72 ساعة بعد الجراحة، فور تحقق الإرقاء الكافي وحسب خطر النزيف المتبقي من الإجراء نفسه.</p>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">٣</div>
+        <h2>حاصرات بيتا والستاتين</h2>
+      </div>
+
+      <h3>حاصرات بيتا (Beta-Blockers)</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الحالة</th><th>التوصية</th></tr></thead>
+          <tbody>
+            <tr><td>مريض يتناول حاصر بيتا مزمناً</td><td>يستمر حول الجراحة دون انقطاع — الإيقاف المفاجئ خطر</td></tr>
+            <tr><td>مريض لم يكن يتناول حاصر بيتا</td><td>لا يُبدأ روتينياً قبل الجراحة فقط لتقليل الخطر</td></tr>
+            <tr><td>مؤشر واضح لحاصر بيتا (HFrEF، رجفان أذيني)</td><td>يمكن البدء المبكر — قبل الجراحة بوقت كافٍ للتحمل، وليس صباح العملية</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rec rec-iii">
+        <div class="rec-text">لا يُوصى ببدء حاصرات بيتا الروتيني في يوم الجراحة أو قبله بفترة قصيرة جداً بهدف الوقاية القلبية وحدها</div>
+        <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <div class="info-box danger">
+        <strong>🚨 درس POISE</strong>
+        بدء جرعة عالية من حاصر بيتا فجأة قبل الجراحة مباشرة قلّل الاحتشاء لكنه زاد السكتة الدماغية والوفيات الكلية — الرسالة: إذا كان هناك مؤشر لحاصر بيتا، ابدأه مبكراً وبجرعة منخفضة تُصعَّد تدريجياً، وليس في اللحظة الأخيرة.
+      </div>
+
+      <h3>الستاتين</h3>
+      <p>يُستمر بالستاتين دون انقطاع حول الجراحة في جميع المرضى الذين يتناولونه — له تأثيرات مثبِّتة للويحة العصيدية ومضادة للالتهاب مستقلة عن خفض الكوليسترول.</p>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى باستمرار علاج الستاتين دون انقطاع في الفترة المحيطة بالجراحة في المرضى الذين يتناولونه بالفعل</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <h2>ACEi / ARB — الإيقاف يوم الجراحة</h2>
+      </div>
+
+      <p>مثبطات الإنزيم المحول للأنجيوتنسين وحاصرات مستقبلات الأنجيوتنسين ترتبط بخطر متزايد لانخفاض الضغط الشديد أثناء التخدير عند الاستمرار بها حتى صباح الجراحة.</p>
+
+      <ul>
+        <li>يُوقف ACEi/ARB في صباح يوم الجراحة (جرعة واحدة فقط تُحجب)</li>
+        <li>الاستثناء: مريض قصور قلب حاد يعتمد عليها لضبط الاحتقان — تُقيَّم الحالة فردياً</li>
+        <li>يُستأنف الدواء بعد الجراحة فور استقرار الضغط والحالة الكلوية</li>
+      </ul>
+
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنصح بإيقاف مثبطات ACE أو حاصرات مستقبلات الأنجيوتنسين في صباح يوم الجراحة لتقليل خطر انخفاض الضغط الشديد أثناء التخدير</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <h2>أدوية السكري حول الجراحة</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الدواء</th><th>التوصية</th></tr></thead>
+          <tbody>
+            <tr><td><strong>SGLT2 Inhibitors</strong></td><td>إيقاف 3–4 أيام قبل الجراحة الكبرى — خطر الحماض الكيتوني السكري الطبيعي (Euglycemic DKA)</td></tr>
+            <tr><td><strong>Metformin</strong></td><td>يستمر عادة، يُوقف فقط عند خطر قصور كلوي حاد متوقع أو تباين وريدي كبير</td></tr>
+            <tr><td><strong>GLP-1 Agonists</strong></td><td>يُنظر في إيقافها قبل الجراحة (تأخير إفراغ المعدة) حسب بروتوكولات التخدير المحلية</td></tr>
+            <tr><td><strong>الإنسولين طويل المفعول</strong></td><td>يستمر بجرعة مخفّضة عادة (50–80%) صباح الجراحة</td></tr>
+            <tr><td><strong>الإنسولين قصير المفعول/سريع</strong></td><td>يُوقف صباح الجراحة إذا كان المريض صائماً</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإيقاف مثبطات SGLT2 قبل 3–4 أيام من الجراحة الكبرى الاختيارية للوقاية من الحماض الكيتوني السكري الطبيعي</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ راقب سكر الدم بدقة حول الجراحة</strong>
+        الهدف هو تجنّب كل من نقص وارتفاع السكر الشديدين — نطاق مقبول عام 140–180 mg/dL أثناء وبعد الجراحة الكبرى في معظم المرضى.
+      </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section" id="s8">
+      <div class="section-header">
+        <div class="section-num">٦</div>
+        <h2>جدول شامل: استمرار أم إيقاف؟</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الدواء</th><th>القرار العام</th><th>التوقيت إن أُوقف</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Aspirin</strong></td><td style="color:var(--green)">استمرار غالباً</td><td>5–7 أيام إن لزم الإيقاف</td></tr>
+            <tr><td><strong>Clopidogrel</strong></td><td style="color:var(--gold)">حسب دواعي الاستخدام</td><td>5 أيام</td></tr>
+            <tr><td><strong>Ticagrelor</strong></td><td style="color:var(--gold)">حسب دواعي الاستخدام</td><td>3–5 أيام</td></tr>
+            <tr><td><strong>Prasugrel</strong></td><td style="color:var(--gold)">حسب دواعي الاستخدام</td><td>7 أيام</td></tr>
+            <tr><td><strong>Warfarin</strong></td><td style="color:var(--red)">إيقاف مع/بدون جسر</td><td>3–5 أيام، هدف INR&lt;1.5</td></tr>
+            <tr><td><strong>DOACs</strong></td><td style="color:var(--red)">إيقاف حسب الجدول</td><td>24–48 (وأحياناً 72) ساعة</td></tr>
+            <tr><td><strong>Beta-Blocker</strong></td><td style="color:var(--green)">استمرار دائماً</td><td>—</td></tr>
+            <tr><td><strong>Statin</strong></td><td style="color:var(--green)">استمرار دائماً</td><td>—</td></tr>
+            <tr><td><strong>ACEi/ARB</strong></td><td style="color:var(--red)">إيقاف صباح الجراحة</td><td>جرعة واحدة فقط</td></tr>
+            <tr><td><strong>SGLT2 Inhibitors</strong></td><td style="color:var(--red)">إيقاف قبل الجراحة الكبرى</td><td>3–4 أيام</td></tr>
+            <tr><td><strong>Metformin</strong></td><td style="color:var(--green)">استمرار غالباً</td><td>—</td></tr>
+            <tr><td><strong>Diuretics</strong></td><td style="color:var(--gold)">تقييم فردي حسب الحجم</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Key Points -->
+    <div class="key-points" id="keys">
+      <h4>🔑 نقاط المفتاح</h4>
+      <ul>
+        <li>Aspirin يستمر في معظم الجراحات إلا عند خطر نزيف عالٍ جداً</li>
+        <li>الدعامة التاجية الحديثة (خصوصاً DES &lt;6 أشهر) تفرض تأجيل الجراحة الاختيارية إن أمكن</li>
+        <li>DOACs تُدار بجدول توقيت ثابت حسب وظيفة الكلى وخطر النزيف — دون جسر روتيني</li>
+        <li>الجسر بالهيبارين يُحجز لخطر صمّي عالٍ جداً فقط، وليس لكل مريض رجفان أذيني</li>
+        <li>حاصرات بيتا تستمر دائماً عند من يتناولها مزمناً — لا تُبدأ فجأة قبل الجراحة مباشرة (درس POISE)</li>
+        <li>الستاتين يستمر دون انقطاع دائماً حول الجراحة</li>
+        <li>ACEi/ARB يُوقف صباح الجراحة فقط (جرعة واحدة) لتقليل خطر انخفاض الضغط</li>
+        <li>SGLT2i يُوقف 3–4 أيام قبل الجراحة الكبرى للوقاية من الحماض الكيتوني الطبيعي</li>
+      </ul>
+    </div>
+
+    <!-- Navigation -->
+    <div class="next-prev">
+      <a href="ncs-part3.html" class="nav-btn">
+        <div class="dir">← العودة إلى</div>
+        <div class="title">الحالات القلبية المحددة</div>
+      </a>
+      <a href="ncs-part5.html" class="nav-btn next">
+        <div class="dir">الجزء التالي ←</div>
+        <div class="title">التخدير والجراحة الطارئة</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>مبني على غايدلاين ESC 2022 لتقييم القلب في الجراحة غير القلبية — للأغراض التعليمية | <a href="ncs-index.html">← NCS Overview</a> | <a href="guidelines.html">جميع الغايدات</a></p>
+</footer>
+
+<script>
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = p + '%';
+});
+
+const toc = document.querySelectorAll('.toc a');
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      toc.forEach(a => a.classList.remove('active'));
+      const id = e.target.id;
+      const active = document.querySelector(`.toc a[href="#${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+</body>
+</html>

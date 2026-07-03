@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NCS — الجزء الأول: التقييم الأولي وتقييم الخطر العام | ESC 2022</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#ef4444;--green:#10b981;--blue:#3b82f6;--gold:#f59e0b;--red:#ef4444;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));z-index:9999;transition:width .2s;width:0}
+  header{background:linear-gradient(135deg,#3a0a0a,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:var(--red);padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+  .back-btn:hover{background:rgba(239,68,68,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:#fff}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .part-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2rem;overflow-x:auto}
+  .part-nav-inner{max-width:1400px;margin:0 auto;display:flex;gap:.5rem}
+  .part-btn{padding:.4rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text2);background:transparent;white-space:nowrap;transition:all .2s}
+  .part-btn:hover{border-color:var(--red);color:var(--red)}
+  .part-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:var(--red);border-right-color:var(--red);background:rgba(239,68,68,.1)}
+  .toc .toc-sub{padding-right:1rem;font-size:.78rem}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:var(--red);color:#fff;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;flex-shrink:0}
+  .section h2{font-size:1.25rem;font-weight:700;color:#fff}
+  .section h3{font-size:1.05rem;font-weight:600;color:var(--red);margin:1.5rem 0 .75rem}
+  .section h4{font-size:.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 .5rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul,.section ol{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
+  .badge-i{background:var(--green);color:#fff}
+  .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
+  .rec-iia{background:rgba(59,130,246,.12);border-color:var(--blue)}
+  .badge-iia{background:var(--blue);color:#fff}
+  .rec-iib{background:rgba(245,158,11,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#000}
+  .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
+  .badge-iii{background:var(--red);color:#fff}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .highlight strong{color:var(--red)}
+  .warning{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .warning strong{color:var(--gold)}
+  .danger{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .danger strong{color:var(--red)}
+  .success{background:rgba(16,185,129,.1);border-color:var(--green)}
+  .success strong{color:var(--green)}
+  .info-blue{background:rgba(59,130,246,.1);border-color:var(--blue)}
+  .info-blue strong{color:var(--blue)}
+  .info-purple{background:rgba(139,92,246,.1);border-color:var(--purple)}
+  .info-purple strong{color:var(--purple)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(239,68,68,.15);color:var(--red);padding:.75rem 1rem;text-align:right;font-weight:600;white-space:nowrap}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:rgba(255,255,255,.03)}
+  .algo-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+  .algo-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  .algo-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .algo-num{background:var(--red);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:.2rem}
+  .algo-content h4{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:.3rem}
+  .algo-content p{font-size:.83rem;color:var(--text2);margin:0}
+  .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0}
+  .type-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:3px solid var(--red)}
+  .type-card.t2{border-top-color:var(--gold)}
+  .type-card.t3{border-top-color:var(--blue)}
+  .type-name{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.5rem}
+  .type-def{font-size:.82rem;color:var(--text2);margin-bottom:.75rem}
+  .type-row{display:flex;justify-content:space-between;font-size:.8rem;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .type-row:last-child{border-bottom:none}
+  .type-label{color:var(--text2)}
+  .type-val{color:var(--text);font-weight:500}
+  .key-points{background:linear-gradient(135deg,rgba(239,68,68,.1),rgba(245,158,11,.06));border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+  .key-points h4{color:var(--red);margin-bottom:1rem;font-size:1rem}
+  .key-points ul{list-style:none;padding:0}
+  .key-points li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem}
+  .key-points li::before{content:'🔑';flex-shrink:0}
+  .next-prev{display:flex;justify-content:space-between;margin-top:2rem;gap:1rem}
+  .nav-btn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;text-decoration:none;transition:all .25s;flex:1;max-width:260px}
+  .nav-btn:hover{border-color:var(--red);background:rgba(239,68,68,.08)}
+  .nav-btn .dir{font-size:.75rem;color:var(--text2);margin-bottom:.25rem}
+  .nav-btn .title{font-size:.9rem;font-weight:700;color:#fff}
+  .nav-btn.next{text-align:left}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:2rem}
+  footer a{color:var(--red);text-decoration:none}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="ncs-index.html" class="back-btn">← NCS Overview</a>
+    <div class="header-title">
+      <h1>الجزء الأول — التقييم الأولي وتقييم الخطر العام</h1>
+      <p>ESC Guidelines 2022 · Non-Cardiac Surgery</p>
+    </div>
+  </div>
+</header>
+
+<div class="part-nav">
+  <div class="part-nav-inner">
+    <a href="ncs-part1.html" class="part-btn active">١ · التقييم الأولي</a>
+    <a href="ncs-part2.html" class="part-btn">٢ · الفحوصات</a>
+    <a href="ncs-part3.html" class="part-btn">٣ · حالات خاصة</a>
+    <a href="ncs-part4.html" class="part-btn">٤ · الأدوية</a>
+    <a href="ncs-part5.html" class="part-btn">٥ · التخدير والطوارئ</a>
+    <a href="ncs-part6.html" class="part-btn">٦ · المضاعفات</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h3>محتويات الجزء الأول</h3>
+    <a href="#s1">١ · المبادئ العامة</a>
+    <a href="#s2" class="toc-sub">· فريق التقييم متعدد التخصصات</a>
+    <a href="#s3">٢ · تصنيف خطورة الجراحة</a>
+    <a href="#s4" class="toc-sub">· أمثلة على كل فئة</a>
+    <a href="#s5">٣ · الحالة الوظيفية</a>
+    <a href="#s6" class="toc-sub">· مقياس DASI</a>
+    <a href="#s7">٤ · مؤشر الخطر القلبي RCRI</a>
+    <a href="#s8">٥ · الواسمات الحيوية</a>
+    <a href="#s9">٦ · خوارزمية التقييم الشامل</a>
+    <a href="#s10">٧ · متى نؤجل الجراحة</a>
+    <a href="#keys">نقاط المفتاحية</a>
+  </nav>
+
+  <div class="content">
+
+    <!-- Section 1 -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">١</div>
+        <h2>المبادئ العامة للتقييم القلبي قبل الجراحة</h2>
+      </div>
+
+      <p>الهدف الأساسي من التقييم القلبي قبل الجراحة غير القلبية ليس منع المريض من إجراء الجراحة، بل تحديد المرضى المعرّضين لخطر مضاعفات قلبية وعائية حول الجراحة، وتحسين حالتهم قدر الإمكان دون تأخير غير مبرر للعملية الضرورية.</p>
+
+      <div class="info-box highlight">
+        <strong>🎯 المبدأ الجوهري في غايدلاين 2022</strong>
+        القرار حول أي فحص أو تدخل قبل الجراحة يجب أن يوازن دائماً بين خطر الجراحة نفسها، والحالة القلبية للمريض، وإلحاح الجراحة — وليس مجرد اتباع قائمة فحوصات روتينية.
+      </div>
+
+      <h3 id="s2">فريق التقييم متعدد التخصصات (Heart Team / Perioperative Team)</h3>
+      <p>يوصي الغايدلاين بمقاربة تعاونية تجمع الجرّاح، طبيب التخدير، وطبيب القلب — خصوصاً في المرضى عاليي الخطر أو الجراحات الكبرى غير الاختيارية.</p>
+
+      <ul>
+        <li>الجرّاح: يحدّد إلحاح الجراحة وخطورتها النوعية ومدى إمكانية تأجيلها</li>
+        <li>طبيب التخدير: يقيّم الخطر التخديري العام ونوع التخدير الأنسب</li>
+        <li>طبيب القلب: يقيّم الحالة القلبية الأساسية ويوصي بالتحسين قبل الجراحة إن لزم</li>
+        <li>في الحالات المعقدة (صمامات، قصور قلب متقدم): تُناقش الحالة ضمن Heart Team رسمي</li>
+      </ul>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتقييم قلبي شامل قبل أي جراحة غير قلبية اختيارية في المرضى المعروف لديهم مرض قلبي وعائي أو عوامل خطر قلبية وعائية أو أعراض توحي بذلك</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">٢</div>
+        <h2>تصنيف خطورة الجراحة</h2>
+      </div>
+
+      <p>غيّر غايدلاين 2022 التصنيف الثلاثي القديم (منخفضة/متوسطة/عالية) إلى تصنيف ثنائي أبسط اعتماداً على خطر الوفاة القلبية والاحتشاء خلال 30 يوماً بعد الجراحة.</p>
+
+      <div class="table-wrap" id="s4">
+        <table class="data-table">
+          <thead>
+            <tr><th>الفئة</th><th>الخطر 30 يوماً</th><th>أمثلة نموذجية</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong style="color:var(--green)">Low Risk</strong></td><td>&lt; 1%</td><td>جراحة العين، الثدي، الغدة الدرقية، تنظير بسيط، جراحة تجميلية سطحية، جراحة اليد</td></tr>
+            <tr><td><strong style="color:var(--red)">Elevated Risk</strong></td><td>≥ 1%</td><td>جراحة الأوعية الدموية الكبرى، جراحة البطن الكبرى، زراعة الأعضاء، جراحة الصدر، جراحة العظام الكبرى (ورك/حوض)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box info-blue">
+        <strong>📌 ملاحظة مهمة 2022</strong>
+        الجراحة الوعائية الكبرى (Open aortic، Bypass الأطراف السفلية) تبقى من أعلى فئات الخطر — تستحق تقييماً دقيقاً حتى عند غياب الأعراض.
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ إلحاح الجراحة يتجاوز تصنيف الخطر</strong>
+        في الجراحة الطارئة المهدِّدة للحياة (نزيف نشط، انثقاب معوي، إنتان حاد) لا تُؤخَّر الجراحة لأي فحص قلبي — التقييم يكون سريرياً سريعاً فقط.
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">٣</div>
+        <h2>الحالة الوظيفية (Functional Capacity)</h2>
+      </div>
+
+      <p>تقييم الحالة الوظيفية بوحدات METs (Metabolic Equivalents) هو حجر الأساس في قرار الحاجة لفحوصات إضافية — وهو أهم من العمر وحده.</p>
+
+      <div class="type-grid">
+        <div class="type-card">
+          <div class="type-name">≥ 4 METs</div>
+          <div class="type-def">صعود طابقين دون توقف، مشي سريع، أعمال منزلية شاقة</div>
+          <div class="type-row"><span class="type-label">القرار</span><span class="type-val">تابع للجراحة مباشرة</span></div>
+        </div>
+        <div class="type-card t2">
+          <div class="type-name">&lt; 4 METs</div>
+          <div class="type-def">عجز عن صعود طابق واحد أو المشي مسافة قصيرة بسرعة عادية</div>
+          <div class="type-row"><span class="type-label">القرار</span><span class="type-val">فكّر بواسمات حيوية ± فحص إضافي</span></div>
+        </div>
+        <div class="type-card t3">
+          <div class="type-name">غير معروفة</div>
+          <div class="type-def">قصور حركي، بتر، أمراض مفاصل تمنع التقييم الذاتي</div>
+          <div class="type-row"><span class="type-label">القرار</span><span class="type-val">اعتمد على الواسمات الحيوية</span></div>
+        </div>
+      </div>
+
+      <h3 id="s6">مقياس DASI (Duke Activity Status Index)</h3>
+      <p>استبيان مبني على 12 نشاطاً يومياً يُترجم إلى تقدير METs تقريبي — أظهرت دراسة METS أن التقدير الذاتي البسيط للمريض ("هل يمكنك صعود طابقين؟") أقل دقة من DASI أو من الواسمات الحيوية الموضوعية في التنبؤ بالمضاعفات.</p>
+
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنصح باستخدام استبيان DASI أو أدوات موضوعية مشابهة لتقدير الحالة الوظيفية بدلاً من الاعتماد فقط على السؤال الذاتي العام</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+
+      <div class="info-box success">
+        <strong>✅ CPET — الطريقة الأدق</strong>
+        اختبار القدرة على التحمل القلبي الرئوي (Cardiopulmonary Exercise Testing) يقيس VO2 peak وعتبة اللاهوائية (Anaerobic Threshold) بشكل موضوعي — يُستخدم قبل الجراحات الكبرى جداً عند توفره.
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <h2>مؤشر الخطر القلبي المعدّل (RCRI — Revised Cardiac Risk Index)</h2>
+      </div>
+
+      <p>يبقى مؤشر Lee (RCRI) الأداة الأكثر استخداماً واختباراً في التنبؤ بالمضاعفات القلبية الكبرى بعد الجراحة غير القلبية، رغم بساطته.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>العامل</th><th>التفاصيل</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>جراحة عالية الخطورة</strong></td><td>داخل الصدر، داخل البطن، فوق الإربية الوعائية</td></tr>
+            <tr><td>2</td><td><strong>مرض شريان تاجي إقفاري</strong></td><td>احتشاء سابق، ذبحة، اختبار جهد إيجابي، Q waves</td></tr>
+            <tr><td>3</td><td><strong>قصور قلب احتقاني</strong></td><td>تاريخ قصور قلب، وذمة رئوية، S3، خُماري رئوي</td></tr>
+            <tr><td>4</td><td><strong>مرض وعائي دماغي</strong></td><td>سكتة سابقة أو نوبة إقفارية عابرة (TIA)</td></tr>
+            <tr><td>5</td><td><strong>سكري على إنسولين</strong></td><td>يحتاج علاج إنسولين قبل الجراحة</td></tr>
+            <tr><td>6</td><td><strong>قصور كلوي</strong></td><td>كرياتينين مصل &gt; 2 mg/dL (177 µmol/L)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>عدد العوامل</th><th>خطر المضاعفات القلبية الكبرى</th></tr></thead>
+          <tbody>
+            <tr><td><strong style="color:var(--green)">0</strong></td><td>~ 0.4%</td></tr>
+            <tr><td><strong style="color:var(--green)">1</strong></td><td>~ 1%</td></tr>
+            <tr><td><strong style="color:var(--gold)">2</strong></td><td>~ 2.4%</td></tr>
+            <tr><td><strong style="color:var(--red)">≥ 3</strong></td><td>~ 5.4% أو أكثر</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى باستخدام RCRI كأداة أولية لتقدير خطر المضاعفات القلبية حول الجراحة في جميع المرضى الذين سيخضعون لجراحة ذات خطورة مرتفعة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section" id="s8">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <h2>الواسمات الحيوية (Biomarkers)</h2>
+      </div>
+
+      <p>أحد أهم التغييرات في نسخة 2022 هو التركيز المتزايد على NT-proBNP/BNP كأداة تنبؤية موضوعية، بالإضافة إلى Troponin كأداة كشف ما بعد الجراحة.</p>
+
+      <h3>NT-proBNP / BNP قبل الجراحة</h3>
+      <ul>
+        <li>يُقاس في المرضى ≥ 65 سنة، أو RCRI ≥ 1، أو مرض قلبي وعائي معروف، قبل جراحة ذات خطورة مرتفعة</li>
+        <li>NT-proBNP طبيعي: &lt; 300 pg/mL — BNP طبيعي: &lt; 92 pg/mL</li>
+        <li>ارتفاع القيمة يوجّه نحو مراقبة Troponin بعد الجراحة ومتابعة أوثق</li>
+      </ul>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بقياس NT-proBNP أو BNP قبل الجراحة في المرضى ≥65 سنة أو من لديهم عوامل خطر قلبية معروفة، الخاضعين لجراحة ذات خطورة مرتفعة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+
+      <h3>Troponin عالي الحساسية بعد الجراحة</h3>
+      <p>قياس Troponin في اليوم الأول والثاني بعد الجراحة عالية الخطورة يكشف عن "الإصابة القلبية بعد الجراحة غير القلبية" (MINS) — وهي غالباً بدون أعراض إقفارية واضحة لكنها مرتبطة بشكل قوي بالوفيات خلال 30 يوماً (راجع الجزء السادس بالتفصيل).</p>
+
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنصح بقياس Troponin عالي الحساسية بشكل روتيني في اليوم 1 و2 بعد الجراحة في المرضى عاليي الخطر القلبي الخاضعين لجراحة ذات خطورة مرتفعة</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section" id="s9">
+      <div class="section-header">
+        <div class="section-num">٦</div>
+        <h2>خوارزمية التقييم الشامل خطوة بخطوة</h2>
+      </div>
+
+      <div class="algo-box">
+        <div class="algo-step">
+          <div class="algo-num">1</div>
+          <div class="algo-content">
+            <h4>هل الجراحة طارئة ومهدِّدة للحياة؟</h4>
+            <p>نعم → لا وقت لأي تقييم إضافي، توجّه للجراحة فوراً مع تحسين قدر الإمكان أثناء التحضير</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">2</div>
+          <div class="algo-content">
+            <h4>هل لدى المريض حالة قلبية غير مستقرة؟</h4>
+            <p>ذبحة غير مستقرة، قصور قلب لا معاوض، اضطراب نظم خطير، مرض صمامي شديد عرضي → عالج الحالة القلبية أولاً قبل الجراحة الاختيارية</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">3</div>
+          <div class="algo-content">
+            <h4>ما تصنيف خطورة الجراحة؟</h4>
+            <p>Low Risk → تابع للجراحة دون فحوصات إضافية · Elevated Risk → انتقل للخطوة التالية</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">4</div>
+          <div class="algo-content">
+            <h4>احسب RCRI وقيّم الحالة الوظيفية</h4>
+            <p>RCRI منخفض + ≥4 METs → تابع للجراحة · RCRI ≥2 أو &lt;4 METs → فكّر بالواسمات الحيوية</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">5</div>
+          <div class="algo-content">
+            <h4>قِس NT-proBNP/BNP</h4>
+            <p>طبيعي → تابع للجراحة مع مراقبة Troponin بعد العملية · مرتفع → فكّر بفحص وظيفي/تصويري إضافي (الجزء الثاني)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="section" id="s10">
+      <div class="section-header">
+        <div class="section-num">٧</div>
+        <h2>متى نؤجل أو نلغي الجراحة</h2>
+      </div>
+
+      <ul>
+        <li>متلازمة شريان تاجي حادة غير مستقرة أو ذبحة صدرية غير مستقرة</li>
+        <li>قصور قلب حاد لا معاوض (Decompensated Heart Failure)</li>
+        <li>اضطراب نظم بطيني أو فوق بطيني خطير غير مضبوط</li>
+        <li>تضيق أبهري شديد عرضي غير معالج</li>
+        <li>PCI حديث مع DAPT إلزامي غير مكتمل المدة (راجع الجزء الرابع)</li>
+      </ul>
+
+      <div class="info-box danger">
+        <strong>🚨 تأجيل الجراحة الاختيارية له كلفته أيضاً</strong>
+        القرار يجب أن يوازن بين خطر المضاعفات القلبية وخطر تفاقم الحالة الجراحية الأصلية (مثل ورم خبيث) نتيجة التأخير — القرار يُتخذ ضمن فريق متعدد التخصصات.
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتأجيل الجراحة الاختيارية غير القلبية في المرضى الذين يعانون من حالة قلبية غير مستقرة إلى حين تحقيق الاستقرار السريري</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <!-- Key Points -->
+    <div class="key-points" id="keys">
+      <h4>🔑 نقاط المفتاح — الجزء الأول</h4>
+      <ul>
+        <li>هدف التقييم هو تقليل الخطر، وليس منع المريض من الجراحة الضرورية</li>
+        <li>غايدلاين 2022 يعتمد تصنيفاً ثنائياً لخطورة الجراحة: منخفضة &lt;1% ومرتفعة ≥1%</li>
+        <li>الحالة الوظيفية ≥4 METs بدون أعراض تسمح بالتقدم مباشرة للجراحة غالباً</li>
+        <li>RCRI يبقى الأداة الأساسية الأولى لتقدير الخطر القلبي حول الجراحة</li>
+        <li>NT-proBNP/BNP أصبح توصية Class I في المرضى عاليي الخطر قبل الجراحات الكبرى</li>
+        <li>الجراحة الطارئة الحقيقية لا تُؤخَّر لأي فحص قلبي غير ضروري</li>
+        <li>عدم الاستقرار القلبي الحاد سبب مطلق لتأجيل الجراحة الاختيارية</li>
+      </ul>
+    </div>
+
+    <!-- Navigation -->
+    <div class="next-prev">
+      <a href="ncs-index.html" class="nav-btn">
+        <div class="dir">← العودة إلى</div>
+        <div class="title">نظرة عامة على NCS</div>
+      </a>
+      <a href="ncs-part2.html" class="nav-btn next">
+        <div class="dir">الجزء التالي ←</div>
+        <div class="title">الفحوصات القلبية التشخيصية</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>مبني على غايدلاين ESC 2022 لتقييم القلب في الجراحة غير القلبية — للأغراض التعليمية | <a href="ncs-index.html">← NCS Overview</a> | <a href="guidelines.html">جميع الغايدات</a></p>
+</footer>
+
+<script>
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = p + '%';
+});
+
+const toc = document.querySelectorAll('.toc a');
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      toc.forEach(a => a.classList.remove('active'));
+      const id = e.target.id;
+      const active = document.querySelector(`.toc a[href="#${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+</body>
+</html>
