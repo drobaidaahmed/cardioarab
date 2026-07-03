@@ -10,6 +10,14 @@
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   const isAndroid = /android/i.test(navigator.userAgent);
 
+  // نلتقط حدث التثبيت الأصلي إن توفر (يعمل أحياناً حسب الجهاز/الشبكة)
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+  window.addEventListener('appinstalled', () => { deferredPrompt = null; });
+
   function showInstructions() {
     if (isIOS) {
       alert('١. دوس على زر المشاركة ⬆️ تحت\n٢. دوس "إضافة إلى الشاشة الرئيسية"');
@@ -18,8 +26,20 @@
     }
   }
 
+  async function handleInstallClick() {
+    // إذا كان التثبيت المباشر متاحاً (نادراً ما يفشل)، جربه أولاً — تثبيت بضغطة واحدة بدون تعليمات
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      try { await deferredPrompt.userChoice; } catch (_) {}
+      deferredPrompt = null;
+      return;
+    }
+    // غير متاح (الحالة الشائعة بسبب قيود Play Services إقليمياً) — نعرض التعليمات اليدوية
+    showInstructions();
+  }
+
   // إتاحة الدالة لأي زر يدوي بالصفحة (مثلاً زر "ثبّت التطبيق" بالهيدر) — دائماً متاحة بغض النظر عن حالة البانر
-  window.caShowInstallInstructions = showInstructions;
+  window.caShowInstallInstructions = handleInstallClick;
 
   // لا تُظهر البانر إذا كان التطبيق يعمل أصلاً بوضع standalone (مثبّت فعلاً)
   const isStandalone =
@@ -65,8 +85,8 @@
   if (isIOS) {
     buildBanner('كيف؟', showInstructions);
   } else if (isAndroid) {
-    // لا نعتمد على beforeinstallprompt لأنه غير موثوق في بعض المناطق (قيود Play Services)
-    buildBanner('كيف؟', showInstructions);
+    // نجرب التثبيت المباشر إن توفر؛ وإلا نعرض تعليمات يدوية
+    buildBanner('تثبيت', handleInstallClick);
   }
 
 })();
