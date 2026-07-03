@@ -116,4 +116,66 @@
     e.preventDefault();
   });
 
+  // ─── 9. Watermark ديناميكي — اسم/بريد المشترك فوق المحتوى ────────────────
+  function escapeXml(s) {
+    return String(s).replace(/[<>&'"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'}[c]));
+  }
+
+  function addWatermark() {
+    let user = null;
+    try { user = JSON.parse(localStorage.getItem('currentUser')); } catch (_) {}
+    if (!user || (!user.name && !user.email)) return;
+
+    const label = escapeXml(`${user.name || ''}   ${user.email || ''}`);
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='340' height='170'>
+      <text x='0' y='90' font-size='13' fill='rgba(255,255,255,0.07)' font-family='sans-serif' transform='rotate(-28 170 85)'>${label}</text>
+    </svg>`;
+    const bg = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+
+    function ensureWatermark() {
+      if (document.getElementById('ca-watermark')) return;
+      const wm = document.createElement('div');
+      wm.id = 'ca-watermark';
+      wm.style.cssText = `position:fixed;inset:0;pointer-events:none;z-index:2147483000;background-image:url("${bg}");background-repeat:repeat;`;
+      document.body.appendChild(wm);
+    }
+
+    ensureWatermark();
+    // إعادة إدراجه لو تمت إزالته يدوياً من الصفحة
+    setInterval(ensureWatermark, 2000);
+  }
+
+  if (document.body) addWatermark();
+  else document.addEventListener('DOMContentLoaded', addWatermark);
+
+  // ─── 10. مراقبة الجهاز — تسجيل خروج تلقائي لو تم الدخول من جهاز آخر ───────
+  (function deviceWatch() {
+    const SB_URL = 'https://ikisgwnsxadiujueeava.supabase.co';
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlraXNnd25zeGFkaXVqdWVlYXZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NzU5ODYsImV4cCI6MjA5ODI1MTk4Nn0.Ar45kQJPOgJ9ITqGVv9XeSxpGgyx53s6CTmFCNDBa-g';
+
+    async function checkDevice() {
+      let user = null;
+      try { user = JSON.parse(localStorage.getItem('currentUser')); } catch (_) {}
+      if (!user || !user.id || user.is_admin) return;
+
+      const myDevice = localStorage.getItem('deviceId');
+      if (!myDevice) return;
+
+      try {
+        const res = await fetch(`${SB_URL}/rest/v1/users?id=eq.${user.id}&select=device_id`, {
+          headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+        });
+        const rows = await res.json();
+        if (rows.length && rows[0].device_id && rows[0].device_id !== myDevice) {
+          localStorage.removeItem('currentUser');
+          alert('⚠️ تم تسجيل الدخول إلى حسابك من جهاز آخر. تم تسجيل خروجك من هذا الجهاز.');
+          location.href = 'login.html';
+        }
+      } catch (_) {}
+    }
+
+    checkDevice();
+    setInterval(checkDevice, 60000); // كل دقيقة
+  })();
+
 })();

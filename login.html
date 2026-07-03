@@ -29,6 +29,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .links a{color:var(--accent);text-decoration:none;font-weight:600;font-size:.88rem}
 .links p{margin:.4rem 0;color:var(--text2);font-size:.85rem}
 </style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8b5cf6">
 </head>
 <body>
 <div class="card">
@@ -60,6 +62,9 @@ function showMsg(txt, type) {
   el.className = 'alert show alert-' + type;
 }
 
+const DEVICE_COOLDOWN_DAYS = 15;
+let pendingUser = null; // مستخدم بانتظار تأكيد "هذا جهازي الجديد"
+
 async function handleLogin() {
   const email = document.getElementById('loginEmail').value.trim().toLowerCase();
   const pass  = document.getElementById('loginPassword').value.trim();
@@ -86,24 +91,38 @@ async function handleLogin() {
       return;
     }
 
-    // فحص انتهاء الاشتراك
+    // فحص الجهاز — الحساب مقيّد بجهاز واحد فقط (لا يشمل حساب المالك)
     if (!user.is_admin) {
-      const subs = await db.select('subscriptions', `?user_id=eq.${user.id}&active=eq.true`);
-      if (subs.length && subs[0].end_date && new Date() > new Date(subs[0].end_date)) {
-        await db.update('subscriptions', `?id=eq.${subs[0].id}`, { active: false });
-        showMsg('⏳ انتهت صلاحية اشتراكك. يرجى التواصل مع المالك لتجديده', 'danger');
+      const myDevice = device.getId();
+
+      if (!user.device_id) {
+        // أول تسجيل دخول على الإطلاق — اربط الحساب بهذا الجهاز
+        await db.update('users', `?id=eq.${user.id}`, {
+          device_id: myDevice,
+          device_changed_at: new Date().toISOString()
+        });
+      } else if (user.device_id !== myDevice) {
+        // جهاز مختلف عن الجهاز المسجّل
+        const changedAt = user.device_changed_at ? new Date(user.device_changed_at) : null;
+        const daysSince = changedAt ? (Date.now() - changedAt.getTime()) / 86400000 : Infinity;
+
+        if (daysSince < DEVICE_COOLDOWN_DAYS) {
+          const remaining = Math.ceil(DEVICE_COOLDOWN_DAYS - daysSince);
+          showMsg(`🚫 هذا الحساب مستخدم على جهاز آخر. يمكن تغيير الجهاز بعد ${remaining} يوم، أو تواصل مع المالك`, 'danger');
+          btn.disabled = false; btn.textContent = 'تسجيل الدخول';
+          return;
+        }
+
+        // مضت 15 يوم أو أكثر — اسمح بالتبديل بعد تأكيد صريح من المستخدم
+        pendingUser = user;
+        showDeviceConfirm();
         btn.disabled = false; btn.textContent = 'تسجيل الدخول';
         return;
       }
+      // نفس الجهاز — تابع الدخول عادي
     }
 
-    session.set(user);
-    await addLog('تسجيل دخول ناجح', email);
-    showMsg('✅ تم تسجيل الدخول بنجاح!', 'success');
-
-    setTimeout(() => {
-      window.location.href = user.is_admin ? 'admin.html' : 'index.html';
-    }, 1200);
+    await finishLogin(user, email);
 
   } catch (e) {
     console.error(e);
@@ -112,8 +131,64 @@ async function handleLogin() {
   }
 }
 
+function showDeviceConfirm() {
+  const el = document.getElementById('msg');
+  el.innerHTML = '⚠️ هذا الحساب مرتبط بجهاز آخر — لكن مضى أكثر من ' + DEVICE_COOLDOWN_DAYS + ' يوماً، فيمكنك ربط هذا الجهاز الآن.' +
+    '<br><button class="btn" style="margin-top:.75rem" onclick="confirmNewDevice()">✅ هذا جهازي الجديد</button>';
+  el.className = 'alert show alert-danger';
+}
+
+async function confirmNewDevice() {
+  if (!pendingUser) return;
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+
+  try {
+    const myDevice = device.getId();
+    await db.update('users', `?id=eq.${pendingUser.id}`, {
+      device_id: myDevice,
+      device_changed_at: new Date().toISOString()
+    });
+    const email = pendingUser.email;
+    await finishLogin(pendingUser, email);
+  } catch (e) {
+    console.error(e);
+    showMsg('❌ خطأ في الاتصال، حاول مرة أخرى', 'danger');
+  }
+  btn.disabled = false; btn.textContent = 'تسجيل الدخول';
+}
+
+async function finishLogin(user, email) {
+  // فحص انتهاء الاشتراك
+  if (!user.is_admin) {
+    const subs = await db.select('subscriptions', `?user_id=eq.${user.id}&active=eq.true`);
+    if (subs.length && subs[0].end_date && new Date() > new Date(subs[0].end_date)) {
+      await db.update('subscriptions', `?id=eq.${subs[0].id}`, { active: false });
+      showMsg('⏳ انتهت صلاحية اشتراكك. يرجى التواصل مع المالك لتجديده', 'danger');
+      const btn = document.getElementById('loginBtn');
+      btn.disabled = false; btn.textContent = 'تسجيل الدخول';
+      return;
+    }
+  }
+
+  session.set(user);
+  await addLog('تسجيل دخول ناجح', email);
+  showMsg('✅ تم تسجيل الدخول بنجاح!', 'success');
+
+  setTimeout(() => {
+    window.location.href = user.is_admin ? 'admin.html' : 'index.html';
+  }, 1200);
+}
+
 document.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
 </script>
 <script src="protection.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(console.warn);
+  });
+}
+</script>
 </body>
 </html>

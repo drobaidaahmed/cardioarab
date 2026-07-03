@@ -98,6 +98,19 @@ const session = {
   }
 };
 
+// ─── Device Helper (لتقييد الحساب بجهاز واحد) ──────────────────────────────
+const device = {
+  // معرف ثابت لهذا الجهاز/المتصفح، يُنشأ مرة واحدة ويُحفظ محلياً
+  getId() {
+    let id = localStorage.getItem('deviceId');
+    if (!id) {
+      id = (crypto.randomUUID ? crypto.randomUUID() : ('dev-' + Date.now() + '-' + Math.random().toString(36).slice(2)));
+      localStorage.setItem('deviceId', id);
+    }
+    return id;
+  }
+};
+
 // ─── Log Helper ──────────────────────────────────────────────────────────────
 async function addLog(message, email = '') {
   try {
