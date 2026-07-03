@@ -21,6 +21,17 @@
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   const isAndroid = /android/i.test(navigator.userAgent);
 
+  function showInstructions() {
+    if (isIOS) {
+      alert('١. دوس على زر المشاركة ⬆️ تحت\n٢. دوس "إضافة إلى الشاشة الرئيسية"');
+    } else {
+      alert('١. دوس على النقاط الثلاث ⋮ فوق\n٢. دوس "إضافة إلى الشاشة الرئيسية"');
+    }
+  }
+
+  // إتاحة الدالة لأي زر يدوي بالصفحة (مثلاً زر "ثبّت التطبيق" بالهيدر)
+  window.caShowInstallInstructions = showInstructions;
+
   function buildBanner(btnText, onInstallClick) {
     const bar = document.createElement('div');
     bar.id = 'ca-install-banner';
@@ -52,15 +63,10 @@
   }
 
   if (isIOS) {
-    buildBanner('كيف؟', () => {
-      alert('١. دوس على زر المشاركة ⬆️ تحت\n٢. دوس "إضافة إلى الشاشة الرئيسية"');
-    });
+    buildBanner('كيف؟', showInstructions);
   } else if (isAndroid) {
     // لا نعتمد على beforeinstallprompt لأنه غير موثوق في بعض المناطق (قيود Play Services)
-    // نعرض تعليمات يدوية واضحة دائماً
-    buildBanner('كيف؟', () => {
-      alert('١. دوس على النقاط الثلاث ⋮ فوق\n٢. دوس "إضافة إلى الشاشة الرئيسية"');
-    });
+    buildBanner('كيف؟', showInstructions);
   }
 
 })();
