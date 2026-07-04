@@ -233,7 +233,7 @@ async function loadUsers(q=''){
                 <td dir="ltr" style="text-align:left">${u.email}</td>
                 <td><span class="bp bp-active">✅ نشط دائماً</span></td>
                 <td>—</td>
-                <td>${new Date(u.created_at).toLocaleDateString('ar-SA')}</td>
+                <td>${new Date(u.created_at).toLocaleDateString('en-US')}</td>
                 <td>—</td>
             </tr>`;
 
@@ -254,8 +254,8 @@ async function loadUsers(q=''){
                             :'<span class="bp bp-inactive">🔴 غير نشط</span>'
                     }
                 </td>
-                <td style="font-size:.8rem;color:var(--text2)">${endDate&&active?endDate.toLocaleDateString('ar-SA'):'—'}</td>
-                <td style="font-size:.8rem;color:var(--text2)">${new Date(u.created_at).toLocaleDateString('ar-SA')}</td>
+                <td style="font-size:.8rem;color:var(--text2)">${endDate&&active?endDate.toLocaleDateString('en-US'):'—'}</td>
+                <td style="font-size:.8rem;color:var(--text2)">${new Date(u.created_at).toLocaleDateString('en-US')}</td>
                 <td>
                     <div class="actions">
                         <button class="btn btn-activate" onclick="activateUser('${u.id}','${u.email}','${u.name}')">✅ تفعيل شهر</button>
@@ -289,7 +289,7 @@ async function activateUser(id, email, name){
             await sbPost('subscriptions',{user_id:id,plan:'monthly',active:true,end_date:endDate.toISOString(),days:30});
         }
         await addLog(`تم تفعيل اشتراك شهر للمستخدم ${name}`,email);
-        alert(`✅ تم تفعيل اشتراك ${name} حتى ${endDate.toLocaleDateString('ar-SA')}`);
+        alert(`✅ تم تفعيل اشتراك ${name} حتى ${endDate.toLocaleDateString('en-US')}`);
         loadUsers(); loadStats();
     }catch(e){alert('❌ خطأ في التفعيل: '+JSON.stringify(e));}
 }
@@ -335,7 +335,7 @@ async function loadLog(){
         if(!logs.length){list.innerHTML='<li><span class="msg">لا توجد سجلات بعد.</span></li>';return;}
         list.innerHTML=logs.map(l=>`<li>
             <span class="msg">${l.message} ${l.email?`<span style="color:var(--text2)">(${l.email})</span>`:''}</span>
-            <span class="time">${new Date(l.created_at).toLocaleString('ar-SA')}</span>
+            <span class="time">${new Date(l.created_at).toLocaleString('en-US')}</span>
         </li>`).join('');
     }catch{list.innerHTML='<li><span class="msg">❌ خطأ في التحميل</span></li>';}
 }
