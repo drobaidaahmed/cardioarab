@@ -370,8 +370,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
         <span class="card-year">ESC 2018</span>
         <span class="card-badge badge-paid">مدفوع</span>
       </div>
-      <div class="card-title">الإغماء — Syncope</div>
-      <div class="card-sub">الإغماء الوعائي المبهمي • الوضعي • القلبي • الفحوصات الأولية</div>
+      <div class="card-title">الغشي — Syncope</div>
+      <div class="card-sub">الغشي الوعائي المبهمي • الوضعي • القلبي • الفحوصات الأولية</div>
     </a>
 
     <a href="revascularization-index.html" class="g-card available paid">
@@ -728,6 +728,13 @@ res.addEventListener('keydown', e=>{
           + '<div><span style="color:#a78bfa;font-weight:700;font-size:.9rem">البحث الذكي متاح للمشتركين فقط</span>'
           + '<span style="color:#64748b;font-size:.82rem;margin-right:.5rem"> — ' + loginLink + '</span></div></div>';
       }
+    } else {
+      // مفعّل (مشترك أو مالك) — حوّل كل كروت "مدفوع" إلى "متاح" بالأخضر مثل باقي الغايدلاينات
+      document.querySelectorAll('.g-card.paid').forEach(card => {
+        card.classList.remove('paid');
+        const badge = card.querySelector('.card-badge');
+        if(badge){ badge.textContent = 'متاح'; badge.className = 'card-badge badge-available'; }
+      });
     }
 
     // فعّل محرك البحث فقط إذا كان الوصول حقيقياً (العناصر الأصلية موجودة بعد بالـ DOM)
