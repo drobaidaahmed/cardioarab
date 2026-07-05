@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الجزء الأول: التشخيص والأدوات | ESC 2018</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#3b82f6;--green:#10b981;--blue:#3b82f6;--gold:#f59e0b;--red:#ef4444;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--gold));z-index:9999;transition:width .2s;width:0}
+  header{background:linear-gradient(135deg,#0a2540,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.4);color:var(--blue);padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+  .back-btn:hover{background:rgba(59,130,246,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:#fff}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:var(--blue);border-right-color:var(--blue);background:rgba(59,130,246,.1)}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:var(--blue);color:#fff;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;flex-shrink:0}
+  .section h2{font-size:1.25rem;font-weight:700;color:#fff}
+  .section h3{font-size:1.05rem;font-weight:600;color:var(--blue);margin:1.5rem 0 .75rem}
+  .section h4{font-size:.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 .5rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul,.section ol{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
+  .badge-i{background:var(--green);color:#fff}
+  .rec-iia{background:rgba(59,130,246,.12);border-color:var(--blue)}
+  .badge-iia{background:var(--blue);color:#fff}
+  .rec-iib{background:rgba(245,158,11,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#000}
+  .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
+  .badge-iii{background:var(--red);color:#fff}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(59,130,246,.1);border-color:var(--blue)}
+  .highlight strong{color:var(--blue)}
+  .warning{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .warning strong{color:var(--gold)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(59,130,246,.15);color:var(--blue);padding:.75rem 1rem;text-align:right;font-weight:600;white-space:nowrap}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:rgba(255,255,255,.03)}
+  .algo-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+  .algo-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  .algo-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .algo-num{background:var(--blue);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:.2rem}
+  .algo-content h4{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:.3rem}
+  .algo-content p{font-size:.83rem;color:var(--text2);margin:0}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:3rem}
+  footer a{color:var(--blue);text-decoration:none}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:relative;top:0;max-height:none}}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="revascularization-index.html" class="back-btn">← العودة للفهرس</a>
+    <div class="header-title">
+      <h1>التشخيص والأدوات المساعدة</h1>
+      <p>ESC/EACTS 2018 — إعادة الارواء القلبي — الجزء الأول</p>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <div class="toc">
+    <h3>📑 المحتويات</h3>
+    <a href="#section1" class="toc-link active">الأدوات غير الغزية</a>
+    <a href="#section2" class="toc-link">الأدوات الغزية</a>
+    <a href="#section3" class="toc-link">FFR والضغط المشتق</a>
+    <a href="#section4" class="toc-link">التصوير الوعائي</a>
+    <a href="#section5" class="toc-link">الفريق القلبي</a>
+    <a href="#section6" class="toc-link">توقيت التدخل</a>
+    <a href="#section7" class="toc-link">الخلاصة</a>
+  </div>
+
+  <div class="content">
+
+    <div class="section" id="section1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2>الأدوات التشخيصية غير الغزية</h2>
+      </div>
+      
+      <h3>تقييم نقص الارواء الدقيق</h3>
+      <p>التوثيق الوظيفي لنقص الارواء قبل التدخلات الاختيارية هو النهج المفضل. اختبار الإجهاد بأشكاله المختلفة (تمرين، دوبوتامين، أدينوسين) يوفر معلومات حول وجود ومدى نقص الارواء الذي يؤثر على التنبؤ والحاجة للعلاج.</p>
+      
+      <div class="info-box highlight">
+        <strong>🎯 النقطة الرئيسية:</strong>
+        تصوير الإجهاد غير الغزي (CMR, Echo stress, SPECT, PET) يوفر معلومات عن مدى نقص الارواء وتأثيره على النتيجة. مساحة نقص الارواء >10% من البطين الأيسر تشير للحاجة لإعادة ارواء.
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">
+          <strong>تقييم نقص الارواء في المرضى المستقرين:</strong> التصوير الوظيفي الإجهادي مستحسن قبل التدخل الاختياري، خاصة في المرضى بدون أعراض واضحة أو بأعراض محدودة.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-i">CLASS I</span>
+          <span class="badge badge-loe">LOE: A</span>
+        </div>
+      </div>
+
+      <h3>تقييم حيوية العضلة القلبية</h3>
+      <p>في المرضى بقصور بطيني وفشل قلبي ممكن عكسه، قد تكون العضلة القلبية محمية (hibernating) أو مصدومة (stunned) وقابلة للتحسن بالارواء. عدة طرق تقييم: CMR, SPECT, PET, Echocardiography.</p>
+
+      <div class="algo-box">
+        <div class="algo-step">
+          <div class="algo-num">1</div>
+          <div class="algo-content">
+            <h4>CMR — التقييم الأول المفضل</h4>
+            <p>يقيم النزامج المتأخر (late gadolinium enhancement) ويحدد المناطق الحية والميتة بدقة عالية</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">2</div>
+          <div class="algo-content">
+            <h4>SPECT و PET</h4>
+            <p>يقييم الأيض والتروية المجهرية ويحدد الحيوية بشكل وظيفي</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">3</div>
+          <div class="algo-content">
+            <h4>Dobutamine Stress</h4>
+            <p>يحدد القدرة الانكماشية (contractile reserve) وقابلية التحسن</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="section2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2>الأدوات التشخيصية الغزية</h2>
+      </div>
+      
+      <p>استخدام القسطرة التشخيصية يسمح بتقييم دقيق لتشريح الأوعية والآفات، وتطبيق الاختبارات الوظيفية المباشرة على الآفات.</p>
+
+      <h3>استخدام التصوير والقياسات الوظيفية</h3>
+      
+      <div class="rec rec-iia">
+        <div class="rec-text">
+          <strong>استخدام التصوير الوعائي داخل الأوعية (IVUS):</strong> يجب النظر فيه لتقييم الآفات المتوسطة في الشريان الأيسر الرئيسي قبل القرار بعدم التدخل.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-iia">CLASS IIa</span>
+          <span class="badge badge-loe">LOE: B</span>
+        </div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">
+          <strong>مؤشرات FFR و iwFR:</strong> موصى به بقوة لتقييم آفات متوسطة (40-90%) عندما لا يكون هناك دليل على نقص ارواء بالاختبارات غير الغزية.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-i">CLASS I</span>
+          <span class="badge badge-loe">LOE: A</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="section3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2>FFR والمؤشرات المشتقة من الضغط</h2>
+      </div>
+      
+      <h3>FFR — الحد الفاصل 0.80</h3>
+      <p>FFR = Fractional Flow Reserve. يقيس النسبة بين تدفق الدم البعيدي تحت فرط التدفق مقسومة على الضغط الأبهري. FFR ≤0.80 يشير لآفة وظيفية ذات صلة سريرية.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>قيمة FFR</th>
+              <th>التفسير</th>
+              <th>الإجراء الموصى به</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>FFR > 0.80</strong></td>
+              <td>آفة غير وظيفية</td>
+              <td>تأجيل التدخل آمن</td>
+            </tr>
+            <tr>
+              <td><strong>FFR 0.75-0.80</strong></td>
+              <td>منطقة رمادية</td>
+              <td>قد تحتاج لمعايير إضافية</td>
+            </tr>
+            <tr>
+              <td><strong>FFR < 0.75</strong></td>
+              <td>آفة وظيفية ذات أهمية تنبؤية</td>
+              <td>التدخل موصى به</td>
+            </tr>
+            <tr>
+              <td><strong>FFR ≤ 0.80</strong></td>
+              <td>حد التدخل الحالي</td>
+              <td>معياري في التجارب الحالية</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box highlight">
+        <strong>💡 ملاحظة سريرية:</strong>
+        في دراسة FAME 2: قام FFR-guided PCI بتقليل الحاجة للتدخل الطارئ من 17.2% إلى 4.3% مقارنة بالعلاج الطبي وحده خلال سنتين.
+      </div>
+
+      <h3>iwFR — البديل الخالي من الأدينوسين</h3>
+      <p>Instantaneous Wave-Free Ratio لا يتطلب أدينوسين. الدراسات الحديثة (DEFINE-FLAIR, iFR-SWEDEHEART) أظهرت تكافؤ النتائج مع FFR عند استخدام حد 0.89.</p>
+
+      <div class="rec rec-iia">
+        <div class="rec-text">
+          <strong>استخدام iwFR:</strong> يمكن اعتباره بديلاً آمناً لـ FFR في تقييم الآفات المتوسطة، خاصة عند عدم توفر الأدينوسين.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-iia">CLASS IIa</span>
+          <span class="badge badge-loe">LOE: B</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="section4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2>التصوير الوعائي الداخلي (IVUS و OCT)</h2>
+      </div>
+      
+      <h3>IVUS — التصوير بالموجات الفوق الصوتية</h3>
+      <ul>
+        <li><strong>الدقة المحورية:</strong> 150 ميكرومتر</li>
+        <li><strong>الميزة:</strong> نفاذية أعمق وتقييم أفضل لحجم الوعاء</li>
+        <li><strong>الاستخدام:</strong> تقييم الآفات المتوسطة في الشريان الأيسر الرئيسي</li>
+        <li><strong>الحد الفاصل:</strong> MLA (Minimal Luminal Area) 6.0 mm² للـ LM</li>
+      </ul>
+
+      <h3>OCT — التصوير البصري</h3>
+      <ul>
+        <li><strong>الدقة المحورية:</strong> 15 ميكرومتر (أدق من IVUS)</li>
+        <li><strong>العيب:</strong> يحتاج لإزاحة دم كاملة، نفاذية محدودة</li>
+        <li><strong>الاستخدام:</strong> توجيه وضع الدعامات وتقييم ما بعد التدخل</li>
+        <li><strong>التطبيق:</strong> الآفات المعقدة والدعامات السابقة</li>
+      </ul>
+
+      <div class="rec rec-iia">
+        <div class="rec-text">
+          <strong>استخدام التصوير الوعائي الداخلي:</strong> يجب النظر فيه لتوجيه وضع الدعامات واستتباب الآفات، خاصة في الآفات المعقدة والتكلسات الثقيلة.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-iia">CLASS IIa</span>
+          <span class="badge badge-loe">LOE: B</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="section5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <h2>الفريق القلبي والعملية متعددة التخصصات</h2>
+      </div>
+      
+      <h3>مكونات الفريق القلبي</h3>
+      <ul>
+        <li><strong>طبيب القلب السريري:</strong> التقييم العام والتشخيص</li>
+        <li><strong>طبيب القلب التداخلي:</strong> خبرة PCI والتقنيات الحديثة</li>
+        <li><strong>جراح القلب:</strong> التقييم الجراحي والخيارات البديلة</li>
+        <li><strong>التخصصات الإضافية:</strong> التخدير، جراحة الأوعية، الطب الباطني</li>
+      </ul>
+
+      <div class="info-box highlight">
+        <strong>📌 أهمية الفريق القلبي:</strong>
+        في دراسات الجودة تبين أن 93-95% من توصيات الفريق تُتبع فعلياً. كما تقلل من الاستخدام غير المناسب لـ PCI (10-15%) و CABG (1-2%).
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">
+          <strong>التحديث الحديث:</strong> يُوصى بشدة بتشكيل فريق قلبي متعدد التخصصات في جميع المركز لتقييم الحالات المعقدة والمستقرة قبل التدخل.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-i">CLASS I</span>
+          <span class="badge badge-loe">LOE: C</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="section6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <h2>توقيت التدخل وفترة الانتظار</h2>
+      </div>
+      
+      <h3>توقيت التدخل حسب الحالة السريرية</h3>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>الحالة السريرية</th>
+              <th>التصنيف</th>
+              <th>الوقت المثالي</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>STEMI Primary PCI</strong></td>
+              <td>Emergency</td>
+              <td>≤120 دقيقة من التماس الطبي الأول</td>
+            </tr>
+            <tr>
+              <td><strong>High Risk NSTEMI</strong></td>
+              <td>Urgent</td>
+              <td>≤2 ساعة</td>
+            </tr>
+            <tr>
+              <td><strong>Intermediate Risk</strong></td>
+              <td>Early</td>
+              <td>≤24 ساعة</td>
+            </tr>
+            <tr>
+              <td><strong>Low Risk NSTEMI</strong></td>
+              <td>Selective</td>
+              <td>اختياري منتظم</td>
+            </tr>
+            <tr>
+              <td><strong>Stable CAD — High Risk</strong></td>
+              <td>Planned</td>
+              <td>≤2 أسابيع</td>
+            </tr>
+            <tr>
+              <td><strong>Stable CAD — Low Risk</strong></td>
+              <td>Elective</td>
+              <td>≤6 أسابيع</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>PCI Ad-hoc — التدخل الفوري</h3>
+      <p>التدخل في نفس جلسة التشخيص (Ad-hoc PCI) آمن وفعال لكن يجب أن لا يكون الخيار الافتراضي في الحالات المعقدة. في دراسات أمريكية، حتى 30% من مرضى PCI كانوا مرشحين لـ CABG.</p>
+
+      <div class="rec rec-iib">
+        <div class="rec-text">
+          <strong>Ad-hoc PCI:</strong> قد يُعتبر مناسباً إذا اكتمل التقييم الوظيفي والمريض تلقى إعلاماً كاملاً عن الخيارات البديلة، خاصة في حالات الأمراض البسيطة.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-iib">CLASS IIb</span>
+          <span class="badge badge-loe">LOE: B</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section" id="section7">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <h2>خلاصة الجزء الأول</h2>
+      </div>
+      
+      <div style="background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(16,185,129,.05));border:1px solid rgba(59,130,246,.3);border-radius:12px;padding:1.5rem">
+        <h3 style="color:var(--blue);margin-bottom:1rem">🎯 النقاط الأساسية</h3>
+        <ul style="list-style:none;padding:0">
+          <li style="padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem">
+            <span style="color:var(--blue);flex-shrink:0">✓</span>
+            <span><strong>التصوير الوظيفي:</strong> ضروري قبل PCI الاختياري لتوثيق نقص الارواء</span>
+          </li>
+          <li style="padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem">
+            <span style="color:var(--blue);flex-shrink:0">✓</span>
+            <span><strong>FFR/iwFR:</strong> موصى به لتقييم الآفات المتوسطة (40-90%)</span>
+          </li>
+          <li style="padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem">
+            <span style="color:var(--blue);flex-shrink:0">✓</span>
+            <span><strong>FFR ≤ 0.80:</strong> حد التدخل الحالي الموصى به</span>
+          </li>
+          <li style="padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem">
+            <span style="color:var(--blue);flex-shrink:0">✓</span>
+            <span><strong>الفريق القلبي:</strong> ضروري في الحالات المعقدة والمستقرة</span>
+          </li>
+          <li style="padding:.4rem 0;font-size:.9rem;display:flex;gap:.75rem">
+            <span style="color:var(--blue);flex-shrink:0">✓</span>
+            <span><strong>الموافقة المستنيرة:</strong> ضرورية قبل أي تدخل مع شرح كامل</span>
+          </li>
+        </ul>
+      </div>
+
+      <h3 style="margin-top:2rem">الخطوة التالية</h3>
+      <p>في الجزء الثاني سنتناول إعادة الارواء في الحالات المستقرة، بما في ذلك الاختيار بين PCI و CABG، وحساب درجات SYNTAX والمخاطر الجراحية.</p>
+
+      <a href="revascularization-part2.html" style="display:inline-block;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.4);color:var(--blue);padding:.75rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:600;margin-top:1rem;transition:all .2s">الجزء الثاني: إعادة الارواء في الحالات المستقرة →</a>
+
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>ESC/EACTS 2018 Guidelines on Myocardial Revascularization — الجزء الأول: التشخيص والأدوات | للأغراض التعليمية</p>
+</footer>
+
+<script>
+  window.addEventListener('scroll', ()=>{
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = scrollTop / docHeight;
+    document.getElementById('progress-bar').style.width = (scrollPercent * 100) + '%';
+  });
+  
+  document.querySelectorAll('.toc a').forEach(link => {
+    link.addEventListener('click', function(e) {
+      document.querySelectorAll('.toc a').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

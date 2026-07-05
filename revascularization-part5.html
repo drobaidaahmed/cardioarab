@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الجزء الخامس: الجوانب الإجرائية | ESC 2018</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#14b8a6;--green:#10b981;--blue:#3b82f6;--gold:#f59e0b;--red:#ef4444;--teal:#14b8a6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--blue));z-index:9999}
+  header{background:linear-gradient(135deg,#0a2a2a,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(20,184,166,.15);border:1px solid rgba(20,184,166,.4);color:var(--teal);padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s}
+  .back-btn:hover{background:rgba(20,184,166,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:#fff}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:var(--teal);border-right-color:var(--teal);background:rgba(20,184,166,.1)}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:var(--teal);color:#000;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:.95rem}
+  .section h2{font-size:1.25rem;font-weight:700;color:#fff}
+  .section h3{font-size:1.05rem;font-weight:600;color:var(--teal);margin:1.5rem 0 .75rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(20,184,166,.12);border-color:var(--teal)}
+  .badge-i{background:var(--teal);color:#000}
+  .rec-iia{background:rgba(20,184,166,.12);border-color:var(--teal)}
+  .badge-iia{background:var(--teal);color:#000}
+  .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(20,184,166,.1);border-color:var(--teal)}
+  .highlight strong{color:var(--teal)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(20,184,166,.15);color:var(--teal);padding:.75rem 1rem;text-align:right;font-weight:600}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:3rem}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:relative;top:0;max-height:none}}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="revascularization-index.html" class="back-btn">← العودة</a>
+    <div class="header-title">
+      <h1>الجوانب الإجرائية والعلاج الدوائي</h1>
+      <p>ESC/EACTS 2018 — الجزء الخامس</p>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <div class="toc">
+    <h3>📑 المحتويات</h3>
+    <a href="#section1" class="toc-link active">تقنيات CABG</a>
+    <a href="#section2" class="toc-link">أنواع الدعامات</a>
+    <a href="#section3" class="toc-link">Anticoagulation</a>
+    <a href="#section4" class="toc-link">Antiplatelet Therapy</a>
+    <a href="#section5" class="toc-link">DAPT Duration</a>
+    <a href="#section6" class="toc-link">الخلاصة</a>
+  </div>
+
+  <div class="content">
+
+    <div class="section" id="section1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2>تقنيات وقنوات الجسور في CABG</h2>
+      </div>
+      
+      <h3>اختيار القنوات</h3>
+      
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>نوع القناة</th>
+              <th>المميزات</th>
+              <th>العيوب</th>
+              <th>الاستخدام الأول</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LIMA → LAD</strong></td>
+              <td>أفضل بقاء طويل</td>
+              <td>-</td>
+              <td>دائماً الخط الأول</td>
+            </tr>
+            <tr>
+              <td><strong>RIMA</strong></td>
+              <td>بقاء جيد</td>
+              <td>قد تؤخر الإجراء</td>
+              <td>RCA / Cx ثانوي</td>
+            </tr>
+            <tr>
+              <td><strong>Radial Artery</strong></td>
+              <td>أفضل من SVG</td>
+              <td>تشنج، صعوبة harvest</td>
+              <td>بديل معقول</td>
+            </tr>
+            <tr>
+              <td><strong>SVG</strong></td>
+              <td>سهل الحصول</td>
+              <td>بقاء قصير (60% في 10y)</td>
+              <td>الخيار الأخير</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">
+          <strong>استخدام القنوات الشريانية المتعددة:</strong> موصى به بقوة عندما يكون ممكناً تقنياً لتحسين النتائج طويلة الأمد.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-i">CLASS I</span>
+          <span class="badge badge-loe">LOE: A</span>
+        </div>
+      </div>
+
+      <h3>تقنيات التشغيل</h3>
+      <ul>
+        <li><strong>On-Pump CABG:</strong> الطريقة التقليدية مع مضخة القلب والرئة</li>
+        <li><strong>Off-Pump CABG (OPCAB):</strong> بدون توقف القلب</li>
+        <li><strong>Minimal Access:</strong> شقوق أصغر، تكافؤ النتائج</li>
+        <li><strong>Robotic-Assisted:</strong> تقنيات حديثة قيد الدراسة</li>
+      </ul>
+
+      <div class="info-box highlight">
+        <strong>🔬 البحث الحديث:</strong>
+        دراسة ROOBY و GOPCABE لم تجد فرقاً ملحوظاً بين On-Pump و Off-Pump CABG في النتائج الأساسية.
+      </div>
+
+    </div>
+
+    <div class="section" id="section2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2>أنواع الدعامات في PCI</h2>
+      </div>
+      
+      <h3>Drug-Eluting Stents (DES)</h3>
+      <ul>
+        <li><strong>First Generation:</strong> Sirolimus, Paclitaxel (قديمة)</li>
+        <li><strong>Second Generation:</strong> Everolimus, Zotarolimus (الحالية)</li>
+        <li><strong>Polymer Type:</strong> Durable, Bioabsorbable, Polymer-free</li>
+        <li><strong>النتائج:</strong> إعادة ارواء أقل من BMS</li>
+      </ul>
+
+      <div class="rec rec-i">
+        <div class="rec-text">
+          <strong>استخدام DES:</strong> الخيار الروتيني المفضل لجميع المرضى والحالات في الوقت الحالي.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-i">CLASS I</span>
+          <span class="badge badge-loe">LOE: A</span>
+        </div>
+      </div>
+
+      <h3>Bioresorbable Scaffolds (BRS)</h3>
+      <p>دعامات قابلة للامتصاص بدون كثافة معادن دائمة. الدراسات الحديثة أظهرت مشاكل أمان وليست موصى بها روتينياً حالياً.</p>
+
+      <div class="info-box highlight">
+        <strong>⚠ ملاحظة:</strong>
+        بيانات الأمان من دراسات مثل ABSORB كانت مخيبة للآمال. استخدام محدود فقط في تجارب سريرية.
+      </div>
+
+      <h3>Bare Metal Stents (BMS)</h3>
+      <ul>
+        <li><strong>الاستخدام:</strong> نادر في الوقت الحاضر</li>
+        <li><strong>المؤشرات:</strong> حالات خاصة جداً (نزيف عالٍ جداً)</li>
+        <li><strong>DAPT المطلوبة:</strong> 1 شهر على الأقل</li>
+      </ul>
+
+    </div>
+
+    <div class="section" id="section3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2>المعالجة المضادة للتخثر</h2>
+      </div>
+      
+      <h3>Anticoagulation أثناء PCI</h3>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>الدواء</th>
+              <th>الجرعة</th>
+              <th>المميزات</th>
+              <th>التوصية</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>UFH (Heparin)</strong></td>
+              <td>70-100 U/kg IV</td>
+              <td>الخط الأول، سريع العمل</td>
+              <td>Class I</td>
+            </tr>
+            <tr>
+              <td><strong>Bivalirudin</strong></td>
+              <td>0.75 mg/kg + 1.75 mg/kg/h</td>
+              <td>STEMI + نزيف عالٍ</td>
+              <td>Class IIa</td>
+            </tr>
+            <tr>
+              <td><strong>Enoxaparin</strong></td>
+              <td>0.5 mg/kg IV</td>
+              <td>بديل UFH</td>
+              <td>Class IIa</td>
+            </tr>
+            <tr>
+              <td><strong>Fondaparinux</strong></td>
+              <td>-</td>
+              <td>لا مع PCI وحده</td>
+              <td>Class III</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">
+          <strong>Unfractionated Heparin (UFH):</strong> الخيار المفضل والأول لـ anticoagulation أثناء PCI.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-i">CLASS I</span>
+          <span class="badge badge-loe">LOE: A</span>
+        </div>
+      </div>
+
+      <h3>معايير التوقف</h3>
+      <ul>
+        <li><strong>ACT Goal:</strong> 250-350 ثانية أثناء PCI</li>
+        <li><strong>End of Procedure:</strong> توقف فوراً بعد نهاية PCI</li>
+        <li><strong>Reversal:</strong> Protamine 1mg لكل 100 U UFH</li>
+      </ul>
+
+    </div>
+
+    <div class="section" id="section4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2>العلاج المضاد للصفائح</h2>
+      </div>
+      
+      <h3>Aspirin</h3>
+      <ul>
+        <li><strong>Loading Dose:</strong> 250-500 mg IV أو 300-500 mg P.O.</li>
+        <li><strong>Maintenance:</strong> 75-100 mg يومياً</li>
+        <li><strong>Duration:</strong> مدى الحياة بعد PCI أو CABG</li>
+      </ul>
+
+      <h3>P2Y12 Inhibitors</h3>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>الدواء</th>
+              <th>Loading</th>
+              <th>Maintenance</th>
+              <th>المميزات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Ticagrelor</strong></td>
+              <td>180 mg</td>
+              <td>90 mg × 2</td>
+              <td>أقوى، موصى به أول</td>
+            </tr>
+            <tr>
+              <td><strong>Prasugrel</strong></td>
+              <td>60 mg</td>
+              <td>10 mg × 1 (5 في ≥75y)</td>
+              <td>قوي لكن ممنوع بعض الحالات</td>
+            </tr>
+            <tr>
+              <td><strong>Clopidogrel</strong></td>
+              <td>600 mg</td>
+              <td>75 mg × 1</td>
+              <td>بديل إذا فشل الأول</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">
+          <strong>Ticagrelor أو Prasugrel:</strong> موصى بهما على Clopidogrel في ACS و PCI.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-i">CLASS I</span>
+          <span class="badge badge-loe">LOE: A</span>
+        </div>
+      </div>
+
+      <h3>موانع ومحاذير</h3>
+      <ul>
+        <li><strong>Prasugrel المحظور:</strong> سكتة دماغية سابقة، ≥75 سنة، &lt;60 kg</li>
+        <li><strong>Ticagrelor:</strong> تحفظ مع الحصار الثاني/الثالث</li>
+        <li><strong>Clopidogrel:</strong> بدائل أفضل متاحة</li>
+      </ul>
+
+    </div>
+
+    <div class="section" id="section5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <h2>مدة DAPT (Dual Antiplatelet Therapy)</h2>
+      </div>
+      
+      <h3>المدة الموياة</h3>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>الحالة</th>
+              <th>DAPT Duration</th>
+              <th>الملاحظات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>PCI مع DES (Stable)</strong></td>
+              <td>12 شهراً</td>
+              <td>المعياري الموصى به</td>
+            </tr>
+            <tr>
+              <td><strong>ACS + PCI + DES</strong></td>
+              <td>12 شهراً</td>
+              <td>الحد الأدنى الموصى به</td>
+            </tr>
+            <tr>
+              <td><strong>High Bleeding Risk</strong></td>
+              <td>3-6 أشهر</td>
+              <td>قصر الفترة محتمل</td>
+            </tr>
+            <tr>
+              <td><strong>Very High Risk</strong></td>
+              <td>&gt;12 شهر</td>
+              <td>قد يمتد بعد تقييم</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">
+          <strong>مدة DAPT 12 شهراً:</strong> معياري بعد PCI مع DES في معظم الحالات.
+        </div>
+        <div class="rec-badges">
+          <span class="badge badge-i">CLASS I</span>
+          <span class="badge badge-loe">LOE: A</span>
+        </div>
+      </div>
+
+      <h3>تقييم مخاطر النزيف</h3>
+      <ul>
+        <li><strong>ARC-HBR Score:</strong> لتقييم مخاطر النزيف</li>
+        <li><strong>مؤشرات قصر DAPT:</strong> نزيف سابق، أنيميا ثقيلة، قصور كلوي</li>
+        <li><strong>إعادة تقييم:</strong> كل 3-6 أشهر</li>
+      </ul>
+
+    </div>
+
+    <div class="section" id="section6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <h2>خلاصة الجزء الخامس</h2>
+      </div>
+      
+      <div style="background:linear-gradient(135deg,rgba(20,184,166,.1),rgba(16,185,129,.05));border:1px solid rgba(20,184,166,.3);border-radius:12px;padding:1.5rem">
+        <h3 style="color:var(--teal);margin-bottom:1rem">🎯 الملخص العملي</h3>
+        <ul style="list-style:none;padding:0">
+          <li style="padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem">
+            <span style="color:var(--teal);flex-shrink:0">✓</span>
+            <span><strong>CABG:</strong> LIMA → LAD دائماً، قنوات شريانية متعددة أفضل</span>
+          </li>
+          <li style="padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem">
+            <span style="color:var(--teal);flex-shrink:0">✓</span>
+            <span><strong>DES:</strong> الخيار الروتيني الحالي الوحيد</span>
+          </li>
+          <li style="padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem">
+            <span style="color:var(--teal);flex-shrink:0">✓</span>
+            <span><strong>UFH:</strong> Anticoagulation أول الاختيار</span>
+          </li>
+          <li style="padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem">
+            <span style="color:var(--teal);flex-shrink:0">✓</span>
+            <span><strong>P2Y12:</strong> Ticagrelor أو Prasugrel في ACS</span>
+          </li>
+          <li style="padding:.4rem 0;font-size:.9rem;display:flex;gap:.75rem">
+            <span style="color:var(--teal);flex-shrink:0">✓</span>
+            <span><strong>DAPT:</strong> 12 شهراً معياري بعد PCI</span>
+          </li>
+        </ul>
+      </div>
+
+      <a href="revascularization-part6.html" style="display:inline-block;background:rgba(20,184,166,.15);border:1px solid rgba(20,184,166,.4);color:var(--teal);padding:.75rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:600;margin-top:1rem">الجزء السادس: المتابعة والخلاصة النهائية →</a>
+
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>ESC/EACTS 2018 Guidelines — الجزء الخامس | للأغراض التعليمية</p>
+</footer>
+
+<script>
+  window.addEventListener('scroll', ()=>{
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = scrollTop / docHeight;
+    document.getElementById('progress-bar').style.width = (scrollPercent * 100) + '%';
+  });
+  
+  document.querySelectorAll('.toc a').forEach(link => {
+    link.addEventListener('click', function(e) {
+      document.querySelectorAll('.toc a').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
