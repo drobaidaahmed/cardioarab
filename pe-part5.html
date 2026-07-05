@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PE — الجزء الخامس: المتابعة طويلة المدى وCTEPH | ESC 2019</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#ef4444;--green:#10b981;--blue:#3b82f6;--gold:#f59e0b;--red:#ef4444;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));z-index:9999;transition:width .2s;width:0}
+  header{background:linear-gradient(135deg,#3a0a0a,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:var(--red);padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+  .back-btn:hover{background:rgba(239,68,68,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:#fff}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .part-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2rem;overflow-x:auto}
+  .part-nav-inner{max-width:1400px;margin:0 auto;display:flex;gap:.5rem}
+  .part-btn{padding:.4rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text2);background:transparent;white-space:nowrap;transition:all .2s}
+  .part-btn:hover{border-color:var(--red);color:var(--red)}
+  .part-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:var(--red);border-right-color:var(--red);background:rgba(239,68,68,.1)}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:var(--red);color:#fff;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;flex-shrink:0}
+  .section h2{font-size:1.25rem;font-weight:700;color:#fff}
+  .section h3{font-size:1.05rem;font-weight:600;color:var(--red);margin:1.5rem 0 .75rem}
+  .section h4{font-size:.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 .5rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul,.section ol{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
+  .badge-i{background:var(--green);color:#fff}
+  .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
+  .rec-iia{background:rgba(59,130,246,.12);border-color:var(--blue)}
+  .badge-iia{background:var(--blue);color:#fff}
+  .rec-iib{background:rgba(245,158,11,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#000}
+  .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
+  .badge-iii{background:var(--red);color:#fff}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .highlight strong{color:var(--red)}
+  .warning{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .warning strong{color:var(--gold)}
+  .danger{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .danger strong{color:var(--red)}
+  .success{background:rgba(16,185,129,.1);border-color:var(--green)}
+  .success strong{color:var(--green)}
+  .info-blue{background:rgba(59,130,246,.1);border-color:var(--blue)}
+  .info-blue strong{color:var(--blue)}
+  .info-purple{background:rgba(139,92,246,.1);border-color:var(--purple)}
+  .info-purple strong{color:var(--purple)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(239,68,68,.15);color:var(--red);padding:.75rem 1rem;text-align:right;font-weight:600;white-space:nowrap}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:rgba(255,255,255,.03)}
+  .algo-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+  .algo-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  .algo-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .algo-num{background:var(--red);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:.2rem}
+  .algo-content h4{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:.3rem}
+  .algo-content p{font-size:.83rem;color:var(--text2);margin:0}
+  .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0}
+  .type-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:3px solid var(--red)}
+  .type-card.t2{border-top-color:var(--gold)}
+  .type-card.t3{border-top-color:var(--blue)}
+  .type-card.t4{border-top-color:var(--green)}
+  .type-name{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.5rem}
+  .type-def{font-size:.82rem;color:var(--text2);margin-bottom:.75rem}
+  .type-row{display:flex;justify-content:space-between;font-size:.8rem;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .type-row:last-child{border-bottom:none}
+  .type-label{color:var(--text2)}
+  .type-val{color:var(--text);font-weight:500}
+  .key-points{background:linear-gradient(135deg,rgba(239,68,68,.1),rgba(245,158,11,.06));border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+  .key-points h4{color:var(--red);margin-bottom:1rem;font-size:1rem}
+  .key-points ul{list-style:none;padding:0}
+  .key-points li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem}
+  .key-points li::before{content:'🔑';flex-shrink:0}
+  .next-prev{display:flex;justify-content:space-between;margin-top:2rem;gap:1rem}
+  .nav-btn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;text-decoration:none;transition:all .25s;flex:1;max-width:260px}
+  .nav-btn:hover{border-color:var(--red);background:rgba(239,68,68,.08)}
+  .nav-btn .dir{font-size:.75rem;color:var(--text2);margin-bottom:.25rem}
+  .nav-btn .title{font-size:.9rem;font-weight:700;color:#fff}
+  .nav-btn.next{text-align:left}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:2rem}
+  footer a{color:var(--red);text-decoration:none}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
+</style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8b5cf6">
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="pe-index.html" class="back-btn">← PE Overview</a>
+    <div class="header-title">
+      <h1>الجزء الخامس — المتابعة طويلة المدى وCTEPH</h1>
+      <p>ESC Guidelines 2019 · Acute Pulmonary Embolism</p>
+    </div>
+  </div>
+</header>
+
+<div class="part-nav">
+  <div class="part-nav-inner">
+    <a href="pe-part1.html" class="part-btn">١ · التشخيص</a>
+    <a href="pe-part2.html" class="part-btn">٢ · تصنيف الخطورة</a>
+    <a href="pe-part3.html" class="part-btn">٣ · العلاج الحاد</a>
+    <a href="pe-part4.html" class="part-btn">٤ · حالات خاصة</a>
+    <a href="pe-part5.html" class="part-btn active">٥ · المتابعة وCTEPH</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <div class="toc">
+    <h3>محتويات الجزء الخامس</h3>
+    <a href="#s1">١. المتابعة بعد 3–6 أشهر</a>
+    <a href="#s2">٢. فرط ضغط الشريان الرئوي المزمن CTEPH</a>
+    <a href="#s3">٣. متلازمة ما بعد PE</a>
+    <a href="#s4">٤. إعادة تقييم إطالة مضادات التخثر</a>
+    <a href="#s5">٥. برامج فرق PE (PERT)</a>
+    <a href="#keys">🔑 نقاط المفتاح</a>
+  </div>
+
+  <div class="content">
+
+    <!-- Section 1 -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">١</div>
+        <h2>المتابعة بعد 3–6 أشهر</h2>
+      </div>
+      <p>كل مريض PE يحتاج زيارة متابعة منظَّمة بعد 3–6 أشهر من الحدث الحاد، بصرف النظر عن مدى تحسّن الأعراض ظاهرياً.</p>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>البند</th><th>الهدف</th></tr></thead>
+          <tbody>
+            <tr><td><strong>تقييم الأعراض المتبقية</strong></td><td>ضيق نفس، محدودية النشاط — كشف Post-PE Syndrome مبكراً</td></tr>
+            <tr><td><strong>إعادة تقييم خطر النزف</strong></td><td>لتحديد قرار الاستمرار أو الإيقاف في غير المُستفزّ</td></tr>
+            <tr><td><strong>Echocardiography عند الأعراض المستمرة</strong></td><td>كشف علامات فرط ضغط رئوي مستمر</td></tr>
+            <tr><td><strong>تقييم وظيفي (مثل اختبار المشي 6 دقائق)</strong></td><td>عند الشك بمحدودية وظيفية غير مفسَّرة</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بمتابعة سريرية منظَّمة لجميع مرضى PE بعد 3–6 أشهر لتقييم الأعراض المتبقية، خطر النزف، وقرار مدة العلاج المستمرة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">٢</div>
+        <h2>فرط ضغط الشريان الرئوي المزمن الخثاري الانسدادي (CTEPH)</h2>
+      </div>
+      <p>مضاعفة نادرة نسبياً لكنها خطيرة، تحدث عند فشل ارتشاف الجلطات الرئوية بشكل كامل، ما يؤدي إلى إعادة تشكيل دائمة في الشريان الرئوي وارتفاع مزمن في الضغط الرئوي.</p>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>عامل الخطر</th><th>ملاحظة</th></tr></thead>
+          <tbody>
+            <tr><td>PE سابق كبير أو متكرر</td><td>العامل الأهم</td></tr>
+            <tr><td>PE غير مُستفزّ عند التشخيص الأولي</td><td>خطر أعلى من المُستفزّ</td></tr>
+            <tr><td>خلل RV مستمر بعد 3–6 أشهر</td><td>علامة تحذيرية قوية</td></tr>
+            <tr><td>استئصال الطحال، أمراض التهابية مزمنة، أجسام غريبة وريدية</td><td>عوامل خطر إضافية معروفة</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>أعراض CTEPH التحذيرية</h3>
+      <ul>
+        <li>ضيق نفس مستمر ومتزايد تدريجياً بعد الحدث الحاد</li>
+        <li>محدودية نشاط جسدي غير مفسَّرة</li>
+        <li>علامات قصور قلب أيمن متأخرة (وذمة، تضخم كبد)</li>
+      </ul>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتحويل المرضى ذوي الأعراض التنفسية أو الوظيفية المستمرة بعد PE إلى مركز متخصص لتقييم CTEPH، بدءاً بـ Echocardiography</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="info-box info-purple">
+        <strong>🔬 العلاج النهائي لـ CTEPH</strong>
+        Pulmonary Endarterectomy الجراحي هو العلاج الأمثل في المرضى المؤهَّلين جراحياً؛ في غير القابلين للجراحة — Balloon Pulmonary Angioplasty أو علاج دوائي موجَّه (مثل Riociguat) خيارات معتبرة.
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">٣</div>
+        <h2>متلازمة ما بعد PE (Post-PE Syndrome)</h2>
+      </div>
+      <p>مصطلح أوسع من CTEPH يشمل أي أعراض تنفسية أو وظيفية مستمرة بعد PE الحاد دون بلوغ درجة فرط الضغط الرئوي المزمن الكامل، وتشمل انخفاض القدرة الوظيفية وضيق النفس المزمن الخفيف إلى المتوسط.</p>
+      <div class="info-box warning">
+        <strong>⚠️ لا تُهمل الأعراض "الخفيفة" المستمرة</strong>
+        نسبة معتبرة من مرضى PE يعانون من أعراض متبقية تؤثر على جودة الحياة حتى دون CTEPH كامل — التقييم الوظيفي المنظَّم في زيارة المتابعة يكشف هذه الحالات.
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <h2>إعادة تقييم إطالة مضادات التخثر</h2>
+      </div>
+      <div class="algo-box">
+        <div class="algo-step">
+          <div class="algo-num">1</div>
+          <div class="algo-content"><h4>هل الحدث مُستفزّ بعامل مؤقت رئيسي؟</h4><p>نعم → إيقاف عند 3 أشهر عادة</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">2</div>
+          <div class="algo-content"><h4>غير مُستفزّ أو عامل خطر ثابت (سرطان نشط، APS)؟</h4><p>قيّم خطر النزف مقابل خطر التكرار لتحديد الإطالة</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">3</div>
+          <div class="algo-content"><h4>خطر نزف منخفض إلى متوسط؟</h4><p>فكِّر بعلاج ممتد بجرعة كاملة أو مخفَّضة من DOAC (Class IIa)</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">4</div>
+          <div class="algo-content"><h4>خطر نزف مرتفع؟</h4><p>الإيقاف عند 3–6 أشهر أرجح، مع إعادة تقييم دورية للموازنة</p></div>
+        </div>
+      </div>
+      <div class="info-box success">
+        <strong>✅ استخدم نماذج تقييم خطر النزف الموحَّدة</strong>
+        النماذج المُقنَّنة (مثل HAS-BLED المُكيَّف لـ VTE) تساعد على اتخاذ قرار موضوعي بدل الاعتماد على الحكم الشخصي وحده.
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <h2>برامج فرق PE (Pulmonary Embolism Response Team – PERT)</h2>
+      </div>
+      <p>نموذج تنظيمي متعدد التخصصات (طب الطوارئ، القلب، الجراحة الصدرية، الأشعة التداخلية، الرئة) يهدف لتسريع القرار العلاجي في الحالات المعقدة أو High/Intermediate-High Risk.</p>
+      <div class="info-box highlight">
+        <strong>💡 لماذا PERT؟</strong>
+        القرارات في High Risk PE (Thrombolysis مقابل قسطرة مقابل جراحة) تحتاج غالباً استشارة سريعة متعددة التخصصات — البنية المنظَّمة لـ PERT تقلّل زمن اتخاذ القرار وتحسّن النتائج في المراكز التي تتوفر فيها.
+      </div>
+    </div>
+
+    <!-- Key Points -->
+    <div class="key-points" id="keys">
+      <h4>🔑 نقاط المفتاح — الجزء الخامس</h4>
+      <ul>
+        <li>كل مريض PE يحتاج متابعة منظَّمة بعد 3–6 أشهر — بصرف النظر عن التحسّن الظاهري</li>
+        <li>خلل RV المستمر بعد 3–6 أشهر علامة تحذيرية قوية لـ CTEPH</li>
+        <li>ضيق النفس المستمر أو المتزايد بعد PE يستدعي إحالة لتقييم CTEPH، بدءاً بـ Echo</li>
+        <li>Pulmonary Endarterectomy هو العلاج الأمثل لـ CTEPH في المرشحين جراحياً</li>
+        <li>Post-PE Syndrome أوسع من CTEPH ويشمل أعراضاً وظيفية أخف يجب عدم إهمالها</li>
+        <li>قرار إطالة مضادات التخثر يوازن دائماً بين خطر التكرار وخطر النزف</li>
+        <li>برامج PERT تحسّن سرعة ودقة القرار في الحالات الحرجة والمعقدة</li>
+      </ul>
+    </div>
+
+    <!-- Navigation -->
+    <div class="next-prev">
+      <a href="pe-part4.html" class="nav-btn">
+        <div class="dir">← الجزء السابق</div>
+        <div class="title">حالات خاصة</div>
+      </a>
+      <a href="pe-index.html" class="nav-btn next">
+        <div class="dir">→ العودة إلى</div>
+        <div class="title">نظرة عامة على PE</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>مبني على غايدلاين ESC 2019 للانصمام الرئوي الحاد — للأغراض التعليمية | <a href="pe-index.html">← PE Overview</a> | <a href="guidelines.html">جميع الغايدات</a></p>
+</footer>
+
+<script>
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = p + '%';
+});
+
+const toc = document.querySelectorAll('.toc a');
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      toc.forEach(a => a.classList.remove('active'));
+      const id = e.target.id;
+      const active = document.querySelector(`.toc a[href="#${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(console.warn);
+  });
+}
+</script>
+<script src="pwa-install.js"></script>
+</body>
+</html>
