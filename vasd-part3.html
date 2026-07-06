@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#8b5cf6;--green:#10b981;--blue:#3b82f6;--gold:#f59e0b;--red:#ef4444;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#8b5cf6;--green:#10b981;--orange:#fbbf24;--blue:#3b82f6;--gold:#ea580c;--red:#ef4444;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
   #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--teal));z-index:9999;transition:width .2s;width:0}
@@ -45,10 +45,10 @@
   .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
   .badge-i{background:var(--green);color:#fff}
   .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
-  .rec-iia{background:rgba(59,130,246,.12);border-color:var(--blue)}
-  .badge-iia{background:var(--blue);color:#fff}
-  .rec-iib{background:rgba(245,158,11,.12);border-color:var(--gold)}
-  .badge-iib{background:var(--gold);color:#000}
+  .rec-iia{background:rgba(251,191,36,.15);border-color:var(--orange)}
+  .badge-iia{background:var(--orange);color:#000}
+  .rec-iib{background:rgba(234,88,12,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#fff}
   .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
   .badge-iii{background:var(--red);color:#fff}
   .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
@@ -99,6 +99,17 @@
   footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:2rem}
   footer a{color:var(--accent);text-decoration:none}
   @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
+
+  header{transition:padding .3s ease}
+  .header-inner{transition:gap .3s ease}
+  .header-title h1{transition:font-size .3s ease}
+  .header-title p{transition:opacity .2s ease,max-height .3s ease,margin .3s ease;overflow:hidden}
+  .back-btn{transition:all .2s ease,padding .3s ease,font-size .3s ease,gap .3s ease}
+  header.shrink{padding:.3rem 1.25rem}
+  header.shrink .header-inner{gap:.6rem}
+  header.shrink .header-title h1{font-size:.85rem}
+  header.shrink .header-title p{opacity:0;max-height:0;margin:0}
+  header.shrink .back-btn{padding:.2rem .5rem;font-size:.7rem;gap:.2rem}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#8b5cf6">
@@ -302,10 +313,12 @@
 
 <script>
 const bar = document.getElementById('progress-bar');
+const __headerEl = document.querySelector('header');
 window.addEventListener('scroll', () => {
   const h = document.documentElement;
   const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
   bar.style.width = p + '%';
+  if (window.scrollY > 80) { __headerEl && __headerEl.classList.add('shrink'); } else { __headerEl && __headerEl.classList.remove('shrink'); }
 });
 
 const toc = document.querySelectorAll('.toc a');
