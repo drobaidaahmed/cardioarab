@@ -695,46 +695,7 @@
   });
 </script>
   <script src="/protection.js"></script>
-  <script src="/supabase.js"></script>
-<script>
-  // فحص المستخدم والاشتراك قبل عرض المحتوى
-  (async () => {
-    try {
-      const userData = JSON.parse(localStorage.getItem('user') || '{}');
-      if (!userData.id) {
-        window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.pathname);
-        return;
-      }
-      
-      // التحقق من الاشتراك النشط
-      const subData = JSON.parse(localStorage.getItem('subscription') || '{}');
-      if (!subData.isActive || new Date(subData.expiryDate) < new Date()) {
-        window.location.href = '/subscription.html';
-        return;
-      }
-      
-      // تفعيل الـ watermark الديناميكي
-      if (typeof initWatermark === 'function') {
-        initWatermark(userData.email, userData.name || 'مشترك');
-      }
-      
-      // تسجيل وصول (logging)
-      fetch('/api/log-access', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          userId: userData.id, 
-          page: window.location.pathname,
-          guideline: 'mi-definition'
-        })
-      }).catch(() => {});
-      
-    } catch (error) {
-      console.error('Authentication error:', error);
-    }
-  })();
-</script>
-  <script>
+    <script>
   // Aggressive header shrink on scroll
   const __headerEl = document.querySelector('header');
   window.addEventListener('scroll', () => {
