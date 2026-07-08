@@ -302,6 +302,17 @@
         }
         .question-card.active {
             display: block;
+            margin-bottom: 26px;
+            padding-bottom: 26px;
+            border-bottom: 1px solid #e9edf4;
+        }
+        .question-card.active:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .question-card.filtered-out {
+            display: none !important;
         }
         .q-number {
             display: inline-block;
@@ -549,6 +560,7 @@
 </head>
 <body>
     <div class="container" id="app">
+        <a href="braunwald-index.html" style="display:inline-flex;align-items:center;gap:6px;color:#2a7de1;text-decoration:none;font-size:13px;font-weight:600;margin-bottom:10px;">← العودة إلى القائمة الرئيسية</a>
 
         <div class="sticky-top">
         <div class="page-header">
@@ -606,11 +618,6 @@
         <div class="nav-buttons" id="singleNavButtons">
             <div class="footer-tools">
                 <button class="reset-btn" id="resetBtn">↻ إعادة ضبط الكل</button>
-            </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <button id="prevBtn">← السابق</button>
-                <span class="counter" id="counterDisplay">1 / 167</span>
-                <button id="nextBtn" class="primary">التالي →</button>
             </div>
         </div>
 
@@ -3300,43 +3307,12 @@ const IMG = {
         }
 
         // ============================================================
-        // التطبيق
+        // التطبيق (عرض جميع الأسئلة مع التمرير، بدون تنقل بأزرار)
         // ============================================================
-        let currentQuestion = 0;
         const answered = {}; // { questionId: 'correct' | 'wrong' }
 
         const container = document.getElementById('questionContainer');
-        const nav = document.getElementById('questionNav');
         const progressFill = document.getElementById('progressFill');
-        const counterDisplay = document.getElementById('counterDisplay');
-
-        function renderNav() {
-            nav.innerHTML = '';
-            allQuestions.forEach((q, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'q-btn';
-                btn.textContent = q.id;
-                if (idx === currentQuestion) btn.classList.add('active');
-                const userSel = answered[q.id];
-                const status = userSel ? (userSel === q.answer ? 'correct' : 'wrong') : null;
-                if (status === 'correct') btn.classList.add('answered-correct');
-                else if (status === 'wrong') btn.classList.add('answered-wrong');
-                btn.addEventListener('click', () => goToQuestion(idx));
-                nav.appendChild(btn);
-            });
-        }
-
-        function goToQuestion(idx) {
-            if (idx < 0) idx = 0;
-            if (idx >= allQuestions.length) idx = allQuestions.length - 1;
-            currentQuestion = idx;
-            renderQuestion();
-            renderNav();
-            updateProgress();
-            counterDisplay.textContent = `${allQuestions[idx].id} / ${allQuestions.length}`;
-            const card = document.querySelector('.question-card.active');
-            if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
 
         const scoreCorrectEl = document.getElementById('scoreCorrect');
         const scoreDoneEl = document.getElementById('scoreDone');
@@ -3354,12 +3330,11 @@ const IMG = {
             if (scoreTotalEl) scoreTotalEl.textContent = total;
         }
 
-        function renderQuestion() {
-            const q = allQuestions[currentQuestion];
+        function buildQuestionCardHTML(q) {
             const isAnswered = !!answered[q.id];
             const userAnswer = answered[q.id] ? answered[q.id] : null;
 
-            let html = `<div class="question-card active">`;
+            let html = `<div class="question-card active" data-qid="${q.id}">`;
             html += `<div class="q-number">السؤال ${q.id}</div>`;
             html += `<div class="q-text">${q.text}</div>`;
 
@@ -3398,7 +3373,7 @@ const IMG = {
             html += `</div>`;
 
             const showFeedback = isAnswered;
-            html += `<div class="feedback ${showFeedback ? 'show' : ''}" id="feedback">`;
+            html += `<div class="feedback ${showFeedback ? 'show' : ''}">`;
             if (isAnswered) {
                 if (userAnswer === q.answer) {
                     html += `<div class="correct-answer">✅ إجابة صحيحة</div>`;
@@ -3413,30 +3388,47 @@ const IMG = {
             html += `</div>`;
 
             html += `</div>`;
-            container.innerHTML = html;
+            return html;
+        }
 
-            if (!isAnswered) {
-                document.querySelectorAll('.option').forEach(el => {
-                    el.addEventListener('click', function() {
-                        const letter = this.dataset.letter;
-                        handleAnswer(q.id, letter);
-                    });
-                });
+        function renderAllQuestions() {
+            container.innerHTML = allQuestions.map(buildQuestionCardHTML).join('');
+            applyFilters();
+        }
+
+        function updateCard(qId) {
+            const q = allQuestions.find(q => q.id === qId);
+            if (!q) return;
+            const oldEl = container.querySelector(`.question-card[data-qid="${qId}"]`);
+            if (oldEl) {
+                oldEl.outerHTML = buildQuestionCardHTML(q);
+                const newEl = container.querySelector(`.question-card[data-qid="${qId}"]`);
+                if (newEl && (!questionMatchesFilter(q) || !questionMatchesSearch(q))) {
+                    newEl.classList.add('filtered-out');
+                }
             }
         }
+
+        container.addEventListener('click', function(e) {
+            const optEl = e.target.closest('.option');
+            if (!optEl || optEl.classList.contains('disabled')) return;
+            const card = optEl.closest('.question-card');
+            if (!card) return;
+            const qId = Number(card.dataset.qid);
+            handleAnswer(qId, optEl.dataset.letter);
+        });
 
         function handleAnswer(qId, selectedLetter) {
             if (answered[qId]) return;
             const q = allQuestions.find(q => q.id === qId);
             if (!q) return;
             answered[qId] = selectedLetter;
-            renderQuestion();
-            renderNav();
+            updateCard(qId);
             updateProgress();
         }
 
         // ============================================================
-        // الفلترة والبحث والتبويبات (تطابق واجهة الجزء الثالث)
+        // الفلترة والبحث والتبويبات
         // ============================================================
         let currentFilter = 'all';
         let searchTerm = '';
@@ -3457,21 +3449,14 @@ const IMG = {
             return hay.includes(term.toLowerCase());
         }
 
-        function findNextMatchingIndex(fromIdx, direction) {
-            const len = allQuestions.length;
-            for (let step = 1; step <= len; step++) {
-                const idx = (fromIdx + direction * step + len) % len;
-                const q = allQuestions[idx];
-                if (questionMatchesFilter(q) && questionMatchesSearch(q)) return idx;
-            }
-            return fromIdx;
-        }
-
-        function findFirstMatchingIndex() {
-            for (let i = 0; i < allQuestions.length; i++) {
-                if (questionMatchesFilter(allQuestions[i]) && questionMatchesSearch(allQuestions[i])) return i;
-            }
-            return -1;
+        function applyFilters() {
+            container.querySelectorAll('.question-card').forEach(card => {
+                const qId = Number(card.dataset.qid);
+                const q = allQuestions.find(qq => qq.id === qId);
+                if (!q) return;
+                const show = questionMatchesFilter(q) && questionMatchesSearch(q);
+                card.classList.toggle('filtered-out', !show);
+            });
         }
 
         document.querySelectorAll('#filterBtns .fbtn').forEach(btn => {
@@ -3479,8 +3464,7 @@ const IMG = {
                 document.querySelectorAll('#filterBtns .fbtn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentFilter = btn.dataset.f;
-                const idx = findFirstMatchingIndex();
-                if (idx !== -1) goToQuestion(idx);
+                applyFilters();
             });
         });
 
@@ -3488,8 +3472,7 @@ const IMG = {
         if (searchBox) {
             searchBox.addEventListener('input', () => {
                 searchTerm = searchBox.value;
-                const idx = findFirstMatchingIndex();
-                if (idx !== -1) goToQuestion(idx);
+                applyFilters();
             });
         }
 
@@ -3538,25 +3521,16 @@ const IMG = {
             });
         });
 
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            goToQuestion(findNextMatchingIndex(currentQuestion, -1));
-        });
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            goToQuestion(findNextMatchingIndex(currentQuestion, 1));
-        });
-
         document.getElementById('resetBtn').addEventListener('click', () => {
             if (confirm('هل تريد إعادة ضبط جميع الإجابات؟')) {
                 for (const key in answered) delete answered[key];
-                renderQuestion();
-                renderNav();
+                renderAllQuestions();
                 updateProgress();
-                counterDisplay.textContent = `${allQuestions[currentQuestion].id} / ${allQuestions.length}`;
             }
         });
 
-        renderNav();
-        goToQuestion(0);
+        renderAllQuestions();
+        updateProgress();
     </script>
 <script src="protection.js"></script>
 <script>
