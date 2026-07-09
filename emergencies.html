@@ -3,93 +3,460 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>دليل الطوارئ | CardioArab</title>
+<title>دليل الحالات الإسعافية المحدّث | CardioArab</title>
 <style>
-:root{--bg:#0f1720;--panel:#141f2b;--panel2:#182533;--border:#233240;--text:#dbe6ef;--text-dim:#8fa3b3;--accent:#14b8a6;--accent2:#2dd4bf;--gold:#e0b04f;--red:#e5686b;--blue:#5b9bd5;--orange:#f97316}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{margin:0;padding:0;height:100%}
-body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-touch-callout:none;background:var(--bg);color:var(--text);font-family:"Tajawal","IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;font-size:13px;line-height:1.7;display:flex;flex-direction:column}
-a{color:var(--accent2);text-decoration:none}
+:root{
+  --bg:#0f1720;
+  --panel:#141f2b;
+  --panel2:#182533;
+  --border:#233240;
+  --text:#dbe6ef;
+  --text-dim:#8fa3b3;
+  --accent:#14b8a6;
+  --accent2:#2dd4bf;
+  --gold:#e0b04f;
+  --red:#e5686b;
+  --blue:#5b9bd5;
+  --orange:#f97316;
+  --card-radius:8px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Tajawal","IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  font-size:13px;
+  line-height:1.7;
+}
+a{color:var(--accent2);text-decoration:none;}
+.app{display:flex;min-height:100vh;}
+.sidebar{
+  width:270px;
+  min-width:270px;
+  background:var(--panel);
+  border-left:1px solid var(--border);
+  height:100vh;
+  position:sticky;
+  top:0;
+  overflow-y:auto;
+  padding:14px 10px 40px 10px;
+}
+.sidebar::-webkit-scrollbar{width:6px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.brand{
+  font-size:15px;
+  font-weight:700;
+  color:var(--accent2);
+  padding:4px 8px 12px 8px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:10px;
+}
+.brand small{display:block;color:var(--text-dim);font-weight:400;font-size:10px;}
+.search-box{
+  position:relative;
+  margin-bottom:14px;
+  padding:0 4px;
+}
+#searchInput{
+  -webkit-user-select:text;
+  -moz-user-select:text;
+  user-select:text;
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  background:var(--panel2);
+  color:var(--text);
+  font-family:inherit;
+  font-size:12.5px;
+}
+#searchInput:focus{outline:1px solid var(--accent);}
+#searchCount{
+  font-size:10.5px;
+  color:var(--text-dim);
+  padding:6px 6px 0 6px;
+}
+#searchResults{
+  position:relative;
+  margin-top:4px;
+}
+.search-hit{
+  display:block;
+  padding:6px 8px;
+  border-radius:5px;
+  font-size:11.5px;
+  color:var(--text);
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+}
+.search-hit:hover{background:var(--panel2);}
+.search-hit b{color:var(--gold);background:rgba(224,176,79,.18);border-radius:2px;}
+.search-hit .hit-cat{color:var(--text-dim);font-size:10px;display:block;margin-top:2px;}
+nav.toc{padding:0 2px;}
+.cat-title{
+  font-size:10.5px;
+  color:var(--text-dim);
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  margin:14px 6px 4px 6px;
+  padding-top:6px;
+  border-top:1px solid var(--border);
+}
+.cat-title:first-child{border-top:none;margin-top:0;}
+.toc a{
+  display:block;
+  padding:5px 8px;
+  border-radius:5px;
+  color:var(--text);
+  font-size:12px;
+}
+.toc a:hover{background:var(--panel2);color:var(--accent2);}
+.toc a.active{background:var(--accent);color:#04201c;font-weight:700;}
+main{
+  flex:1;
+  padding:22px 26px 80px 26px;
+  max-width:900px;
+}
+.page-title{
+  font-size:22px;
+  font-weight:800;
+  color:var(--accent2);
+  margin-bottom:4px;
+}
+.author-line{
+  font-size:12.5px;
+  color:var(--accent);
+  font-weight:700;
+  margin-bottom:10px;
+}
+.page-sub{
+  color:var(--text-dim);
+  font-size:12px;
+  margin-bottom:22px;
+  border-bottom:1px solid var(--border);
+  padding-bottom:14px;
+}
+section.topic{
+  margin-bottom:34px;
+  padding-bottom:10px;
+  scroll-margin-top:14px;
+}
+h2.topic-title{
+  font-size:17px;
+  color:var(--gold);
+  background:var(--panel);
+  border-right:4px solid var(--accent);
+  padding:8px 12px;
+  border-radius:6px;
+  margin:0 0 12px 0;
+}
+h3.sub{
+  font-size:14px;
+  color:var(--accent2);
+  margin:16px 0 6px 0;
+  border-bottom:1px dashed var(--border);
+  padding-bottom:4px;
+}
+h4.sub2{
+  font-size:12.5px;
+  color:var(--blue);
+  margin:10px 0 5px 0;
+}
+p{margin:6px 0;}
+ul,ol{margin:6px 0;padding-inline-start:22px;}
+li{margin:3px 0;}
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--card-radius);
+  padding:10px 14px;
+  margin:10px 0;
+}
+.flow{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:var(--card-radius);
+  padding:10px 14px;
+  margin:10px 0;
+  font-size:12.5px;
+}
+.flow-step{
+  padding:6px 10px;
+  margin:4px 0;
+  border-right:3px solid var(--accent);
+  background:var(--panel);
+  border-radius:4px;
+}
+.flow-arrow{text-align:center;color:var(--text-dim);margin:2px 0;}
+.note{
+  background:rgba(91,155,213,.1);
+  border-right:3px solid var(--blue);
+  padding:8px 10px;
+  margin:10px 0;
+  border-radius:4px;
+  font-size:12.5px;
+}
+.warn{
+  background:rgba(229,104,107,.1);
+  border-right:3px solid var(--red);
+  padding:8px 10px;
+  margin:10px 0;
+  border-radius:4px;
+  font-size:12.5px;
+}
+.upd{
+  background:rgba(249,115,22,.15);
+  color:var(--orange);
+  padding:1px 4px;
+  border-radius:3px;
+  font-size:10px;
+  font-weight:600;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:10px 0;
+  font-size:12px;
+}
+table th,table td{
+  border:1px solid var(--border);
+  padding:6px 8px;
+  text-align:right;
+}
+table th{
+  background:var(--panel2);
+  color:var(--accent2);
+  font-weight:700;
+}
+.top-btn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:var(--accent);
+  color:#04201c;
+  border:none;
+  font-weight:800;
+  cursor:pointer;
+  display:none;
+  z-index:99;
+  font-size:16px;
+}
+.top-btn:hover{background:var(--accent2);}
 
-/* TOP BAR */
-.top-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:var(--panel);border-bottom:1px solid var(--border);gap:1rem;flex-wrap:wrap;height:60px;flex-shrink:0}
-.top-bar .logo{font-size:14px;font-weight:700;color:var(--accent2)}
-.top-bar .nav-right{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
-.top-bar a{color:var(--text-dim);font-size:.85rem;padding:.4rem 1rem;border:1px solid var(--border);border-radius:6px;background:var(--panel2);transition:.2s}
-.top-bar a:hover{border-color:var(--accent);color:var(--accent2)}
-.top-bar a.btn-primary{background:var(--accent);color:#04201c;border-color:var(--accent);font-weight:700}
-.top-bar a.btn-primary:hover{background:var(--accent2)}
+/* HEADER */
+header{
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+  padding:12px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1rem;
+  flex-shrink:0;
+  height:60px;
+  z-index:101;
+  position:sticky;
+  top:0;
+}
+header h1{
+  font-size:16px;
+  font-weight:800;
+  color:var(--accent2);
+  margin:0;
+  flex:0 0 auto;
+  letter-spacing:.3px;
+}
+header .doctor-name{
+  font-size:13px;
+  color:var(--accent2);
+  font-weight:800;
+  letter-spacing:.2px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  flex:1;
+  min-width:0;
+}
+.menu-toggle{
+  background:none;
+  border:1px solid var(--border);
+  color:var(--text);
+  cursor:pointer;
+  padding:6px 10px;
+  border-radius:5px;
+  font-size:16px;
+  transition:.2s;
+  white-space:nowrap;
+}
+.menu-toggle:hover{
+  border-color:var(--accent);
+  color:var(--accent2);
+}
+.home-btn{
+  text-decoration:none;
+  color:var(--text-dim);
+  border:1px solid var(--border);
+  padding:6px 10px;
+  border-radius:5px;
+  font-size:11px;
+  transition:.2s;
+  white-space:nowrap;
+}
+.home-btn:hover{
+  border-color:var(--accent);
+  color:var(--accent2);
+}
 
-/* LAYOUT */
-.app{display:flex;flex:1;overflow:hidden}
+/* SIDEBAR OVERLAY */
+.sidebar-overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(0,0,0,.5);
+  display:none;
+  z-index:99;
+}
+.sidebar-overlay.show{
+  display:block;
+}
 
-/* SIDEBAR */
-.sidebar{width:270px;background:var(--panel);border-left:1px solid var(--border);height:100%;overflow-y:auto;padding:14px 10px 40px 10px;flex-shrink:0}
-.sidebar::-webkit-scrollbar{width:6px}
-.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-.brand{font-size:14px;font-weight:700;color:var(--accent2);padding:4px 8px 12px 8px;border-bottom:1px solid var(--border);margin-bottom:10px}
-.brand small{display:block;color:var(--text-dim);font-weight:400;font-size:10px}
-.search-box{margin-bottom:14px;padding:0 4px}
-#searchInput{-webkit-user-select:text;-moz-user-select:text;user-select:text;width:100%;padding:8px 10px;border-radius:6px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-family:inherit;font-size:12.5px}
-#searchInput:focus{outline:1px solid var(--accent)}
-.search-hit{display:block;padding:6px 8px;border-radius:5px;font-size:11.5px;color:var(--text);cursor:pointer}
-.search-hit:hover{background:var(--panel2)}
-nav.toc{padding:0 2px}
-.cat-title{font-size:10.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin:14px 6px 4px 6px;padding-top:6px;border-top:1px solid var(--border)}
-.cat-title:first-child{border-top:none;margin-top:0}
-.toc a{display:block;padding:5px 8px;border-radius:5px;color:var(--text);font-size:12px}
-.toc a:hover{background:var(--panel2);color:var(--accent2)}
-.toc a.active{background:var(--accent);color:#04201c;font-weight:700}
+/* SIDEBAR TOGGLE */
+.sidebar{
+  position:fixed;
+  right:-270px;
+  top:60px;
+  width:270px;
+  height:calc(100vh - 60px);
+  background:var(--panel);
+  border-left:1px solid var(--border);
+  overflow-y:auto;
+  padding:14px 10px 40px;
+  transition:right .3s ease;
+  z-index:100;
+}
+.sidebar.show{
+  right:0;
+}
 
-/* MAIN CONTENT */
-main{flex:1;overflow-y:auto;padding:22px 26px 80px 26px}
-.page-title{font-size:22px;font-weight:800;color:var(--accent2);margin-bottom:4px}
-.author-line{font-size:12.5px;color:var(--accent);font-weight:700;margin-bottom:10px}
-.page-sub{color:var(--text-dim);font-size:12px;margin-bottom:22px;border-bottom:1px solid var(--border);padding-bottom:14px}
-section.topic{margin-bottom:34px;padding-bottom:10px;scroll-margin-top:14px}
-h2.topic-title{font-size:17px;color:var(--gold);background:var(--panel);border-right:4px solid var(--accent);padding:8px 12px;border-radius:6px;margin:0 0 12px 0}
-h3.sub{font-size:14px;color:var(--accent2);margin:16px 0 6px 0;border-bottom:1px dashed var(--border);padding-bottom:4px}
-p{margin:6px 0}
-ul,ol{margin:6px 0;padding-inline-start:22px}
-li{margin:3px 0}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin:10px 0}
-.flow{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin:10px 0;font-size:12.5px}
-.flow-step{padding:6px 10px;margin:4px 0;border-right:3px solid var(--accent);background:var(--panel);border-radius:4px}
-.flow-arrow{text-align:center;color:var(--text-dim);margin:2px 0}
-.note{background:rgba(91,155,213,.1);border-right:3px solid var(--blue);padding:8px 10px;margin:10px 0;border-radius:4px;font-size:12.5px}
-.warn{background:rgba(229,104,107,.1);border-right:3px solid var(--red);padding:8px 10px;margin:10px 0;border-radius:4px;font-size:12.5px}
-.upd{background:rgba(249,115,22,.15);color:var(--orange);padding:1px 4px;border-radius:3px;font-size:10px;font-weight:600}
-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}
-table th,table td{border:1px solid var(--border);padding:6px 8px;text-align:right}
-table th{background:var(--panel2);color:var(--accent2);font-weight:700}
+.app{
+  display:flex;
+  min-height:100vh;
+  flex-direction:column;
+  margin-top:60px;
+}
+main{
+  flex:1;
+  overflow-x:hidden;
+}
+
 </style>
-</head>
-<body>
+</head><body>
 
-<!-- TOP NAVIGATION -->
-<div class="top-bar">
-  <div class="logo">CardioArab 🫀</div>
-  <div class="nav-right" id="topBarNav">
-    <a href="index.html">🏠 الرئيسية</a>
-    <a href="login.html" style="border-color:#e5686b;color:#e5686b">🔐 دخول</a>
-  </div>
-</div>
+<!-- HEADER -->
+<header>
+  <h1>🏥</h1>
+  <div class="doctor-name">د. عبيدة سمير أحمد</div>
+  <a href="index.html" class="home-btn">🏠</a>
+  <button class="menu-toggle" id="menuToggle">☰ الفهرس</button>
+</header>
 
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- APP CONTAINER -->
 <div class="app">
-<aside class="sidebar">
-<div class="brand">دليل الطوارئ <small>2026</small></div>
+<aside class="sidebar" id="sidebar">
+<div class="brand">CardioArab Emergencies <small>Updated 2026</small></div>
+
 <div class="search-box">
-  <input type="text" id="searchInput" placeholder="ابحث...">
+  <input type="text" id="searchInput" placeholder="ابحث عن موضوع...">
   <div id="searchCount"></div>
   <div id="searchResults"></div>
 </div>
-<nav class="toc" id="toc"></nav>
+
+<nav class="toc">
+  <div class="cat-title">💓 حالات القلب</div>
+  <a href="#bls">♥️ الإنعاش القلبي</a>
+  <a href="#stemi">🫀 احتشاء مع ST</a>
+  <a href="#nstemi">📉 احتشاء بدون ST</a>
+  <a href="#chest-pain">💢 ألم صدري</a>
+  <a href="#svt">⚡ تسرع فوق بطيني</a>
+  <a href="#acute-af">💓 رجفان أذيني حاد</a>
+  <a href="#pulmonary-edema">💧 وذمة رئة حادة</a>
+  <a href="#cardiogenic-shock">🆘 صدمة قلبية</a>
+  <a href="#aortic-dissection">🩸 تسلخ الأبهر</a>
+  <a href="#myocarditis">💔 التهاب عضلة القلب</a>
+  <a href="#pericarditis">🫀 التهاب التامور الحاد</a>
+  <a href="#acute-limb-ischemia">🦵 إقفار الطرف الحاد</a>
+
+  <div class="cat-title">🫁 حالات التنفس</div>
+  <a href="#hypoxia">🫁 نقص أكسجة</a>
+  <a href="#asthma">🫁 أزمة ربوية</a>
+  <a href="#copd">🫁 أزمة COPD</a>
+  <a href="#pneumothorax">💨 استرواح صدر</a>
+  <a href="#cap">🫁 ذات رئة</a>
+  <a href="#pe">💨 انصمام رئوي</a>
+  <a href="#drowning">🌊 الغرق</a>
+
+  <div class="cat-title">🧠 حالات عصبية</div>
+  <a href="#stroke">🧠 سكتة دماغية</a>
+  <a href="#seizures">⚡ حالة صرعية</a>
+  <a href="#coma">😵 السبات</a>
+  <a href="#headache">🤕 صداع حاد</a>
+  <a href="#encephalitis">🦠 التهاب الدماغ</a>
+  <a href="#meningitis">🦠 التهاب سحايا</a>
+  <a href="#head-trauma">🤕 رض رأس</a>
+  <a href="#spine-trauma">🔗 رض العمود الفقري</a>
+  <a href="#icp">🧠 ارتفاع ICP</a>
+
+  <div class="cat-title">⚗️ حالات استقلابية</div>
+  <a href="#sepsis">🦠 الإنتان الشديد</a>
+  <a href="#dka">⚗️ الحماض الخلوني</a>
+  <a href="#hypoglycemia">🍬 نقص السكر</a>
+  <a href="#electrolytes">⚡ اضطرابات شوارد</a>
+  <a href="#acute-kidney">🧫 قصور كلوي</a>
+  <a href="#hhs">🌡️ حالة فرط سكر</a>
+  <a href="#thyroid">🔴 أزمة درقية</a>
+  <a href="#adrenal">🔴 أزمة كظرية</a>
+
+  <div class="cat-title">🚨 حالات أخرى</div>
+  <a href="#anaphylaxis">🚨 التأق</a>
+  <a href="#gi-bleed">🩸 نزف هضمي</a>
+  <a href="#abdominal-pain">🤢 ألم بطن حاد</a>
+  <a href="#diarrhea">🌊 إسهال شديد</a>
+  <a href="#caustic">☠️ ابتلاع حموض</a>
+  <a href="#foreign-body">🔴 جسم غريب</a>
+  <a href="#hypertensive-emergency">📈 ارتفاع ضغط خبيث</a>
+  <a href="#hypothermia">🥶 نقص الحرارة</a>
+  <a href="#heat-stroke">☀️ ضربة الحرارة</a>
+  <a href="#agitation">😤 هياج شديد</a>
+  <a href="#burns">🔥 الحروق</a>
+  <a href="#electrical-injury">⚡ صعق كهربائي</a>
+  <a href="#envenomation">🐍 لدغات أفاعي/حشرات</a>
+  <a href="#overdose">💊 تسمم دوائي</a>
+</nav>
 </aside>
 
 <main>
-<h1 class="page-title">🏥 دليل الحالات الإسعافية</h1>
+<h1 class="page-title">🏥 دليل الحالات الإسعافية المحدّث</h1>
 <p class="author-line">د. عبيدة سمير أحمد | CardioArab © 2026</p>
-<p class="page-sub">مرجع شامل لتدبير الحالات الإسعافية — ACLS 2025، SSC 2026، ESC 2024-2025</p><section class="topic" id="bls">
+<p class="page-sub">مرجع عملي شامل يتضمن أحدث توصيات ACLS 2025، Surviving Sepsis 2026، ESC 2024-2025</p>
+
+<!-- BLS/ACLS -->
+<section class="topic" id="bls">
 <h2 class="topic-title">♥️ الإنعاش القلبي الرئوي (ACLS 2025 Updates) <span class="upd">AHA 2025</span></h2>
 
 <h3 class="sub">التعريف والخطوات الأساسية</h3>
@@ -183,6 +550,36 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 </div>
 
 <div class="warn">موانع الـ thrombolysis: نزف حالي، سكتة في 3 أشهر، ارتفاع شديد BP. قلل BP أولاً قبل الدواء.</div>
+
+<h3 class="sub">توقيت إعادة التروية والنقل بين المراكز</h3>
+<ul>
+<li>يجب نقل المريض إلى مخبر القثطرة خلال <b>60 دقيقة</b> من وصوله إلى مشفى مجهز بقثطرة قلبية</li>
+<li>يجب نقل المريض إلى مشفى مجهز بقثطرة خلال <b>90 دقيقة</b> من وصوله لمركز غير مجهز بها</li>
+<li>إذا كانت مدة النقل المتوقعة لمخبر القثطرة تتجاوز <b>120 دقيقة</b>: تطبق حالات الخثرة (Thrombolysis) بدلاً من الانتظار</li>
+<li>عند القرار بإعطاء حالات الخثرة: يجب البدء بها خلال <b>10 دقائق</b> من وصول المريض (Door-to-needle)</li>
+<li>مضادات التخثر المرافقة لحالات الخثرة: Enoxaparin 1 ملغ/كغ SC كل 12 ساعة حتى إعادة التروية أو حتى 8 أيام</li>
+<li><b>قثطرة إنقاذية (Rescue PCI):</b> تستطب عند عدم الاستجابة لحالات الخثرة (هبوط قطعة ST أقل من 50% بعد 60-90 دقيقة) أو عند وجود اضطراب هيموديناميكي/كهربائي بأي وقت</li>
+<li>إعادة التروية للشريان المسؤول عن الاحتشاء بعد حالات الخثرة الناجحة: خلال 3-24 ساعة</li>
+</ul>
+
+<h3 class="sub">بروتوكول ما بعد إعادة التروية والعلاج المزمن</h3>
+<table>
+<tr><th>التوصية</th><th>الدرجة</th></tr>
+<tr><td>مراقبة في العناية الإكليلية ≥24 ساعة (إعادة تروية كاملة بدون اختلاطات)، ثم الجناح 48 ساعة إضافية</td><td>IC</td></tr>
+<tr><td>إيكو قلب لكل المرضى بعد إعادة التروية (تحري الاختلاطات الميكانيكية وخثرة البطين الأيسر)</td><td>IB</td></tr>
+<tr><td>إعادة إيكو بعد 6-12 أسبوع إذا EF≤40% لتقييم الحاجة لـ ICD</td><td>IB</td></tr>
+<tr><td>إيقاف التدخين لكل المرضى (± varenicline/bupropion)</td><td>IA</td></tr>
+<tr><td>أسبرين 75-100 ملغ مدى الحياة</td><td>IA</td></tr>
+<tr><td>علاج مضاد صفيحات ثنائي (أسبرين + P2Y12) لمدة <b>12 شهر</b> بعد إعادة التروية</td><td>IA</td></tr>
+<tr><td>PPI لكل المرضى على مضاد صفيحات ثنائي</td><td>IB</td></tr>
+<tr><td>علاج ثلاثي (أسبرين+كلوبيدوغريل+مميع) 1-6 أشهر عند استطباب تمييع إضافي (رجفان أذيني، صمام صنعي)</td><td>IIA</td></tr>
+<tr><td>تمييع 6 أشهر عند خثرة البطين الأيسر</td><td>IIA</td></tr>
+<tr><td>لا يستخدم تيكاغريلور أو براسوغريل ضمن العلاج الثلاثي</td><td>IIIC</td></tr>
+<tr><td>بيتا حاصر عند كل مرضى قصور القلب مع EF≤40%</td><td>IA</td></tr>
+<tr><td>ACE inhibitors/ARBs خلال 24 ساعة عند نقص وظيفة العضلة، سكري، أو احتشاء أمامي</td><td>IA</td></tr>
+<tr><td>حاصرات المستقبلات القشرانية المعدنية (MRA) عند EF&lt;40% أو سكري مع عدم وجود قصور كلوي/فرط بوتاسيوم</td><td>IB</td></tr>
+<tr><td>ستاتين عالي الكثافة (أتورفاستاتين 80 ملغ) بأسرع وقت لكل المرضى</td><td>IA</td></tr>
+</table>
 
 </section>
 
@@ -283,6 +680,35 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <h3 class="sub">التقديم والتشخيص</h3>
 <p><b>PE:</b> جلطة في الشرايين الرئوية → ضيق تنفس حاد، ألم صدري، خفقان.</p>
 
+<h3 class="sub">عوامل الخطر</h3>
+<table>
+<tr><th>خطورة عالية</th><th>خطورة متوسطة</th><th>خطورة منخفضة</th></tr>
+<tr><td>كسر الورك/الفخذ</td><td>جراحة تنظيرية للركبة</td><td>الحمل</td></tr>
+<tr><td>استبدال مفصل الورك/الركبة</td><td>قثطرة وريدية مركزية</td><td>الدوالي الوريدية</td></tr>
+<tr><td>جراحة كبرى عامة</td><td>علاج كيميائي</td><td>الاستلقاء الطويل (سفر &gt;8 ساعات)</td></tr>
+<tr><td>رض شديد</td><td>قصور قلب/تنفس مزمن</td><td>البدانة</td></tr>
+<tr><td>إصابة نخاع شوكي</td><td>مانعات حمل هرمونية</td><td>الجراحة تحت التنظير</td></tr>
+<tr><td>-</td><td>سرطان نشط</td><td>-</td></tr>
+</table>
+
+<h3 class="sub">معايير Wells للتقييم السريري</h3>
+<table>
+<tr><th>المعيار</th><th>النقاط</th></tr>
+<tr><td>علامات سريرية لتخثر وريد عميق (DVT)</td><td>3</td></tr>
+<tr><td>PE هو التشخيص الأكثر احتمالاً</td><td>3</td></tr>
+<tr><td>نبض القلب &gt;100</td><td>1.5</td></tr>
+<tr><td>الاستلقاء ≥3 أيام أو جراحة خلال 4 أسابيع</td><td>1.5</td></tr>
+<tr><td>DVT أو PE سابق</td><td>1.5</td></tr>
+<tr><td>نفث دم</td><td>1</td></tr>
+<tr><td>سرطان نشط (علاج خلال 6 أشهر أو تلطيفي)</td><td>1</td></tr>
+</table>
+
+<div class="flow">
+<div class="flow-step"><b>≤4 نقاط (احتمال منخفض):</b> D-dimer — إذا سلبي ينفى PE، إذا إيجابي → CTPA</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step"><b>&gt;4 نقاط (احتمال مرتفع):</b> CTPA مباشرة بدون D-dimer</div>
+</div>
+
 <h3 class="sub">التدبير السريع</h3>
 
 <div class="flow">
@@ -364,7 +790,13 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <tr><td>اعتلال دماغي بفرط التوتر</td><td>-</td><td>خفّض MAP 20-25% (لابيتالول، نيكاردبين)</td></tr>
 <tr><td>وذمة رئة حادة</td><td>-</td><td>خفّض MAP إلى 50-100 ملم ز (نتروغليسرين + مدرات)</td></tr>
 <tr><td>تسلخ أبهر</td><td>-</td><td>خفّض SBP ل 100-110 والنبض 60 (نتروبروسايد/نتروغليسرين + ميتوبرولول)</td></tr>
+<tr><td>إرجاج/ما قبل الإرجاج (حمل)</td><td>بروتين بول، تحاليل كبد/كلى</td><td>خفّض ل &lt;160/105 (لابيتالول أو هيدرالازين أو نيفيديبين) + سلفات المغنزيوم للوقاية من الاختلاج</td></tr>
+<tr><td>فيوكروموسيتوما (Pheochromocytoma)</td><td>كاتيكولامينات بولية</td><td>حاصرات ألفا (فينوكسي بنزامين) أولاً، ثم بيتا حاصر — لا تعطِ بيتا حاصر منفرداً</td></tr>
+<tr><td>تسمم كوكائين/أمفيتامين</td><td>-</td><td>بنزوديازيبين أولاً (ديازيبام)، تجنب البيتا حاصر منفرداً (قد يفاقم التشنج الوعائي)</td></tr>
+<tr><td>ما بعد جراحة دماغية (Post-craniotomy)</td><td>-</td><td>خفّض SBP ل &lt;140 لتفادي نزف موضع الجراحة</td></tr>
 </table>
+
+<div class="note">قاعدة عامة: التخفيض السريع الزائد للضغط (باستثناء تسلخ الأبهر والإرجاج) قد يسبب نقص تروية الأعضاء — الهدف عادة تخفيض 10-20% خلال الساعة الأولى ثم 25% خلال 24 ساعة.</div>
 
 </section>
 
@@ -374,6 +806,14 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 
 <h3 class="sub">التقييم والتدبير</h3>
 <p><b>نقص الحرارة:</b> حرارة مركزية &lt;35°C. <b>لا تفترض الموت حتى ترتفع الحرارة &gt;33°C بعد إعادة التدفئة.</b></p>
+
+<h3 class="sub">درجات نقص الحرارة</h3>
+<table>
+<tr><th>الدرجة</th><th>الحرارة</th><th>الأعراض</th></tr>
+<tr><td>خفيفة</td><td>32-35°C</td><td>رعاد، هياج، تخليط بسيط</td></tr>
+<tr><td>متوسطة</td><td>28-32°C</td><td>سبات، جمود، نظم غير منتظم، بطء قلب شديد</td></tr>
+<tr><td>شديدة</td><td>&lt;28°C</td><td>فقد وعي كامل، توقف تنفس شبه كامل، رجفان بطيني</td></tr>
+</table>
 
 <h3 class="sub">التدبير</h3>
 <ul>
@@ -387,6 +827,14 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 
 <div class="warn">لا تُدفئ بسرعة (تسبب صدمة وعائية ووفاة). استمر بالإنعاش حتى ترتفع الحرارة &gt;33°C — المريض بارد لا يكون ميتاً.</div>
 
+<h3 class="sub">المؤشرات الإيجابية لإعادة الإنعاش</h3>
+<ul>
+<li>عمر &lt;65 سنة (أفضل إنذاراً)</li>
+<li>فترة غمر قصيرة (&lt;15 دقيقة في الماء البارد جداً)</li>
+<li>pH &gt;6.5 عند القياس</li>
+<li>عدم وجود تلف نسيجي شديد</li>
+</ul>
+
 </section>
 
 <!-- AGITATION -->
@@ -394,7 +842,17 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <h2 class="topic-title">😤 التدبير الإسعافي للهياج الشديد <span class="upd">ESC 2025</span></h2>
 
 <h3 class="sub">التقييم السريع</h3>
-<p><b>الهياج الشديد:</b> تهديد للنفس أو الآخرين، قد يكون عضوياً (انتان، استقلابي) أو نفسياً.</p>
+<p><b>الهياج الشديد:</b> تهديد للنفس أو الآخرين، قد يكون عضوياً (انتان، استقلابي) أو نفسياً. القاعدة الذهبية: <b>استبعد السبب العضوي أولاً</b> قبل افتراض المنشأ النفسي البحت.</p>
+
+<h3 class="sub">الأسباب العضوية الواجب استبعادها</h3>
+<table>
+<tr><th>الفئة</th><th>أمثلة</th></tr>
+<tr><td>إنتانية</td><td>التهاب سحايا/دماغ، إنتان جهازي، عدوى بولية عند المسنين</td></tr>
+<tr><td>استقلابية</td><td>نقص/فرط سكر، اضطراب صوديوم، نقص أكسجة، فرط ثاني أكسيد الكربون</td></tr>
+<tr><td>صماوية</td><td>عاصفة درقية، سبات وذمة مخاطية</td></tr>
+<tr><td>سُمّية/دوائية</td><td>تسمم كحول أو سحبه، مخدرات (كوكائين/أمفيتامين)، تأثيرات دوائية جانبية</td></tr>
+<tr><td>عصبية</td><td>نزف/سكتة دماغية، حالة صرعية غير متشنجة، ارتفاع ICP، رض رأس</td></tr>
+</table>
 
 <h3 class="sub">الخطوات الأولى</h3>
 <ol>
@@ -402,15 +860,27 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <li>افتح وريدين كبيرين</li>
 <li>تقييم سريع: نقص أكسجة؟ حرارة؟ نقص سكر؟ صدمة؟</li>
 <li>فحص عصبي إلزامي (منعكسات، قوة، قدرات استعرافية)</li>
+<li>استقصاءات حسب الاشتباه: سكر دموي، غازات دموية، صورة دماغ إذا اشتبه سبب عصبي</li>
 </ol>
 
-<h3 class="sub">العلاج الدوائي</h3>
+<h3 class="sub">مبادئ التقييد الجسدي (إن لزم)</h3>
+<ul>
+<li>✓ آخر خيار بعد فشل التهدئة اللفظية والدوائية</li>
+<li>✓ توثيق السبب والمدة ومراقبة دورية للعلامات الحيوية</li>
+<li>✓ إزالته بأسرع وقت ممكن بعد استقرار المريض</li>
+<li>❌ لا يستخدم كعقاب أو لتسهيل عمل الطاقم فقط</li>
+<li>❌ لا يترك المريض مقيداً بدون مراقبة مستمرة (خطر الاستنشاق والاختناق)</li>
+</ul>
+
+<h3 class="sub">العلاج الدوائي حسب الشدة</h3>
 <table>
 <tr><th>الدرجة</th><th>الوصف</th><th>الدواء</th></tr>
 <tr><td>خفيف</td><td>متهيج لكن متعاون</td><td>لورازيبام 1-2 ملغ فموي</td></tr>
-<tr><td>متوسط</td><td>هياج دون خطر فوري</td><td>ميدازولام 2-5 ملغ IM</td></tr>
-<tr><td>شديد</td><td>خطر على النفس/الآخرين</td><td>كيتامين 5 ملغ/كغ IM</td></tr>
+<tr><td>متوسط</td><td>هياج دون خطر فوري</td><td>ميدازولام 2-5 ملغ IM أو هالوبيريدول 5 ملغ IM</td></tr>
+<tr><td>شديد</td><td>خطر على النفس/الآخرين</td><td>كيتامين 5 ملغ/كغ IM (الأسرع تأثيراً) أو مشاركة هالوبيريدول+ميدازولام</td></tr>
 </table>
+
+<div class="warn">راقب التنفس وتشبع الأكسجين عن كثب بعد أي مهدئ حقني — خاصة مع الكيتامين والبنزوديازيبينات مجتمعة.</div>
 
 </section>
 
@@ -435,6 +905,14 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <div class="flow-step"><b>الهدف:</b> انخفاض سكر 50-100 ملغ/100 مل/ساعة، انخفاض lactate، تصحيح pH</div>
 </div>
 
+<h3 class="sub">بروتوكول البوتاسيوم بالتفصيل (3 عتبات)</h3>
+<table>
+<tr><th>مستوى K</th><th>القرار</th></tr>
+<tr><td>K &lt; 3.3</td><td>أوقف الإنسولين مؤقتاً، أعطِ 20-30 mEq/ساعة حتى K&gt;3.3 قبل بدء/متابعة الإنسولين</td></tr>
+<tr><td>K بين 3.3 - 5.3</td><td>أضف 20-30 mEq لكل لتر سيروم، تابع الإنسولين بجرعته الاعتيادية</td></tr>
+<tr><td>K &gt; 5.3</td><td>لا تضف بوتاسيوم، راقب المستوى كل ساعتين مع متابعة الإنسولين</td></tr>
+</table>
+
 <h3 class="sub">المضاعفات المهمة</h3>
 <ul>
 <li><b>الوذمة الدماغية:</b> أكثر عند الأطفال، قد تحدث بسرعة — راقب مستوى الوعي، هدف تصحيح ناهن (slow correction)</li>
@@ -457,6 +935,8 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 
 <div class="flow">
 <div class="flow-step"><b>0-5 دقائق:</b> ضعه على جانبه، افتح مجرى التنفس، أكسجين، IV access، اختبارات (سكر، شوارد، سموم)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">إذا سكر دم منخفض أو اشتباه إدمان كحول: أعطِ Thiamine 100 ملغ IV <b>قبل</b> الغلوكوز (لتجنب اعتلال Wernicke)، ثم Dextrose 50% إذا نقص سكر مؤكد</div>
 <div class="flow-arrow">↓</div>
 <div class="flow-step"><b>5-10 دقائق (Early):</b> لورازيبام 4 ملغ IV (0.1 ملغ/كغ) بسرعة 2 ملغ/دقيقة، كرر بعد 10 دقائق</div>
 <div class="flow-arrow">↓</div>
@@ -544,9 +1024,10 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 
 <h3 class="sub">نقص الكلس الحاد (Hypocalcemia &lt;7)</h3>
 <ul>
-<li><b>العلامات:</b> تشنج بيدي/قدمين (Chvostek's sign)، اضطرابات نظم، tetany</li>
-<li><b>العلاج:</b> غلوكونات الكالسيوم 10% 10-20 مل IV بطيء (احذر الكلوريد سوف يسبب تآكل وريدي)</li>
-<li><b>بعدها:</b> magnesium sulfate 1-2 غ IV (نقص Mg يسبب نقص Ca persistent)</li>
+<li><b>معادلة التصحيح (عند نقص الألبومين):</b> Ca المصحح = Ca المقاس + 0.8 × (4 - الألبومين)</li>
+<li><b>العلامات:</b> تشنج بيدي/قدمين (Chvostek's sign — تقلص الوجه عند قرع العصب الوجهي)، Trousseau's sign (تشنج اليد عند نفخ كفة الضغط فوق الانقباضي 3 دقائق)، اضطرابات نظم (QT مطاول)، tetany</li>
+<li><b>العلاج:</b> غلوكونات الكالسيوم 10% 10-20 مل IV بطيء خلال 10 دقائق (احذر الكلوريد سوف يسبب تآكل وريدي)</li>
+<li><b>بعدها:</b> magnesium sulfate 1-2 غ IV (نقص Mg يسبب نقص Ca persistent ومقاوم للعلاج)</li>
 </ul>
 
 </section>
@@ -558,12 +1039,23 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <h3 class="sub">التقديم والتقييم</h3>
 <p><b>الأزمة:</b> ضيق تنفس حاد، صفير في الصدر، ضيق في الصدر، سعال. <b>الخطورة:</b> عدم القدرة على الكلام بكلمات كاملة = حالة طارئة.</p>
 
+<h3 class="sub">تصنيف شدة النوبة</h3>
+<table>
+<tr><th>الدرجة</th><th>معدل التنفس</th><th>معدل النبض</th><th>SpO2</th><th>PEF</th><th>الكلام</th></tr>
+<tr><td>خفيفة</td><td>طبيعي أو مرتفع قليلاً</td><td>&lt;100</td><td>&gt;95%</td><td>&gt;80%</td><td>جمل كاملة</td></tr>
+<tr><td>متوسطة</td><td>مرتفع</td><td>100-120</td><td>91-95%</td><td>50-80%</td><td>عبارات قصيرة</td></tr>
+<tr><td>شديدة</td><td>&gt;30</td><td>&gt;120</td><td>&lt;91%</td><td>&lt;50%</td><td>كلمات مفردة فقط</td></tr>
+<tr><td>مهددة للحياة</td><td>صدر صامت / بطء تنفس</td><td>بطء قلب / اضطراب نظم</td><td>&lt;90%</td><td>&lt;33%</td><td>تخليط، سبات، إنهاك</td></tr>
+</table>
+
 <h3 class="sub">التدبير السريع</h3>
 
 <div class="flow">
 <div class="flow-step">أكسجين عالي التدفق (SpO2 &gt;90%)، وضعية شبه جالسة</div>
 <div class="flow-arrow">↓</div>
 <div class="flow-step"><b>Salbutamol (albuterol):</b> nebulized 5 ملغ أو MDI 100 ميكروغرام × 10 نفخات بسرعة (كل دقيقتين × 3 مرات في أول 15 دقيقة)</div>
+
+<div class="note"><b>MDI (Metered Dose Inhaler):</b> هو البخاخ اليدوي العادي (بخاخ الفنتولين المعروف) — كل ضغطة واحدة = نفخة = 100 ميكروغرام دواء. "10 نفخات" يعني 10 ضغطات متتالية على البخاخ (المجموع 1 ملغ). يفضّل استخدامه مع spacer (حجرة استنشاق) لتحسين وصول الدواء للرئتين.</div>
 <div class="flow-arrow">↓</div>
 <div class="flow-step"><b>Ipratropium:</b> 0.5 ملغ nebulized مع salbutamol (يحسّن bronchodilation)</div>
 <div class="flow-arrow">↓</div>
@@ -628,33 +1120,23 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <div class="flow-step"><b>إذا دوالي مريئية مشبوهة:</b> أضف terlipressin 2 ملغ IV q4h + ocreotide infusion (صادات + وقاية من التهاب الصفاق البكتيري العفوي)</div>
 </div>
 
-<h3 class="sub">معايير الحداثة (Glasgow-Blatchford score)</h3>
-<ul>
-<li>النزيف الكميات الكبير: Hb &lt;10، BP انقباضي &lt;100، نبض &gt;100</li>
-<li>هذه المعايير تشير لـ need for transfusion و increased mortality</li>
-</ul>
-
-</section>
-
-<!-- HYPOTHERMIA -->
-<section class="topic" id="hypothermia-continued">
-<h2 class="topic-title">🥶 نقص الحرارة — تفاصيل إضافية</h2>
-
-<h3 class="sub">درجات نقص الحرارة</h3>
+<h3 class="sub">معايير الخطورة (Glasgow-Blatchford Score)</h3>
 <table>
-<tr><th>الدرجة</th><th>الحرارة</th><th>الأعراض</th></tr>
-<tr><td>خفيفة</td><td>32-35°C</td><td>رعاد، هياج، تخليط بسيط</td></tr>
-<tr><td>متوسطة</td><td>28-32°C</td><td>سبات، جمود، نظم غير منتظم، بطء قلب شديد</td></tr>
-<tr><td>شديدة</td><td>&lt;28°C</td><td>فقد وعي كامل، توقف تنفس شبه كامل، رجفان بطيني</td></tr>
+<tr><th>المعيار</th><th>النقاط</th></tr>
+<tr><td>البولة (Urea) 6.5-8 ملمول/L</td><td>2</td></tr>
+<tr><td>البولة 8-10 ملمول/L</td><td>3</td></tr>
+<tr><td>البولة &gt;10 ملمول/L</td><td>4-6</td></tr>
+<tr><td>Hb ذكور 12-13 / إناث 10-12 غ/دل</td><td>1-3</td></tr>
+<tr><td>Hb ذكور &lt;10 / إناث &lt;10 غ/دل</td><td>6</td></tr>
+<tr><td>SBP انقباضي 100-109</td><td>1</td></tr>
+<tr><td>SBP انقباضي &lt;90</td><td>3</td></tr>
+<tr><td>نبض ≥100</td><td>1</td></tr>
+<tr><td>تغوط أسود (melena)</td><td>1</td></tr>
+<tr><td>إغماء (syncope)</td><td>2</td></tr>
+<tr><td>مرض كبدي</td><td>2</td></tr>
+<tr><td>قصور قلب</td><td>2</td></tr>
 </table>
-
-<h3 class="sub">المؤشرات الإيجابية للإعادة</h3>
-<ul>
-<li>عمر &lt;65 سنة (أفضل نوايا)</li>
-<li>فترة غمر قصيرة (&lt;15 دقيقة في الماء البارد جداً)</li>
-<li>pH &gt;6.5 (وليس &lt;6.5)</li>
-<li>عدم تلف شديد</li>
-</ul>
+<div class="note">النتيجة = 0: يمكن الخروج والمتابعة الخارجية. النتيجة ≥1: يحتاج تدخل (نقل دم/منظار/دخول مشفى).</div>
 
 </section>
 
@@ -730,8 +1212,6 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <br><b>التدبير:</b> بزل سريعة للتامور في أول دقائق → سيروم ملحي قبل البزل إذا انخفاض BP شديد.
 <br><b>موضع البزل:</b> (1) تحت القص (infra-xyphoid) الأكثر أماناً، (2) أو بين الضلعين الخامس/السادس على الخط الأوسط الترقوي (MCL).
 </div>
-
-</section>
 
 </section>
 
@@ -829,6 +1309,19 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <tr><td>إيكو</td><td>قصور قلبي</td><td>قلب طبيعي</td></tr>
 <tr><td>Chest X-ray</td><td>وذمة مركزية، خطوط Kerley</td><td>وذمة محيطية</td></tr>
 </table>
+
+<h3 class="sub">تصنيف الملف الهيموديناميكي (جاف/رطب — دافئ/بارد)</h3>
+<p>قيّم أولاً: هل يوجد <b>احتقان</b> (وداجي محتقن، خراخر رطبة، وذمات) وهل يوجد <b>سوء إرواء محيطي</b> (أطراف باردة، تخليط، قلة بول)؟</p>
+
+<table>
+<tr><th>النمط</th><th>الاحتقان</th><th>الإرواء</th><th>التدبير</th></tr>
+<tr><td><b>دافئ ورطب</b> (الأشيع 95%)</td><td>نعم</td><td>كافٍ</td><td>موسعات وعائية + مدرات عروة</td></tr>
+<tr><td><b>بارد ورطب</b></td><td>نعم</td><td>ناقص</td><td>إذا SBP&lt;90: دواعم قلوصية ± مقبضات وعائية، ثم مدرات بعد تحسن الإرواء</td></tr>
+<tr><td><b>دافئ وجاف</b></td><td>لا</td><td>كافٍ</td><td>عدّل العلاج الفموي</td></tr>
+<tr><td><b>بارد وجاف</b> (نادر 5%)</td><td>لا</td><td>ناقص</td><td>خذ بالاعتبار تحدي السوائل الحذر</td></tr>
+</table>
+
+<div class="note">95% من مرضى الوذمة الرئوية الحادة هم "رطبون" (احتقان)، و95% منهم دافئون (إرواء كافٍ) — لذا موسعات الأوعية + المدرات هي الخط الأول في الأغلبية الساحقة.</div>
 
 </section>
 
@@ -928,6 +1421,14 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 
 <div class="warn">لا تأخر الصادات بانتظار البزل. الصادات المبكرة تنقص الوفيات بـ 10-15%.</div>
 
+<h3 class="sub">تفريق أنواع التهاب السحايا حسب CSF</h3>
+<table>
+<tr><th>النوع</th><th>الخلايا</th><th>Glucose</th><th>Protein</th><th>ملاحظات</th></tr>
+<tr><td>جرثومي</td><td>عدلات (&gt;1000)</td><td>منخفض جداً</td><td>مرتفع جداً</td><td>إسعافي — صادات فوراً</td></tr>
+<tr><td>فيروسي (ودماغي)</td><td>لمفاويات</td><td>طبيعي غالباً</td><td>طبيعي أو مرتفع قليلاً</td><td>غالباً حميد، acyclovir إذا HSV مشتبه</td></tr>
+<tr><td>سلي (TB)</td><td>لمفاويات</td><td>منخفض</td><td>مرتفع جداً</td><td>بداية تحت حادة، علاج رباعي مطول</td></tr>
+</table>
+
 </section>
 
 <!-- HEAD TRAUMA -->
@@ -947,6 +1448,29 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <div class="flow-arrow">↓</div>
 <div class="flow-step"><b>C-spine imaging:</b> CT أفضل من X-rays</div>
 </div>
+
+<h3 class="sub">معايير إجراء الطبقي المحوري الفوري (خلال ساعة) — بالغين</h3>
+<ul>
+<li>GCS &lt;13 عند الفحص الأول، أو GCS &lt;15 بعد ساعتين من الإصابة</li>
+<li>اشتباه كسر جمجمة مفتوح أو منخسف</li>
+<li>أي علامة كسر قاعدة الجمجمة (نزف أذن، Battle's sign، Raccoon eyes، تسرب CSF من أنف/أذن)</li>
+<li>اختلاج بعد الرض</li>
+<li>عجز عصبي بؤري</li>
+<li>أكثر من نوبة إقياء واحدة</li>
+<li>فقدان وعي أو فقدان ذاكرة رجعي مع: عمر ≥65، اضطراب تخثر/مميعات، آلية رض خطيرة (سقوط &gt;1م أو 5 درجات، حادث سيارة عالي السرعة)</li>
+</ul>
+
+<h3 class="sub">معايير الطبقي المحوري — الأطفال (&lt;16 سنة)</h3>
+<ul>
+<li>اشتباه إصابة غير حادثة (non-accidental injury)</li>
+<li>اختلاج بعد الرض بدون صرع معروف</li>
+<li>GCS &lt;14 (أو &lt;15 عند الرضع &lt;1 سنة)</li>
+<li>عند إعادة التقييم بالمشفى: GCS &lt;15</li>
+<li>اشتباه كسر جمجمة مفتوح/منخسف أو علامات كسر قاعدة الجمجمة</li>
+<li>عجز عصبي بؤري</li>
+<li>عند الرضع: كدمة/تورم/جرح فروة رأس &gt;5 سم</li>
+<li>آلية خطيرة: حادث سيارة عالي السرعة، سقوط من ارتفاع &gt;3م، إصابة عالية السرعة بجسم</li>
+</ul>
 
 <h3 class="sub">المضاعفات الطارئة</h3>
 
@@ -1010,6 +1534,16 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <li>Encephalitis أو Meningitis</li>
 </ul>
 
+<h3 class="sub">متلازمات الانفتاق الدماغي (Herniation Syndromes)</h3>
+<table>
+<tr><th>النوع</th><th>الآلية</th><th>العلامات</th></tr>
+<tr><td>الانفتاق الصدغي (Uncal)</td><td>الفص الصدغي يضغط على العصب القحفي الثالث</td><td>توسع حدقة أحادي الجانب (ipsilateral) + شلل نصفي مقابل + هبوط وعي سريع</td></tr>
+<tr><td>الانفتاق اللوزي (Tonsillar)</td><td>لوزتا المخيخ تنضغطان عبر الثقبة العظمى</td><td>اضطراب تنفس مفاجئ، سكتة قلبية — إسعافي قصوى</td></tr>
+<tr><td>الانفتاق المركزي (Central/Transtentorial)</td><td>ضغط منتشر على جذع الدماغ</td><td>هبوط وعي تدريجي، تنفس Cheyne-Stokes، حدقتان صغيرتان ثم متوسعتان</td></tr>
+</table>
+
+<div class="warn">توسع حدقة مفاجئ أحادي الجانب = علامة إنذارية للانفتاق الصدغي — يتطلب Mannitol/Hypertonic saline فوري + استشارة جراحة أعصاب عاجلة.</div>
+
 </section>
 
 <!-- HHS -->
@@ -1046,7 +1580,6 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 
 </section>
 
-</main>
 <section class="topic" id="chest-pain">
 <h2 class="topic-title">💢 خوارزمية تقييم ألم الصدر الحاد <span class="upd">ESC 2024</span></h2>
 
@@ -1075,10 +1608,10 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 
 <!-- SVT -->
 <section class="topic" id="svt">
-<h2 class="topic-title">⚡ عدم انتظام فوق البطيني السريع (SVT) <span class="upd">ACC 2024</span></h2>
+<h2 class="topic-title">⚡ تسرع فوق بطيني (SVT) <span class="upd">ESC 2019</span></h2>
 
 <h3 class="sub">التعريف والتدبير</h3>
-<p><b>SVT:</b> نبض &gt;150 منتظم، السبب: reentrant (60%) أو accessory pathway (WPW 30%).</p>
+<p><b>تسرع فوق بطيني:</b> نبض &gt;150 منتظم، السبب: reentrant عقدي AVNRT (60%) أو مسلك إضافي AVRT/WPW (30%) أو تسرع أذيني.</p>
 
 <div class="flow">
 <div class="flow-step">تخطيط قلبي + IV access</div>
@@ -1087,10 +1620,22 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <div class="flow-arrow">↓</div>
 <div class="flow-step"><b>Adenosine:</b> 6 ملغ IV rapid، كرر 12 ملغ بعد دقيقة</div>
 <div class="flow-arrow">↓</div>
-<div class="flow-step">إذا فشل: Verapamil 5-10 ملغ IV</div>
+<div class="flow-step">إذا فشل: Verapamil 5-10 ملغ IV (تجنبه مع WPW + AF)</div>
 <div class="flow-arrow">↓</div>
 <div class="flow-step">إذا hemodynamic instability: cardioversion synchronized 100 J</div>
 </div>
+
+<h3 class="sub">تصنيف التسرعات فوق البطينية (ESC 2019)</h3>
+<table>
+<tr><th>النوع</th><th>الآلية</th><th>العلاج الأساسي</th></tr>
+<tr><td>التسرع الجيبي غير الملائم</td><td>زيادة أتمتة العقدة الجيبية</td><td>Beta-blocker أو Ivabradine</td></tr>
+<tr><td>تسرع عود الدخول بالعقدة الجيبية</td><td>Reentry داخل العقدة الجيبية</td><td>Vagal maneuvers، Adenosine</td></tr>
+<tr><td>التسرع الأذيني وحيد البؤرة</td><td>بؤرة أذينية منفردة</td><td>Beta-blocker، cardioversion إذا غير مستقر</td></tr>
+<tr><td>التسرع الأذيني عديد البؤر</td><td>بؤر أذينية متعددة (غالباً COPD)</td><td>علاج المرض الأساسي + Verapamil/Diltiazem (تجنب Adenosine)</td></tr>
+<tr><td>متلازمة تسرع القلب الانتصابي الوضعي (POTS)</td><td>خلل استقلال عصبي</td><td>سوائل + ضغط أطراف سفلية + Beta-blocker بجرعة منخفضة</td></tr>
+</table>
+
+<div class="note">التسرع الأذيني عديد البؤر (MFAT) لا يستجيب على Adenosine أو Cardioversion لأنه ليس آلية reentry — العلاج الأساسي معالجة السبب الرئوي.</div>
 
 </section>
 
@@ -1154,6 +1699,15 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 
 <h3 class="sub">الحماية والتدبير</h3>
 
+<h3 class="sub">قاعدة كندا لتصوير عنق الرقبة (Canadian C-Spine Rule)</h3>
+<div class="flow">
+<div class="flow-step"><b>الخطوة 1 — عوامل خطر عالية (توجب التصوير مباشرة):</b> عمر ≥65، آلية خطيرة (سقوط من ارتفاع، حادث سيارة عالي السرعة، اصطدام دراجة)، تنميل/خدر بالأطراف</div>
+<div class="flow-arrow">↓ إذا لا يوجد</div>
+<div class="flow-step"><b>الخطوة 2 — عوامل خطر منخفضة (تسمح بفحص حركة الرقبة):</b> حادث سيارة بسيط من الخلف، وضعية جالسة بالإسعاف، مشي بعد الحادثة بشكل طبيعي، بداية ألم متأخرة، عدم وجود إيلام بخط الوسط للرقبة</div>
+<div class="flow-arrow">↓ إذا وجد عامل واحد على الأقل</div>
+<div class="flow-step"><b>الخطوة 3:</b> اطلب من المريض تدوير الرقبة 45° يميناً ويساراً بأمان — إذا استطاع بدون ألم: لا حاجة للتصوير. إذا تعذر أو وجد ألم: صوّر</div>
+</div>
+
 <div class="flow">
 <div class="flow-step">C-spine collar + backboard لحين الاستبعاد</div>
 <div class="flow-arrow">↓</div>
@@ -1165,6 +1719,13 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <div class="flow-arrow">↓</div>
 <div class="flow-step">قد تحتاج جراحة decompression</div>
 </div>
+
+<h3 class="sub">تسكين الألم عند رض العمود الفقري</h3>
+<ul>
+<li><b>الخط الأول:</b> مورفين IV بجرعات متدرجة (titration) 2-4 ملغ كل 5-10 دقائق حتى السيطرة على الألم</li>
+<li><b>بديل:</b> Diamorphine IV أو Ketamine بجرعة منخفضة (analgesic dose) عند عدم كفاية المورفين أو مقاومة الألم</li>
+<li>راقب التنفس وBP عن كثب عند استخدام مسكنات أفيونية بجرعات متكررة</li>
+</ul>
 
 </section>
 
@@ -1184,6 +1745,33 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <div class="flow-step">أشعة: X-ray (free air) ثم Ultrasound/CT حسب الاشتباه</div>
 <div class="flow-arrow">↓</div>
 <div class="flow-step">IV access × 2، سوائل، صادات إذا مشبوهة عدوى</div>
+</div>
+
+<h3 class="sub">التشخيص التفريقي حسب موقع وصفة الألم</h3>
+<table>
+<tr><th>السبب</th><th>الموقع/الانتشار</th><th>الصفة</th><th>ملاحظة مميزة</th></tr>
+<tr><td>التهاب الزائدة</td><td>حول السرة ثم حفرة حرقفية يمنى</td><td>مبرح تدريجي</td><td>Rovsing's sign، إيلام مرتد موضع</td></tr>
+<tr><td>التهاب المرارة الحاد</td><td>مراق أيمن ينتشر للكتف</td><td>عاصر حاد</td><td>Murphy's sign، إيكو بطن</td></tr>
+<tr><td>التهاب البنكرياس الحاد</td><td>شرسوفي ينتشر للظهر</td><td>مضجر مبرح</td><td>Lipase مرتفع، قد يكون شديد مع صدمة</td></tr>
+<tr><td>التهاب الرتوج</td><td>حفرة حرقفية يسرى</td><td>مبرح تدريجي</td><td>الأشيع كسبب لألم الحفرة اليسرى</td></tr>
+<tr><td>قرحة مثقوبة</td><td>شرسوفي ثم منتشر</td><td>حارق مفاجئ</td><td>هواء حر على الصورة الشعاعية</td></tr>
+<tr><td>انسداد الأمعاء</td><td>حول السرة منتشر</td><td>ماغص متقطع</td><td>غثيان، توقف خروج الغازات، تطبل</td></tr>
+<tr><td>الاحتشاء المساريقي</td><td>حول السرة منتشر</td><td>مبرح معذب مفاجئ</td><td>ألم لا يتناسب مع الفحص السريري</td></tr>
+<tr><td>تمزق أم دم الأبهر</td><td>بطن/ظهر/خاصرة منتشر</td><td>ممزق مفاجئ</td><td>عدم استقرار هيموديناميكي — إسعافي قصوى</td></tr>
+<tr><td>الحمل الهاجر الممزق</td><td>حوضي/حفرة يسرى أو يمنى</td><td>مبرح حاد مفاجئ</td><td>beta-hCG + إيكو حوض إسعافي</td></tr>
+</table>
+
+<h3 class="sub">خوارزمية القرار الأولي</h3>
+<div class="flow">
+<div class="flow-step">عدم استقرار هيموديناميكي؟ ← نعم: ABC + استشارة جراحة إسعافية + FAST + تحضير لفتح بطن</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">إيلام حفرة حرقفية يمنى + إيلام مرتد موضع؟ ← طبقي محوري بروتوكول الزائدة (عند النساء: إيكو حوض أولاً)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">ألم مراق أيمن قولنجي بعد الطعام؟ ← إيكو بطن (بحث عن حصيات/التهاب مرارة)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">غثيان وإقياء وتوقف خروج وتطبل مع سوابق جراحة؟ ← صورة بطن واقفة أو طبقي محوري (انسداد أمعاء)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">ألم منتشر معمم + إيلام مرتد منتشر؟ ← التهاب بريتوان — جراحة إسعافية</div>
 </div>
 
 </section>
@@ -1244,6 +1832,35 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 
 <div class="warn">لا Aspirin - قد يزيد T3/T4 free!</div>
 
+<h3 class="sub">سبات الوذمة المخاطية (Myxedema Coma)</h3>
+<p>الطرف الآخر من طيف اضطرابات الغدة الدرقية الإسعافية — <b>قصور درقية حاد شديد ومهدد للحياة</b>. أشيع عند النساء المسنات، غالباً بعد عامل محرض (عدوى، برد، أدوية مهدئة).</p>
+
+<h3 class="sub">الأعراض المميزة</h3>
+<ul>
+<li>هبوط حرارة الجسم (hypothermia) دون قشعريرة</li>
+<li>تغيّم الوعي يتدرج حتى السبات</li>
+<li>بطء قلب + انخفاض BP</li>
+<li>بطء تنفس مع احتباس CO2</li>
+<li>نقص صوديوم ونقص سكر دم</li>
+</ul>
+
+<h3 class="sub">التدبير الإسعافي</h3>
+<div class="flow">
+<div class="flow-step">دعم تنفسي (قد يحتاج تنبيب لبطء التنفس الشديد)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step"><b>هيدروكورتيزون:</b> 100 ملغ IV أولاً (قبل هرمون الدرقية دائماً — لتفادي أزمة كظرية مصاحبة)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step"><b>Levothyroxine (T4):</b> جرعة تحميل IV، ثم جرعة يومية أقل</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">قد يضاف Liothyronine (T3) في الحالات الشديدة جداً</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">تدفئة سلبية بطيئة (بطانيات) — تجنب التدفئة الفعالة السريعة (قد تسبب انخماص وعائي)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">تصحيح نقص الصوديوم ونقص السكر بحذر</div>
+</div>
+
+<div class="warn">لا تعطِ هرمون الدرقية قبل الهيدروكورتيزون — قد يسرّع استقلاب الكورتيزول المتبقي ويسبب أزمة كظرية حادة.</div>
+
 </section>
 
 <!-- ADRENAL CRISIS -->
@@ -1277,6 +1894,303 @@ table th{background:var(--panel2);color:var(--accent2);font-weight:700}
 <li><b>Esophageal:</b> Endoscopy للإزالة (احذر perforation)</li>
 <li><b>Gastric:</b> Observation 4 أسابيع، endoscopy إذا sharp أو لم تتحرك</li>
 </ul>
+
+</section>
+
+<!-- ACUTE AF -->
+<section class="topic" id="acute-af">
+<h2 class="topic-title">💓 نوبة الرجفان الأذيني الحاد (Acute AF with RVR) <span class="upd">ESC 2024</span></h2>
+
+<h3 class="sub">التعريف والتقييم الأولي</h3>
+<p><b>الرجفان الأذيني:</b> نظم أذيني فوضوي غير منتظم تماماً (irregularly irregular) مع فقدان موجة P. عند تسارع الاستجابة البطينية (RVR) &gt;110-120 نبضة/دقيقة يصبح إسعافياً.</p>
+
+<h3 class="sub">خوارزمية القرار: تحكم بالنظم أم بالمعدل؟</h3>
+<div class="flow">
+<div class="flow-step"><b>اضطراب هيموديناميكي</b> (BP منخفض، وذمة رئة، ألم صدري إقفاري، هبوط وعي)؟</div>
+<div class="flow-arrow">↓ نعم</div>
+<div class="flow-step"><b>Cardioversion كهربائي متزامن فوري</b> (100-200 J) — لا تنتظر مضاد التخثر</div>
+<div class="flow-arrow">↓ لا (مستقر)</div>
+<div class="flow-step">حدد مدة النوبة: <b>أقل من 48 ساعة</b> أو <b>غير معروفة/أكثر من 48 ساعة</b></div>
+</div>
+
+<h3 class="sub">إذا مستقر — حسب مدة النوبة</h3>
+<table>
+<tr><th>المدة</th><th>القرار</th></tr>
+<tr><td>&lt;48 ساعة (مؤكدة)</td><td>يمكن cardioversion (كهربائي أو دوائي) مباشرة دون حاجة انتظار مضاد تخثر مسبق</td></tr>
+<tr><td>&gt;48 ساعة أو غير معروفة</td><td>لا cardioversion فوري (خطر انصمام) — تحكم بالمعدل + مضاد تخثر ± إيكو عبر المريء لاستبعاد خثرة قبل أي محاولة تحويل</td></tr>
+</table>
+
+<h3 class="sub">تحكم بالمعدل (Rate Control)</h3>
+<ul>
+<li><b>الخط الأول:</b> Beta-blocker — Metoprolol 2.5-5 ملغ IV كل 5 دقائق (حتى 15 ملغ) أو Esmolol infusion</li>
+<li><b>بديل:</b> Diltiazem 0.25 ملغ/كغ IV على 2 دقيقة، ثم infusion (تجنب مع قصور قلب شديد EF منخفض)</li>
+<li><b>عند قصور القلب/EF منخفض:</b> Digoxin أو Amiodarone بدلاً من حاصرات الكالسيوم</li>
+<li>الهدف: معدل قلب &lt;110 نبضة/دقيقة</li>
+</ul>
+
+<h3 class="sub">مضاد التخثر — نقاط سريعة (CHA₂DS₂-VASc)</h3>
+<p>يُقيَّم كل مريض AF لخطر السكتة: قصور قلب، ارتفاع ضغط، عمر≥75 (نقطتان)، سكري، سكتة سابقة (نقطتان)، مرض وعائي، عمر 65-74، جنس أنثى. نقطة ≥2 عند الرجال أو ≥3 عند النساء → مضاد تخثر مزمن (DOAC أو وارفارين).</p>
+
+<div class="warn">لا تُقدِم على cardioversion لمريض AF مستقر تتجاوز نوبته 48 ساعة أو مجهولة المدة دون تقييم خطر الخثرة أولاً — خطر انصمام دماغي حقيقي.</div>
+
+</section>
+
+<!-- BURNS -->
+<section class="topic" id="burns">
+<h2 class="topic-title">🔥 الحروق الحادة (Burns) <span class="upd">ABA 2024</span></h2>
+
+<h3 class="sub">التقييم الأولي (ABC + C للحرق)</h3>
+<div class="flow">
+<div class="flow-step">أوقف عملية الحرق (أبعد الملابس المحترقة، برّد بماء فاتر 10-20 دقيقة — لا ماء مثلج)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">قيّم مجرى الهواء: حروق الوجه/الشعر الأنفي/بحة صوت/سخام بالبلعوم = خطر إصابة استنشاقية → تنبيب مبكر قبل تطور الوذمة</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">قيّم نسبة مساحة سطح الجسم المحروقة (%TBSA) بقاعدة التسعات (Rule of Nines)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">حدد عمق الحرق ودرجته</div>
+</div>
+
+<h3 class="sub">قاعدة التسعات (Rule of Nines) — البالغين</h3>
+<table>
+<tr><th>المنطقة</th><th>النسبة</th></tr>
+<tr><td>الرأس والعنق</td><td>9%</td></tr>
+<tr><td>كل طرف علوي</td><td>9%</td></tr>
+<tr><td>الجذع الأمامي</td><td>18%</td></tr>
+<tr><td>الجذع الخلفي</td><td>18%</td></tr>
+<tr><td>كل طرف سفلي</td><td>18%</td></tr>
+<tr><td>الأعضاء التناسلية</td><td>1%</td></tr>
+</table>
+
+<h3 class="sub">تصنيف عمق الحرق</h3>
+<table>
+<tr><th>الدرجة</th><th>الوصف</th><th>المظهر</th></tr>
+<tr><td>سطحي (أول)</td><td>البشرة فقط</td><td>احمرار مؤلم بدون فقاعات (مثل حرق الشمس)</td></tr>
+<tr><td>جزئي سطحي (ثاني سطحي)</td><td>البشرة + جزء من الأدمة</td><td>فقاعات، مؤلم جداً، احمرار فاتح</td></tr>
+<tr><td>جزئي عميق (ثاني عميق)</td><td>معظم الأدمة</td><td>لون أبيض رخامي، ألم أقل (تأذي أعصاب)</td></tr>
+<tr><td>كامل السماكة (ثالث)</td><td>كامل الجلد</td><td>لون أبيض شمعي أو أسود متفحم، غير مؤلم (تخرب أعصاب)</td></tr>
+</table>
+
+<h3 class="sub">معادلة السوائل (Parkland Formula)</h3>
+<div class="card">
+<b>الحجم الكلي (24 ساعة) = 4 مل × وزن (كغ) × %TBSA</b>
+<br>يُعطى <b>نصف الكمية في أول 8 ساعات</b> من وقت الحرق (وليس وصول المريض)، والنصف الآخر خلال 16 ساعة المتبقية.
+<br>محلول: Lactated Ringer's (يُفضّل على السيروم الملحي العادي لتجنب الحماض فرط الكلوري)
+</div>
+
+<h3 class="sub">معايير التحويل لمركز حروق متخصص</h3>
+<ul>
+<li>حروق كاملة السماكة &gt;5% من سطح الجسم</li>
+<li>حروق جزئية &gt;10% من سطح الجسم عند أي عمر، أو أي نسبة عند الأطفال/المسنين</li>
+<li>حروق الوجه، اليدين، القدمين، الأعضاء التناسلية، المفاصل الكبرى</li>
+<li>حروق كهربائية أو كيميائية</li>
+<li>إصابة استنشاقية مرافقة</li>
+<li>حرق مع رض مرافق أو أمراض مزمنة معقدة</li>
+</ul>
+
+<div class="warn">لا تضع الثلج مباشرة على الحرق (يزيد تلف الأنسجة). لا تفقأ الفقاعات في الإسعاف الأولي. غطِّ الحرق بشاش نظيف جاف أو مبلل رطب معقم.</div>
+
+</section>
+
+<!-- ELECTRICAL INJURY -->
+<section class="topic" id="electrical-injury">
+<h2 class="topic-title">⚡ الصعق الكهربائي والصاعقة <span class="upd">ACEP 2024</span></h2>
+
+<h3 class="sub">المبادئ الأساسية</h3>
+<p>الإصابة الكهربائية قد تسبب أذية داخلية شديدة (عضلات، قلب، أعصاب) رغم أن الحرق الجلدي الظاهر قد يكون بسيطاً — "جبل الجليد الكهربائي".</p>
+
+<h3 class="sub">التدبير الإسعافي</h3>
+<div class="flow">
+<div class="flow-step">تأكد من فصل مصدر التيار قبل الاقتراب من المصاب (سلامة المسعف أولاً)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">ABC + مراقبة قلبية مستمرة (خطر اضطراب نظم فوري ولاحق)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">تخطيط قلب لكل المرضى — حتى لو بدون أعراض</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">فحص نقاط الدخول والخروج للتيار (تساعد بتقدير مسار الأذية الداخلية)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">راقب علامات انحلال الربيدات: CK، بول داكن، وظائف كلى</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">سوائل IV سخية إذا انحلال ربيدات (هدف إدرار بولي عالٍ لحماية الكلى)</div>
+</div>
+
+<h3 class="sub">إصابة الصاعقة (Lightning) — خصوصية</h3>
+<ul>
+<li>غالباً تسبب سكتة قلبية فورية (asystole) قد تنتكس تلقائياً — لكن الشلل التنفسي المرافق يطول أكثر فيسبب سكتة قلبية ثانوية بنقص الأكسجة</li>
+<li><b>قاعدة Reverse Triage:</b> عند إصابات جماعية بالصاعقة، عالج "الموتى ظاهرياً" (سكتة قلبية) أولاً — لأن فرصة الإنعاش الناجح عالية بعكس الرض العادي</li>
+<li>راقب لظهور Keraunoparalysis (شلل مؤقت بالأطراف، يتحسن عادة تلقائياً)</li>
+</ul>
+
+<h3 class="sub">معايير القبول والمراقبة</h3>
+<ul>
+<li>تيار عالي الفولتية (&gt;1000 فولت) أو فقدان وعي أو اضطراب نظم على ECG → قبول للمراقبة القلبية 24 ساعة</li>
+<li>تيار منزلي منخفض الفولتية بدون أعراض وECG طبيعي → يمكن الخروج بعد مراقبة قصيرة</li>
+</ul>
+
+</section>
+
+<!-- DROWNING -->
+<section class="topic" id="drowning">
+<h2 class="topic-title">🌊 الغرق (Drowning) <span class="upd">ILCOR 2024</span></h2>
+
+<h3 class="sub">التعريف والفيزيولوجيا المرضية</h3>
+<p><b>الغرق:</b> ضعف تنفسي ناتج عن غمر/انغماس بسائل. المشكلة الأساسية هي <b>نقص الأكسجة</b> الناتج عن استنشاق الماء أو تشنج الحنجرة — وليس "الماء بالرئتين" كسبب رئيسي دائماً.</p>
+
+<h3 class="sub">التدبير الإسعافي</h3>
+<div class="flow">
+<div class="flow-step">أخرج المصاب من الماء بأسرع وأأمن طريقة (احذر إصابة عنق مرافقة عند الغوص/القفز)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step"><b>ABC معكوس الأولوية قليلاً:</b> ابدأ بالتهوية (5 نفخات إنقاذ أولاً) قبل ضغطات الصدر لأن السبب الأساسي نقص الأكسجة</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">أكسجين عالي التدفق للجميع، حتى مع أعراض خفيفة</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">لا تحاول تفريغ الماء من الرئتين (مناورة Heimlich غير مفيدة هنا وقد تؤخر الإنعاش)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">راقب لتطور الوذمة الرئوية غير القلبية (قد تظهر متأخرة حتى 4-6 ساعات)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">صحح نقص الحرارة المرافق غالباً (خاصة بالماء البارد)</div>
+</div>
+
+<h3 class="sub">معايير المراقبة والخروج</h3>
+<ul>
+<li>مريض عديم الأعراض تماماً مع فحص وSpO2 طبيعيين بعد 6-8 ساعات مراقبة → يمكن الخروج</li>
+<li>أي سعال، صفير، نقص أكسجة، أو تغيّم وعي → قبول للمراقبة والمشاهدة للوذمة الرئوية المتأخرة</li>
+</ul>
+
+<div class="note">"غرق جاف" و"غرق ثانوي" مصطلحات قديمة غير دقيقة علمياً — التصنيف الحديث يعتمد فقط على وجود/عدم وجود أعراض تنفسية عند التقييم وخلال فترة المراقبة.</div>
+
+</section>
+
+<!-- HEAT STROKE -->
+<section class="topic" id="heat-stroke">
+<h2 class="topic-title">☀️ ضربة الحرارة (Heat Stroke) <span class="upd">ACEP 2024</span></h2>
+
+<h3 class="sub">التعريف والتصنيف</h3>
+<table>
+<tr><th>الحالة</th><th>الحرارة المركزية</th><th>الوعي</th></tr>
+<tr><td>الإنهاك الحراري (Heat Exhaustion)</td><td>&lt;40°C</td><td>طبيعي، قد يكون تعب/دوخة</td></tr>
+<tr><td>ضربة الحرارة (Heat Stroke)</td><td>&gt;40°C</td><td>اضطراب عصبي (تخليط، اختلاج، سبات)</td></tr>
+</table>
+
+<p><b>ضربة الحرارة الجهدية</b> (Exertional): شباب رياضيون، تطور سريع. <b>ضربة الحرارة غير الجهدية</b> (Classic): مسنون/أمراض مزمنة، طقس حار، تطور تدريجي.</p>
+
+<h3 class="sub">التدبير الإسعافي — الأولوية القصوى: التبريد السريع</h3>
+<div class="flow">
+<div class="flow-step">ABC + أكسجين + مراقبة قلبية</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step"><b>التبريد الفوري:</b> الغمر بماء بارد/جليدي (Cold water immersion) — الطريقة الأسرع والأفعل، الهدف خفض الحرارة لـ &lt;39°C خلال 30 دقيقة</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">إذا تعذر الغمر: رش بماء فاتر + مراوح قوية (تبخير) + كمادات ثلج على الرقبة/الإبطين/الأربية</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">سوائل IV سيروم ملحي بارد إذا أمكن</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">راقب: وظائف كلى (خطر AKI)، CK (انحلال ربيدات)، تخثر (خطر DIC)، كبد</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">أوقف التبريد الفعّال عند وصول الحرارة لـ 38.5-39°C (تجنب فرط التبريد الارتدادي)</div>
+</div>
+
+<div class="warn">لا تستخدم خافضات الحرارة الدوائية (Acetaminophen/NSAIDs) — لا فائدة لها في ضربة الحرارة (ليست حمى بآلية مركزية) وقد تضر الكبد/الكلى المتأذيين أصلاً. التبريد الفيزيائي السريع هو العلاج الوحيد الفعّال.</div>
+
+</section>
+
+<!-- ENVENOMATION -->
+<section class="topic" id="envenomation">
+<h2 class="topic-title">🐍 لدغات الأفاعي والحشرات (Envenomation) <span class="upd">WHO 2024</span></h2>
+
+<h3 class="sub">لدغة الأفعى</h3>
+<div class="flow">
+<div class="flow-step">طمئن المريض (القلق يسرّع انتشار السم)، ثبّت الطرف المصاب بمستوى القلب أو أخفض قليلاً</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">أزل أي مجوهرات/أشياء ضاغطة من الطرف قبل التورم</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">لف ضماد ضاغط غير محكم بضغط خفيف (Pressure immobilization) فقط لأنواع أفاعي عصبية السمية — لا يُنصح به عالمياً لكل الأنواع</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">راقب علامات السمية: تورم متصاعد، اضطراب تخثر (نزف لثة/دم بالبول)، أعراض عصبية (تدلي جفن، ضعف عضلي، صعوبة بلع)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step"><b>مصل مضاد السم (Antivenom):</b> يُعطى عند علامات سمية جهازية أو تطور موضعي سريع — بعد اختبار حساسية إن توفر</div>
+</div>
+
+<h3 class="sub">الممنوعات في إسعاف لدغة الأفعى</h3>
+<ul>
+<li>❌ لا تشق الجرح أو تحاول مص السم</li>
+<li>❌ لا تربط عاصبة (Tourniquet) محكمة — تسبب نخر بالطرف</li>
+<li>❌ لا تضع ثلجاً مباشرة على مكان اللدغة</li>
+<li>❌ لا تعطِ أدوية مضادة للالتهاب (Aspirin/NSAIDs) — تزيد خطر النزف مع اضطراب التخثر</li>
+</ul>
+
+<h3 class="sub">لدغات ولسعات الحشرات (عقرب، نحل، دبور)</h3>
+<div class="card">
+<b>لدغة العقرب:</b> ألم موضعي شديد ± أعراض جهازية عصبية (عند الأنواع الخطيرة: تعرق، سيلان لعاب، تشنجات) — علاج داعم، مصل مضاد إذا توفر ومتوفرة عند أعراض جهازية.
+<br><b>لسعة نحل/دبور:</b> أزل الإبرة بالكشط (لا بالضغط لتفادي حقن مزيد من السم) — راقب فوراً لعلامات التأق (انظر قسم التأق) خاصة عند تحسس سابق أو لسعات متعددة.
+</div>
+
+<div class="warn">أي علامة تأق (صعوبة تنفس، تورم وجه/شفاه، هبوط ضغط) بعد أي لدغة أو لسعة = أدرينالين فوراً بغض النظر عن نوع اللدغة (انظر بروتوكول التأق).</div>
+
+</section>
+
+<!-- DRUG OVERDOSE / TOXIDROMES -->
+<section class="topic" id="overdose">
+<h2 class="topic-title">💊 التسمم الدوائي والجرعة الزائدة (Toxidromes) <span class="upd">ACMT 2024</span></h2>
+
+<h3 class="sub">المبادئ العامة</h3>
+<div class="flow">
+<div class="flow-step">ABC أولاً — استقرار المريض قبل أي محاولة تشخيص نوعي للسم</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">تحديد المتلازمة السمية (Toxidrome) من الفحص السريري + التاريخ + أدوية بمكان الحادثة</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">فحوصات: سكر دم (إلزامي لكل مريض بتغيّم وعي)، ECG (QRS/QT)، باراسيتامول وساليسيلات دموي (حتى بدون شبهة مباشرة)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">فحم فعال (Activated Charcoal) 1 غ/كغ فموي/أنبوب أنفي معدي — الأفضل خلال ساعة من الابتلاع وعند مجرى هوائي محمي</div>
+</div>
+
+<h3 class="sub">المتلازمات السمية الرئيسية (Toxidromes)</h3>
+<table>
+<tr><th>المتلازمة</th><th>العلامات</th><th>الترياق</th></tr>
+<tr><td>أفيونات (Opioid)</td><td>تقبض حدقات، بطء تنفس، هبوط وعي</td><td>Naloxone 0.4-2 ملغ IV/IM/IN، كرر حسب الاستجابة</td></tr>
+<tr><td>بنزوديازيبين</td><td>هبوط وعي، بطء تنفس أخف من الأفيونات</td><td>عادة داعم فقط — Flumazenil نادراً (خطر اختلاج عند إدمان مزمن)</td></tr>
+<tr><td>مضاد كولين (Anticholinergic)</td><td>توسع حدقات، جفاف جلد، احمرار، تسرع قلب، هذيان ("عمياء كالخفاش، جافة كالعظم، حمراء كالشمندر، مجنونة كقبعة")</td><td>داعم، بنزوديازيبين للهياج، Physostigmine بحالات مختارة</td></tr>
+<tr><td>كوليني (Cholinergic — منظمات فوسفورية)</td><td>سيلان لعاب، تعرق، تقبض حدقات، بطء قلب، تشنجات</td><td>Atropine بجرعات متصاعدة + Pralidoxime</td></tr>
+<tr><td>مضادات اكتئاب ثلاثية الحلقات (TCA)</td><td>QRS متسع، هبوط ضغط، اختلاج، اضطراب نظم</td><td>Sodium bicarbonate IV bolus (يضيّق QRS ويحمي القلب)</td></tr>
+<tr><td>سيروتونيني (Serotonin Syndrome)</td><td>هياج، رمع عضلي (clonus)، فرط منعكسات، ارتفاع حرارة</td><td>بنزوديازيبين + Cyproheptadine بالحالات الشديدة</td></tr>
+<tr><td>ساليسيلات (Aspirin)</td><td>طنين أذن، فرط تنفس، حماض استقلابي + قلاء تنفسي مختلط</td><td>Sodium bicarbonate (قلونة البول لزيادة الطرح) ± غسيل كلوي بالحالات الشديدة</td></tr>
+<tr><td>أسيتامينوفن (Paracetamol)</td><td>غالباً بدون أعراض بالبداية! سمية كبدية متأخرة 24-72 ساعة</td><td>N-acetylcysteine (NAC) — يُعطى حسب مخطط Rumack-Matthew من مستوى الدم بعد 4 ساعات</td></tr>
+</table>
+
+<div class="warn">التسمم بالأسيتامينوفن خطير تحديداً لأن المريض قد يبدو بصحة جيدة تماماً بأول 24 ساعة بينما التخرب الكبدي جارٍ بصمت — لا تنتظر الأعراض لطلب المستوى الدموي وبدء NAC.</div>
+
+</section>
+
+<!-- ACUTE LIMB ISCHEMIA -->
+<section class="topic" id="acute-limb-ischemia">
+<h2 class="topic-title">🦵 إقفار الطرف الحاد (Acute Limb Ischemia) <span class="upd">ESVS 2024</span></h2>
+
+<h3 class="sub">التعريف والأسباب</h3>
+<p><b>إقفار الطرف الحاد:</b> انقطاع مفاجئ بالتروية الشريانية للطرف — إسعافي قصوى (نافذة ذهبية 6 ساعات لإنقاذ الطرف). الأسباب: صمة قلبية المنشأ (رجفان أذيني الأشيع)، خثرة على لويحة تصلب عصيدي، تسلخ أبهر ممتد.</p>
+
+<h3 class="sub">العلامات الست الكلاسيكية (6 P's)</h3>
+<table>
+<tr><th>العلامة</th><th>بالعربية</th></tr>
+<tr><td>Pain</td><td>ألم مفاجئ شديد</td></tr>
+<tr><td>Pallor</td><td>شحوب</td></tr>
+<tr><td>Pulselessness</td><td>غياب النبض المحيطي</td></tr>
+<tr><td>Paresthesia</td><td>تنميل/خدر (علامة إنذارية مبكرة لتأذي عصبي)</td></tr>
+<tr><td>Paralysis</td><td>شلل حركي (علامة متأخرة خطيرة — يهدد بقاء الطرف)</td></tr>
+<tr><td>Poikilothermia</td><td>برودة الطرف مقارنة بالسليم</td></tr>
+</table>
+
+<h3 class="sub">التدبير الإسعافي</h3>
+<div class="flow">
+<div class="flow-step">مضاد تخثر فوري: Heparin IV bolus (80 وحدة/كغ) ثم infusion — لا تؤخر بانتظار التصوير</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">استشارة جراحة وعائية إسعافية فورية</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">تصوير دوبلر/CT angiography لتحديد موقع الانسداد (لا يؤخر التدخين الجراحي عند شلل حركي)</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">التدخل: استئصال الخثرة الجراحي (Embolectomy)، أو تحليل الخثرة عبر القثطرة (Catheter thrombolysis)، أو مجازة وعائية حسب الحالة</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">راقب بعد إعادة التروية: متلازمة إعادة التروية (فرط بوتاسيوم، انحلال ربيدات، حماض)</div>
+</div>
+
+<div class="warn">وجود شلل حركي أو فقدان حس عميق = علامة تهدد بقاء الطرف خلال ساعات — إسعافي جراحي فوري، لا وقت لانتظار مواعيد التصوير الروتينية.</div>
 
 </section>
 
@@ -1362,84 +2276,32 @@ function doSearch(query){
 
 document.getElementById('searchInput').addEventListener('keyup', (e)=>doSearch(e.target.value));
 </script>
-</body>
-</html>
-</main>
-</div>
 
-<script src="supabase.js"></script>
 <script>
-(async function(){
-  try{
-    const u = JSON.parse(localStorage.getItem("currentUser"));
-    const tb = document.getElementById("topBarNav");
-    if(u && u.is_admin){
-      tb.innerHTML = '<a href="subscription.html" class="btn-primary">📋 خطط</a><a href="admin.html" style="color:#f59e0b;border-color:#f59e0b">🎛️ لوحة التحكم</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" style="color:#ef4444;border-color:#ef4444">خروج</a>';
-      return;
-    }
-    if(u){
-      const isSubscribed = await session.isSubscribed();
-      if(isSubscribed){
-        tb.innerHTML = '<a href="subscription.html" class="btn-primary">📋 اشتراكي</a><a href="profile.html">👤 ' + u.name + '</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" style="color:#ef4444;border-color:#ef4444">خروج</a>';
-        return;
-      }
-    }
-    tb.innerHTML = (u ? '<a href="subscription.html" class="btn-primary">📋 خطط</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" style="color:#ef4444;border-color:#ef4444">خروج</a>' : '<a href="subscription.html" class="btn-primary">📋 خطط</a><a href="login.html">🔐 دخول</a><a href="register.html">📝 تسجيل</a>');
-  }catch(e){ console.error(e); }
-})();
-</script>
-<script src="protection.js"></script>
-<script src="pwa-install.js"></script>
-<script>
-// TOC Builder
-const toc = document.getElementById('toc');
-const categories = {
-  'heart': { title: '💓 حالات القلب', ids: ['bls','stemi','nstemi','chest-pain','svt','pulmonary-edema','cardiogenic-shock','aortic-dissection','myocarditis','pericarditis'] },
-  'resp': { title: '🫁 حالات التنفس', ids: ['hypoxia','asthma','copd','pneumothorax','cap','pe'] },
-  'neuro': { title: '🧠 حالات عصبية', ids: ['stroke','seizures','coma','icp','headache','encephalitis','meningitis','head-trauma','spine-trauma'] },
-  'meta': { title: '⚗️ حالات استقلابية', ids: ['sepsis','dka','hypoglycemia','electrolytes','acute-kidney','hhs','thyroid','adrenal'] },
-  'other': { title: '🚨 حالات أخرى', ids: ['anaphylaxis','gi-bleed','abdominal-pain','diarrhea','caustic','foreign-body','hypertensive-emergency','hypothermia','agitation'] }
-};
+const menuToggle = document.getElementById('menuToggle');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
 
-Object.values(categories).forEach(cat => {
-  const div = document.createElement('div');
-  div.className = 'cat-title';
-  div.textContent = cat.title;
-  toc.appendChild(div);
-  cat.ids.forEach(id => {
-    const a = document.createElement('a');
-    a.href = '#' + id;
-    const sec = document.querySelector('#' + id);
-    if(sec) a.textContent = sec.querySelector('h2')?.textContent?.split('(')[0]?.trim() || id;
-    toc.appendChild(a);
-  });
+menuToggle.addEventListener('click', () => {
+  sidebar.classList.toggle('show');
+  overlay.classList.toggle('show');
 });
 
-// Search
-document.getElementById('searchInput').addEventListener('keyup', function(){
-  const q = this.value.trim();
-  const res = document.getElementById('searchResults');
-  if(q.length < 2){ res.innerHTML = ''; return; }
-  const re = new RegExp(q, 'gi');
-  let hits = [];
-  document.querySelectorAll('section.topic').forEach(sec => {
-    const m = sec.textContent.match(re);
-    if(m) hits.push({id:sec.id, title:sec.querySelector('h2')?.textContent, count:m.length});
-  });
-  hits.sort((a,b) => b.count - a.count);
-  res.innerHTML = hits.slice(0,10).map(h => '<a class="search-hit" href="#' + h.id + '">' + h.title + '</a>').join('');
+overlay.addEventListener('click', () => {
+  sidebar.classList.remove('show');
+  overlay.classList.remove('show');
 });
 
-// Scroll tracking
-window.addEventListener('scroll', () => {
-  let current = '';
-  document.querySelectorAll('section.topic').forEach(sec => {
-    if(sec.getBoundingClientRect().top <= 120) current = sec.id;
-  });
-  document.querySelectorAll('.toc a').forEach(a => {
-    a.classList.toggle('active', a.href === '#' + current);
+// إغلاق الـ sidebar عند الضغط على أي رابط (فهرس أو نتيجة بحث)
+document.querySelectorAll('.toc a, #searchResults').forEach(el => {
+  el.addEventListener('click', (e) => {
+    if(e.target.closest('a')){
+      sidebar.classList.remove('show');
+      overlay.classList.remove('show');
+    }
   });
 });
 </script>
+
 </body>
 </html>
