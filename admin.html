@@ -145,6 +145,17 @@
         </div>
     </div>
 
+    <!-- صندوق الاقتراحات والشكاوي -->
+    <div class="section">
+        <div class="section-title">
+            <span>📥 صندوق الاقتراحات والشكاوي <span id="fbUnreadBadge" class="bp" style="background:rgba(139,92,246,.2);color:var(--accent);margin-right:.5rem;display:none"></span></span>
+            <button class="btn btn-danger" style="padding:6px 14px;font-size:.8rem" onclick="clearAllFeedback()">🗑️ مسح الكل</button>
+        </div>
+        <div id="feedbackList" style="display:flex;flex-direction:column;gap:.75rem">
+            <div class="empty">⏳ جاري التحميل...</div>
+        </div>
+    </div>
+
     <!-- سجل الأمان -->
     <div class="section">
         <div class="section-title">
@@ -357,9 +368,56 @@ async function clearLog(){
     loadLog();
 }
 
+// ─── صندوق الاقتراحات والشكاوي ─────────────────────────
+function escHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+const FB_TYPE_ICON = {'اقتراح':'💡','شكوى':'⚠️','مشكلة تقنية':'🐞'};
+
+async function loadFeedback(){
+    const box=document.getElementById('feedbackList');
+    try{
+        const items=await sbGet('feedback','?order=created_at.desc&limit=100');
+        const unread=items.filter(f=>f.status!=='read').length;
+        const badge=document.getElementById('fbUnreadBadge');
+        if(unread>0){badge.style.display='inline-block';badge.textContent=unread+' جديد';}
+        else{badge.style.display='none';}
+
+        if(!items.length){box.innerHTML='<div class="empty">لا توجد رسائل بعد.</div>';return;}
+        box.innerHTML=items.map(f=>`
+            <div style="background:var(--bg2);border:1px solid ${f.status==='read'?'var(--border)':'var(--accent)'};border-radius:12px;padding:1rem">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem">
+                    <div>
+                        <span style="font-weight:700">${FB_TYPE_ICON[f.type]||'💬'} ${escHtml(f.type||'رسالة')}</span>
+                        <span style="color:var(--text2);font-size:.8rem;margin-right:.5rem">من: ${escHtml(f.name||'—')} ${f.email?`(<span dir="ltr">${escHtml(f.email)}</span>)`:''}</span>
+                    </div>
+                    <span style="font-size:.75rem;color:var(--text2)">${new Date(f.created_at).toLocaleString('en-US')}</span>
+                </div>
+                <div style="font-size:.9rem;line-height:1.7;white-space:pre-wrap;margin-bottom:.75rem">${escHtml(f.message)}</div>
+                <div class="actions">
+                    ${f.status!=='read'?`<button class="btn btn-success" onclick="markFeedbackRead('${f.id}')">✅ تمت القراءة</button>`:'<span class="bp bp-active">✅ مقروءة</span>'}
+                    <button class="btn" style="background:rgba(239,68,68,.08);color:#ef4444;border:1px solid rgba(239,68,68,.2)" onclick="deleteFeedback('${f.id}')">🗑️ حذف</button>
+                </div>
+            </div>
+        `).join('');
+    }catch(e){
+        box.innerHTML=`<div class="empty">❌ لم يتم إعداد جدول feedback بعد في Supabase، أو حدث خطأ في التحميل.</div>`;
+    }
+}
+
+async function markFeedbackRead(id){
+    try{await sbPatch('feedback',`?id=eq.${id}`,{status:'read'});loadFeedback();}catch{alert('خطأ في العملية');}
+}
+async function deleteFeedback(id){
+    if(!confirm('حذف هذه الرسالة؟'))return;
+    try{await sbDelete('feedback',`?id=eq.${id}`);loadFeedback();}catch{alert('خطأ في الحذف');}
+}
+async function clearAllFeedback(){
+    if(!confirm('مسح كل الرسائل في صندوق الاقتراحات والشكاوي؟'))return;
+    try{await sbDelete('feedback','?id=gt.00000000-0000-0000-0000-000000000000');loadFeedback();}catch{alert('خطأ في المسح');}
+}
+
 // ─── تهيئة ───────────────────────────────────────────
-loadStats();loadUsers();loadLog();
-setInterval(()=>{loadStats();loadUsers();loadLog();},30000);
+loadStats();loadUsers();loadLog();loadFeedback();
+setInterval(()=>{loadStats();loadUsers();loadLog();loadFeedback();},30000);
 </script>
 <script src="protection.js"></script>
 <script>
