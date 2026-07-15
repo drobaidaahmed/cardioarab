@@ -129,6 +129,40 @@ nav a:hover{color:var(--text);border-color:var(--border);background:var(--bg3)}
         <div id="ca-notes-list" style="display:flex;flex-direction:column;gap:.7rem"></div>
     </div>
 
+    <!-- الأسئلة التي أخطأت فيها -->
+    <div class="card" id="ca-mistakes">
+        <div class="section-title" style="display:flex;justify-content:space-between;align-items:center">
+            <span>❌ الأسئلة التي أخطأت فيها</span>
+            <button type="button" id="ca-mistakes-clear" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:.75rem;font-family:inherit">🗑️ مسح الكل</button>
+        </div>
+        <p style="font-size:.78rem;color:var(--text2);margin:-.75rem 0 1rem">
+            محفوظة على هذا الجهاز فقط من كل بنوك الأسئلة، لتتابع مراجعة نقاط ضعفك. لا علاقة لها بالاشتراك ولا تُرفع لأي سيرفر.
+        </p>
+        <div id="ca-mistakes-list" style="display:flex;flex-direction:column;gap:.7rem"></div>
+    </div>
+
+    <!-- اقتراح أو شكوى -->
+    <div class="card" id="ca-feedback">
+        <div class="section-title">💬 اقتراح أو شكوى</div>
+        <p style="font-size:.78rem;color:var(--text2);margin:-.75rem 0 1rem">
+            رسالتك تصل مباشرة لمالك المنصة.
+        </p>
+        <div class="form-group">
+            <label>نوع الرسالة</label>
+            <select id="fbType" style="width:100%;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:.95rem">
+                <option value="اقتراح">💡 اقتراح</option>
+                <option value="شكوى">⚠️ شكوى</option>
+                <option value="مشكلة تقنية">🐞 مشكلة تقنية</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>رسالتك</label>
+            <textarea id="fbMessage" placeholder="اكتب اقتراحك أو شكواك هنا..." style="width:100%;min-height:100px;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:.95rem;resize:vertical"></textarea>
+        </div>
+        <button class="btn btn-primary" id="fbSendBtn" onclick="sendFeedback()">📤 إرسال</button>
+        <div class="alert" id="fbAlert"></div>
+    </div>
+
 </div>
 
 <script>
@@ -138,6 +172,34 @@ const H = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Be
 
 async function sbGet(t, q='') { const r=await fetch(`${SB_URL}/rest/v1/${t}${q}`,{headers:H}); return r.json(); }
 async function sbPatch(t, q, d) { const r=await fetch(`${SB_URL}/rest/v1/${t}${q}`,{method:'PATCH',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(d)}); return r.json(); }
+async function sbPost(t, d) { const r=await fetch(`${SB_URL}/rest/v1/${t}`,{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(d)}); if(!r.ok) throw await r.json(); return r.json(); }
+
+// إرسال اقتراح/شكوى للمالك (يظهر في admin.html كصندوق وارد)
+async function sendFeedback() {
+    const el = document.getElementById('fbAlert');
+    const show = (m,t) => { el.textContent=m; el.className='alert show alert-'+t; setTimeout(()=>el.className='alert',4000); };
+    const type = document.getElementById('fbType').value;
+    const msg = document.getElementById('fbMessage').value.trim();
+    if (!msg) return show('⚠️ يرجى كتابة رسالة أولاً','danger');
+
+    const btn = document.getElementById('fbSendBtn');
+    btn.disabled = true; btn.textContent = '⏳ جاري الإرسال...';
+    try {
+        await sbPost('feedback', {
+            user_id: user.id,
+            name: user.name || '',
+            email: user.email || '',
+            type: type,
+            message: msg,
+            status: 'new'
+        });
+        show('✅ تم إرسال رسالتك، شكراً لك!','success');
+        document.getElementById('fbMessage').value = '';
+    } catch (e) {
+        show('❌ تعذّر الإرسال، حاول لاحقاً','danger');
+    }
+    btn.disabled = false; btn.textContent = '📤 إرسال';
+}
 
 // Auth
 const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
@@ -231,6 +293,7 @@ async function changePass() {
 loadProfile();
 </script>
 <script src="protection.js"></script>
+<script src="answers.js"></script>
 <script>window.CA_NOTES_NO_WIDGET = true;</script>
 <script src="notes.js"></script>
 <script>
@@ -307,11 +370,54 @@ loadProfile();
         });
     }
 
+    function renderMistakes() {
+        const box = document.getElementById('ca-mistakes-list');
+        if (!window.CAAnswers) { box.innerHTML = ''; return; }
+        const wrong = CAAnswers.wrongOnly();
+        if (!wrong.length) {
+            box.innerHTML = '<div style="color:var(--text2);font-size:.85rem;text-align:center;padding:.5rem 0">لا توجد أسئلة مسجّلة كخطأ حتى الآن — كل التوفيق في المراجعة! 💪</div>';
+            return;
+        }
+        box.innerHTML = wrong.map(a => `
+            <div class="ca-mistake-card" data-pagekey="${esc(a.pageKey)}" data-qid="${esc(a.qid)}" style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:.8rem">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;margin-bottom:.4rem">
+                    <a href="${esc(a.pageKey)}#chapter-${esc(a.chapter)}" style="color:var(--accent);font-weight:700;font-size:.82rem;text-decoration:none">${esc(a.pageTitle)} — سؤال ${esc(a.qid)}</a>
+                    <span style="font-size:.68rem;color:var(--text2);flex-shrink:0">${fmtDate(a.updatedAt)}</span>
+                </div>
+                <div style="font-size:.85rem;line-height:1.6;margin-bottom:.5rem">${esc(a.stem)}</div>
+                <div style="font-size:.78rem;color:var(--text2);margin-bottom:.5rem">
+                    ${a.chosenLabel ? `اخترت: <span style="color:var(--red);font-weight:700">${esc(a.chosenLabel)}</span> · ` : ''}
+                    الصحيح: <span style="color:var(--green);font-weight:700">${esc(a.correctLabel)}</span>
+                </div>
+                <button class="ca-m-retry" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:.75rem;font-family:inherit">🔄 حذف من القائمة (لإعادة المحاولة)</button>
+            </div>
+        `).join('');
+
+        box.querySelectorAll('.ca-m-retry').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const wrap = e.target.closest('[data-pagekey]');
+                CAAnswers.remove(wrap.dataset.pagekey, wrap.dataset.qid);
+                renderMistakes();
+            });
+        });
+    }
+
     function initLocalSections() {
         renderContinue();
         renderNotes();
+        renderMistakes();
+        document.getElementById('ca-mistakes-clear').addEventListener('click', () => {
+            if (!window.CAAnswers) return;
+            if (confirm('مسح كل الأسئلة المسجّلة كخطأ من هذا الجهاز؟ (لن يؤثر هذا على اشتراكك أو حسابك)')) {
+                CAAnswers.clearAll();
+                renderMistakes();
+            }
+        });
         if (location.hash === '#ca-notes') {
             document.getElementById('ca-notes').scrollIntoView({ behavior: 'smooth' });
+        }
+        if (location.hash === '#ca-mistakes') {
+            document.getElementById('ca-mistakes').scrollIntoView({ behavior: 'smooth' });
         }
     }
 
