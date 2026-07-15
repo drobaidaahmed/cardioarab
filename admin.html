@@ -132,6 +132,7 @@
                         <th>#</th>
                         <th>الاسم</th>
                         <th>البريد</th>
+                        <th>الهاتف</th>
                         <th>الحالة</th>
                         <th>تاريخ الانتهاء</th>
                         <th>تاريخ التسجيل</th>
@@ -139,7 +140,7 @@
                     </tr>
                 </thead>
                 <tbody id="usersTableBody">
-                    <tr><td colspan="7" class="empty">⏳ جاري التحميل...</td></tr>
+                    <tr><td colspan="8" class="empty">⏳ جاري التحميل...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -223,12 +224,12 @@ async function changePassword(){
 // ─── المستخدمون ──────────────────────────────────────
 async function loadUsers(q=''){
     const tbody=document.getElementById('usersTableBody');
-    tbody.innerHTML='<tr><td colspan="7" class="empty">⏳ جاري التحميل...</td></tr>';
+    tbody.innerHTML='<tr><td colspan="8" class="empty">⏳ جاري التحميل...</td></tr>';
     try{
         let query='?order=created_at.desc';
         if(q) query+=`&or=(name.ilike.*${q}*,email.ilike.*${q}*)`;
         const users=await sbGet('users',query);
-        if(!users.length){tbody.innerHTML='<tr><td colspan="7" class="empty">لا يوجد مستخدمون</td></tr>';return;}
+        if(!users.length){tbody.innerHTML='<tr><td colspan="8" class="empty">لا يوجد مستخدمون</td></tr>';return;}
 
         let subMap={};
         try{
@@ -242,6 +243,7 @@ async function loadUsers(q=''){
                 <td>${i+1}</td>
                 <td>${u.name||'—'} <span class="bp bp-admin">مالك</span></td>
                 <td dir="ltr" style="text-align:left">${u.email}</td>
+                <td dir="ltr" style="text-align:left">${u.phone||'—'}</td>
                 <td><span class="bp bp-active">✅ نشط دائماً</span></td>
                 <td>—</td>
                 <td>${new Date(u.created_at).toLocaleDateString('en-US')}</td>
@@ -257,6 +259,7 @@ async function loadUsers(q=''){
                 <td>${i+1}</td>
                 <td>${u.name||'—'}</td>
                 <td dir="ltr" style="text-align:left;font-size:.83rem">${u.email}</td>
+                <td dir="ltr" style="text-align:left;font-size:.83rem">${u.phone||'—'}</td>
                 <td>
                     ${u.blocked
                         ?'<span class="bp" style="background:rgba(239,68,68,.2);color:#ef4444">🚫 محظور</span>'
@@ -281,7 +284,7 @@ async function loadUsers(q=''){
             </tr>`;
         }).join('');
     }catch(e){
-        tbody.innerHTML=`<tr><td colspan="7" class="empty">❌ خطأ: ${e.message||JSON.stringify(e)}</td></tr>`;
+        tbody.innerHTML=`<tr><td colspan="8" class="empty">❌ خطأ: ${e.message||JSON.stringify(e)}</td></tr>`;
     }
 }
 
