@@ -370,5 +370,22 @@ const obs = new IntersectionObserver(entries => {
 }, { rootMargin: '-30% 0px -60% 0px' });
 sections.forEach(s => obs.observe(s));
 </script>
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+<script src="notes.js"></script>
 </body>
 </html>

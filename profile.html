@@ -113,6 +113,22 @@ nav a:hover{color:var(--text);border-color:var(--border);background:var(--bg3)}
         <div class="alert" id="passAlert"></div>
     </div>
 
+    <!-- تابع القراءة -->
+    <div class="card" id="ca-continue">
+        <div class="section-title">📖 تابع من حيث توقفت</div>
+        <div id="ca-continue-list" style="display:flex;flex-direction:column;gap:.6rem"></div>
+    </div>
+
+    <!-- ملاحظاتي -->
+    <div class="card" id="ca-notes">
+        <div class="section-title">📝 ملاحظاتي المحلية</div>
+        <p style="font-size:.78rem;color:var(--text2);margin:-.75rem 0 1rem">
+            هذه الملاحظات محفوظة على هذا الجهاز/المتصفح فقط، ولا تُرفع لأي سيرفر.
+            لن تظهر إذا فتحت حسابك من جهاز آخر.
+        </p>
+        <div id="ca-notes-list" style="display:flex;flex-direction:column;gap:.7rem"></div>
+    </div>
+
 </div>
 
 <script>
@@ -215,6 +231,94 @@ async function changePass() {
 loadProfile();
 </script>
 <script src="protection.js"></script>
+<script>window.CA_NOTES_NO_WIDGET = true;</script>
+<script src="notes.js"></script>
+<script>
+// ─────────── عرض "تابع من حيث توقفت" + "ملاحظاتي المحلية" (محلي بالكامل) ───────────
+(function () {
+    const esc = (window.CAUtils && window.CAUtils.escapeHtml) || (s => s);
+    const fmtDate = (window.CAUtils && window.CAUtils.fmtDate) || (() => '');
+
+    function renderContinue() {
+        const box = document.getElementById('ca-continue-list');
+        const items = window.CAProgress ? window.CAProgress.recent(30) : [];
+        if (!items.length) {
+            box.innerHTML = '<div style="color:var(--text2);font-size:.85rem;text-align:center;padding:.5rem 0">لم تبدأ القراءة بعد — تصفّح أي مرشد وسنحفظ مكانك تلقائياً هنا.</div>';
+            return;
+        }
+        box.innerHTML = items.map(p => `
+            <a href="${esc(p.pageKey)}" style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.65rem .9rem;text-decoration:none;color:var(--text)">
+                <div>
+                    <div style="font-weight:600;font-size:.88rem">${esc(p.title)}</div>
+                    <div style="font-size:.72rem;color:var(--text2);margin-top:.15rem">آخر تحديث: ${fmtDate(p.updatedAt)}</div>
+                </div>
+                <div style="flex-shrink:0;display:flex;align-items:center;gap:.5rem">
+                    <div style="width:40px;height:40px;border-radius:50%;background:conic-gradient(var(--accent) ${p.percent * 3.6}deg,var(--border) 0deg);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700">${p.percent}%</div>
+                </div>
+            </a>
+        `).join('');
+    }
+
+    function renderNotes() {
+        const box = document.getElementById('ca-notes-list');
+        const notes = (window.CANotes ? window.CANotes.all() : []).sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        if (!notes.length) {
+            box.innerHTML = '<div style="color:var(--text2);font-size:.85rem;text-align:center;padding:.5rem 0">لا توجد ملاحظات محفوظة بعد.</div>';
+            return;
+        }
+        box.innerHTML = notes.map(n => `
+            <div class="ca-note-card" data-id="${n.id}" style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:.8rem">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;margin-bottom:.4rem">
+                    <a href="${esc(n.pageKey)}" style="color:var(--accent);font-weight:700;font-size:.82rem;text-decoration:none">${esc(n.pageTitle)}</a>
+                    <span style="font-size:.68rem;color:var(--text2);flex-shrink:0">${fmtDate(n.updatedAt)}</span>
+                </div>
+                ${n.section ? `<div style="font-size:.72rem;color:var(--text2);margin-bottom:.3rem">📍 ${esc(n.section)}</div>` : ''}
+                <div class="ca-note-body" style="font-size:.86rem;white-space:pre-wrap;line-height:1.6">${esc(n.text)}</div>
+                <div style="display:flex;gap:.75rem;margin-top:.5rem">
+                    <button class="ca-p-edit" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:.75rem;font-family:inherit">✏️ تعديل</button>
+                    <button class="ca-p-del" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.75rem;font-family:inherit">🗑️ حذف</button>
+                </div>
+            </div>
+        `).join('');
+
+        box.querySelectorAll('.ca-p-del').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const id = e.target.closest('[data-id]').dataset.id;
+                if (confirm('حذف هذه الملاحظة؟')) { window.CANotes.remove(id); renderNotes(); }
+            });
+        });
+        box.querySelectorAll('.ca-p-edit').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const wrap = e.target.closest('[data-id]');
+                const id = wrap.dataset.id;
+                const bodyEl = wrap.querySelector('.ca-note-body');
+                const current = bodyEl.textContent;
+                const ta = document.createElement('textarea');
+                ta.value = current;
+                ta.style.cssText = 'width:100%;min-height:70px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:.5rem;font-family:inherit;font-size:.85rem';
+                bodyEl.replaceWith(ta);
+                ta.focus();
+                const saveBtn = document.createElement('button');
+                saveBtn.textContent = '💾 حفظ التعديل';
+                saveBtn.style.cssText = 'margin-top:.4rem;background:var(--green);color:#fff;border:none;padding:.35rem .8rem;border-radius:7px;font-size:.75rem;cursor:pointer;font-family:inherit';
+                ta.insertAdjacentElement('afterend', saveBtn);
+                saveBtn.addEventListener('click', () => { window.CANotes.update(id, ta.value.trim()); renderNotes(); });
+            });
+        });
+    }
+
+    function initLocalSections() {
+        renderContinue();
+        renderNotes();
+        if (location.hash === '#ca-notes') {
+            document.getElementById('ca-notes').scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initLocalSections);
+    else initLocalSections();
+})();
+</script>
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
