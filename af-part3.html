@@ -726,8 +726,6 @@
   },{rootMargin:'-20% 0px -70% 0px'}).observe?sections.forEach(s=>new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(l=>{l.classList.remove('active');if(l.getAttribute('href')==='#'+e.target.id)l.classList.add('active')});}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s)):null;
 </script>
 
-<script src="supabase.js"></script>
-<script src="protection.js"></script>
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -743,5 +741,22 @@ window.addEventListener('scroll', () => {
   else { __headerEl && __headerEl.classList.remove('shrink'); }
 }, { passive: true });
 </script>
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+<script src="notes.js"></script>
 </body>
 </html>
