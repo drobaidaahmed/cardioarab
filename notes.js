@@ -95,9 +95,9 @@
       try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(obj)); } catch (_) {}
     },
     get(key) { return this.all()[key] || null; },
-    set(key, percent, title) {
+    set(key, percent, title, sectionId) {
       const obj = this.all();
-      obj[key] = { percent: percent, title: title || key, updatedAt: new Date().toISOString() };
+      obj[key] = { percent: percent, title: title || key, sectionId: sectionId || '', updatedAt: new Date().toISOString() };
       this._save(obj);
     },
     remove(key) {
@@ -123,20 +123,30 @@
   // إن كانت هذه صفحة "بروفايل" أو إدارة، لا نعرض الودجت العائم
   if (window.CA_NOTES_NO_WIDGET) return;
 
-  // ───────────────── تحديد العنوان الحالي أثناء التمرير (للسياق) ──────────
-  function currentSectionTitle() {
+  // ───────────────── تحديد القسم الحالي أثناء التمرير (للسياق ولدقة الاستئناف) ──────────
+  function currentSectionEl() {
     try {
       const secs = document.querySelectorAll('.section[id], section[id]');
-      if (!secs.length) return '';
+      if (!secs.length) return null;
       let best = null;
       secs.forEach(s => {
         const top = s.getBoundingClientRect().top;
         if (top - 150 <= 0) best = s;
       });
-      if (!best) best = secs[0];
-      const h = best.querySelector('h1,h2,h3');
-      return h ? h.textContent.trim().slice(0, 120) : (best.id || '');
-    } catch (_) { return ''; }
+      return best || secs[0];
+    } catch (_) { return null; }
+  }
+
+  function currentSectionTitle() {
+    const best = currentSectionEl();
+    if (!best) return '';
+    const h = best.querySelector('h1,h2,h3');
+    return h ? h.textContent.trim().slice(0, 120) : (best.id || '');
+  }
+
+  function currentSectionId() {
+    const best = currentSectionEl();
+    return best ? (best.id || '') : '';
   }
 
   // ───────────────────────── تتبّع تقدّم القراءة ──────────────────────────
@@ -147,7 +157,7 @@
     if (scrollable <= 40) return; // صفحة قصيرة جداً، لا داعي للتتبع
     const percent = Math.min(100, Math.max(0, Math.round((window.scrollY || d.scrollTop) / scrollable * 100)));
     clearTimeout(progressTimer);
-    progressTimer = setTimeout(() => Progress.set(pageKey(), percent, pageTitle()), 500);
+    progressTimer = setTimeout(() => Progress.set(pageKey(), percent, pageTitle(), currentSectionId()), 500);
   }
   window.addEventListener('scroll', trackProgress, { passive: true });
   window.addEventListener('beforeunload', trackProgress);
@@ -156,6 +166,8 @@
   function initResumeBanner() {
     const saved = Progress.get(pageKey());
     if (!saved || saved.percent < 5 || saved.percent > 96) return;
+    // إن كان الرابط يحوي #معرّف القسم أصلاً، فالمتصفح نفسه نقل المستخدم للمكان الصحيح، لا داعي للبانر
+    if (saved.sectionId && location.hash === '#' + saved.sectionId) return;
 
     const banner = document.createElement('div');
     banner.id = 'ca-resume-banner';
@@ -174,9 +186,14 @@
     document.body.appendChild(banner);
 
     document.getElementById('ca-resume-go').addEventListener('click', () => {
-      const d = document.documentElement;
-      const target = (saved.percent / 100) * (d.scrollHeight - d.clientHeight);
-      window.scrollTo({ top: target, behavior: 'smooth' });
+      const el = saved.sectionId ? document.getElementById(saved.sectionId) : null;
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        const d = document.documentElement;
+        const target = (saved.percent / 100) * (d.scrollHeight - d.clientHeight);
+        window.scrollTo({ top: target, behavior: 'smooth' });
+      }
       banner.remove();
     });
     document.getElementById('ca-resume-close').addEventListener('click', () => banner.remove());

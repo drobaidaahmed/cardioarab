@@ -141,7 +141,7 @@ nav a:hover{color:var(--text);border-color:var(--border);background:var(--bg3)}
         <div id="ca-mistakes-list" style="display:flex;flex-direction:column;gap:.7rem"></div>
     </div>
 
-    <!-- اقتراح أو شكوى -->
+    <!-- اقتراح أو شكوى (للمستخدم العادي) -->
     <div class="card" id="ca-feedback">
         <div class="section-title">💬 اقتراح أو شكوى</div>
         <p style="font-size:.78rem;color:var(--text2);margin:-.75rem 0 1rem">
@@ -161,6 +161,15 @@ nav a:hover{color:var(--text);border-color:var(--border);background:var(--bg3)}
         </div>
         <button class="btn btn-primary" id="fbSendBtn" onclick="sendFeedback()">📤 إرسال</button>
         <div class="alert" id="fbAlert"></div>
+    </div>
+
+    <!-- صندوق الرسائل الواردة (للمالك فقط) -->
+    <div class="card" id="ca-feedback-inbox" style="display:none">
+        <div class="section-title">📥 صندوق الرسائل الواردة</div>
+        <p style="font-size:.78rem;color:var(--text2);margin:-.75rem 0 1rem">
+            هنا تصل اقتراحات وشكاوى المستخدمين. لأنك المالك، هذه الرسائل موجّهة إليك وليس منك.
+        </p>
+        <a href="admin.html#feedbackSection" class="btn btn-primary" style="display:inline-block;text-decoration:none;text-align:center">📥 فتح صندوق الرسائل الواردة</a>
     </div>
 
 </div>
@@ -196,6 +205,7 @@ async function sendFeedback() {
         show('✅ تم إرسال رسالتك، شكراً لك!','success');
         document.getElementById('fbMessage').value = '';
     } catch (e) {
+        console.error('sendFeedback error:', e);
         show('❌ تعذّر الإرسال، حاول لاحقاً','danger');
     }
     btn.disabled = false; btn.textContent = '📤 إرسال';
@@ -217,6 +227,12 @@ async function loadProfile() {
     document.getElementById('infoEmail').textContent = user.email || '—';
     document.getElementById('infoType').textContent = user.is_admin ? '👑 مالك' : '👤 مستخدم';
     document.getElementById('infoDate').textContent = new Date(user.created_at).toLocaleDateString('en-US');
+
+    // المالك يشوف رابط صندوق الوارد بدل نموذج الإرسال (ما في داعي يرسل رسالة لنفسه)
+    if (user.is_admin) {
+        document.getElementById('ca-feedback').style.display = 'none';
+        document.getElementById('ca-feedback-inbox').style.display = 'block';
+    }
 
     // حالة الاشتراك
     if (user.is_admin) {
@@ -309,8 +325,10 @@ loadProfile();
             box.innerHTML = '<div style="color:var(--text2);font-size:.85rem;text-align:center;padding:.5rem 0">لم تبدأ القراءة بعد — تصفّح أي مرشد وسنحفظ مكانك تلقائياً هنا.</div>';
             return;
         }
-        box.innerHTML = items.map(p => `
-            <a href="${esc(p.pageKey)}" style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.65rem .9rem;text-decoration:none;color:var(--text)">
+        box.innerHTML = items.map(p => {
+            const href = esc(p.pageKey) + (p.sectionId ? '#' + esc(p.sectionId) : '');
+            return `
+            <a href="${href}" style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.65rem .9rem;text-decoration:none;color:var(--text)">
                 <div>
                     <div style="font-weight:600;font-size:.88rem">${esc(p.title)}</div>
                     <div style="font-size:.72rem;color:var(--text2);margin-top:.15rem">آخر تحديث: ${fmtDate(p.updatedAt)}</div>
@@ -319,7 +337,8 @@ loadProfile();
                     <div style="width:40px;height:40px;border-radius:50%;background:conic-gradient(var(--accent) ${p.percent * 3.6}deg,var(--border) 0deg);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700">${p.percent}%</div>
                 </div>
             </a>
-        `).join('');
+        `;
+        }).join('');
     }
 
     function renderNotes() {
