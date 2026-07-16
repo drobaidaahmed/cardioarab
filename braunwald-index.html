@@ -5,33 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>بنك برنولد للأسئلة</title>
     <style>
+        :root{
+            --bg:#1b2636;
+            --card:#26334a;
+            --card2:#2e3d58;
+            --accent:#2dd4bf;
+            --accent2:#38bdf8;
+            --text:#eef2f8;
+            --muted:#9fb0c5;
+            --border:#3d4f6b;
+            --gold:#facc15;
+        }
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         body {
-            font-family: 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
-            background: #f5f7fc;
-            color: #1e2a3a;
+            font-family: 'IBM Plex Sans Arabic', 'Tajawal', 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+            background:
+              radial-gradient(1200px 600px at 15% -10%, #2dd4bf1a, transparent 60%),
+              radial-gradient(1000px 500px at 100% 0%, #38bdf81a, transparent 55%),
+              var(--bg);
+            color: var(--text);
             padding: 24px;
         }
         .container {
             max-width: 1100px;
             margin: 0 auto;
-            background: #fff;
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 32px;
             padding: 32px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
         }
         .sticky-top {
             position: sticky;
             top: 0;
             z-index: 60;
-            background: #fff;
+            background: var(--card);
             padding-top: 14px;
             margin-top: -14px;
-            box-shadow: 0 8px 12px -10px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 12px -10px rgba(0,0,0,0.4);
+            transition: padding-top .3s ease;
         }
         .page-header {
             display: flex;
@@ -41,7 +57,8 @@
             flex-wrap: wrap;
             padding-bottom: 8px;
             margin-bottom: 10px;
-            border-bottom: 1px solid #e9edf4;
+            border-bottom: 1px solid var(--border);
+            transition: padding-bottom .3s ease, margin-bottom .3s ease;
         }
         .brand-left {
             display: flex;
@@ -52,25 +69,29 @@
             width: 30px;
             height: 30px;
             border-radius: 9px;
-            background: linear-gradient(135deg, #2a7de1, #1b5bb0);
+            background: linear-gradient(135deg, var(--accent), #0b5c52);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 900;
-            color: #fff;
+            color: #03211c;
             font-size: 12.5px;
-            box-shadow: 0 0 14px rgba(42, 125, 225, 0.35);
+            box-shadow: 0 0 14px rgba(45, 212, 191, 0.4);
             flex-shrink: 0;
+            transition: width .3s ease, height .3s ease, font-size .3s ease;
         }
         .brand-title {
             font-size: 16px;
             font-weight: 700;
-            color: #0b1a33;
+            color: var(--text);
+            transition: font-size .3s ease;
         }
         .brand-sub {
-            color: #5b6f87;
+            color: var(--muted);
             font-size: 11px;
             margin-top: 1px;
+            transition: opacity .2s ease, max-height .3s ease, margin .3s ease;
+            overflow: hidden;
         }
         .pages-grid {
             display: grid;
@@ -79,8 +100,8 @@
             margin-top: 24px;
         }
         .page-card {
-            background: #f5f7fc;
-            border: 2px solid #e9edf4;
+            background: var(--card2);
+            border: 2px solid var(--border);
             border-radius: 16px;
             padding: 24px;
             text-decoration: none;
@@ -89,71 +110,77 @@
             cursor: pointer;
         }
         .page-card:hover {
-            border-color: #2a7de1;
-            box-shadow: 0 8px 24px rgba(42, 125, 225, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 8px 24px rgba(45, 212, 191, 0.18);
             transform: translateY(-2px);
         }
         .page-card-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #2a7de1, #1b5bb0);
+            background: linear-gradient(135deg, var(--accent), #0b5c52);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
+            color: #03211c;
             font-size: 18px;
             margin-bottom: 12px;
         }
         .page-card-title {
             font-size: 16px;
             font-weight: 700;
-            color: #0b1a33;
+            color: var(--text);
             margin-bottom: 6px;
         }
         .page-card-desc {
             font-size: 13px;
-            color: #5b6f87;
+            color: var(--muted);
             line-height: 1.5;
             margin-bottom: 12px;
         }
         .page-card-badge {
             display: inline-block;
-            background: #2a7de1;
-            color: #fff;
+            background: var(--accent);
+            color: #03211c;
             font-size: 11px;
             padding: 4px 10px;
             border-radius: 6px;
-            font-weight: 600;
-        }
-        .intro-section {
-            background: linear-gradient(135deg, #f5f7fc 0%, #f0f4fd 100%);
-            border: 1px solid #e9edf4;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 32px;
-        }
-        .intro-section h2 {
-            font-size: 18px;
-            color: #0b1a33;
-            margin-bottom: 12px;
             font-weight: 700;
         }
+        .intro-section {
+            background: linear-gradient(135deg, #1c4a46, #1a3540);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 10px 16px;
+            margin-bottom: 16px;
+        }
+        .intro-section h2 {
+            font-size: 13.5px;
+            color: #eafffb;
+            margin-bottom: 3px;
+            font-weight: 800;
+        }
         .intro-section p {
-            font-size: 14px;
-            color: #5b6f87;
-            line-height: 1.6;
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.5;
         }
         .lock-badge {
             display: inline-block;
-            background: #fef08a;
-            color: #854d0e;
+            background: #facc151a;
+            color: var(--gold);
+            border: 1px solid #facc1533;
             font-size: 11px;
             padding: 4px 8px;
             border-radius: 6px;
             font-weight: 600;
-            margin-top: 8px;
+            margin-top: 6px;
         }
+        .sticky-top.shrink{padding-top:2px}
+        .sticky-top.shrink .page-header{padding-bottom:2px;margin-bottom:2px}
+        .sticky-top.shrink .logo{width:20px;height:20px;font-size:9px}
+        .sticky-top.shrink .brand-title{font-size:12px}
+        .sticky-top.shrink .brand-sub{opacity:0;max-height:0;margin:0}
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
@@ -171,9 +198,9 @@
 </head>
 <body>
     <div class="container">
-        <a href="question-banks.html" style="display:inline-flex;align-items:center;gap:6px;color:#2a7de1;text-decoration:none;font-size:13px;font-weight:600;margin-bottom:12px;">← العودة إلى بنوك الأسئلة</a>
+        <a href="question-banks.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--accent);text-decoration:none;font-size:13px;font-weight:600;margin-bottom:12px;">← العودة إلى بنوك الأسئلة</a>
 
-        <div class="sticky-top">
+        <div class="sticky-top" id="stickyTop">
             <div class="page-header">
                 <div class="brand-left">
                     <div class="logo">ب</div>
@@ -229,6 +256,13 @@
         </div>
     </div>
 
+<script>
+const __stickyTop = document.getElementById('stickyTop');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 60) { __stickyTop && __stickyTop.classList.add('shrink'); }
+  else { __stickyTop && __stickyTop.classList.remove('shrink'); }
+}, { passive: true });
+</script>
 <script src="supabase.js"></script>
 <script>
 (async function(){
