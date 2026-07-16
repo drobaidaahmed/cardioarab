@@ -89,6 +89,25 @@
   .hidden{display:none !important;}
   .no-results{text-align:center; color:var(--muted); padding:40px 0; display:none;}
   footer{text-align:center; color:var(--muted); font-size:12.5px; padding:20px; direction:rtl;}
+
+/* ---------- فلاتر الأسئلة (بنفس مبدأ براونولد، بألوان بورد ريفيو) ---------- */
+.filter-tabs{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; transition:.25s;}
+header.shrink .filter-tabs{margin-top:6px;}
+.ftab{
+  background:var(--card2); border:1px solid var(--border); color:var(--muted);
+  padding:7px 13px; border-radius:20px; font-size:12.5px; font-weight:700; cursor:pointer;
+  font-family:inherit; display:inline-flex; align-items:center; gap:6px; transition:.15s;
+}
+.ftab:hover{border-color:var(--accent2); color:var(--text);}
+.ftab .fcount{
+  background:#0b131a; border-radius:10px; padding:1px 7px; font-size:11px; font-weight:800; color:inherit;
+}
+.ftab.active{background:var(--accent); color:#03211c; border-color:var(--accent);}
+.ftab.active .fcount{background:#03211c33; color:#03211c;}
+.ftab[data-f="correct"].active{background:var(--correct); border-color:var(--correct); color:#eafff0;}
+.ftab[data-f="correct"].active .fcount{background:#00000030; color:#eafff0;}
+.ftab[data-f="wrong"].active{background:var(--wrong); border-color:var(--wrong); color:#ffecec;}
+.ftab[data-f="wrong"].active .fcount{background:#00000030; color:#ffecec;}
 </style>
 </head>
 <body>
@@ -130,6 +149,12 @@
     <button id="resetAnswersBtn" class="btn" type="button" style="border-color:var(--wrong);color:#ffb4b4;white-space:nowrap;">🔄 إعادة ضبط الأسئلة</button>
     <div class="counter" id="counter">تمت الإجابة: 0 / 300</div>
   </div>
+  <div class="filter-tabs" id="filterTabs">
+    <button class="ftab active" data-f="all">الكل <span class="fcount" id="fcAll">0</span></button>
+    <button class="ftab" data-f="correct">صحيحة <span class="fcount" id="fcCorrect">0</span></button>
+    <button class="ftab" data-f="wrong">خاطئة <span class="fcount" id="fcWrong">0</span></button>
+    <button class="ftab" data-f="unanswered">غير محلولة <span class="fcount" id="fcUnanswered">0</span></button>
+  </div>
   <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
   <div class="chapternav" id="chapterNav"></div>
 </header>
@@ -169,6 +194,23 @@ const answered = new Set();
 function updateCounter(){
   counterEl.textContent = 'تمت الإجابة: ' + answered.size + ' / ' + QUESTIONS.length;
   progressBar.style.width = (answered.size / QUESTIONS.length * 100) + '%';
+  updateFilterCounts();
+}
+
+function updateFilterCounts(){
+  let correct=0, wrong=0, neutral=0, unanswered=0;
+  document.querySelectorAll('.qcard').forEach(c=>{
+    const st = c.dataset.status;
+    if(st==='correct') correct++;
+    else if(st==='wrong') wrong++;
+    else if(st==='neutral') neutral++;
+    else unanswered++;
+  });
+  const set = (id, v)=>{ const el = document.getElementById(id); if(el) el.textContent = v; };
+  set('fcAll', QUESTIONS.length);
+  set('fcCorrect', correct);
+  set('fcWrong', wrong);
+  set('fcUnanswered', unanswered);
 }
 
 function buildCard(q, idx){
@@ -176,6 +218,7 @@ function buildCard(q, idx){
   card.className = 'qcard';
   card.id = 'q' + idx;
   card.dataset.search = (q.stem + ' ' + (q.explanation||'') + ' ' + (q.options ? q.options.map(o=>o[1]).join(' ') : '')).toLowerCase();
+  card.dataset.status = 'unanswered';
 
   const head = document.createElement('div');
   head.className = 'qhead';
@@ -212,6 +255,7 @@ function buildCard(q, idx){
         }
         answerBox.classList.add('show');
         answered.add(idx);
+        card.dataset.status = isCorrect ? 'correct' : 'wrong';
         updateCounter();
         if(window.CAAnswers){
           CAAnswers.save({qid:q.num, chapter:q.chapter, stem:q.stem, chosenLabel:opt[0], correctLabel:q.correct, isCorrect:isCorrect});
@@ -234,6 +278,7 @@ function buildCard(q, idx){
         });
         answerBox.classList.add('show');
         answered.add(idx);
+        card.dataset.status = savedAns.isCorrect ? 'correct' : 'wrong';
       }
     }
 
@@ -250,6 +295,7 @@ function buildCard(q, idx){
       });
       answerBox.classList.add('show');
       answered.add(idx);
+      card.dataset.status = 'wrong';
       updateCounter();
       if(window.CAAnswers){
         CAAnswers.save({qid:q.num, chapter:q.chapter, stem:q.stem, chosenLabel:null, correctLabel:q.correct, isCorrect:false});
@@ -266,14 +312,31 @@ function buildCard(q, idx){
     showBtn.className = 'btn';
     showBtn.textContent = 'أظهر الجواب';
     showBtn.onclick = ()=>{
+      if(showBtn.disabled) return;
       answerBox.classList.add('show');
+      showBtn.disabled = true;
       answered.add(idx);
+      card.dataset.status = 'neutral';
       updateCounter();
+      if(window.CAAnswers){
+        CAAnswers.save({qid:q.num, chapter:q.chapter, stem:q.stem, chosenLabel:null, correctLabel:null, isCorrect:null});
+      }
     };
     controls.appendChild(showBtn);
     card.appendChild(controls);
 
     answerBox.innerHTML = '<div class="ans-title">✅ الإجابة</div><p>' + (q.explanation||'') + '</p>';
+
+    // استرجاع حالة "تم الاطلاع على الإجابة" سابقًا لهذا السؤال (محليًا على هذا الجهاز فقط)
+    if(window.CAAnswers){
+      const savedAns = CAAnswers.get(q.num);
+      if(savedAns){
+        answerBox.classList.add('show');
+        showBtn.disabled = true;
+        answered.add(idx);
+        card.dataset.status = 'neutral';
+      }
+    }
   }
 
   card.appendChild(answerBox);
@@ -334,18 +397,39 @@ window.addEventListener('scroll', ()=>{
 // search
 const searchInput = document.getElementById('search');
 const noResults = document.getElementById('noResults');
-searchInput.addEventListener('input', ()=>{
+let currentFilter = 'all';
+
+function passesFilter(card){
+  if(currentFilter === 'all') return true;
+  const st = card.dataset.status;
+  if(currentFilter === 'unanswered') return st === 'unanswered';
+  if(currentFilter === 'correct') return st === 'correct';
+  if(currentFilter === 'wrong') return st === 'wrong';
+  return true;
+}
+
+function applyFilters(){
   const term = searchInput.value.trim().toLowerCase();
   let visibleCount = 0;
   document.querySelectorAll('.qcard').forEach(card=>{
-    const match = !term || card.dataset.search.includes(term);
-    card.style.display = match ? '' : 'none';
-    if(match) visibleCount++;
+    const matchSearch = !term || card.dataset.search.includes(term);
+    const show = matchSearch && passesFilter(card);
+    card.style.display = show ? '' : 'none';
+    if(show) visibleCount++;
   });
   document.querySelectorAll('.chapter-divider').forEach(div=>{
-    div.style.display = term ? 'none' : '';
+    div.style.display = (term || currentFilter !== 'all') ? 'none' : '';
   });
-  noResults.style.display = (term && visibleCount === 0) ? 'block' : 'none';
+  noResults.style.display = (visibleCount === 0) ? 'block' : 'none';
+}
+searchInput.addEventListener('input', applyFilters);
+document.getElementById('filterTabs').addEventListener('click', (e)=>{
+  const b = e.target.closest('.ftab');
+  if(!b) return;
+  document.querySelectorAll('.ftab').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  currentFilter = b.dataset.f;
+  applyFilters();
 });
 </script>
 <script src="protection.js"></script>

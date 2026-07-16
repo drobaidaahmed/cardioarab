@@ -129,18 +129,6 @@ nav a:hover{color:var(--text);border-color:var(--border);background:var(--bg3)}
         <div id="ca-notes-list" style="display:flex;flex-direction:column;gap:.7rem"></div>
     </div>
 
-    <!-- الأسئلة التي أخطأت فيها -->
-    <div class="card" id="ca-mistakes">
-        <div class="section-title" style="display:flex;justify-content:space-between;align-items:center">
-            <span>❌ الأسئلة التي أخطأت فيها</span>
-            <button type="button" id="ca-mistakes-clear" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:.75rem;font-family:inherit">🗑️ مسح الكل</button>
-        </div>
-        <p style="font-size:.78rem;color:var(--text2);margin:-.75rem 0 1rem">
-            محفوظة على هذا الجهاز فقط من كل بنوك الأسئلة، لتتابع مراجعة نقاط ضعفك. لا علاقة لها بالاشتراك ولا تُرفع لأي سيرفر.
-        </p>
-        <div id="ca-mistakes-list" style="display:flex;flex-direction:column;gap:.7rem"></div>
-    </div>
-
     <!-- اقتراح أو شكوى (للمستخدم العادي) -->
     <div class="card" id="ca-feedback">
         <div class="section-title">💬 اقتراح أو شكوى</div>
@@ -389,54 +377,11 @@ loadProfile();
         });
     }
 
-    function renderMistakes() {
-        const box = document.getElementById('ca-mistakes-list');
-        if (!window.CAAnswers) { box.innerHTML = ''; return; }
-        const wrong = CAAnswers.wrongOnly();
-        if (!wrong.length) {
-            box.innerHTML = '<div style="color:var(--text2);font-size:.85rem;text-align:center;padding:.5rem 0">لا توجد أسئلة مسجّلة كخطأ حتى الآن — كل التوفيق في المراجعة! 💪</div>';
-            return;
-        }
-        box.innerHTML = wrong.map(a => `
-            <div class="ca-mistake-card" data-pagekey="${esc(a.pageKey)}" data-qid="${esc(a.qid)}" style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:.8rem">
-                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;margin-bottom:.4rem">
-                    <a href="${esc(a.pageKey)}#chapter-${esc(a.chapter)}" style="color:var(--accent);font-weight:700;font-size:.82rem;text-decoration:none">${esc(a.pageTitle)} — سؤال ${esc(a.qid)}</a>
-                    <span style="font-size:.68rem;color:var(--text2);flex-shrink:0">${fmtDate(a.updatedAt)}</span>
-                </div>
-                <div style="font-size:.85rem;line-height:1.6;margin-bottom:.5rem">${esc(a.stem)}</div>
-                <div style="font-size:.78rem;color:var(--text2);margin-bottom:.5rem">
-                    ${a.chosenLabel ? `اخترت: <span style="color:var(--red);font-weight:700">${esc(a.chosenLabel)}</span> · ` : ''}
-                    الصحيح: <span style="color:var(--green);font-weight:700">${esc(a.correctLabel)}</span>
-                </div>
-                <button class="ca-m-retry" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:.75rem;font-family:inherit">🔄 حذف من القائمة (لإعادة المحاولة)</button>
-            </div>
-        `).join('');
-
-        box.querySelectorAll('.ca-m-retry').forEach(btn => {
-            btn.addEventListener('click', e => {
-                const wrap = e.target.closest('[data-pagekey]');
-                CAAnswers.remove(wrap.dataset.pagekey, wrap.dataset.qid);
-                renderMistakes();
-            });
-        });
-    }
-
     function initLocalSections() {
         renderContinue();
         renderNotes();
-        renderMistakes();
-        document.getElementById('ca-mistakes-clear').addEventListener('click', () => {
-            if (!window.CAAnswers) return;
-            if (confirm('مسح كل الأسئلة المسجّلة كخطأ من هذا الجهاز؟ (لن يؤثر هذا على اشتراكك أو حسابك)')) {
-                CAAnswers.clearAll();
-                renderMistakes();
-            }
-        });
         if (location.hash === '#ca-notes') {
             document.getElementById('ca-notes').scrollIntoView({ behavior: 'smooth' });
-        }
-        if (location.hash === '#ca-mistakes') {
-            document.getElementById('ca-mistakes').scrollIntoView({ behavior: 'smooth' });
         }
     }
 
