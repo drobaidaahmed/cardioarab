@@ -172,6 +172,7 @@ async function finishLogin(user, email) {
   }
 
   session.set(user);
+  try { await db.update('users', `?id=eq.${user.id}`, { last_login: new Date().toISOString() }); } catch(e) {}
   await addLog('تسجيل دخول ناجح', email);
   showMsg('✅ تم تسجيل الدخول بنجاح!', 'success');
 
