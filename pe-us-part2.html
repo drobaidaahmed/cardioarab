@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PE — الجزء الثاني: تصنيف المريض | AHA/ACC 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#8b5cf6;--green:#10b981;--orange:#fbbf24;--blue:#3b82f6;--gold:#ea580c;--red:#ef4444;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--blue));z-index:9999;transition:width .2s;width:0}
+  header{background:linear-gradient(135deg,#241a3a,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.4);color:var(--purple);padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+  .back-btn:hover{background:rgba(139,92,246,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:#fff}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .part-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2rem;overflow-x:auto}
+  .part-nav-inner{max-width:1400px;margin:0 auto;display:flex;gap:.5rem}
+  .part-btn{padding:.4rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text2);background:transparent;white-space:nowrap;transition:all .2s}
+  .part-btn:hover{border-color:var(--purple);color:var(--purple)}
+  .part-btn.active{background:var(--purple);border-color:var(--purple);color:#fff}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:var(--purple);border-right-color:var(--purple);background:rgba(139,92,246,.1)}
+  .toc .toc-sub{padding-right:1rem;font-size:.78rem}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:var(--purple);color:#fff;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;flex-shrink:0}
+  .section h2{font-size:1.25rem;font-weight:700;color:#fff}
+  .section h3{font-size:1.05rem;font-weight:600;color:var(--purple);margin:1.5rem 0 .75rem}
+  .section h4{font-size:.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 .5rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul,.section ol{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
+  .badge-i{background:var(--green);color:#fff}
+  .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
+  .rec-iia{background:rgba(251,191,36,.15);border-color:var(--orange)}
+  .badge-iia{background:var(--orange);color:#000}
+  .rec-iib{background:rgba(234,88,12,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#fff}
+  .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
+  .badge-iii{background:var(--red);color:#fff}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(139,92,246,.1);border-color:var(--purple)}
+  .highlight strong{color:var(--purple)}
+  .warning{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .warning strong{color:var(--gold)}
+  .danger{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .danger strong{color:var(--red)}
+  .success{background:rgba(16,185,129,.1);border-color:var(--green)}
+  .success strong{color:var(--green)}
+  .info-blue{background:rgba(59,130,246,.1);border-color:var(--blue)}
+  .info-blue strong{color:var(--blue)}
+  .info-purple{background:rgba(139,92,246,.1);border-color:var(--purple)}
+  .info-purple strong{color:var(--purple)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(139,92,246,.15);color:var(--purple);padding:.75rem 1rem;text-align:right;font-weight:600;white-space:nowrap}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:rgba(255,255,255,.03)}
+  .algo-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+  .algo-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  .algo-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .algo-num{background:var(--purple);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:.2rem}
+  .algo-content h4{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:.3rem}
+  .algo-content p{font-size:.83rem;color:var(--text2);margin:0}
+  .cat-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:1rem 0;border-right:5px solid}
+  .cat-card.a{border-color:var(--green)}
+  .cat-card.b{border-color:var(--blue)}
+  .cat-card.c{border-color:var(--orange)}
+  .cat-card.d{border-color:var(--gold)}
+  .cat-card.e{border-color:var(--red)}
+  .cat-head{display:flex;align-items:center;gap:1rem;margin-bottom:.75rem}
+  .cat-letter{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.3rem;font-family:var(--mono);flex-shrink:0}
+  .cat-card.a .cat-letter{background:rgba(16,185,129,.2);color:var(--green)}
+  .cat-card.b .cat-letter{background:rgba(59,130,246,.2);color:var(--blue)}
+  .cat-card.c .cat-letter{background:rgba(251,191,36,.2);color:var(--orange)}
+  .cat-card.d .cat-letter{background:rgba(234,88,12,.2);color:var(--gold)}
+  .cat-card.e .cat-letter{background:rgba(239,68,68,.2);color:var(--red)}
+  .cat-name{font-size:1.05rem;font-weight:700;color:#fff}
+  .cat-desc{font-size:.85rem;color:var(--text2)}
+  .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0}
+  .type-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:3px solid var(--purple)}
+  .type-card.t2{border-top-color:var(--gold)}
+  .type-card.t3{border-top-color:var(--blue)}
+  .type-name{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.5rem}
+  .type-def{font-size:.82rem;color:var(--text2);margin-bottom:.75rem}
+  .type-row{display:flex;justify-content:space-between;font-size:.8rem;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .type-row:last-child{border-bottom:none}
+  .type-label{color:var(--text2)}
+  .type-val{color:var(--text);font-weight:500}
+  .key-points{background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(59,130,246,.06));border:1px solid rgba(139,92,246,.3);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+  .key-points h4{color:var(--purple);margin-bottom:1rem;font-size:1rem}
+  .key-points ul{list-style:none;padding:0}
+  .key-points li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem}
+  .key-points li::before{content:'🔑';flex-shrink:0}
+  .next-prev{display:flex;justify-content:space-between;margin-top:2rem;gap:1rem}
+  .nav-btn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;text-decoration:none;transition:all .25s;flex:1;max-width:260px}
+  .nav-btn:hover{border-color:var(--purple);background:rgba(139,92,246,.08)}
+  .nav-btn .dir{font-size:.75rem;color:var(--text2);margin-bottom:.25rem}
+  .nav-btn .title{font-size:.9rem;font-weight:700;color:#fff}
+  .nav-btn.next{text-align:left}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:2rem}
+  footer a{color:var(--purple);text-decoration:none}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
+
+  header{transition:padding .3s ease}
+  .header-inner{transition:gap .3s ease}
+  .header-title h1{transition:font-size .3s ease}
+  .header-title p{transition:opacity .2s ease,max-height .3s ease,margin .3s ease;overflow:hidden}
+  .back-btn{transition:all .2s ease,padding .3s ease,font-size .3s ease,gap .3s ease}
+  header.shrink{padding:.3rem 1.25rem}
+  header.shrink .header-inner{gap:.6rem}
+  header.shrink .header-title h1{font-size:.85rem}
+  header.shrink .header-title p{opacity:0;max-height:0;margin:0}
+  header.shrink .back-btn{padding:.2rem .5rem;font-size:.7rem;gap:.2rem}
+</style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8b5cf6">
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="pe-us-index.html" class="back-btn">← PE Overview</a>
+    <div class="header-title">
+      <h1>الجزء الثاني — تصنيف المريض: AHA/ACC Clinical Categories</h1>
+      <p>AHA/ACC/Multisociety Guideline 2026 · Acute Pulmonary Embolism</p>
+    </div>
+  </div>
+</header>
+
+<div class="part-nav">
+  <div class="part-nav-inner">
+    <a href="pe-us-part1.html" class="part-btn">١ · التشخيص</a>
+    <a href="pe-us-part2.html" class="part-btn active">٢ · تصنيف المريض</a>
+    <a href="pe-us-part3.html" class="part-btn">٣ · مضادات التخثر</a>
+    <a href="pe-us-part4.html" class="part-btn">٤ · حالات الخثرة</a>
+    <a href="pe-us-part5.html" class="part-btn">٥ · الجراحة</a>
+    <a href="pe-us-part6.html" class="part-btn">٦ · مقابل ESC</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h3>محتويات الجزء الثاني</h3>
+    <a href="#s1">١ · وداعاً للتصنيف القديم</a>
+    <a href="#s2">٢ · الفئة A</a>
+    <a href="#s3">٣ · الفئة B</a>
+    <a href="#s4">٤ · الفئة C (C1–C3)</a>
+    <a href="#s5">٥ · الفئة D (D1–D2)</a>
+    <a href="#s6">٦ · الفئة E (E1–E2)</a>
+    <a href="#s7">٧ · أدوات مساعدة</a>
+    <a href="#s8" class="toc-sub">· PESI / sPESI / Hestia</a>
+    <a href="#s9">٨ · البيومركرز</a>
+    <a href="#s10">٩ · تصوير RV</a>
+    <a href="#s11">١٠ · خوارزمية القرار الشاملة</a>
+    <a href="#keys">نقاط المفتاحية</a>
+  </nav>
+
+  <div class="content">
+
+    <!-- Section 1 -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">١</div>
+        <h2>وداعاً لـ Massive / Submassive / Low-Risk</h2>
+      </div>
+
+      <p>يقدّم غايدلاين 2026 تحوّلاً مفاهيمياً جذرياً: استبدال التصنيف التقليدي "حسب الخطر" (منخفض/متوسط/عالٍ أو Massive/Submassive/Low-Risk) بنظام تكاملي جديد كلياً يُدعى <strong>AHA/ACC Acute Pulmonary Embolism Clinical Categories</strong> — خمس فئات (A إلى E) مع فئات فرعية.</p>
+
+      <div class="info-box highlight">
+        <strong>💡 الفكرة الجوهرية</strong>
+        النظام الجديد يدمج الخطورة السريرية، البيومركرز، تصوير البطين الأيمن (RV)، المعطيات الديناميكية، والتعويض التنفسي — بدلاً من الاعتماد فقط على عدم الاستقرار الديناميكي كمحدد وحيد. القرار العلاجي يُبنى على الأثر الفيزيولوجي المرضي (Physiopathological Impact) لا على حجم الخثرة التشريحي.
+      </div>
+
+      <h3>لماذا التغيير؟</h3>
+      <ul>
+        <li>مصطلح "Submassive" كان غامضاً وغير متسق بين الأطباء والمراكز</li>
+        <li>الاعتماد فقط على ضغط الدم كخط فاصل يُغفل حالات "الصدمة السوية الضغط" (Normotensive Shock)</li>
+        <li>النظام الجديد يعكس تدرّجاً ديناميكياً واقعياً في تدهور الحالة</li>
+        <li>يتيح قراراً علاجياً أكثر دقة لكل مريض بدلاً من بروتوكول ثنائي جامد</li>
+      </ul>
+    </div>
+
+    <!-- Category A -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">٢</div>
+        <h2>الفئة A — بدون أعراض (Subclinical / Asymptomatic)</h2>
+      </div>
+
+      <div class="cat-card a">
+        <div class="cat-head">
+          <div class="cat-letter">A</div>
+          <div>
+            <div class="cat-name">PE مكتشف صدفة</div>
+            <div class="cat-desc">لا أعراض متعلقة بالـ PE — اكتُشف أثناء تصوير لسبب آخر (تصنيف سرطاني مثلاً)</div>
+          </div>
+        </div>
+        <p style="margin-top:.75rem">لا حاجة لتقييم بيومركرز أو RV إضافي روتينياً في هذه الفئة عند غياب الأعراض.</p>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يمكن بأمان خروج مرضى الفئة A من قسم الطوارئ مباشرة دون الحاجة لدخول المستشفى</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+    </div>
+
+    <!-- Category B -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">٣</div>
+        <h2>الفئة B — أعراض + خطورة سريرية منخفضة</h2>
+      </div>
+
+      <div class="cat-card b">
+        <div class="cat-head">
+          <div class="cat-letter">B</div>
+          <div>
+            <div class="cat-name">PE عرضي بخطورة منخفضة</div>
+            <div class="cat-desc">أعراض موجودة، لكن PESI/sPESI/Hestia يشيرون لخطر منخفض للنتائج السيئة</div>
+          </div>
+        </div>
+        <p style="margin-top:.75rem">لا حاجة لتصوير RV أو بيومركرز روتينياً ما لم تكن هناك دواعٍ سريرية أخرى.</p>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بالخروج المبكر لمرضى الفئة B الذين لديهم إمكانية فورية لمضاد التخثر ومتابعة منظّمة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+    </div>
+
+    <!-- Category C -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <h2>الفئة C — خطورة سريرية عالية (PESI III–V / sPESI ≥1 / Hestia ≥1)</h2>
+      </div>
+
+      <div class="cat-card c">
+        <div class="cat-head">
+          <div class="cat-letter">C</div>
+          <div>
+            <div class="cat-name">تقابل ما كان يُعرف بـ "Intermediate Risk" في ESC</div>
+            <div class="cat-desc">مع أو بدون خلل بيومركرز/RV — تُقسّم فرعياً حسب درجة الخلل الوظيفي</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الفئة الفرعية</th><th>الوصف</th><th>البيومركرز / RV</th></tr></thead>
+          <tbody>
+            <tr><td><strong>C1</strong></td><td>خطورة سريرية عالية فقط</td><td>بيومركرز وRV طبيعيان</td></tr>
+            <tr><td><strong>C2</strong></td><td>خطورة سريرية + خلل بيومركرز أو RV واحد</td><td>ارتفاع Troponin/BNP أو تمدد RV فقط</td></tr>
+            <tr><td><strong>C3</strong></td><td>خطورة سريرية + خلل بيومركرز وRV معاً</td><td>كلاهما غير طبيعي — MAP &gt; 80 mmHg يميّز خطراً أقل ضمن هذه الفئة</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box info-purple">
+        <strong>📌 دور الضغط الشرياني المتوسط (MAP)</strong>
+        بيانات رصدية تشير إلى أن MAP &gt; 80 mmHg في مرضى C3 يدل على خطر منخفض جداً للتدهور خلال 48 ساعة — حساسية 77.5% ونوعية 95% وفق سجل PE الإيطالي، ما يساعد في تفريد القرار داخل الفئة C.
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يجب دخول مرضى الفئة C للمستشفى لتحسين استراتيجية العلاج تحت مراقبة فريق PERT</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+    </div>
+
+    <!-- Category D -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <h2>الفئة D — قصور قلبي رئوي وشيك (Incipient Cardiopulmonary Failure)</h2>
+      </div>
+
+      <div class="cat-card d">
+        <div class="cat-head">
+          <div class="cat-letter">D</div>
+          <div>
+            <div class="cat-name">مساهمة مميزة للغايدلاين الجديد</div>
+            <div class="cat-desc">يُدخل رسمياً مفهوم "الصدمة السوية الضغط" (Normotensive Shock) لأول مرة بهذا الوضوح</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الفئة الفرعية</th><th>التعريف</th></tr></thead>
+          <tbody>
+            <tr><td><strong>D1</strong></td><td>هبوط ضغط عابر أو نسبي يستجيب للسوائل، بدون نقص تروية أو أذية عضوية</td></tr>
+            <tr><td><strong>D2</strong></td><td>صدمة سوية الضغط (Normotensive Shock) — نقص تروية واضح رغم ضغط طبيعي ظاهرياً</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ لماذا هذا مهم؟</strong>
+        مريض بضغط طبيعي قد يكون بالفعل في صدمة حقيقية (D2) بسبب فشل تعويضي لـ RV — الاعتماد فقط على رقم ضغط الدم يُغفل هذه الحالات الخطيرة التي تحتاج تصعيداً سريعاً في القرار العلاجي.
+      </div>
+    </div>
+
+    <!-- Category E -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">٦</div>
+        <h2>الفئة E — قصور قلبي رئوي مع هبوط ضغط مستمر</h2>
+      </div>
+
+      <div class="cat-card e">
+        <div class="cat-head">
+          <div class="cat-letter">E</div>
+          <div>
+            <div class="cat-name">تقابل "High-Risk / Massive PE" سابقاً</div>
+            <div class="cat-desc">هبوط ضغط مستمر (Persistent Hypotension) — أعلى خطورة في النظام الجديد</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الفئة الفرعية</th><th>التعريف</th></tr></thead>
+          <tbody>
+            <tr><td><strong>E1</strong></td><td>هبوط ضغط مستمر (SBP &lt; 90 mmHg لأكثر من 15 دقيقة) بدون سكتة قلبية</td></tr>
+            <tr><td><strong>E2</strong></td><td>سكتة قلبية مرافقة أو صدمة مقاومة تهدد الحياة فوراً</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يجب دخول مرضى الفئتين D وE للمستشفى فوراً لتحسين استراتيجية العلاج تحت إشراف فريق PERT</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+    </div>
+
+    <!-- Section 7: PESI/Hestia -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">٧</div>
+        <h2 id="s8">أدوات مساعدة للفئتين A وB — PESI / sPESI / Hestia</h2>
+      </div>
+
+      <p>تُستخدم هذه الأدوات لتحديد المرضى منخفضي الخطر ضمن الفئتين A وB والمرشحين للخروج المبكر أو العلاج الخارجي.</p>
+
+      <h3>sPESI (Simplified PESI)</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>المعيار</th><th>النقاط</th></tr></thead>
+          <tbody>
+            <tr><td>العمر &gt; 80 سنة</td><td>+1</td></tr>
+            <tr><td>سرطان نشط</td><td>+1</td></tr>
+            <tr><td>قصور قلبي أو رئوي مزمن</td><td>+1</td></tr>
+            <tr><td>نبض القلب ≥ 110</td><td>+1</td></tr>
+            <tr><td>ضغط انقباضي &lt; 100 mmHg</td><td>+1</td></tr>
+            <tr><td>تشبع أكسجين &lt; 90%</td><td>+1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box success">
+        <strong>✅ التفسير</strong>
+        0 نقطة = خطر منخفض للوفاة خلال 30 يوماً → مرشّح جيد للخروج المبكر أو العلاج الخارجي الكامل. أي نقطة ≥1 تستوجب تقييماً أعمق قبل قرار الخروج.
+      </div>
+
+      <h3>Hestia Criteria</h3>
+      <p>مجموعة من 11 معياراً سريرياً (كعدم الاستقرار الديناميكي، الحاجة لأكسجين، نزيف نشط، ألم شديد يحتاج مسكنات وريدية) — غياب كل المعايير يدعم العلاج الخارجي الآمن.</p>
+    </div>
+
+    <!-- Section 8: Biomarkers -->
+    <div class="section" id="s9">
+      <div class="section-header">
+        <div class="section-num">٨</div>
+        <h2>البيومركرز في تصنيف الخطورة</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>البيومركر</th><th>الدلالة</th><th>ملاحظة</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Troponin</strong></td><td>أذية عضلة RV الدقيقة</td><td>يرتفع في PE دون انسداد شريان تاجي</td></tr>
+            <tr><td><strong>BNP / NT-proBNP</strong></td><td>إجهاد جداري RV (Wall Stress)</td><td>مرتبط بشدة توسّع RV</td></tr>
+            <tr><td><strong>Lactate</strong></td><td>نقص التروية النسيجية</td><td>مفيد خصوصاً في تمييز D2 (الصدمة السوية الضغط)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 9: RV imaging -->
+    <div class="section" id="s10">
+      <div class="section-header">
+        <div class="section-num">٩</div>
+        <h2>تصوير البطين الأيمن (RV) لتصنيف الخطورة</h2>
+      </div>
+
+      <ul>
+        <li><strong>نسبة RV/LV &gt; 1.0:</strong> على CTPA أو الإيكو — العلامة الأشيع استخداماً لتمدد RV</li>
+        <li><strong>TAPSE منخفض:</strong> يدل على ضعف انقباض RV الطولي</li>
+        <li><strong>McConnell Sign:</strong> نمط خلل حركة مميّز لـ RV الحاد</li>
+      </ul>
+
+      <div class="info-box danger">
+        <strong>🚨 نقطة محورية: عبء الخثرة التشريحي لا يُستخدم للتصنيف</strong>
+        ينص الغايدلاين صراحة (توصية Class 3 — لا فائدة) على عدم استخدام قياس حجم/عبء الخثرة التشريحي لتصنيف الخطورة في الفئات A–C؛ الأدلة لم تُظهر ارتباطاً بين حجم الخثرة والنتائج السيئة بعد استبعاد مرضى Shock Index &gt; 1. القرار العلاجي يُبنى على الأثر الديناميكي الدموي والوظيفي لـ RV — لا على مقدار الانسداد التشريحي.
+      </div>
+    </div>
+
+    <!-- Section 10: Decision algorithm -->
+    <div class="section" id="s11">
+      <div class="section-header">
+        <div class="section-num">١٠</div>
+        <h2>خوارزمية القرار الشاملة</h2>
+      </div>
+
+      <div class="algo-box">
+        <div class="algo-step">
+          <div class="algo-num">1</div>
+          <div class="algo-content"><h4>تأكيد التشخيص</h4><p>PE مؤكد بالتصوير (الجزء الأول)</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">2</div>
+          <div class="algo-content"><h4>هل يوجد أعراض؟</h4><p>لا → الفئة A | نعم → تابع</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">3</div>
+          <div class="algo-content"><h4>قيّم PESI/sPESI/Hestia</h4><p>منخفض → الفئة B | مرتفع → تابع للفئة C</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">4</div>
+          <div class="algo-content"><h4>قيّم البيومركرز وRV</h4><p>حدد C1/C2/C3 حسب عدد الخلل الوظيفي الموجود</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">5</div>
+          <div class="algo-content"><h4>هل يوجد هبوط ضغط أو نقص تروية؟</h4><p>عابر/مستجيب للسوائل → D1 | نقص تروية بضغط طبيعي → D2</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">6</div>
+          <div class="algo-content"><h4>هبوط ضغط مستمر؟</h4><p>&gt;15 دقيقة بدون سكتة → E1 | سكتة قلبية/صدمة مقاومة → E2</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Points -->
+    <div class="key-points" id="keys">
+      <h4>🔑 نقاط المفتاح — الجزء الثاني</h4>
+      <ul>
+        <li>نظام A–E الجديد يستبدل كلياً مصطلحات Massive/Submassive/Low-Risk القديمة</li>
+        <li>الفئة D تُدخل مفهوم "الصدمة السوية الضغط" — أهم إضافة مفاهيمية في الغايدلاين</li>
+        <li>الفئة C تقابل "Intermediate Risk" الأوروبية القديمة، لكن بتقسيم فرعي أدق (C1-C3)</li>
+        <li>عبء الخثرة التشريحي لا يُستخدم للتصنيف — القرار على أساس ديناميكي وظيفي فقط</li>
+        <li>PESI/sPESI/Hestia تبقى الأداة العملية لفرز A/B للخروج المبكر</li>
+        <li>MAP &gt; 80 mmHg مؤشر مفيد لتمييز خطر أقل ضمن الفئة C3</li>
+        <li>فئات D وE تستوجب دخولاً فورياً وتفعيل فريق PERT</li>
+      </ul>
+    </div>
+
+    <!-- Navigation -->
+    <div class="next-prev">
+      <a href="pe-us-part1.html" class="nav-btn">
+        <div class="dir">← الجزء السابق</div>
+        <div class="title">التشخيص والتقييم الأولي</div>
+      </a>
+      <a href="pe-us-part3.html" class="nav-btn next">
+        <div class="dir">الجزء التالي ←</div>
+        <div class="title">العلاج الأساسي — مضادات التخثر</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>مبني على غايدلاين AHA/ACC/Multisociety 2026 لـ PE — للأغراض التعليمية | <a href="pe-us-index.html">← PE Overview</a> | <a href="guidelines-american.html">جميع الغايدات الأمريكية</a></p>
+</footer>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const __headerEl = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = p + '%';
+  if (window.scrollY > 80) { __headerEl && __headerEl.classList.add('shrink'); } else { __headerEl && __headerEl.classList.remove('shrink'); }
+});
+
+const toc = document.querySelectorAll('.toc a');
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      toc.forEach(a => a.classList.remove('active'));
+      const id = e.target.id;
+      const active = document.querySelector(`.toc a[href="#${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+<script src="notes.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(console.warn);
+  });
+}
+</script>
+<script src="pwa-install.js"></script>
+</body>
+</html>
