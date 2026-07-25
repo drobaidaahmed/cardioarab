@@ -72,7 +72,7 @@ footer strong{color:var(--accent)}
 
 <div class="container" id="mainContainer">
   <div class="list" id="articlesList">
-    <a href="whats-new-hf-2026-ar.html" class="article-card">
+    <a href="whats-new-hf-2026-ar.html" class="article-card" id="article-card-1">
       <div class="icon">🫀</div>
       <div class="body">
         <h2>الجديد في التعريف العالمي الثاني لفشل القلب (2026) مقارنة بـ 2021</h2>
@@ -105,23 +105,35 @@ footer strong{color:var(--accent)}
     const u = JSON.parse(localStorage.getItem('currentUser'));
     const isAdmin = u && u.is_admin;
     const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
-    if(!isAdmin && !isSubscribed){
-      location.href = 'subscription.html';
-      return;
-    }
 
     const topBar = document.getElementById('topBar');
     const BACK_BTN = `<a href="articles.html">← مقالات ومحاضرات</a>`;
 
     if(isAdmin){
       topBar.innerHTML = BACK_BTN + `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="admin.html" style="color:#f59e0b;border-color:#f59e0b;">🎛️ لوحة التحكم</a>`;
-    }else{
+    }else if(isSubscribed){
       topBar.innerHTML = BACK_BTN + `<a href="subscription.html" class="btn-primary">📋 اشتراكي</a><a href="profile.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #1e2d45;border-radius:8px;background:#111827;color:#94a3b8;">👤 ${u.name}</a>`;
+    }else{
+      topBar.innerHTML = BACK_BTN + `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="login.html">🔐 دخول</a>`;
     }
-  }catch(e){
-    location.href = 'subscription.html';
-  }
+
+    // الصفحة متاحة للجميع — لكن المقال الأول مقيّد بالمشتركين الفعّالين فقط
+    if(!isAdmin && !isSubscribed){
+      const card1 = document.getElementById('article-card-1');
+      if(card1){
+        card1.style.opacity = '0.4';
+        card1.style.pointerEvents = 'none';
+        card1.style.cursor = 'default';
+        card1.removeAttribute('href');
+        const lockNote = document.createElement('div');
+        lockNote.style.cssText = 'margin-top:10px;font-size:12.5px;color:#f59e0b;font-weight:600;';
+        lockNote.innerHTML = '🔒 حصري للمشتركين الفعّالين — <a href="subscription.html" style="color:#8b5cf6;text-decoration:underline;pointer-events:auto;">اشترك الآن</a>';
+        card1.querySelector('.body').appendChild(lockNote);
+      }
+    }
+  }catch(e){}
 })();
+</script>
 </script>
 <script src="protection.js"></script>
 <script src="notes.js"></script>
