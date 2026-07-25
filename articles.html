@@ -98,22 +98,18 @@ footer strong{color:var(--accent)}
     const u = JSON.parse(localStorage.getItem('currentUser'));
     const isAdmin = u && u.is_admin;
     const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
-    if(!isAdmin && !isSubscribed){
-      location.href = 'subscription.html';
-      return;
-    }
 
     const topBar = document.getElementById('topBar');
     const HOME_BTN = `<a href="index.html">🏠 الرئيسية</a>`;
 
     if(isAdmin){
       topBar.innerHTML = HOME_BTN + `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="admin.html" style="color:#f59e0b;border-color:#f59e0b;">🎛️ لوحة التحكم</a>`;
-    }else{
+    }else if(isSubscribed){
       topBar.innerHTML = HOME_BTN + `<a href="subscription.html" class="btn-primary">📋 اشتراكي</a><a href="profile.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #1e2d45;border-radius:8px;background:#111827;color:#94a3b8;">👤 ${u.name}</a>`;
+    }else{
+      topBar.innerHTML = HOME_BTN + `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="login.html">🔐 دخول</a>`;
     }
-  }catch(e){
-    location.href = 'subscription.html';
-  }
+  }catch(e){}
 })();
 </script>
 <script src="protection.js"></script>
