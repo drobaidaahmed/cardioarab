@@ -147,25 +147,22 @@
 
 <script src="supabase.js"></script>
 <script>
+// محتوى مجاني بالكامل — لا بوابة اشتراك، فقط تخصيص الشريط العلوي إن وُجد مستخدم مسجّل
 (async function(){
   try{
     const u = JSON.parse(localStorage.getItem('currentUser'));
-    const isAdmin = u && u.is_admin;
-    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
-    if(!isAdmin && !isSubscribed){
-      location.href = 'subscription.html';
-      return;
-    }
     const topBar = document.getElementById('topBar');
+    if(!topBar) return;
     const BACK_BTN = `<a href="medical-articles.html">← رجوع</a>`;
-    if(isAdmin){
-      topBar.innerHTML = BACK_BTN + `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="admin.html" style="color:#f59e0b;border-color:#f59e0b;">🎛️ لوحة التحكم</a>`;
+    const FREE_BADGE = `<span style="background:#10b981;color:#fff;font-size:11px;font-weight:700;padding:.3rem .8rem;border-radius:8px;">✅ مجاني للجميع</span>`;
+    if(u && u.is_admin){
+      topBar.innerHTML = BACK_BTN + FREE_BADGE + `<a href="admin.html" style="color:#f59e0b;border-color:#f59e0b;">🎛️ لوحة التحكم</a>`;
+    }else if(u){
+      topBar.innerHTML = BACK_BTN + FREE_BADGE + `<a href="profile.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #2E2456;border-radius:8px;background:#1D1440;color:#B7ADD1;">👤 ${u.name}</a>`;
     }else{
-      topBar.innerHTML = BACK_BTN + `<a href="subscription.html" class="btn-primary">📋 اشتراكي</a><a href="profile.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #2E2456;border-radius:8px;background:#1D1440;color:#B7ADD1;">👤 ${u.name}</a>`;
+      topBar.innerHTML = BACK_BTN + FREE_BADGE + `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="login.html">🔐 دخول</a>`;
     }
-  }catch(e){
-    location.href = 'subscription.html';
-  }
+  }catch(e){}
 })();
 </script>
 <script src="protection.js"></script>
