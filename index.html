@@ -53,7 +53,21 @@ footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
   .container{padding:20px 16px}
   .top-bar{justify-content:center}
 }
-@media(min-width:601px) and (max-width:900px){.grid{max-width:600px}}
+/* CONFERENCE ANNOUNCEMENT BANNER */
+.conf-banner{max-width:1100px;margin:24px auto 0;padding:0 20px}
+.conf-banner a{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(139,92,246,.16),rgba(139,92,246,.05));border:1px solid rgba(139,92,246,.4);border-radius:14px;padding:16px 20px;text-decoration:none;color:var(--text);transition:.25s}
+.conf-banner a:hover{border-color:var(--accent);background:linear-gradient(135deg,rgba(139,92,246,.24),rgba(139,92,246,.08));transform:translateY(-2px)}
+.conf-banner .cb-icon{font-size:26px;flex-shrink:0}
+.conf-banner .cb-body{flex:1;min-width:0}
+.conf-banner .cb-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.conf-banner .cb-new{background:#ef4444;color:#fff;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.3px}
+.conf-banner .cb-desc{font-size:12.5px;color:var(--text2);margin-top:4px}
+.conf-banner .cb-arrow{font-size:18px;color:var(--accent);flex-shrink:0}
+@media(max-width:600px){
+  .conf-banner a{padding:14px 16px;gap:10px}
+  .conf-banner .cb-title{font-size:13.5px}
+  .conf-banner .cb-desc{font-size:11.5px}
+}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#8b5cf6">
@@ -71,6 +85,17 @@ footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
   <p>Clinical Knowledge for Cardiologists</p>
   <span class="tr">المعرفة السريرية لأطباء القلب</span>
 </header>
+
+<div class="conf-banner" id="confBanner">
+  <a href="conference-index.html" id="confBannerLink">
+    <div class="cb-icon">🎙️</div>
+    <div class="cb-body">
+      <div class="cb-title">لم تحضر ندوة الرابطة السورية لهذا العام؟ <span class="cb-new">جديد</span></div>
+      <div class="cb-desc">غطّينا كل جلساتها الأربع بالتفصيل — أهم ما قيل، وأحدث الدراسات (2024-2026) وراء كل نقطة. اطّلع عليها الآن.</div>
+    </div>
+    <div class="cb-arrow">←</div>
+  </a>
+</div>
 
 <div class="container">
   <div class="grid">
@@ -133,6 +158,16 @@ footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
   </a>
 </section>
 
+<script>
+// إخفاء إعلان تغطية المؤتمر تلقائياً بعد شهر واحد من نشره
+(function(){
+  const EXPIRY = new Date('2026-08-24T00:00:00');
+  if(new Date() > EXPIRY){
+    const b = document.getElementById('confBanner');
+    if(b) b.remove();
+  }
+})();
+</script>
 <script src="supabase.js"></script>
 <script>
 (async function(){
