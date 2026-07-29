@@ -93,8 +93,11 @@
   .guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
   .g-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem;text-decoration:none;display:block;transition:border-color .2s,background .2s}
   a.g-card:hover{border-color:rgba(139,92,246,.4);background:var(--bg3)}
-  .g-card.locked{opacity:.55;cursor:default}
-  .g-card.locked:hover{transform:none;box-shadow:none;border-color:var(--border)}
+  .g-card.locked{opacity:.55;cursor:pointer;position:relative}
+  .g-card.locked:hover{border-color:var(--border);background:var(--bg2)}
+  .g-card.locked .g-lock-badge{background:rgba(148,163,184,.12);color:var(--text2);border:1px solid var(--border)}
+  .search-wrap.locked .search-input{cursor:pointer;opacity:.65}
+  .search-wrap.locked .search-input::placeholder{color:var(--text2)}
   .g-top{display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem;margin-bottom:.4rem}
   .g-title-ar{font-size:1rem;font-weight:700;color:#fff;line-height:1.5}
   .g-title-en{font-size:.78rem;color:var(--text2);margin-top:.3rem;font-family:var(--mono)}
@@ -1190,12 +1193,48 @@ if(document.readyState === 'loading'){
     const isAdmin = u && u.is_admin;
     const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
     if(!isAdmin && !isSubscribed){
-      location.href = 'subscription.html';
+      lockAllGuideCards();
+      lockSearch();
     }
   }catch(e){
-    location.href = 'subscription.html';
+    lockAllGuideCards();
+    lockSearch();
   }
 })();
+
+function lockAllGuideCards(){
+  document.querySelectorAll('.g-card').forEach(card=>{
+    card.classList.add('locked');
+    card.dataset.realHref = card.getAttribute('href');
+    card.removeAttribute('href');
+
+    const badge = card.querySelector('.g-badge');
+    if(badge){
+      badge.className = 'g-badge g-lock-badge';
+      badge.textContent = '🔒 للمشتركين';
+    }
+
+    card.addEventListener('click', (e)=>{
+      e.preventDefault();
+      location.href = 'subscription.html';
+    });
+  });
+}
+
+function lockSearch(){
+  const wrap = document.getElementById('searchWrap');
+  const inp = document.getElementById('searchInput');
+  if(!wrap || !inp) return;
+
+  wrap.classList.add('locked');
+  inp.setAttribute('readonly', 'readonly');
+  inp.placeholder = '🔒 البحث متاح للمشتركين فقط';
+  inp.value = '';
+
+  const goSubscribe = (e)=>{ e.preventDefault(); location.href = 'subscription.html'; };
+  wrap.addEventListener('click', goSubscribe);
+  inp.addEventListener('focus', goSubscribe);
+}
 </script>
 <script src="protection.js"></script>
 <script>
