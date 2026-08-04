@@ -118,6 +118,17 @@ async function handleRegister() {
       plan: 'free', active: false
     });
 
+    // إرسال إيميل تأكيد البريد الإلكتروني عبر Edge Function (Resend)
+    try {
+      await fetch('https://ikisgwnsxadiujueeava.supabase.co/functions/v1/send-verification-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name, token: verificationToken })
+      });
+    } catch (_) {
+      // لا نوقف عملية التسجيل إذا فشل إرسال إيميل التحقق؛ المستخدم بإمكانه طلب إعادة الإرسال لاحقاً
+    }
+
     await addLog('تسجيل حساب جديد: ' + name, email);
 
     // إشعار تيليغرام
@@ -126,7 +137,7 @@ async function handleRegister() {
       await fetch(`https://api.telegram.org/bot8900525496:AAE8ZeCd3AHPG8P0F9CWLrhGqz0o9zzRsVI/sendMessage?chat_id=792639380&text=${msg}`);
     } catch(_) {}
 
-    showMsg('✅ تم إنشاء الحساب! سيتم تفعيله بعد التحقق من الدفع.', 'success');
+    showMsg('✅ تم إنشاء الحساب! تحقق من بريدك الإلكتروني لتأكيده، وسيُفعّل الاشتراك بعد التحقق من الدفع.', 'success');
     setTimeout(() => { window.location.href = 'index.html'; }, 2500);
 
   } catch (e) {
