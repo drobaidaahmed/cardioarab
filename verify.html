@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تأكيد البريد الإلكتروني — CardioArab</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#8b5cf6;--green:#10b981;--red:#ef4444;--font:'IBM Plex Sans Arabic',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem}
+.card{width:100%;max-width:440px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:2.25rem 2rem;text-align:center}
+.logo{margin-bottom:1.5rem}
+.logo h1{font-size:1.5rem;font-weight:700;color:#fff}
+.logo h1 span{color:var(--accent)}
+.icon{font-size:3rem;margin-bottom:1rem}
+.status-title{font-size:1.15rem;font-weight:700;margin-bottom:.6rem}
+.status-title.success{color:var(--green)}
+.status-title.danger{color:var(--red)}
+.status-title.pending{color:var(--text2)}
+.status-desc{color:var(--text2);font-size:.9rem;line-height:1.8;margin-bottom:1.5rem}
+.spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;margin:0 auto 1.25rem;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn{display:inline-block;width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;font-family:var(--font);font-size:1rem;font-weight:700;cursor:pointer;text-decoration:none;transition:.2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(139,92,246,.4)}
+.links{text-align:center;margin-top:1.25rem}
+.links a{color:var(--accent);text-decoration:none;font-weight:600;font-size:.88rem}
+.links a:hover{text-decoration:underline}
+</style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8b5cf6">
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <h1>🫀 <span>Cardio</span>Arab</h1>
+  </div>
+
+  <div id="pendingState">
+    <div class="spinner"></div>
+    <div class="status-title pending">جاري التحقق من بريدك الإلكتروني...</div>
+    <div class="status-desc">من فضلك انتظر لحظة.</div>
+  </div>
+
+  <div id="successState" style="display:none">
+    <div class="icon">✅</div>
+    <div class="status-title success">تم تأكيد بريدك الإلكتروني بنجاح</div>
+    <div class="status-desc">صار حسابك موثّق. لسا اشتراكك بحاجة تفعيل من الإدارة بعد التحقق من الدفع إذا ما فعّلته لسا.</div>
+    <a href="login.html" class="btn">تسجيل الدخول</a>
+  </div>
+
+  <div id="errorState" style="display:none">
+    <div class="icon">⚠️</div>
+    <div class="status-title danger" id="errorTitle">رابط التحقق غير صالح</div>
+    <div class="status-desc" id="errorDesc">تأكد أنك فتحت نفس الرابط الذي وصلك بالإيميل، أو أنه لم يُستخدم من قبل.</div>
+    <a href="index.html" class="btn">العودة للرئيسية</a>
+  </div>
+
+  <div class="links">
+    <p><a href="index.html">🏠 العودة للرئيسية</a></p>
+  </div>
+</div>
+
+<script src="supabase.js"></script>
+<script>
+function show(stateId) {
+  ['pendingState','successState','errorState'].forEach(id => {
+    document.getElementById(id).style.display = (id === stateId) ? 'block' : 'none';
+  });
+}
+
+async function verifyEmail() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+
+  if (!token) {
+    document.getElementById('errorTitle').textContent = 'رابط ناقص';
+    document.getElementById('errorDesc').textContent = 'لم يتم العثور على رمز التحقق في الرابط.';
+    show('errorState');
+    return;
+  }
+
+  try {
+    const users = await db.select('users', `?verification_token=eq.${token}`);
+
+    if (!users || users.length === 0) {
+      document.getElementById('errorTitle').textContent = 'الرابط غير صالح أو مُستخدَم مسبقاً';
+      document.getElementById('errorDesc').textContent = 'إذا كان بريدك مؤكداً من قبل يمكنك تسجيل الدخول مباشرة.';
+      show('errorState');
+      return;
+    }
+
+    const user = users[0];
+
+    await db.update('users', `?id=eq.${user.id}`, {
+      email_verified: true,
+      verification_token: null
+    });
+
+    show('successState');
+
+  } catch (e) {
+    console.error(e);
+    document.getElementById('errorTitle').textContent = 'حدث خطأ أثناء التحقق';
+    document.getElementById('errorDesc').textContent = 'حاول مرة أخرى، أو تواصل معنا عبر واتساب إذا استمرت المشكلة.';
+    show('errorState');
+  }
+}
+
+verifyEmail();
+</script>
+<script src="protection.js"></script>
+</body>
+</html>

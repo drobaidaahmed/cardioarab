@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HFpEF — الجزء الأول: التشخيص وأدوات التقييم والمحاكيات | ACC 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--brand:#3b82f6;--green:#10b981;--orange:#fbbf24;--gold:#ea580c;--red:#ef4444;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--brand),var(--purple));z-index:9999;transition:width .2s;width:0}
+  header{background:linear-gradient(135deg,#0a1c3a,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.4);color:var(--brand);padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+  .back-btn:hover{background:rgba(59,130,246,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:#fff}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .part-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2rem;overflow-x:auto}
+  .part-nav-inner{max-width:1400px;margin:0 auto;display:flex;gap:.5rem}
+  .part-btn{padding:.4rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text2);background:transparent;white-space:nowrap;transition:all .2s}
+  .part-btn:hover{border-color:var(--brand);color:var(--brand)}
+  .part-btn.active{background:var(--brand);border-color:var(--brand);color:#fff}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:var(--brand);border-right-color:var(--brand);background:rgba(59,130,246,.1)}
+  .toc .toc-sub{padding-right:1rem;font-size:.78rem}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:var(--brand);color:#fff;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;flex-shrink:0}
+  .section h2{font-size:1.25rem;font-weight:700;color:#fff}
+  .section h3{font-size:1.05rem;font-weight:600;color:var(--brand);margin:1.5rem 0 .75rem}
+  .section h4{font-size:.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 .5rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul,.section ol{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
+  .badge-i{background:var(--green);color:#fff}
+  .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
+  .rec-iia{background:rgba(251,191,36,.15);border-color:var(--orange)}
+  .badge-iia{background:var(--orange);color:#000}
+  .rec-iib{background:rgba(234,88,12,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#fff}
+  .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
+  .badge-iii{background:var(--red);color:#fff}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(59,130,246,.1);border-color:var(--brand)}
+  .highlight strong{color:var(--brand)}
+  .warning{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .warning strong{color:var(--gold)}
+  .danger{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .danger strong{color:var(--red)}
+  .success{background:rgba(16,185,129,.1);border-color:var(--green)}
+  .success strong{color:var(--green)}
+  .info-purple{background:rgba(139,92,246,.1);border-color:var(--purple)}
+  .info-purple strong{color:var(--purple)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(59,130,246,.15);color:var(--brand);padding:.75rem 1rem;text-align:right;font-weight:600;white-space:nowrap}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:rgba(255,255,255,.03)}
+  .algo-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+  .algo-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  .algo-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .algo-num{background:var(--brand);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:.2rem}
+  .algo-content h4{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:.3rem}
+  .algo-content p{font-size:.83rem;color:var(--text2);margin:0}
+  .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0}
+  .type-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:3px solid var(--brand)}
+  .type-card.t2{border-top-color:var(--gold)}
+  .type-card.t3{border-top-color:var(--teal)}
+  .type-name{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.5rem}
+  .type-def{font-size:.82rem;color:var(--text2);margin-bottom:.75rem}
+  .type-row{display:flex;justify-content:space-between;font-size:.8rem;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .type-row:last-child{border-bottom:none}
+  .type-label{color:var(--text2)}
+  .type-val{color:var(--text);font-weight:500}
+  .key-points{background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(139,92,246,.06));border:1px solid rgba(59,130,246,.3);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+  .key-points h4{color:var(--brand);margin-bottom:1rem;font-size:1rem}
+  .key-points ul{list-style:none;padding:0}
+  .key-points li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem}
+  .key-points li::before{content:'🔑';flex-shrink:0}
+  .next-prev{display:flex;justify-content:space-between;margin-top:2rem;gap:1rem}
+  .nav-btn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;text-decoration:none;transition:all .25s;flex:1;max-width:260px}
+  .nav-btn:hover{border-color:var(--brand);background:rgba(59,130,246,.08)}
+  .nav-btn .dir{font-size:.75rem;color:var(--text2);margin-bottom:.25rem}
+  .nav-btn .title{font-size:.9rem;font-weight:700;color:#fff}
+  .nav-btn.next{text-align:left}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:2rem}
+  footer a{color:var(--brand);text-decoration:none}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
+  header{transition:padding .3s ease}
+  .header-inner{transition:gap .3s ease}
+  .header-title h1{transition:font-size .3s ease}
+  .header-title p{transition:opacity .2s ease,max-height .3s ease,margin .3s ease;overflow:hidden}
+  .back-btn{transition:all .2s ease,padding .3s ease,font-size .3s ease,gap .3s ease}
+  header.shrink{padding:.3rem 1.25rem}
+  header.shrink .header-inner{gap:.6rem}
+  header.shrink .header-title h1{font-size:.85rem}
+  header.shrink .header-title p{opacity:0;max-height:0;margin:0}
+  header.shrink .back-btn{padding:.2rem .5rem;font-size:.7rem;gap:.2rem}
+</style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8b5cf6">
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="hfpef-us-index.html" class="back-btn">← HFpEF Overview</a>
+    <div class="header-title">
+      <h1>الجزء الأول — التشخيص، أدوات التقييم، ومحاكيات HFpEF</h1>
+      <p>ACC Expert Consensus Decision Pathway 2026 · Heart Failure with Preserved Ejection Fraction</p>
+    </div>
+  </div>
+</header>
+
+<div class="part-nav">
+  <div class="part-nav-inner">
+    <a href="hfpef-us-part1.html" class="part-btn active">١ · التشخيص والمحاكيات</a>
+    <a href="hfpef-us-part2.html" class="part-btn">٢ · العلاج الدوائي</a>
+    <a href="hfpef-us-part3.html" class="part-btn">٣ · غير الدوائي والمرافق</a>
+    <a href="hfpef-us-part4.html" class="part-btn">٤ · مقارنة ESC</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h3>محتويات الجزء الأول</h3>
+    <a href="#s1">١ · خلفية ووبائيات</a>
+    <a href="#s2">٢ · تحدي التشخيص</a>
+    <a href="#s3">٣ · التشخيص التفريقي</a>
+    <a href="#s4">٤ · أدوات التقييم التشخيصي</a>
+    <a href="#s5" class="toc-sub">· جدول المقارنة الكامل</a>
+    <a href="#s6">٥ · المحاكيات غير القلبية</a>
+    <a href="#s7">٦ · المحاكيات القلبية</a>
+    <a href="#s8" class="toc-sub">· جدول المحاكيات والتقييم</a>
+    <a href="#s9">٧ · الفروق بين الجنسين</a>
+    <a href="#keys">نقاط المفتاح</a>
+  </nav>
+
+  <div class="content">
+
+    <!-- Section 1 -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">١</div>
+        <h2>خلفية ووبائيات HFpEF</h2>
+      </div>
+
+      <p>رغم التقدّم العلاجي الكبير، يبقى قصور القلب سبباً رئيسياً للمراضة والوفاة عالمياً، بخطر مدى الحياة عند سن الأربعين يقارب 20%. وبينما استقرّت حالات قصور القلب بشكل عام في الولايات المتحدة بل وتراجعت نسبياً، فإن حالات قصور قلب مع وظيفية قلبية طبيعية (HFpEF) في تزايد مستمر.</p>
+
+      <div class="info-box highlight">
+        <strong>📄 "Management of Heart Failure With Preserved Ejection Fraction: 2026 ACC Expert Consensus Decision Pathway"</strong>
+        نُشرت في JACC عام 2026 كتحديث شامل لمسار القرار السريري الصادر عام 2023 — يعكس التطورات العلاجية الكبرى في السنوات الأخيرة، خصوصاً مع نتائج تجارب SGLT2i، وMRA غير الستيرويدي، والعلاجات المعتمدة على الإنكريتين.
+      </div>
+
+      <p>تُمثّل HFpEF أكثر من <strong>50% من كل حالات قصور القلب</strong>، بنتائج سريرية مماثلة تقريباً لقصور القلب بالكسر المخفّض (HFrEF) من حيث المراضة والوفاة. ومع ذلك، تبقى الحالة غير مُشخَّصة بشكل كافٍ في الممارسة اليومية، وتستهلك موارد صحية كبيرة.</p>
+
+      <div class="info-box success">
+        <strong>✅ لماذا تغيّر المشهد العلاجي؟</strong>
+        تطوّر الإطار المفاهيمي لـHFpEF من مجرد "خلل انبساطي" إلى متلازمة معقدة متعددة الأجهزة، مدفوعة بالسمنة الحشوية والأديبوكينات الالتهابية والخلل الاستقلابي، مع التعرّف على مجموعات فرعية ظاهرية (phenotypes) متمايزة — وهو ما فتح الباب لعلاجات موجّهة لم تكن متاحة قبل عقد من الزمن.
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">٢</div>
+        <h2>تحدي التشخيص — لا يوجد اختبار واحد قاطع</h2>
+      </div>
+
+      <p>يعتمد "التعريف الشامل لقصور القلب" على وجود أعراض و/أو علامات لقصور القلب ناجمة عن خلل بنيوي أو وظيفي بالقلب، مترافقة مع واحد على الأقل من: (1) ارتفاع الببتيدات المدرّة للصوديوم، أو (2) دليل موضوعي على احتقان رئوي أو جهازي قلبي المنشأ.</p>
+
+      <div class="info-box warning">
+        <strong>⚠️ العقبة الأساسية</strong>
+        لا يوفّر تخطيط صدى القلب سمات قاطعة لـHFpEF، وقد تكون مستويات الببتيدات المدرّة للصوديوم طبيعية تماماً — خصوصاً عند المرضى الذين يعانون السمنة. لذلك يتطلّب التشخيص الدقيق: تشخيصاً تفريقياً دقيقاً، استخدام أنظمة تسجيل نقاط لتقدير احتمالية HFpEF، ونفي المحاكيات القلبية وغير القلبية المحتملة.
+      </div>
+
+      <p>المقاربة الموصى بها من الغايدلاين تسير على ثلاث خطوات متتالية: (1) تحديد المرضى المحتملين بناءً على الأعراض والعلامات المميزة، (2) تقييم المحاكيات القلبية وغير القلبية كجزء من التشخيص التفريقي الشامل، (3) تنفيذ خطة إدارة تشمل علاج الأمراض المرافقة والإدارة غير الدوائية إلى جانب العلاج الدوائي الأمثل.</p>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">٣</div>
+        <h2>التشخيص التفريقي لضيق التنفس والوذمة</h2>
+      </div>
+
+      <p>رغم أن ضيق التنفس والوذمة من الأعراض الشائعة لـHFpEF، إلا أن أسباباً أخرى عديدة تستدعي الأخذ بعين الاعتبار قبل ربط الأعراض بقصور القلب مباشرة.</p>
+
+      <h3>ضيق التنفس — ثلاثة مصادر رئيسية</h3>
+      <div class="type-grid">
+        <div class="type-card">
+          <div class="type-name">قلبي</div>
+          <div class="type-def">اعتلال عضلة القلب، مرض الشريان التاجي، مرض الصمامات، مرض التامور، اضطرابات النظم</div>
+        </div>
+        <div class="type-card t2">
+          <div class="type-name">رئوي</div>
+          <div class="type-def">مرض الانسداد الرئوي، المرض الرئوي التقييدي، مرض الجنب، الانصمام الرئوي</div>
+        </div>
+        <div class="type-card t3">
+          <div class="type-name">مصدر آخر</div>
+          <div class="type-def">فقر الدم، اضطرابات عصبية عضلية، ضعف اللياقة البدنية، السمنة، القلق</div>
+        </div>
+      </div>
+
+      <h3>الوذمة — مصدران فيزيولوجيان مرضيان</h3>
+      <p>بعد استبعاد الوذمة اللمفية، يُمكن تقسيم مصادر الوذمة إلى ارتفاع الضغط الشعري الهيدروستاتيكي (قلبي، تشمّع، مرض كلوي، احتقان وريدي، حمل، أدوية) أو انخفاض الضغط الغرواني الأسموزي (نقص بروتين الدم بسبب سوء التغذية أو التشمّع أو المتلازمة الكلائية).</p>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <h2>أدوات التقييم التشخيصي الثلاث</h2>
+      </div>
+
+      <p>نظراً لغياب اختبار تشخيصي حاسم، تُستخدم أنظمة التسجيل السريرية للمساعدة في التقييم التشخيصي. ثلاث خوارزميات معتمدة — H2FPEF وHFA-PEFF وHFpEF-ABA — تُستخدم لتقدير احتمالية أن يكون HFpEF هو السبب الكامن وراء ضيق التنفس أو الوذمة.</p>
+
+      <h3>H2FPEF Score</h3>
+      <p>اشتُقّ وتم التحقق منه باستخدام مرجع ذهبي من القياسات الدموية الديناميكية الجهدية الغازية، ويتضمن ستة مكوّنات سهلة الوصول: الوزن الزائد (BMI &gt;30 = نقطتان)، تناول ≥2 أدوية خافضة للضغط (نقطة واحدة)، الرجفان الأذيني (3 نقاط)، ارتفاع الضغط الشرياني الرئوي (نقطة واحدة)، التقدّم بالعمر &gt;60 سنة (نقطة واحدة)، وارتفاع ضغط الامتلاء E/e' &gt;9 (نقطة واحدة). النتيجة ≥6 نقاط تدعم بقوة تشخيص HFpEF.</p>
+
+      <h3>HFA-PEFF Score</h3>
+      <p>خوارزمية أكثر تعقيداً طُوّرت بإجماع الخبراء، وتتضمن أربع خطوات: التقييم المسبق للاختبار (P)، درجة تخطيط الصدى والببتيد المدر (E)، الاختبار الوظيفي عند عدم اليقين (F1)، وتحديد المسبب النهائي (F2). النتيجة ≥5 نقاط تدعم التشخيص.</p>
+
+      <h3>HFpEF-ABA Score</h3>
+      <p>أُشتقّت خصيصاً لتكون أسهل استخداماً في الرعاية الأولية، اعتماداً على ثلاثة متغيرات سريرية شائعة فقط: العمر (Age)، مؤشر كتلة الجسم (BMI)، والرجفان الأذيني (AF) — دون الحاجة لبيانات تخطيط صدى القلب، عبر معادلة أسّية تحتاج حاسبة إلكترونية.</p>
+
+      <div class="info-box highlight">
+        <strong>📌 الاستراتيجية العملية الموصى بها</strong>
+        استخدام H2FPEF كأداة فرز أولية، تليها خوارزمية HFA-PEFF للتأكيد؛ وعند حدوث تضارب بين الأداتين، يُلجأ إلى اختبارات تشخيصية متقدّمة إضافية.
+      </div>
+
+      <h3 id="s5">جدول المقارنة الكامل بين الأدوات الثلاث</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الأداة</th><th>نقاط القوة</th><th>القيود</th><th>الاستخدام الأمثل</th></tr></thead>
+          <tbody>
+            <tr><td><strong>HFA-PEFF</strong></td><td>أساس فيزيولوجي قوي</td><td>خوارزمية معقدة؛ اختبار الإجهاد الانبساطي والقياسات الغازية غالباً غير عملية</td><td>عيادات القلب التخصصية</td></tr>
+            <tr><td><strong>H2FPEF</strong></td><td>نظام نقاط سهل الحساب؛ دقة أعلى رغم قلة المتغيرات</td><td>قد لا يميّز بين أعراض السمنة وHFpEF الحقيقي؛ فئة "متوسطة" كبيرة غير تشخيصية</td><td>الرعاية الأولية، القلب العام، القلب التخصصي</td></tr>
+            <tr><td><strong>HFpEF-ABA</strong></td><td>الأسهل تطبيقاً في الرعاية الأولية؛ لا يحتاج بيانات تخطيط صدى</td><td>يحتاج حاسبة إلكترونية؛ لا عتبات احتمالية راسخة بعد</td><td>الرعاية الأولية، الفرز بالسجلات الطبية الإلكترونية</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ فخاخ الببتيد المدر للصوديوم</strong>
+        تكون مستويات الببتيد المدر أقل عموماً في HFpEF مقارنة بـHFrEF، وأقل أيضاً بالسمنة والعرق الأسود والنساء ذوات الأندروجينية المرتفعة ومقاومة الإنسولين، بينما ترتفع بمرض الكلى المزمن. لذلك فإن المستوى الطبيعي وحده لا يكفي لنفي التشخيص.
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <h2>المحاكيات غير القلبية لـHFpEF</h2>
+      </div>
+
+      <p>تشخيص HFpEF الدقيق يتطلّب نفي محاكيات غير قلبية يُمكن أن تُنتج ضيق تنفس، تحمّل جهد منخفض، وذمة، أو ارتفاع الببتيد المدر — مما يُشبه HFpEF سريرياً.</p>
+
+      <h3>المرض الرئوي</h3>
+      <p>مرض الانسداد الرئوي المزمن، الربو، المرض الرئوي الخلالي، وارتفاع الضغط الشرياني الرئوي من مصادر رئوية أولية يمكن أن تسبب ضيق تنفس جهدي. اختبارات وظائف الرئة، التصوير المقطعي عالي الدقة، وتقييم تبادل الغازات تساعد في التفريق عن السبب القلبي.</p>
+
+      <h3>مرض الكلى</h3>
+      <p>يمكن أن يُحاكي مرض الكلى HFpEF عبر احتقان السوائل، الوذمة الطرفية، وارتفاع الببتيد المدر — وفي كثير من الحالات يصعب الفصل تماماً بين الفيزيولوجيا القلبية-الكلوية، ما يستدعي علاج الحالتين معاً.</p>
+
+      <h3>حالات الإنتاج القلبي المرتفع</h3>
+      <p>تشمل مرض الكبد الشديد، فقر الدم، فرط نشاط الغدة الدرقية، الناسور الشرياني الوريدي (بما فيها ناسور غسيل الكلى)، والحالات الالتهابية المزمنة — قد تسبب ضيق تنفس جهدياً وتسرّع قلب وتعباً.</p>
+
+      <h3>السمنة</h3>
+      <p>محاكٍ آخر بتداخل كبير مع أعراض وعلامات HFpEF؛ قد يعاني مرضى السمنة من ضيق تنفس وتحمّل جهد منخفض وضغوط امتلاء مرتفعة مزمناً رغم بنية عضلة قلب طبيعية. كما تخفض السمنة تركيز الببتيد المدر، مما يزيد الغموض التشخيصي. تشير الدراسات إلى أن حتى 70% من الحالات المشتبهة بها بمجتمعات الإحالة تكون فعلياً HFpEF حقيقياً.</p>
+
+      <h3>الوهن وضعف اللياقة (Frailty/Deconditioning)</h3>
+      <p>يمكن أن يُنتج الوهن وضعف اللياقة عدم تحمّل جهد دون خلل قلبي حقيقي؛ اختبار الإجهاد القلبي الرئوي مع أو دون قياسات دموية غازية مفيد بشكل خاص للتمييز بين المحدودية المحيطية والمركزية القلبية/الرئوية.</p>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">٦</div>
+        <h2>المحاكيات القلبية لـHFpEF</h2>
+      </div>
+
+      <p>عدة حالات قلبية قد تُشبه HFpEF لكنها تمثل شكلاً محدداً من قصور القلب يتطلّب مقاربة تشخيصية وعلاجية مختلفة تماماً. يجب اعتبار HFpEF تشخيصاً استبعادياً بعد النظر بعناية في مرض الصمامات، مرض التامور، مرض عضلة القلب، ومرض الشريان التاجي.</p>
+
+      <h3>مرض الصمامات</h3>
+      <p>خصوصاً تضيّق الأبهر، القلس التاجي، وتضيّق التاجي — يمكن أن تُنتج ضغوط امتلاء مرتفعة وضيق تنفس. التشخيص الدقيق حاسم لأن إدارة هذه الآفات غالباً تتطلّب علاجاً جراحياً أو قسطرياً بدلاً من العلاج الدوائي الخاص بـHFpEF.</p>
+
+      <h3>مرض التامور — التضيّق التاموري</h3>
+      <p>محاكٍ كلاسيكي لـHFpEF، ينتج امتلاءً بطينياً معيقاً مع وظيفة انقباضية محفوظة، مصحوباً غالباً بعلامة كوسمول وسمات تصويرية مثل الارتداد الحاجزي أو سماكة التامور.</p>
+
+      <h3>مرض عضلة القلب — الأمراض الارتشاحية والتقييدية</h3>
+      <p>الداء النشواني القلبي، الساركويد، وداء ترسّب الحديد تُظهر عادة كسر قذف محفوظ مع خلل انبساطي شديد. تشمل الأدلة: زيادة سماكة الجدار البطيني، تخطيط كهربائي منخفض الفولتية، أنماط انفعال غير متطابقة، ومظاهر خارج قلبية مميزة (مثل متلازمة النفق الرسغي مع الداء النشواني الترانستيريتيني).</p>
+
+      <p>يمكن أن يُحاكي اعتلال عضلة القلب الضخامي (HCM) — خصوصاً بالأشكال غير الانسدادية — HFpEF أيضاً. ويجب الانتباه لوجود "أشباه" HCM ذات فيزيولوجيا مرضية مختلفة تماماً كالداء النشواني وأمراض الاختزان النادرة.</p>
+
+      <h3>مرض الشريان التاجي</h3>
+      <p>يمكن أن يظهر بضيق تنفس جهدي وكسر قذف محفوظ، خصوصاً بالذبحة الوعائية الدقيقة، أو نقص التروية دون تضيّق تاجي واضح، أو خلل بطيني أيسر إقليمي خفي.</p>
+
+      <h3 id="s8">جدول المحاكيات الرئيسية والتقييم التشخيصي الموصى به</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>المحاكي</th><th>السمات السريرية الموحية</th><th>التقييم التشخيصي الموصى به</th></tr></thead>
+          <tbody>
+            <tr><td><strong>مرض رئوي</strong></td><td>سعال مزمن، وزيز، نقص أكسجة، DLCO منخفض</td><td>وظائف رئة، تصوير مقطعي، اختبار إجهاد قلبي رئوي</td></tr>
+            <tr><td><strong>مرض كلوي</strong></td><td>احتقان سوائل، مرض كلوي مزمن طويل الأمد</td><td>لوحة وظائف كلى، تقييم حجم السوائل بالموجات فوق الصوتية</td></tr>
+            <tr><td><strong>حالات إنتاج مرتفع</strong></td><td>تسرّع قلب، أطراف دافئة، فرق ضغط واسع</td><td>CBC، TSH، وظائف كبد، صدى القلب، قسطرة قلبية يمنى</td></tr>
+            <tr><td><strong>السمنة</strong></td><td>ببتيد مدر منخفض، بنية قلبية محفوظة</td><td>اختبار إجهاد قلبي رئوي، قسطرة قلبية عند اللزوم</td></tr>
+            <tr><td><strong>مرض الصمامات</strong></td><td>نفخات، أعراض غير متناسبة مع EF المحفوظ</td><td>تخطيط صدى مع دوبلر شامل</td></tr>
+            <tr><td><strong>التضيّق التاموري</strong></td><td>جراحة قلب سابقة، إشعاع صدري، علامة كوسمول</td><td>صدى دوبلر، قسطرة قلبية يمنى ويسرى</td></tr>
+            <tr><td><strong>الداء النشواني القلبي</strong></td><td>سماكة جدار مع فولتية منخفضة، اعتلال أعصاب</td><td>فحص بروتين وحيد النسيلة، تصوير نظائري عظمي، خزعة عند الحاجة</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="section" id="s9">
+      <div class="section-header">
+        <div class="section-num">٧</div>
+        <h2>الاعتبارات الخاصة بالجنس</h2>
+      </div>
+
+      <p>تُعاني النساء من انتشار أعلى لـHFpEF مقارنة بـHFrEF، رغم أن هذا يختلف حسب العرق؛ النساء البيض لديهن انتشار أعلى لـHFpEF، بينما النساء السود لديهن انتشار متقارب بين HFpEF وHFrEF. النساء المصابات بـHFpEF عادة أكبر سناً من الرجال، مع عبء أمراض مرافقة مشابه تقريباً، لكن خطراً منسوباً أكبر من عوامل الخطر التقليدية كارتفاع الضغط والسكري والسمنة.</p>
+
+      <div class="info-box info-purple">
+        <strong>🔬 فروق بنيوية ووظيفية</strong>
+        النساء المصابات بـHFpEF لديهن كتلة بطينية أيسر أقل، وإعادة تشكّل مركزية أكثر، وحجم حجرة بطينية أصغر — وبالتالي كسر قذف أعلى عادة مقارنة بالرجال. الرجال لديهم مرض شريان تاجي وبائي أكثر، بينما تُظهر النساء اختلالاً وعائياً دقيقاً أكثر شيوعاً.
+      </div>
+
+      <p>من عوامل الخطر الفريدة عند النساء: اضطرابات ضغط الحمل، سكري الحمل، العقم، وانقطاع الطمث المبكر. أما من الناحية الفيزيولوجية، فالنساء يُظهرن مستويات ببتيد مدر أعلى بشكل عام، لكن أقل نسبياً عند وجود سمنة مركزية مقارنة بالرجال، مع استهلاك أكسجين ذروي أقل حتى بعد تعديل حجم الجسم والهيموغلوبين.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>المحور</th><th>النساء</th><th>الرجال</th></tr></thead>
+          <tbody>
+            <tr><td><strong>البنية القلبية</strong></td><td>حجرة بطينية أصغر، إعادة تشكّل مركزية أكثر</td><td>نسيج شحمي حشوي أكثر، تشكّل بطيني أقل تمركزاً</td></tr>
+            <tr><td><strong>مرض الشريان التاجي</strong></td><td>اختلال وعائي دقيق أكثر شيوعاً</td><td>مرض شريان تاجي وبائي (epicardial) أكثر شيوعاً</td></tr>
+            <tr><td><strong>الأعراض</strong></td><td>ضيق تنفس أشد وجودة حياة أسوأ</td><td>أعراض أخف نسبياً عند نفس شدة الحالة</td></tr>
+            <tr><td><strong>الفيزيولوجيا الجهدية</strong></td><td>تصلّب شرياني أكبر، ارتفاع أكبر بضغط الشعيرات الرئوية الإسفينية جهدياً</td><td>اقتران بطين أيمن-شريان رئوي أسوأ</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Key Points -->
+    <div class="key-points" id="keys">
+      <h4>🔑 نقاط المفتاح — الجزء الأول</h4>
+      <ul>
+        <li>لا يوجد اختبار تشخيصي واحد قاطع لـHFpEF؛ التشخيص يعتمد على دمج الاحتمالية السريرية، أدوات التسجيل، ونفي المحاكيات</li>
+        <li>الأدوات الثلاث (H2FPEF، HFA-PEFF، HFpEF-ABA) متكاملة وليست بديلاً كاملاً لبعضها — كل منها يناسب سياقاً سريرياً مختلفاً</li>
+        <li>مستوى الببتيد المدر الطبيعي وحده لا ينفي HFpEF، خصوصاً بالسمنة</li>
+        <li>يجب استبعاد المحاكيات غير القلبية أولاً (رئوي، كلوي، إنتاج مرتفع، سمنة، وهن) ثم القلبية (صمامي، تاموري، عضلة قلب، إقفاري)</li>
+        <li>الداء النشواني القلبي يستحق شكاً عالياً خصوصاً مع سماكة الجدار وفولتية منخفضة، لتوفر علاجات موجّهة نوعياً</li>
+        <li>النساء أكثر عرضة لـHFpEF من HFrEF، بأعراض أشد وفيزيولوجيا جهدية مختلفة عن الرجال</li>
+      </ul>
+    </div>
+
+    <!-- Navigation -->
+    <div class="next-prev">
+      <a href="hfpef-us-index.html" class="nav-btn">
+        <div class="dir">← العودة إلى</div>
+        <div class="title">نظرة عامة على HFpEF</div>
+      </a>
+      <a href="hfpef-us-part2.html" class="nav-btn next">
+        <div class="dir">الجزء التالي ←</div>
+        <div class="title">العلاج الدوائي الأمثل</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>مبني على مسار القرار السريري لـACC 2026 لقصور قلب مع وظيفية قلبية طبيعية — للأغراض التعليمية | <a href="hfpef-us-index.html">← HFpEF Overview</a> | <a href="guidelines.html">جميع الغايدات</a></p>
+</footer>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const __headerEl = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = p + '%';
+  if (window.scrollY > 80) { __headerEl && __headerEl.classList.add('shrink'); } else { __headerEl && __headerEl.classList.remove('shrink'); }
+});
+
+const toc = document.querySelectorAll('.toc a');
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      toc.forEach(a => a.classList.remove('active'));
+      const id = e.target.id;
+      const active = document.querySelector(`.toc a[href="#${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+<script src="notes.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(console.warn);
+  });
+}
+</script>
+<script src="pwa-install.js"></script>
+</body>
+</html>

@@ -81,6 +81,15 @@ footer strong{color:var(--accent)}
         <span class="badge">مقال جديد</span>
       </div>
     </a>
+    <a href="cardiac-amyloidosis-hf-transplant.html" class="article-card" id="article-card-2">
+      <div class="icon">🧬</div>
+      <div class="body">
+        <h2>إدارة قصور القلب (HFrEF / HFpEF) في الداء النشواني القلبي، ومتى نفكر بالزرع</h2>
+        <div class="meta">تغطية مؤتمر — FACET بالتعاون مع Baylor Scott & White, Temple (2026)</div>
+        <div class="desc">ملخص علمي لمحاضرة تتناول قواعد العلاج الدوائي القياسي (حاصرات بيتا، ACEI/ARB/ARNI، MRAs) عند مرضى ATTR-CM، مساراً زمنياً للتطور العلاجي منذ 2011، توقيت الإحالة لزرع القلب، ومعايير اختيار المرشحين، بالإضافة للعلاج الداعم المتقدم.</div>
+        <span class="badge">مقال جديد</span>
+      </div>
+    </a>
     <a href="conference-index.html" class="article-card">
       <div class="icon">🎙️</div>
       <div class="body">
@@ -117,19 +126,21 @@ footer strong{color:var(--accent)}
       topBar.innerHTML = BACK_BTN + `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="login.html">🔐 دخول</a>`;
     }
 
-    // الصفحة متاحة للجميع — لكن المقال الأول مقيّد بالمشتركين الفعّالين فقط
+    // الصفحة متاحة للجميع — لكن المقالات المدفوعة مقيّدة بالمشتركين الفعّالين فقط
     if(!isAdmin && !isSubscribed){
-      const card1 = document.getElementById('article-card-1');
-      if(card1){
-        card1.style.opacity = '0.4';
-        card1.style.pointerEvents = 'none';
-        card1.style.cursor = 'default';
-        card1.removeAttribute('href');
-        const lockNote = document.createElement('div');
-        lockNote.style.cssText = 'margin-top:10px;font-size:12.5px;color:#f59e0b;font-weight:600;';
-        lockNote.innerHTML = '🔒 حصري للمشتركين الفعّالين — <a href="subscription.html" style="color:#8b5cf6;text-decoration:underline;pointer-events:auto;">اشترك الآن</a>';
-        card1.querySelector('.body').appendChild(lockNote);
-      }
+      ['article-card-1', 'article-card-2'].forEach(function(cardId){
+        const card = document.getElementById(cardId);
+        if(card){
+          card.style.opacity = '0.4';
+          card.style.pointerEvents = 'none';
+          card.style.cursor = 'default';
+          card.removeAttribute('href');
+          const lockNote = document.createElement('div');
+          lockNote.style.cssText = 'margin-top:10px;font-size:12.5px;color:#f59e0b;font-weight:600;';
+          lockNote.innerHTML = '🔒 حصري للمشتركين الفعّالين — <a href="subscription.html" style="color:#8b5cf6;text-decoration:underline;pointer-events:auto;">اشترك الآن</a>';
+          card.querySelector('.body').appendChild(lockNote);
+        }
+      });
     }
   }catch(e){}
 })();
