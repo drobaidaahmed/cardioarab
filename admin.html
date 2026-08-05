@@ -170,6 +170,21 @@
         </ul>
     </div>
 
+    <!-- البريد الجماعي -->
+    <div class="section">
+        <div class="section-title">📢 إرسال بريد جماعي للمستخدمين المؤكَّدين</div>
+        <div class="form-group">
+            <label>عنوان الرسالة</label>
+            <input type="text" id="broadcastSubject" placeholder="مثال: تحديث جديد على CardioArab">
+        </div>
+        <div class="form-group">
+            <label>نص الرسالة (HTML)</label>
+            <textarea id="broadcastHtml" rows="8" placeholder="<h2>صار في تحديث جديد!</h2><p>...</p>" style="width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:monospace;font-size:.85rem"></textarea>
+        </div>
+        <button class="btn btn-primary" id="broadcastBtn" onclick="sendBroadcast()">🚀 إرسال للجميع</button>
+        <div class="alert" id="broadcastAlert"></div>
+    </div>
+
 </div>
 
 <script>
@@ -422,6 +437,35 @@ async function deleteFeedback(id){
 async function clearAllFeedback(){
     if(!confirm('مسح كل الرسائل في صندوق الاقتراحات والشكاوي؟'))return;
     try{await sbDelete('feedback','?id=gt.00000000-0000-0000-0000-000000000000');loadFeedback();}catch{alert('خطأ في المسح');}
+}
+
+// ─── البريد الجماعي ──────────────────────────────────
+const ADMIN_BROADCAST_KEY = 'cardio-broadcast-2026-xk9m2p';
+async function sendBroadcast(){
+    const subject=document.getElementById('broadcastSubject').value.trim();
+    const html=document.getElementById('broadcastHtml').value.trim();
+    const el=document.getElementById('broadcastAlert');
+    const show=(m,t)=>{el.textContent=m;el.className='alert show alert-'+t;};
+    const btn=document.getElementById('broadcastBtn');
+    if(!subject||!html)return show('⚠️ يرجى تعبئة العنوان والنص','danger');
+    if(!confirm('متأكد بدك ترسل هالإيميل لكل المستخدمين المؤكَّدين؟ ما في رجوع بعد الإرسال.'))return;
+    btn.disabled=true;btn.textContent='⏳ عم يرسل...';
+    show('عم نرسل، هاد ممكن ياخد شوي حسب عدد المستخدمين...','success');
+    try{
+        const res=await fetch(`${SB_URL}/functions/v1/send-broadcast`,{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({subject,html,adminKey:ADMIN_BROADCAST_KEY})
+        });
+        const data=await res.json();
+        if(res.ok){
+            show(`✅ تم الإرسال بنجاح — ${data.totalSent} من أصل ${data.totalUsers} مستخدم مؤكَّد.`,'success');
+            await addLog(`إرسال بريد جماعي: ${subject}`);
+        }else{
+            show('❌ خطأ: '+(data.error||'غير معروف'),'danger');
+        }
+    }catch(e){show('❌ فشل الاتصال: '+e.message,'danger');}
+    finally{btn.disabled=false;btn.textContent='🚀 إرسال للجميع';}
 }
 
 // ─── تهيئة ───────────────────────────────────────────
