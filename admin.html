@@ -185,6 +185,17 @@
         <div class="alert" id="broadcastAlert"></div>
     </div>
 
+    <!-- بث جماعي عبر تلغرام -->
+    <div class="section">
+        <div class="section-title">📨 بث جماعي عبر تلغرام</div>
+        <div class="form-group">
+            <label>نص الرسالة</label>
+            <textarea id="tgBroadcastText" rows="6" placeholder="مثال: صار في تحديث جديد على المنصة..." style="width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:.9rem"></textarea>
+        </div>
+        <button class="btn btn-primary" id="tgBroadcastBtn" onclick="sendTelegramBroadcast()">🚀 إرسال للمرتبطين بتلغرام</button>
+        <div class="alert" id="tgBroadcastAlert"></div>
+    </div>
+
 </div>
 
 <script>
@@ -466,6 +477,34 @@ async function sendBroadcast(){
         }
     }catch(e){show('❌ فشل الاتصال: '+e.message,'danger');}
     finally{btn.disabled=false;btn.textContent='🚀 إرسال للجميع';}
+}
+
+// ─── بث جماعي عبر تلغرام ──────────────────────────────
+async function sendTelegramBroadcast(){
+    const text=document.getElementById('tgBroadcastText').value.trim();
+    const el=document.getElementById('tgBroadcastAlert');
+    const show=(m,t)=>{el.textContent=m;el.className='alert show alert-'+t;};
+    const btn=document.getElementById('tgBroadcastBtn');
+    if(!text)return show('⚠️ يرجى كتابة نص الرسالة','danger');
+    if(!confirm('متأكد بدك ترسل هالرسالة لكل المستخدمين المرتبطين بتلغرام؟'))return;
+    btn.disabled=true;btn.textContent='⏳ عم يرسل...';
+    show('عم نرسل، هاد ممكن ياخد شوي حسب عدد المستخدمين...','success');
+    try{
+        const res=await fetch(`${SB_URL}/functions/v1/send-telegram-broadcast`,{
+            method:'POST',
+            headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY},
+            body:JSON.stringify({text,adminKey:ADMIN_BROADCAST_KEY})
+        });
+        const data=await res.json();
+        if(res.ok && data.ok){
+            show(`✅ تم الإرسال — ${data.sent} من أصل ${data.total} مستخدم مرتبط بتلغرام.`,'success');
+            await addLog(`بث جماعي تلغرام: ${text.slice(0,50)}`);
+            document.getElementById('tgBroadcastText').value='';
+        }else{
+            show('❌ خطأ: '+(data.error||'غير معروف'),'danger');
+        }
+    }catch(e){show('❌ فشل الاتصال: '+e.message,'danger');}
+    finally{btn.disabled=false;btn.textContent='🚀 إرسال للمرتبطين بتلغرام';}
 }
 
 // ─── تهيئة ───────────────────────────────────────────

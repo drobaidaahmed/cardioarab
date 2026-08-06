@@ -154,8 +154,33 @@ footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
 
     // شريط التنقل
     const tb = document.querySelector('.top-bar');
+    const container = document.querySelector('.container');
 
     const INSTALL_BTN = `<a href="#" onclick="window.caShowInstallInstructions && window.caShowInstallInstructions();return false;">📲 ثبّت التطبيق</a>`;
+
+    // فحص ربط تلغرام (لأي مستخدم مسجل غير المالك)
+    let hasTelegram = true;
+    if(u && !u.is_admin){
+      try{
+        const rows = await db.select('users', `?id=eq.${u.id}&select=telegram_chat_id`);
+        hasTelegram = !!(rows && rows[0] && rows[0].telegram_chat_id);
+      }catch{ hasTelegram = true; } // بحال فشل الفحص، ما منزعج المستخدم بإشعار خاطئ
+    }
+
+    function insertTelegramNotice(){
+      if(hasTelegram) return;
+      const tgNotice = document.createElement('div');
+      tgNotice.style.cssText = `
+        background:rgba(34,158,217,.08);border:1px solid rgba(34,158,217,.25);
+        border-radius:10px;padding:.6rem 1rem;margin-bottom:1.25rem;
+        max-width:1100px;margin-left:auto;margin-right:auto;
+        text-align:center;direction:rtl;font-size:.82rem;
+      `;
+      tgNotice.innerHTML = `<span style="color:#229ED9;font-weight:700">🔗 اربط حسابك بتلغرام</span>
+         <span style="color:#94a3b8;margin-right:.4rem">حتى يوصلك كل تحديث وتذكير اشتراك —</span>
+         <a href="https://t.me/Drobaidaahmedbot?start=${u.id}" target="_blank" style="color:#229ED9;font-weight:700;text-decoration:none">اربطه الآن</a>`;
+      container.insertBefore(tgNotice, container.firstChild);
+    }
 
     if(u && u.is_admin){
       // مالك
@@ -168,7 +193,8 @@ footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
       const isSubscribed = await session.isSubscribed();
       if(isSubscribed){
         // مفعّل — شريط خاص بالمستخدم
-        tb.innerHTML=INSTALL_BTN+`<a href="subscription.html" class="btn-primary">📋 اشتراكي</a><a href="profile.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #1e2d45;border-radius:8px;background:#111827;color:#94a3b8;">👤 ${u.name}</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" style="color:#ef4444;border-color:#ef4444;text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid;border-radius:8px;">خروج</a>`;
+        insertTelegramNotice();
+        tb.innerHTML=INSTALL_BTN+`<a href="subscription.html" class="btn-primary">📋 اشتراكي</a><a href="profile.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #1e2d45;border-radius:8px;background:#111827;color:#94a3b8;">👤 ${u.name}</a><a href="https://t.me/Drobaidaahmedbot?start=${u.id}" target="_blank" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #229ED9;border-radius:8px;background:#111827;color:#229ED9;">🔗 ربط تلغرام</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" style="color:#ef4444;border-color:#ef4444;text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid;border-radius:8px;">خروج</a>`;
         return; // مفعّل يرى كل شيء
       }
     }
@@ -176,7 +202,6 @@ footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
     // غير مسجل أو غير مفعّل — بطاقة المقالات صارت متاحة للجميع (المقال الأول فقط مقيّد داخلياً)
 
     // أضف رسالة انتظار التفعيل
-    const container = document.querySelector('.container');
     const notice = document.createElement('div');
     notice.style.cssText = `
       background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);
@@ -191,9 +216,11 @@ footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
          <span style="color:#94a3b8;margin-right:.4rem">— <a href="guidelines.html" style="color:#8b5cf6;font-weight:700;text-decoration:none">تصفح غايدلاين الرجفان</a> بدون تسجيل، أو <a href="register.html" style="color:#8b5cf6;font-weight:700;text-decoration:none">سجّل</a> للوصول الكامل</span>`;
     container.insertBefore(notice, container.firstChild);
 
+    if(u) insertTelegramNotice();
+
     // تحديث شريط التنقل
     tb.innerHTML = INSTALL_BTN + (u
-      ? `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="profile.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #1e2d45;border-radius:8px;background:#111827;color:#94a3b8;">👤 ${u.name}</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" style="color:#ef4444;border-color:#ef4444;text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid;border-radius:8px;background:#111827;">خروج</a>`
+      ? `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="profile.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #1e2d45;border-radius:8px;background:#111827;color:#94a3b8;">👤 ${u.name}</a><a href="https://t.me/Drobaidaahmedbot?start=${u.id}" target="_blank" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #229ED9;border-radius:8px;background:#111827;color:#229ED9;">🔗 ربط تلغرام</a><a href="#" onclick="localStorage.removeItem('currentUser');location.reload();" style="color:#ef4444;border-color:#ef4444;text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid;border-radius:8px;background:#111827;">خروج</a>`
       : `<a href="subscription.html" class="btn-primary">📋 خطط الاشتراك</a><a href="login.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #1e2d45;border-radius:8px;background:#111827;color:#94a3b8;">🔐 دخول</a><a href="register.html" style="text-decoration:none;font-size:.85rem;padding:.4rem 1rem;border:1px solid #1e2d45;border-radius:8px;background:#111827;color:#94a3b8;">📝 تسجيل</a>`);
 
   }catch(e){ console.error(e); }
