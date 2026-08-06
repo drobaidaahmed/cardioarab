@@ -92,9 +92,14 @@ async function verifyEmail() {
 
     const user = users[0];
 
+    if (user.email_verified) {
+      // موثّق أصلاً (تم التحقق سابقاً، مثلاً عبر فحص أمني تلقائي من مزوّد البريد) — نعرض النجاح مباشرة
+      show('successState');
+      return;
+    }
+
     await db.update('users', `?id=eq.${user.id}`, {
-      email_verified: true,
-      verification_token: null
+      email_verified: true
     });
 
     show('successState');
