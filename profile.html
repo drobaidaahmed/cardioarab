@@ -93,6 +93,14 @@ nav a:hover{color:var(--text);border-color:var(--border);background:var(--bg3)}
         <div class="info-row"><span class="label">تاريخ التسجيل</span><span class="value" id="infoDate">—</span></div>
     </div>
 
+    <!-- ربط تلغرام -->
+    <div class="card" id="tgCard">
+        <div class="section-title">🔗 ربط تلغرام</div>
+        <div id="tgStatusBox">
+            <p style="font-size:.85rem;color:var(--text2)">⏳ جاري التحقق...</p>
+        </div>
+    </div>
+
     <!-- تغيير كلمة المرور -->
     <div class="card">
         <div class="section-title">🔑 تغيير كلمة المرور</div>
@@ -294,7 +302,40 @@ async function changePass() {
     btn.disabled=false; btn.textContent='🔐 تغيير كلمة المرور';
 }
 
+// ─── ربط/فك ربط تلغرام ────────────────────────────
+async function loadTelegramStatus() {
+    const box = document.getElementById('tgStatusBox');
+    if (user.is_admin) { document.getElementById('tgCard').style.display = 'none'; return; }
+    try {
+        const rows = await sbGet('users', `?id=eq.${user.id}&select=telegram_chat_id`);
+        const linked = rows && rows[0] && rows[0].telegram_chat_id;
+        if (linked) {
+            box.innerHTML = `
+                <p style="font-size:.9rem;color:var(--green);font-weight:700;margin-bottom:.75rem">✅ حسابك مربوط بتلغرام</p>
+                <p style="font-size:.8rem;color:var(--text2);margin-bottom:1rem">رح توصلك تلقائياً كل التحديثات وتذكيرات الاشتراك.</p>
+                <button class="btn" style="background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)" onclick="unlinkTelegram()">🔓 فك الربط</button>
+            `;
+        } else {
+            box.innerHTML = `
+                <p style="font-size:.85rem;color:var(--text2);margin-bottom:1rem">اربط حسابك بتلغرام حتى يوصلك كل تحديث وتذكير اشتراك.</p>
+                <a href="https://t.me/Drobaidaahmedbot?start=${user.id}" target="_blank" class="btn btn-primary" style="display:inline-block;text-align:center;text-decoration:none">🔗 ربط الحساب الآن</a>
+            `;
+        }
+    } catch {
+        box.innerHTML = '<p style="font-size:.85rem;color:var(--text2)">❌ تعذر التحقق من حالة الربط</p>';
+    }
+}
+
+async function unlinkTelegram() {
+    if (!confirm('متأكد بدك تفك ربط حسابك بتلغرام؟ رح توقف كل التذكيرات والتحديثات.')) return;
+    try {
+        await sbPatch('users', `?id=eq.${user.id}`, { telegram_chat_id: null });
+        loadTelegramStatus();
+    } catch { alert('❌ خطأ أثناء فك الربط'); }
+}
+
 loadProfile();
+loadTelegramStatus();
 </script>
 <script src="protection.js"></script>
 <script src="answers.js"></script>
