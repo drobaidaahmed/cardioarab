@@ -131,10 +131,13 @@ async function handleRegister() {
 
     await addLog('تسجيل حساب جديد: ' + name, email);
 
-    // إشعار تيليغرام
+    // إشعار تيليغرام (عبر Edge Function آمنة، بدون كشف التوكن بالواجهة الأمامية)
     try {
-      const msg = encodeURIComponent(`🆕 مستخدم جديد في CardioArab\n👤 الاسم: ${name}\n📧 البريد: ${email}\n📱 الهاتف: ${phone}\n⏰ ${new Date().toLocaleString('en-US')}`);
-      await fetch(`https://api.telegram.org/bot8900525496:AAE8ZeCd3AHPG8P0F9CWLrhGqz0o9zzRsVI/sendMessage?chat_id=792639380&text=${msg}`);
+      await fetch('https://ikisgwnsxadiujueeava.supabase.co/functions/v1/notify-new-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone })
+      });
     } catch(_) {}
 
     showMsg('✅ تم إنشاء الحساب! تحقق من بريدك الإلكتروني لتأكيده، وسيُفعّل الاشتراك بعد التحقق من الدفع.', 'success');
