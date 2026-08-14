@@ -129,6 +129,55 @@
     padding-top:20px;
     border-top:1px solid var(--border);
   }
+  .home-btn{
+    display:inline-block;
+    margin-bottom:14px;
+    background:var(--card);
+    border:1px solid var(--gold);
+    color:var(--gold-soft);
+    text-decoration:none;
+    font-size:.78rem;
+    padding:7px 16px;
+    border-radius:20px;
+  }
+  .home-btn:hover{background:var(--gold);color:#0b0d12;}
+  .search-wrap{
+    max-width:760px;
+    margin:26px auto 0;
+    padding:0 18px;
+    position:sticky;
+    top:0;
+    z-index:40;
+    background:var(--bg);
+    padding-top:10px;
+    padding-bottom:10px;
+  }
+  #chSearch{
+    width:100%;
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--text);
+    font-family:'IBM Plex Sans Arabic',sans-serif;
+    font-size:.9rem;
+    padding:12px 16px;
+    border-radius:12px;
+    outline:none;
+  }
+  #chSearch:focus{border-color:var(--gold);}
+  .search-count{
+    font-size:.72rem;
+    color:var(--text-dim);
+    margin-top:6px;
+    padding:0 4px;
+  }
+  ul.chapters li.hidden{display:none;}
+  section.sec.hidden{display:none;}
+  ul.chapters li mark{
+    background:var(--gold);
+    color:#0b0d12;
+    border-radius:3px;
+    padding:0 2px;
+  }
 </style>
 </head>
 <body>
@@ -149,9 +198,15 @@
 </nav>
 
 <header>
+  <a href="medical-lectures.html" class="home-btn">↩ الرئيسية — محاضرات وكتب طبية</a>
   <h1>فهرس كليفلاند لطب القلب</h1>
   <p>Cleveland Clinic Manual — الفهرس الكامل (١ – ٦٩)</p>
 </header>
+
+<div class="search-wrap">
+  <input type="text" id="chSearch" placeholder="🔍 ابحث بالكلمة، الحرف، أو رقم الفصل...">
+  <div id="searchCount" class="search-count"></div>
+</div>
 
 <main>
 
@@ -317,5 +372,68 @@
 </footer>
 
 </main>
+
+<script>
+(function(){
+  const input = document.getElementById('chSearch');
+  const count = document.getElementById('searchCount');
+  const sections = Array.from(document.querySelectorAll('main section.sec'));
+  const items = Array.from(document.querySelectorAll('ul.chapters li'));
+
+  // Cache original text for each item to restore after highlight removal
+  items.forEach(li => { li.dataset.orig = li.querySelector('a').innerHTML; });
+
+  function normalize(s){
+    return s.toString().trim().toLowerCase();
+  }
+
+  function highlight(text, query){
+    if(!query) return text;
+    const idx = text.toLowerCase().indexOf(query.toLowerCase());
+    if(idx === -1) return text;
+    return text.slice(0, idx) + '<mark>' + text.slice(idx, idx + query.length) + '</mark>' + text.slice(idx + query.length);
+  }
+
+  function runSearch(){
+    const q = normalize(input.value);
+    let visibleCount = 0;
+
+    items.forEach(li => {
+      const a = li.querySelector('a');
+      const num = li.querySelector('.num').textContent.trim();
+      const title = li.dataset.orig;
+      const titlePlain = normalize(title);
+
+      let match = false;
+      if(!q){
+        match = true;
+      } else if(num === q || num.includes(q)){
+        match = true;
+      } else if(titlePlain.includes(q)){
+        match = true;
+      }
+
+      if(match){
+        li.classList.remove('hidden');
+        a.innerHTML = q ? highlight(title, input.value.trim()) : title;
+        visibleCount++;
+      }else{
+        li.classList.add('hidden');
+        a.innerHTML = title;
+      }
+    });
+
+    sections.forEach(sec => {
+      const visibleLis = sec.querySelectorAll('ul.chapters li:not(.hidden)');
+      sec.classList.toggle('hidden', q && visibleLis.length === 0);
+    });
+
+    count.textContent = q ? `${visibleCount} نتيجة من أصل ${items.length}` : '';
+  }
+
+  input.addEventListener('input', runSearch);
+})();
+</script>
+
 </body>
 </html>
