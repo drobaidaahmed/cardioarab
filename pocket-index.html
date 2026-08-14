@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>فهرس Pocket Medicine الشامل | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0f14;
+    --bg-elev:#121821;
+    --bg-card:#161e29;
+    --border:#232e3d;
+    --text:#e8edf3;
+    --text-dim:#9fb0c3;
+    --text-faint:#6a7a8f;
+    --accent:#3aa6ff;
+    --accent-dim:#1c4a6e;
+    --gold:#d8b26a;
+    --rec-1:#2e9e5b;
+    --rec-2a:#c9a227;
+    --rec-2b:#c97a2c;
+    --rec-3:#c93a3a;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:radial-gradient(1200px 800px at 20% -10%, #10202e 0%, var(--bg) 55%) fixed;
+    color:var(--text);
+    font-family:'IBM Plex Sans Arabic', system-ui, sans-serif;
+    line-height:1.85;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:80px;
+  }
+  ::selection{background:var(--accent-dim); color:#fff;}
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,15,20,0.86);
+    backdrop-filter:saturate(160%) blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .top-inner{
+    max-width:960px; margin:0 auto; padding:14px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-badge{
+    width:36px;height:36px;border-radius:10px;
+    background:linear-gradient(135deg, var(--accent), #1a5a8a);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700; font-size:15px; color:#fff; flex:none;
+    box-shadow:0 4px 14px rgba(58,166,255,.25);
+  }
+  .brand-text{display:flex; flex-direction:column; line-height:1.25;}
+  .brand-text b{font-size:15px; letter-spacing:.2px;}
+  .brand-text span{font-size:11.5px; color:var(--text-faint); font-family:'IBM Plex Mono',monospace;}
+  .top-actions a{
+    font-size:13px; color:var(--text-dim); text-decoration:none;
+    border:1px solid var(--border); padding:7px 12px; border-radius:100px;
+  }
+  .hero{max-width:960px; margin:0 auto; padding:34px 18px 6px;}
+  .kicker{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em;
+    color:var(--accent); background:rgba(58,166,255,.09);
+    border:1px solid rgba(58,166,255,.25); padding:5px 12px; border-radius:100px;
+  }
+  h1.page-title{font-size:clamp(24px,5vw,34px); margin:16px 0 8px; font-weight:700; letter-spacing:-.01em;}
+  .subtitle{color:var(--text-dim); font-size:15px; max-width:70ch;}
+
+  /* ==== Search ==== */
+  .search-wrap{max-width:960px; margin:22px auto 0; padding:0 18px;}
+  .search-box{
+    position:relative; display:flex; align-items:center;
+    background:var(--bg-card); border:1px solid var(--border); border-radius:100px;
+    padding:6px 8px 6px 16px; box-shadow:0 6px 20px rgba(0,0,0,.25);
+  }
+  .search-box svg{flex:none; color:var(--text-faint);}
+  #searchInput{
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--text); font-family:'IBM Plex Sans Arabic',sans-serif;
+    font-size:15px; padding:10px 10px;
+  }
+  #searchInput::placeholder{color:var(--text-faint);}
+  .search-clear{
+    flex:none; display:none; width:30px; height:30px; border-radius:50%;
+    background:var(--bg-elev); border:1px solid var(--border); color:var(--text-dim);
+    align-items:center; justify-content:center; cursor:pointer; font-size:14px;
+  }
+  .search-clear.show{display:flex;}
+  .search-hint{font-size:12px; color:var(--text-faint); margin:8px 4px 0;}
+
+  #searchResults{
+    max-width:960px; margin:14px auto 0; padding:0 18px; display:none;
+  }
+  #searchResults.show{display:block;}
+  .result-count{font-size:12.5px; color:var(--text-faint); margin-bottom:10px;}
+  .result-item{
+    display:flex; align-items:center; gap:12px; background:var(--bg-card);
+    border:1px solid var(--border); border-radius:12px; padding:12px 14px; margin-bottom:8px;
+    text-decoration:none; color:var(--text);
+  }
+  .result-item:active{background:var(--bg-elev);}
+  .result-badge{
+    flex:none; font-size:11px; font-family:'IBM Plex Mono',monospace; color:var(--accent);
+    background:rgba(58,166,255,.1); border:1px solid rgba(58,166,255,.25);
+    padding:3px 9px; border-radius:100px; white-space:nowrap;
+  }
+  .result-text{flex:1; min-width:0;}
+  .result-title{font-size:14.5px; font-weight:600; color:var(--text);}
+  .result-en{font-size:12px; color:var(--text-faint); font-family:'IBM Plex Mono',monospace; direction:ltr; text-align:right;}
+  .no-results{color:var(--text-faint); font-size:14px; text-align:center; padding:20px 0;}
+
+  /* ==== Category cards ==== */
+  .cards-wrap{max-width:960px; margin:30px auto 0; padding:0 18px;}
+  .cards-wrap h2.section-label{font-size:13px; color:var(--text-faint); font-weight:600; letter-spacing:.04em; margin:0 0 14px;}
+  .cards-grid{display:grid; grid-template-columns:1fr; gap:12px;}
+  @media (min-width:640px){.cards-grid{grid-template-columns:1fr 1fr;}}
+  .cat-card{
+    display:flex; align-items:flex-start; gap:14px;
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px; text-decoration:none; color:var(--text);
+    transition:border-color .15s;
+  }
+  .cat-card:active{background:var(--bg-elev);}
+  .cat-card.disabled{opacity:.45; pointer-events:none;}
+  .cat-icon{
+    flex:none; width:44px; height:44px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center; font-size:20px;
+    background:rgba(58,166,255,.1); border:1px solid rgba(58,166,255,.22);
+  }
+  .cat-body b{font-size:15.5px; font-weight:700; display:block; margin-bottom:2px;}
+  .cat-body .en{font-size:11.5px; color:var(--text-faint); font-family:'IBM Plex Mono',monospace; direction:ltr; display:block; text-align:right; margin-bottom:6px;}
+  .cat-body p{margin:0; font-size:13px; color:var(--text-dim); line-height:1.6;}
+  .cat-status{font-size:10.5px; font-family:'IBM Plex Mono',monospace; color:var(--gold); margin-top:8px; display:inline-block;}
+  .cat-status.soon{color:var(--text-faint);}
+
+  footer{max-width:960px; margin:60px auto 0; padding:24px 18px; text-align:center; color:var(--text-faint); font-size:12.5px; border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+<style id="ca-gate-hide">body>*:not(#ca-gate-screen){display:none !important}</style>
+<div id="ca-gate-screen" style="position:fixed;inset:0;z-index:999999;background:#0b0f14;display:flex;align-items:center;justify-content:center;color:#8b5cf6;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:1rem;direction:rtl">جارِ التحقق من الاشتراك…</div>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <div class="brand-badge">CA</div>
+      <div class="brand-text">
+        <b>CardioArab</b>
+        <span>Pocket Medicine · فهرس شامل</span>
+      </div>
+    </div>
+    <div class="top-actions"><a href="#cats">تصفح الأقسام</a></div>
+  </div>
+</header>
+
+<div class="hero">
+  <span class="kicker">POCKET MEDICINE — 9th ed. 2026</span>
+  <h1 class="page-title">الفهرس الشامل</h1>
+  <p class="subtitle">ابحث عن أي موضوع، مصطلح، أو تصنيف من كامل محتوى Pocket Medicine بالعربية أو الإنكليزية، أو تصفح الأقسام مباشرة حسب الاختصاص.</p>
+</div>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="searchInput" type="text" placeholder="ابحث بالعربي أو الإنكليزي… مثال: STEMI، تضيق الأبهر، AFib">
+    <div class="search-clear" id="searchClear">✕</div>
+  </div>
+  <div class="search-hint">يبحث في العناوين والمصطلحات الطبية بالعربية والإنكليزية عبر كل أقسام الكتاب.</div>
+</div>
+
+<div id="searchResults">
+  <div class="result-count" id="resultCount"></div>
+  <div id="resultList"></div>
+</div>
+
+<div class="cards-wrap" id="cats">
+  <h2 class="section-label">الأقسام</h2>
+  <div class="cards-grid">
+
+    <a class="cat-card" href="pocket-cardiology.html">
+      <div class="cat-icon">🫀</div>
+      <div class="cat-body">
+        <b>القلبية</b>
+        <span class="en">Cardiology</span>
+        <p>ECG، ألم الصدر وCAD، ACS وSTEMI، فشل القلب واعتلالات العضلة، الصمامات، التامور، ضغط الدم، الأبهر، اضطرابات النظم، الغشي، الأجهزة، PAD.</p>
+        <span class="cat-status">41 موضوعًا</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-pulmonology.html">
+      <div class="cat-icon">🫁</div>
+      <div class="cat-body">
+        <b>الصدرية</b>
+        <span class="en">Pulmonology</span>
+        <p>ضيق التنفس، الربو وCOPD، توسع القصبات والتليف الكيسي، الانصباب الجنبي، VTE، ارتفاع الضغط الرئوي، التهوية الميكانيكية، ARDS، الإنتان، علم السموم.</p>
+        <span class="cat-status">19 موضوعًا</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-gastroenterology.html">
+      <div class="cat-icon">🍽️</div>
+      <div class="cat-body">
+        <b>الهضمية</b>
+        <span class="en">Gastroenterology</span>
+        <p>عسر البلع، النزف الهضمي، أمراض الكبد وزراعته، القولون والأمعاء الالتهابية، البنكرياس، اضطرابات الحركة والتغذية.</p>
+        <span class="cat-status">20 موضوعًا</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-hematology.html">
+      <div class="cat-icon">🩸</div>
+      <div class="cat-body">
+        <b>الدموية</b>
+        <span class="en">Hematology</span>
+        <p>فقر الدم بأنواعه، مرض الخلايا المنجلية، الانحلال الدموي، قلة الكريات الشاملة، اضطرابات الصفيحات والنزف والتخثر، اضطرابات الكريات البيض، ونقل الدم.</p>
+        <span class="cat-status">12 موضوعًا</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-oncology.html">
+      <div class="cat-icon">🎗️</div>
+      <div class="cat-body">
+        <b>الأورام (الدموية والصلبة)</b>
+        <span class="en">Hematologic & Solid Malignancies</span>
+        <p>MDS، أورام التكاثر النقوي، ابيضاضات الدم، CML، الأورام اللمفاوية، الورم النقيي المتعدد، زرع الخلايا الجذعية، العلاج المناعي والخلوي، سرطانات الرئة والثدي والبروستات والقولون والبنكرياس، أورام صلبة أخرى، الطوارئ الورمية وسميات العلاج.</p>
+        <span class="cat-status">17 موضوعًا</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-endocrinology.html">
+      <div class="cat-icon">⚙️</div>
+      <div class="cat-body">
+        <b>الغدية الصماوية</b>
+        <span class="en">Endocrinology</span>
+        <p>قصور وفرط نشاط الغدد، السكري، اضطرابات الكظر والدرق والنخامى والكالسيوم والدهون والسمنة.</p>
+        <span class="cat-status">21 موضوعًا</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-neurology.html">
+      <div class="cat-icon">🧠</div>
+      <div class="cat-body">
+        <b>العصبية</b>
+        <span class="en">Neurology</span>
+        <p>اضطرابات الوعي، السكتة الدماغية والنزف داخل القحف، الاختلاجات، انسحاب الكحول، الضعف العصبي العضلي، الصداع، أمراض العمود الفقري.</p>
+        <span class="cat-status">16 موضوعًا</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-nephrology-electrolytes-abg.html">
+      <div class="cat-icon">🫘</div>
+      <div class="cat-body">
+        <b>الكلية والشوارد وغازات الدم</b>
+        <span class="en">Nephrology, Electrolytes & ABG</span>
+        <p>غازات الدم والاضطرابات الحمضية القاعدية، الصوديوم والبوتاسيوم، AKI وCKD، التهاب الكبيبات، تحليل البول، حصوات الكلى.</p>
+        <span class="cat-status">15 موضوعًا</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-rheumatology.html">
+      <div class="cat-icon">🦴</div>
+      <div class="cat-body">
+        <b>الروماتيزم</b>
+        <span class="en">Rheumatology</span>
+        <p>التهاب المفاصل المعدي والبلوري، RA، الذئبة وأمراض النسيج الضام، التهابات الأوعية، النقرس، الداء النشواني.</p>
+        <span class="cat-status">29 موضوعًا</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="surgical-issues.html">
+      <div class="cat-icon">🩺</div>
+      <div class="cat-body">
+        <b>الجراحات الصغرى وقضايا الاستشارة</b>
+        <span class="en">Surgical, Ob/Gyn & Ophthalmic Consults</span>
+        <p>ألم البطن والبطن الحاد، الأنابيب والمصارف، النزيف والإفرازات المهبلية، كتلة الملحقات، الطوارئ العينية.</p>
+        <span class="cat-status">8 مواضيع</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-infectious-disease.html">
+      <div class="cat-icon">🦠</div>
+      <div class="cat-body">
+        <b>الانتانية</b>
+        <span class="en">Infectious Disease</span>
+        <p>الالتهاب الرئوي، الإنتانات الفطرية والفرصية، التهابات المسالك البولية والمنقولة جنسياً، التهابات الجلد والجهاز العصبي، تجرثم الدم والتهاب الشغاف، السل، HIV، والحمّيات.</p>
+        <span class="cat-status">12 موضوعًا</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-medicine-meds-formulas.html">
+      <div class="cat-icon">💉</div>
+      <div class="cat-body">
+        <b>أدوية العناية المركزة والصادات</b>
+        <span class="en">ICU Medications & Antimicrobials</span>
+        <p>أدوية العناية المركزة، جداول المضادات الميكروبية، علاج الفطريات الشائعة.</p>
+        <span class="cat-status">3 أقسام</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-medicine-meds-formulas.html#hemo-formulas">
+      <div class="cat-icon">📐</div>
+      <div class="cat-body">
+        <b>الصيغ والمرجع السريع</b>
+        <span class="en">Formulas & Quick Reference</span>
+        <p>صيغ القلب والرئة والهضمي والكلية والدم والغدد، أنماط التصوير الصدري، مقاييس سريرية أخرى، والإحصاء التشخيصي.</p>
+        <span class="cat-status">9 أقسام</span>
+      </div>
+    </a>
+
+    <a class="cat-card" href="pocket-medicine-gallery.html">
+      <div class="cat-icon">🖼️</div>
+      <div class="cat-body">
+        <b>معرض الصور المرجعية</b>
+        <span class="en">Visual Reference Gallery</span>
+        <p>أطلس مصوّر يجمع صور ECG، مسحات الدم المحيطي، الأشعة، وموجودات الفحص السريري من كل أقسام الكتاب بمكان واحد.</p>
+        <span class="cat-status">99 صورة</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  Pocket Medicine, 9th Edition — Marc S. Sabatine · ترجمة وتنظيم عربي حصري على CardioArab.
+</footer>
+
+<script>
+/* ============================================================
+   فهرس البحث — يُحدَّث يدوياً كلما أُضيف قسم أو موضوع جديد.
+   كل مدخلة: عنوان عربي، مرادف/مصطلح إنكليزي، القسم (ملف الوجهة + عنوان القسم)، والرابط الداخلي (id)
+   ============================================================ */
+const searchIndex = [
+  // ----- القلبية -----
+  {ar:"المنهجية العامة لقراءة ECG", en:"ECG systematic approach", file:"pocket-cardiology.html", anchor:"approach", cat:"القلبية"},
+  {ar:"محور QRS، الانحراف الأيمن والأيسر", en:"QRS axis, LAD, RAD", file:"pocket-cardiology.html", anchor:"axis", cat:"القلبية"},
+  {ar:"حصارات الغصن والحزم", en:"Bundle branch block, fascicular block", file:"pocket-cardiology.html", anchor:"bbb", cat:"القلبية"},
+  {ar:"تطاول فترة QT", en:"Long QT", file:"pocket-cardiology.html", anchor:"qt", cat:"القلبية"},
+  {ar:"تغيرات الأذين على ECG", en:"Atrial enlargement", file:"pocket-cardiology.html", anchor:"atrial", cat:"القلبية"},
+  {ar:"تضخم البطين الأيسر", en:"LVH", file:"pocket-cardiology.html", anchor:"lvh", cat:"القلبية"},
+  {ar:"تضخم البطين الأيمن", en:"RVH", file:"pocket-cardiology.html", anchor:"rvh", cat:"القلبية"},
+  {ar:"ضعف تطور موجة R", en:"Poor R-wave progression", file:"pocket-cardiology.html", anchor:"prwp", cat:"القلبية"},
+  {ar:"موجات Q المرضية", en:"Pathologic Q waves", file:"pocket-cardiology.html", anchor:"qwave", cat:"القلبية"},
+  {ar:"ارتفاع مقطع ST", en:"ST elevation, STE", file:"pocket-cardiology.html", anchor:"ste", cat:"القلبية"},
+  {ar:"انخفاض مقطع ST", en:"ST depression, STD", file:"pocket-cardiology.html", anchor:"std", cat:"القلبية"},
+  {ar:"انقلاب موجة T", en:"T-wave inversion, TWI", file:"pocket-cardiology.html", anchor:"twi", cat:"القلبية"},
+  {ar:"انخفاض الفلطية", en:"Low voltage", file:"pocket-cardiology.html", anchor:"lowv", cat:"القلبية"},
+  {ar:"تأثير الشوارد على ECG", en:"Electrolyte effects on ECG", file:"pocket-cardiology.html", anchor:"lytes", cat:"القلبية"},
+  {ar:"قلب الرياضي", en:"Athlete's heart ECG", file:"pocket-cardiology.html", anchor:"athlete", cat:"القلبية"},
+  {ar:"ألم الصدر — التشخيص التفريقي والمقاربة", en:"Chest pain", file:"pocket-cardiology.html", anchor:"chest-pain", cat:"القلبية"},
+  {ar:"التقييم غير الغازي لداء الشريان التاجي", en:"Noninvasive evaluation of CAD, stress testing", file:"pocket-cardiology.html", anchor:"noninvasive", cat:"القلبية"},
+  {ar:"تصوير الأوعية التاجية والتداخل التاجي", en:"Coronary angiography, PCI", file:"pocket-cardiology.html", anchor:"angio-pci", cat:"القلبية"},
+  {ar:"داء الشريان التاجي المزمن", en:"Chronic coronary disease, CCD", file:"pocket-cardiology.html", anchor:"ccd", cat:"القلبية"},
+  {ar:"متلازمات الشريان التاجي الحادة", en:"Acute coronary syndromes, ACS", file:"pocket-cardiology.html", anchor:"acs", cat:"القلبية"},
+  {ar:"الذبحة غير المستقرة واحتشاء عضلة القلب دون ارتفاع ST", en:"NSTE-ACS, UA, NSTEMI", file:"pocket-cardiology.html", anchor:"nste-acs", cat:"القلبية"},
+  {ar:"احتشاء عضلة القلب مع ارتفاع ST ومضاعفاته", en:"STEMI", file:"pocket-cardiology.html", anchor:"stemi", cat:"القلبية"},
+  {ar:"الإدارة طويلة الأمد بعد المتلازمة التاجية الحادة", en:"Post-ACS management", file:"pocket-cardiology.html", anchor:"post-acs", cat:"القلبية"},
+  {ar:"قسطرة الشريان الرئوي والعلاج المخصص", en:"PA catheter, Swan-Ganz", file:"pocket-cardiology.html", anchor:"pac", cat:"القلبية"},
+  {ar:"فشل القلب", en:"Heart failure, HFrEF, HFpEF", file:"pocket-cardiology.html", anchor:"hf", cat:"القلبية"},
+  {ar:"اعتلالات عضلة القلب", en:"Cardiomyopathy, DCM, HCM, RCM", file:"pocket-cardiology.html", anchor:"cmp", cat:"القلبية"},
+  {ar:"تضيق الصمام الأبهري", en:"Aortic stenosis, AS", file:"pocket-cardiology.html", anchor:"as", cat:"القلبية"},
+  {ar:"قصور الصمام الأبهري", en:"Aortic regurgitation, AR", file:"pocket-cardiology.html", anchor:"ar", cat:"القلبية"},
+  {ar:"قصور الصمام التاجي", en:"Mitral regurgitation, MR", file:"pocket-cardiology.html", anchor:"mr", cat:"القلبية"},
+  {ar:"تدلي الصمام التاجي", en:"Mitral valve prolapse, MVP", file:"pocket-cardiology.html", anchor:"mvp", cat:"القلبية"},
+  {ar:"تضيق الصمام التاجي", en:"Mitral stenosis, MS", file:"pocket-cardiology.html", anchor:"ms", cat:"القلبية"},
+  {ar:"قصور الصمام ثلاثي الشرف", en:"Tricuspid regurgitation, TR", file:"pocket-cardiology.html", anchor:"tr", cat:"القلبية"},
+  {ar:"الصمامات القلبية الاصطناعية", en:"Prosthetic heart valves", file:"pocket-cardiology.html", anchor:"prosthetic", cat:"القلبية"},
+  {ar:"أمراض التامور (التهاب، دكاك، تضيقي)", en:"Pericardial disease, tamponade, constrictive pericarditis", file:"pocket-cardiology.html", anchor:"pericarditis", cat:"القلبية"},
+  {ar:"ارتفاع ضغط الدم الشرياني", en:"Hypertension, HTN", file:"pocket-cardiology.html", anchor:"htn", cat:"القلبية"},
+  {ar:"تمدد وتسلخ الأبهر", en:"Aortic aneurysm, aortic dissection", file:"pocket-cardiology.html", anchor:"aortic-aneurysm", cat:"القلبية"},
+  {ar:"اضطرابات النظم (بطء، SVT، WPW، VT، الرجفان الأذيني)", en:"Arrhythmias, SVT, WPW, VT, AFib", file:"pocket-cardiology.html", anchor:"arrhythmias", cat:"القلبية"},
+  {ar:"الغشي", en:"Syncope", file:"pocket-cardiology.html", anchor:"syncope", cat:"القلبية"},
+  {ar:"أجهزة تدبير اضطرابات النظم", en:"Pacemaker, CRT, ICD", file:"pocket-cardiology.html", anchor:"devices", cat:"القلبية"},
+  {ar:"تقييم المخاطر القلبية للجراحة غير القلبية", en:"Perioperative cardiac risk assessment", file:"pocket-cardiology.html", anchor:"periop", cat:"القلبية"},
+  {ar:"مرض الشرايين المحيطية", en:"Peripheral artery disease, PAD", file:"pocket-cardiology.html", anchor:"pad", cat:"القلبية"},
+
+  // ----- الصدرية -----
+  {ar:"مقاربة ضيق التنفس", en:"Dyspnea approach", file:"pocket-pulmonology.html", anchor:"sec-dyspnea", cat:"الصدرية"},
+  {ar:"اختبارات وظائف الرئة", en:"Pulmonary function tests, PFT", file:"pocket-pulmonology.html", anchor:"sec-pft", cat:"الصدرية"},
+  {ar:"الربو (مزمن وحاد)", en:"Asthma", file:"pocket-pulmonology.html", anchor:"sec-asthma", cat:"الصدرية"},
+  {ar:"الحساسية المفرطة والوذمة الوعائية", en:"Anaphylaxis, angioedema", file:"pocket-pulmonology.html", anchor:"sec-anaphylaxis", cat:"الصدرية"},
+  {ar:"مرض الانسداد الرئوي المزمن", en:"COPD", file:"pocket-pulmonology.html", anchor:"sec-copd", cat:"الصدرية"},
+  {ar:"العقيدة الرئوية الانفرادية", en:"Solitary pulmonary nodule", file:"pocket-pulmonology.html", anchor:"sec-nodule", cat:"الصدرية"},
+  {ar:"نفث الدم", en:"Hemoptysis", file:"pocket-pulmonology.html", anchor:"sec-hemoptysis", cat:"الصدرية"},
+  {ar:"توسع القصبات والفطريات غير السلية", en:"Bronchiectasis, NTM", file:"pocket-pulmonology.html", anchor:"sec-bronchiectasis", cat:"الصدرية"},
+  {ar:"التليف الكيسي", en:"Cystic fibrosis, CF", file:"pocket-pulmonology.html", anchor:"sec-cf", cat:"الصدرية"},
+  {ar:"مرض الرئة الخلالي", en:"Interstitial lung disease, ILD", file:"pocket-pulmonology.html", anchor:"sec-ild", cat:"الصدرية"},
+  {ar:"الانصباب الجنبي", en:"Pleural effusion", file:"pocket-pulmonology.html", anchor:"sec-pleural", cat:"الصدرية"},
+  {ar:"الجلطات الوريدية والانصمام الرئوي", en:"VTE, pulmonary embolism, PE", file:"pocket-pulmonology.html", anchor:"sec-vte", cat:"الصدرية"},
+  {ar:"ارتفاع ضغط الدم الرئوي", en:"Pulmonary hypertension, PHT", file:"pocket-pulmonology.html", anchor:"sec-ph", cat:"الصدرية"},
+  {ar:"نقص الأكسجة وفرط ثاني أكسيد الكربون", en:"Respiratory failure, hypoxia, hypercapnia", file:"pocket-pulmonology.html", anchor:"sec-hypoxia", cat:"الصدرية"},
+  {ar:"التهوية الميكانيكية", en:"Mechanical ventilation", file:"pocket-pulmonology.html", anchor:"sec-mechvent", cat:"الصدرية"},
+  {ar:"متلازمة الضائقة التنفسية الحادة", en:"ARDS", file:"pocket-pulmonology.html", anchor:"sec-ards", cat:"الصدرية"},
+  {ar:"الإنتان والصدمة الإنتانية", en:"Sepsis, septic shock", file:"pocket-pulmonology.html", anchor:"sec-sepsis", cat:"الصدرية"},
+  {ar:"علم السموم", en:"Toxicology, poisoning", file:"pocket-pulmonology.html", anchor:"sec-tox", cat:"الصدرية"},
+  {ar:"زراعة الرئة", en:"Lung transplant", file:"pocket-pulmonology.html", anchor:"sec-transplant", cat:"الصدرية"},
+
+  // ----- الهضمية -----
+  {ar:"عسر البلع", en:"Dysphagia", file:"pocket-gastroenterology.html", anchor:"dysphagia", cat:"الهضمية"},
+  {ar:"داء الارتداد المعدي المريئي", en:"GERD", file:"pocket-gastroenterology.html", anchor:"gerd", cat:"الهضمية"},
+  {ar:"داء القرحة الهضمية", en:"Peptic ulcer disease, PUD", file:"pocket-gastroenterology.html", anchor:"pud", cat:"الهضمية"},
+  {ar:"النزف الهضمي", en:"GI bleeding, GIB", file:"pocket-gastroenterology.html", anchor:"gib", cat:"الهضمية"},
+  {ar:"الإسهال الحاد وعدوى المطثية العسيرة", en:"Acute diarrhea, C. diff", file:"pocket-gastroenterology.html", anchor:"diarrhea", cat:"الهضمية"},
+  {ar:"الإسهال المزمن", en:"Chronic diarrhea", file:"pocket-gastroenterology.html", anchor:"chronic-diarrhea", cat:"الهضمية"},
+  {ar:"أمراض القولون وفحص سرطان القولون", en:"Colon disorders, CRC screening", file:"pocket-gastroenterology.html", anchor:"colon", cat:"الهضمية"},
+  {ar:"داء الأمعاء الالتهابي", en:"IBD, Crohn's, ulcerative colitis", file:"pocket-gastroenterology.html", anchor:"ibd", cat:"الهضمية"},
+  {ar:"نقص تروية الأمعاء", en:"Intestinal ischemia", file:"pocket-gastroenterology.html", anchor:"ischemia", cat:"الهضمية"},
+  {ar:"التهاب البنكرياس", en:"Pancreatitis", file:"pocket-gastroenterology.html", anchor:"pancreatitis", cat:"الهضمية"},
+  {ar:"اختبارات وظائف الكبد", en:"Liver function tests, LFTs", file:"pocket-gastroenterology.html", anchor:"lfts", cat:"الهضمية"},
+  {ar:"التهاب الكبد الفيروسي", en:"Viral hepatitis", file:"pocket-gastroenterology.html", anchor:"viral-hep", cat:"الهضمية"},
+  {ar:"التهاب الكبد المناعي والكحولي والدوائي والإقفاري", en:"AIH, alcoholic hepatitis, drug-induced, ischemic hepatitis", file:"pocket-gastroenterology.html", anchor:"other-hep", cat:"الهضمية"},
+  {ar:"الكبد الدهني الاستقلابي", en:"MASLD, MASH, fatty liver", file:"pocket-gastroenterology.html", anchor:"masld", cat:"الهضمية"},
+  {ar:"الفشل الكبدي الحاد", en:"Acute liver failure, ALF", file:"pocket-gastroenterology.html", anchor:"alf", cat:"الهضمية"},
+  {ar:"التشمع ومضاعفاته وزراعة الكبد", en:"Cirrhosis, liver transplant", file:"pocket-gastroenterology.html", anchor:"cirrhosis", cat:"الهضمية"},
+  {ar:"أمراض القناة الصفراوية", en:"Biliary tract disease", file:"pocket-gastroenterology.html", anchor:"biliary", cat:"الهضمية"},
+  {ar:"المتلازمات الوعائية الكبدية", en:"Hepatic vascular disease", file:"pocket-gastroenterology.html", anchor:"vascular", cat:"الهضمية"},
+  {ar:"الاستسقاء والتهاب الصفاق الجرثومي التلقائي", en:"Ascites, SBP", file:"pocket-gastroenterology.html", anchor:"ascites", cat:"الهضمية"},
+  {ar:"اضطرابات الحركة والتغذية", en:"Dysmotility, nutrition, IBS", file:"pocket-gastroenterology.html", anchor:"dysmotility", cat:"الهضمية"},
+
+  // ----- الدموية -----
+  {ar:"مقاربة فقر الدم", en:"Anemia approach", file:"pocket-hematology.html", anchor:"sec-approach", cat:"الدموية"},
+  {ar:"فقر الدم صغير الكريات", en:"Microcytic anemia", file:"pocket-hematology.html", anchor:"sec-microcytic", cat:"الدموية"},
+  {ar:"فقر الدم سوي الكريات", en:"Normocytic anemia", file:"pocket-hematology.html", anchor:"sec-normocytic", cat:"الدموية"},
+  {ar:"فقر الدم كبير الكريات", en:"Macrocytic anemia", file:"pocket-hematology.html", anchor:"sec-macrocytic", cat:"الدموية"},
+  {ar:"قلة الكريات الشاملة وفقر الدم اللاتنسجي", en:"Pancytopenia, aplastic anemia", file:"pocket-hematology.html", anchor:"sec-pancytopenia", cat:"الدموية"},
+  {ar:"مرض الخلايا المنجلية", en:"Sickle cell disease", file:"pocket-hematology.html", anchor:"sec-sickle", cat:"الدموية"},
+  {ar:"فقر الدم الانحلالي", en:"Hemolytic anemia", file:"pocket-hematology.html", anchor:"sec-hemolytic", cat:"الدموية"},
+  {ar:"أطلس مسحة الدم المحيطي", en:"Peripheral blood smear atlas", file:"pocket-hematology.html", anchor:"sec-atlas", cat:"الدموية"},
+  {ar:"اضطرابات الصفيحات والنزف", en:"Platelet disorders, bleeding, thrombocytopenia, ITP, TTP", file:"pocket-hematology.html", anchor:"sec-platelets", cat:"الدموية"},
+  {ar:"اعتلالات التخثر والجلطات", en:"Coagulopathies, hypercoagulable states, DIC, factor deficiencies", file:"pocket-hematology.html", anchor:"sec-coag", cat:"الدموية"},
+  {ar:"اضطرابات الكريات البيض واعتلال العقد", en:"Leukocyte disorders, neutrophilia, neutropenia, eosinophilia, lymphadenopathy", file:"pocket-hematology.html", anchor:"sec-leukocytes", cat:"الدموية"},
+  {ar:"علاج نقل الدم", en:"Transfusion medicine", file:"pocket-hematology.html", anchor:"sec-transfusion", cat:"الدموية"},
+
+  // ----- الأورام -----
+  {ar:"تصنيف WHO للأورام الدموية", en:"WHO classification of hematologic neoplasms", file:"pocket-oncology.html", anchor:"sec-classify", cat:"الأورام"},
+  {ar:"متلازمات خلل التنسج النقوي", en:"Myelodysplastic syndromes, MDS", file:"pocket-oncology.html", anchor:"sec-mds", cat:"الأورام"},
+  {ar:"أورام التكاثر النقوي (PV، ET، PMF)", en:"Myeloproliferative neoplasms, polycythemia vera, essential thrombocythemia, myelofibrosis", file:"pocket-oncology.html", anchor:"sec-mpn", cat:"الأورام"},
+  {ar:"ابيضاضات الدم الحادة (AML، ALL)", en:"Acute leukemia, AML, ALL, APL", file:"pocket-oncology.html", anchor:"sec-acute", cat:"الأورام"},
+  {ar:"ابيضاض الدم النقوي المزمن", en:"Chronic myeloid leukemia, CML", file:"pocket-oncology.html", anchor:"sec-cml", cat:"الأورام"},
+  {ar:"الأورام اللمفاوية وابيضاض اللمفاويات المزمن", en:"Lymphoma, Hodgkin, non-Hodgkin, CLL", file:"pocket-oncology.html", anchor:"sec-lymphoma", cat:"الأورام"},
+  {ar:"اضطرابات الخلايا البلازمية والورم النقيي المتعدد", en:"Plasma cell dyscrasias, multiple myeloma, MGUS", file:"pocket-oncology.html", anchor:"sec-plasma", cat:"الأورام"},
+  {ar:"زرع الخلايا الجذعية المكونة للدم", en:"Hematopoietic stem cell transplant, HSCT, GVHD", file:"pocket-oncology.html", anchor:"sec-hsct", cat:"الأورام"},
+  {ar:"العلاج المناعي والخلوي (مثبطات نقاط التفتيش، CAR-T)", en:"Immunotherapy, immune checkpoint inhibitors, CAR-T cell therapy", file:"pocket-oncology.html", anchor:"sec-immunotherapy", cat:"الأورام"},
+  {ar:"سرطان الرئة", en:"Lung cancer, NSCLC, SCLC", file:"pocket-oncology.html", anchor:"sec-lung", cat:"الأورام"},
+  {ar:"سرطان الثدي", en:"Breast cancer", file:"pocket-oncology.html", anchor:"sec-breast", cat:"الأورام"},
+  {ar:"سرطان البروستات", en:"Prostate cancer", file:"pocket-oncology.html", anchor:"sec-prostate", cat:"الأورام"},
+  {ar:"سرطان القولون والمستقيم", en:"Colorectal cancer, CRC", file:"pocket-oncology.html", anchor:"sec-crc", cat:"الأورام"},
+  {ar:"أورام البنكرياس", en:"Pancreatic tumors, pancreatic adenocarcinoma", file:"pocket-oncology.html", anchor:"sec-pancreatic", cat:"الأورام"},
+  {ar:"سرطانة الخلايا الكبدية", en:"Hepatocellular carcinoma, HCC", file:"pocket-oncology.html", anchor:"sec-solid-other", cat:"الأورام"},
+  {ar:"سرطانة المعدة والمريء", en:"Gastric cancer, esophageal cancer", file:"pocket-oncology.html", anchor:"sec-solid-other", cat:"الأورام"},
+  {ar:"الميلانوما الجلدية", en:"Cutaneous melanoma", file:"pocket-oncology.html", anchor:"sec-solid-other", cat:"الأورام"},
+  {ar:"سرطان المبيض", en:"Ovarian cancer", file:"pocket-oncology.html", anchor:"sec-solid-other", cat:"الأورام"},
+  {ar:"أورام الجهاز العصبي المركزي", en:"CNS tumors, glioma, brain metastases", file:"pocket-oncology.html", anchor:"sec-solid-other", cat:"الأورام"},
+  {ar:"الطوارئ الورمية", en:"Oncologic emergencies, tumor lysis, spinal cord compression, neutropenic fever", file:"pocket-oncology.html", anchor:"sec-emergency", cat:"الأورام"},
+  {ar:"سميات العلاجات الموجهة للسرطان", en:"Chemotherapy toxicity, targeted therapy side effects", file:"pocket-oncology.html", anchor:"sec-toxicity", cat:"الأورام"},
+
+  // ----- الغدية الصماوية -----
+  {ar:"قصور الغدة النخامية", en:"Hypopituitarism", file:"pocket-endocrinology.html", anchor:"pituitary-insuff", cat:"الغدية الصماوية"},
+  {ar:"فرط نشاط الغدة النخامية والأورام النخامية", en:"Pituitary adenoma, acromegaly, prolactinoma", file:"pocket-endocrinology.html", anchor:"pituitary-hyper", cat:"الغدية الصماوية"},
+  {ar:"متلازمات MEN وAPS", en:"MEN syndromes, autoimmune polyglandular syndromes", file:"pocket-endocrinology.html", anchor:"men-aps", cat:"الغدية الصماوية"},
+  {ar:"نهج مستويات TSH واختبارات الغدة الدرقية", en:"Thyroid function tests, TSH approach", file:"pocket-endocrinology.html", anchor:"thyroid-tests", cat:"الغدية الصماوية"},
+  {ar:"قصور الغدة الدرقية", en:"Hypothyroidism", file:"pocket-endocrinology.html", anchor:"hypothyroid", cat:"الغدية الصماوية"},
+  {ar:"فرط نشاط الغدة الدرقية", en:"Hyperthyroidism, thyrotoxicosis", file:"pocket-endocrinology.html", anchor:"hyperthyroid", cat:"الغدية الصماوية"},
+  {ar:"مرض المريض السليم والأميودارون والغدة الدرقية", en:"Sick euthyroid syndrome, amiodarone-induced thyroid disease", file:"pocket-endocrinology.html", anchor:"thyroid-illness-amio", cat:"الغدية الصماوية"},
+  {ar:"عقيدات وسرطان الغدة الدرقية", en:"Thyroid nodules, thyroid cancer", file:"pocket-endocrinology.html", anchor:"thyroid-cancer", cat:"الغدية الصماوية"},
+  {ar:"فرط الكورتيزول (متلازمة كوشينغ)", en:"Cushing's syndrome", file:"pocket-endocrinology.html", anchor:"cushing", cat:"الغدية الصماوية"},
+  {ar:"فرط الألدوستيرونية", en:"Hyperaldosteronism", file:"pocket-endocrinology.html", anchor:"hyperaldo", cat:"الغدية الصماوية"},
+  {ar:"قصور الكظر", en:"Adrenal insufficiency", file:"pocket-endocrinology.html", anchor:"adrenal-insuff", cat:"الغدية الصماوية"},
+  {ar:"ورم القواتم", en:"Pheochromocytoma", file:"pocket-endocrinology.html", anchor:"pheo", cat:"الغدية الصماوية"},
+  {ar:"الأورام الكظرية العرضية", en:"Adrenal incidentaloma", file:"pocket-endocrinology.html", anchor:"adrenal-incidental", cat:"الغدية الصماوية"},
+  {ar:"أساسيات اضطرابات الكالسيوم", en:"Calcium disorders basics, PTH physiology", file:"pocket-endocrinology.html", anchor:"calcium-basics", cat:"الغدية الصماوية"},
+  {ar:"فرط كالسيوم الدم", en:"Hypercalcemia", file:"pocket-endocrinology.html", anchor:"hypercalcemia", cat:"الغدية الصماوية"},
+  {ar:"نقص كالسيوم الدم", en:"Hypocalcemia", file:"pocket-endocrinology.html", anchor:"hypocalcemia", cat:"الغدية الصماوية"},
+  {ar:"داء السكري", en:"Diabetes mellitus", file:"pocket-endocrinology.html", anchor:"diabetes", cat:"الغدية الصماوية"},
+  {ar:"الحماض الكيتوني السكري والحالة المفرطة الأسمولية", en:"DKA, HHS", file:"pocket-endocrinology.html", anchor:"dka-hhs", cat:"الغدية الصماوية"},
+  {ar:"نقص سكر الدم", en:"Hypoglycemia", file:"pocket-endocrinology.html", anchor:"hypoglycemia", cat:"الغدية الصماوية"},
+  {ar:"اضطرابات الدهون", en:"Lipid disorders, dyslipidemia", file:"pocket-endocrinology.html", anchor:"lipids", cat:"الغدية الصماوية"},
+  {ar:"السمنة", en:"Obesity, weight management", file:"pocket-endocrinology.html", anchor:"obesity", cat:"الغدية الصماوية"},
+
+  // ----- العصبية -----
+  {ar:"الوعي والغيبوبة", en:"Altered consciousness, coma", file:"pocket-neurology.html", anchor:"coma", cat:"العصبية"},
+  {ar:"إصابة الدماغ بعد نقص الأكسجة/السكتة القلبية", en:"Anoxic brain injury", file:"pocket-neurology.html", anchor:"anoxic", cat:"العصبية"},
+  {ar:"النوبات الصرعية والحالة الصرعية", en:"Seizures, status epilepticus", file:"pocket-neurology.html", anchor:"seizures", cat:"العصبية"},
+  {ar:"انسحاب الكحول الإيثيلي", en:"Alcohol withdrawal", file:"pocket-neurology.html", anchor:"etoh", cat:"العصبية"},
+  {ar:"الدوار", en:"Dizziness, vertigo", file:"pocket-neurology.html", anchor:"vertigo", cat:"العصبية"},
+  {ar:"السكتة الدماغية الإقفارية", en:"Ischemic stroke", file:"pocket-neurology.html", anchor:"stroke", cat:"العصبية"},
+  {ar:"النزف داخل القحف", en:"Intracranial hemorrhage, ICH", file:"pocket-neurology.html", anchor:"ich", cat:"العصبية"},
+  {ar:"تفريق مواقع الإصابة العصبية والعضلية", en:"Weakness localization, neuromuscular dysfunction", file:"pocket-neurology.html", anchor:"neuropathy", cat:"العصبية"},
+  {ar:"متلازمة غيلان باريه", en:"Guillain-Barré syndrome, GBS", file:"pocket-neurology.html", anchor:"gbs", cat:"العصبية"},
+  {ar:"الوهن العضلي الوبيل", en:"Myasthenia gravis", file:"pocket-neurology.html", anchor:"mg", cat:"العصبية"},
+  {ar:"اعتلالات العضلات", en:"Myopathy", file:"pocket-neurology.html", anchor:"myopathy", cat:"العصبية"},
+  {ar:"الصداع", en:"Headache", file:"pocket-neurology.html", anchor:"headache", cat:"العصبية"},
+  {ar:"الشقيقة", en:"Migraine", file:"pocket-neurology.html", anchor:"migraine", cat:"العصبية"},
+  {ar:"ألم الظهر — تشخيص تفريقي وتقييم", en:"Back pain differential", file:"pocket-neurology.html", anchor:"backpain", cat:"العصبية"},
+  {ar:"انضغاط النخاع الشوكي", en:"Spinal cord compression", file:"pocket-neurology.html", anchor:"cordcompression", cat:"العصبية"},
+  {ar:"انضغاط جذر العصب", en:"Nerve root compression, radiculopathy", file:"pocket-neurology.html", anchor:"rootcompression", cat:"العصبية"},
+
+  // ----- الكلية والشوارد وغازات الدم -----
+  {ar:"غازات الدم الشرياني — الأساسيات والتعويضات", en:"Arterial blood gas basics, compensation", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s1", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"الحماض الاستقلابي — الفجوة الأنيونية وGOLD MARK", en:"Anion-gap metabolic acidosis, GOLD MARK", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s2", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"الحماض الاستقلابي — الفجوة الطبيعية والحماض الأنبوبي الكلوي", en:"Non-anion-gap metabolic acidosis, RTA", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s3", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"القلاء الاستقلابي", en:"Metabolic alkalosis", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s4", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"الحماض والقلاء التنفسيان", en:"Respiratory acidosis/alkalosis", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s5", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"الصوديوم — نقص وفرط", en:"Hyponatremia, hypernatremia", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s6", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"البوتاسيوم والشوارد الأخرى — نقص وفرط", en:"Hypokalemia, hyperkalemia, electrolytes", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s7", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"إصابة الكلى الحادة", en:"Acute kidney injury, AKI", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s8", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"التهاب الكلية الخلالي الحاد", en:"Acute interstitial nephritis, AIN", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s9", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"أمراض الكلى المزمنة ومضاعفاتها", en:"Chronic kidney disease, CKD", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s10", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"التهاب كبيبات الكلى", en:"Glomerulonephritis", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s11", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"المتلازمة الكلوية", en:"Nephrotic syndrome", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s12", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"تحليل البول", en:"Urinalysis", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s13", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"البيلة الدموية", en:"Hematuria", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s14", cat:"الكلية والشوارد وغازات الدم"},
+  {ar:"حصوات الكلى", en:"Nephrolithiasis", file:"pocket-nephrology-electrolytes-abg.html", anchor:"s15", cat:"الكلية والشوارد وغازات الدم"},
+
+  // ----- الروماتيزم -----
+  {ar:"نظرة عامة على أمراض الروماتيزم الالتهابية", en:"Approach to rheumatic disease", file:"pocket-rheumatology.html", anchor:"rheum-overview", cat:"الروماتيزم"},
+  {ar:"اختبارات العلامات الالتهابية والأجسام المضادة الذاتية", en:"Inflammatory markers, autoantibodies", file:"pocket-rheumatology.html", anchor:"inflam-markers", cat:"الروماتيزم"},
+  {ar:"التشخيص التفريقي الروماتيزمي بحسب المظهر السريري", en:"Rheumatologic differential by presentation", file:"pocket-rheumatology.html", anchor:"ddx-presentation", cat:"الروماتيزم"},
+  {ar:"مسببات وتشخيص التهاب المفاصل المعدي", en:"Infectious arthritis", file:"pocket-rheumatology.html", anchor:"infectious-arthritis", cat:"الروماتيزم"},
+  {ar:"التهاب المفاصل الجرثومي (غير السيلاني)", en:"Septic arthritis, non-gonococcal", file:"pocket-rheumatology.html", anchor:"septic-arthritis", cat:"الروماتيزم"},
+  {ar:"العدوى بالمكورات البنية المنتشرة", en:"Disseminated gonococcal infection, DGI", file:"pocket-rheumatology.html", anchor:"dgi", cat:"الروماتيزم"},
+  {ar:"التهاب الجراب الزجي والرضفي", en:"Bursitis", file:"pocket-rheumatology.html", anchor:"bursitis", cat:"الروماتيزم"},
+  {ar:"التهابات المفاصل البلورية: نظرة عامة", en:"Crystal arthropathies overview", file:"pocket-rheumatology.html", anchor:"crystal-arthropathies", cat:"الروماتيزم"},
+  {ar:"النقرس", en:"Gout", file:"pocket-rheumatology.html", anchor:"gout", cat:"الروماتيزم"},
+  {ar:"النقرس الكاذب", en:"CPPD, pseudogout", file:"pocket-rheumatology.html", anchor:"cppd", cat:"الروماتيزم"},
+  {ar:"التهاب المفاصل الروماتويدي", en:"Rheumatoid arthritis, RA", file:"pocket-rheumatology.html", anchor:"ra", cat:"الروماتيزم"},
+  {ar:"مرض ستيل عند البالغين والتهاب الغضاريف الناكس", en:"Adult-onset Still's disease, relapsing polychondritis", file:"pocket-rheumatology.html", anchor:"stills-polychondritis", cat:"الروماتيزم"},
+  {ar:"التهاب الفقار المقسط", en:"Seronegative spondyloarthritis, SpA", file:"pocket-rheumatology.html", anchor:"spa", cat:"الروماتيزم"},
+  {ar:"أمراض النسيج الضام: الأجسام المضادة الذاتية", en:"Connective tissue disease overview", file:"pocket-rheumatology.html", anchor:"ctd-overview", cat:"الروماتيزم"},
+  {ar:"تصلب الجلد الجهازي", en:"Systemic sclerosis, scleroderma", file:"pocket-rheumatology.html", anchor:"ssc", cat:"الروماتيزم"},
+  {ar:"ظاهرة رينود", en:"Raynaud's phenomenon", file:"pocket-rheumatology.html", anchor:"raynaud", cat:"الروماتيزم"},
+  {ar:"الاعتلالات العضلية الالتهابية", en:"Inflammatory myopathies", file:"pocket-rheumatology.html", anchor:"myopathies", cat:"الروماتيزم"},
+  {ar:"متلازمة شوغرن", en:"Sjögren's syndrome", file:"pocket-rheumatology.html", anchor:"sjogren", cat:"الروماتيزم"},
+  {ar:"مرض النسيج الضام المختلط", en:"Mixed connective tissue disease, MCTD", file:"pocket-rheumatology.html", anchor:"mctd", cat:"الروماتيزم"},
+  {ar:"الذئبة الحمامية الجهازية", en:"Systemic lupus erythematosus, SLE", file:"pocket-rheumatology.html", anchor:"sle", cat:"الروماتيزم"},
+  {ar:"مرض IgG4 المرتبط", en:"IgG4-related disease", file:"pocket-rheumatology.html", anchor:"igg4rd", cat:"الروماتيزم"},
+  {ar:"التهابات الأوعية: نظرة عامة", en:"Vasculitis overview", file:"pocket-rheumatology.html", anchor:"vasculitis-overview", cat:"الروماتيزم"},
+  {ar:"التهاب الأوعية الكبيرة (تاكاياسو، GCA، PMR)", en:"Large-vessel vasculitis, GCA, PMR", file:"pocket-rheumatology.html", anchor:"large-vessel-vasculitis", cat:"الروماتيزم"},
+  {ar:"التهاب الأوعية المتوسطة (PAN)", en:"Polyarteritis nodosa, PAN", file:"pocket-rheumatology.html", anchor:"pan", cat:"الروماتيزم"},
+  {ar:"التهاب الأوعية الصغيرة المرتبط بـANCA", en:"ANCA-associated vasculitis", file:"pocket-rheumatology.html", anchor:"anca-vasculitis", cat:"الروماتيزم"},
+  {ar:"التهاب الأوعية الصغيرة بالمعقدات المناعية", en:"Immune-complex small vessel vasculitis", file:"pocket-rheumatology.html", anchor:"immune-complex-vasculitis", cat:"الروماتيزم"},
+  {ar:"متلازمة بهجت", en:"Behçet's syndrome", file:"pocket-rheumatology.html", anchor:"behcet", cat:"الروماتيزم"},
+  {ar:"المتلازمات الالتهابية الذاتية", en:"Autoinflammatory syndromes", file:"pocket-rheumatology.html", anchor:"autoinflammatory", cat:"الروماتيزم"},
+  {ar:"الداء النشواني", en:"Amyloidosis", file:"pocket-rheumatology.html", anchor:"amyloidosis", cat:"الروماتيزم"},
+
+  // ----- الانتانية -----
+  {ar:"الالتهاب الرئوي", en:"Pneumonia, CAP, HAP, VAP", file:"pocket-infectious-disease.html", anchor:"pneumonia", cat:"الانتانية"},
+  {ar:"العدوى الفيروسية التنفسية (الإنفلونزا وكوفيد-19)", en:"Influenza, COVID-19, respiratory viral infection", file:"pocket-infectious-disease.html", anchor:"resp-viral", cat:"الانتانية"},
+  {ar:"العدوى الفطرية", en:"Fungal infections, candidiasis, aspergillosis, cryptococcosis", file:"pocket-infectious-disease.html", anchor:"fungal", cat:"الانتانية"},
+  {ar:"العدوى في المضيفين المثبطين مناعياً", en:"Infections in immunocompromised host", file:"pocket-infectious-disease.html", anchor:"immunocompromised", cat:"الانتانية"},
+  {ar:"عدوى المسالك البولية", en:"Urinary tract infection, UTI", file:"pocket-infectious-disease.html", anchor:"uti", cat:"الانتانية"},
+  {ar:"الأمراض المنقولة جنسياً", en:"Sexually transmitted infections, STI", file:"pocket-infectious-disease.html", anchor:"sti", cat:"الانتانية"},
+  {ar:"عدوى الجلد والأنسجة الرخوة", en:"Skin and soft tissue infections, cellulitis", file:"pocket-infectious-disease.html", anchor:"skin-soft-tissue", cat:"الانتانية"},
+  {ar:"عدوى القدم السكرية", en:"Diabetic foot infection", file:"pocket-infectious-disease.html", anchor:"diabetic-foot", cat:"الانتانية"},
+  {ar:"التهاب العظم والنقي", en:"Osteomyelitis", file:"pocket-infectious-disease.html", anchor:"osteomyelitis", cat:"الانتانية"},
+  {ar:"الخراج فوق الجافية", en:"Epidural abscess", file:"pocket-infectious-disease.html", anchor:"epidural-abscess", cat:"الانتانية"},
+  {ar:"التهاب السحايا الجرثومي الحاد", en:"Acute bacterial meningitis", file:"pocket-infectious-disease.html", anchor:"meningitis-bacterial", cat:"الانتانية"},
+  {ar:"التهاب السحايا العقيم", en:"Aseptic meningitis", file:"pocket-infectious-disease.html", anchor:"meningitis-aseptic", cat:"الانتانية"},
+  {ar:"التهاب الدماغ", en:"Encephalitis", file:"pocket-infectious-disease.html", anchor:"encephalitis", cat:"الانتانية"},
+  {ar:"شلل الوجه (شلل بيل)", en:"Bell's palsy, facial nerve palsy", file:"pocket-infectious-disease.html", anchor:"bells-palsy", cat:"الانتانية"},
+  {ar:"الهربس النطاقي (الحزام الناري)", en:"Herpes zoster, shingles", file:"pocket-infectious-disease.html", anchor:"herpes-zoster", cat:"الانتانية"},
+  {ar:"تجرثم الدم والتهاب الشغاف", en:"Bacteremia, infective endocarditis", file:"pocket-infectious-disease.html", anchor:"bacteremia-endocarditis", cat:"الانتانية"},
+  {ar:"السل", en:"Tuberculosis, TB", file:"pocket-infectious-disease.html", anchor:"tuberculosis", cat:"الانتانية"},
+  {ar:"فيروس نقص المناعة البشرية/الإيدز", en:"HIV, AIDS", file:"pocket-infectious-disease.html", anchor:"hiv", cat:"الانتانية"},
+  {ar:"الأمراض المنقولة بالقراد والحشرات", en:"Tick-borne diseases, Lyme disease", file:"pocket-infectious-disease.html", anchor:"tick-borne", cat:"الانتانية"},
+  {ar:"الحمى مجهولة المصدر", en:"Fever of unknown origin, FUO", file:"pocket-infectious-disease.html", anchor:"fuo", cat:"الانتانية"},
+  {ar:"الحمى والطفح الجلدي", en:"Fever and rash", file:"pocket-infectious-disease.html", anchor:"fever-rash", cat:"الانتانية"},
+  {ar:"الحمى في المسافر العائد", en:"Fever in the returning traveler", file:"pocket-infectious-disease.html", anchor:"fever-traveler", cat:"الانتانية"},
+
+  // ----- أدوية العناية المركزة والصادات والصيغ -----
+  {ar:"أدوية العناية المركزة", en:"ICU medications, vasopressors, sedation", file:"pocket-medicine-meds-formulas.html", anchor:"icu-meds", cat:"الأدوية والصيغ"},
+  {ar:"جداول المضادات الميكروبية", en:"Antimicrobial tables, antibiotic spectrum", file:"pocket-medicine-meds-formulas.html", anchor:"antimicrobials", cat:"الأدوية والصيغ"},
+  {ar:"علاج الفطريات الشائعة", en:"Antifungal therapy", file:"pocket-medicine-meds-formulas.html", anchor:"antifungals", cat:"الأدوية والصيغ"},
+  {ar:"الصيغ القلبية", en:"Cardiology formulas, quick reference", file:"pocket-medicine-meds-formulas.html", anchor:"hemo-formulas", cat:"الأدوية والصيغ"},
+  {ar:"أنماط التصوير الصدري", en:"Chest imaging patterns, CXR, CT chest", file:"pocket-medicine-meds-formulas.html", anchor:"chest-imaging", cat:"الأدوية والصيغ"},
+  {ar:"الصيغ الرئوية", en:"Pulmonary formulas", file:"pocket-medicine-meds-formulas.html", anchor:"pulm-formulas", cat:"الأدوية والصيغ"},
+  {ar:"صيغ أمراض الجهاز الهضمي", en:"GI formulas", file:"pocket-medicine-meds-formulas.html", anchor:"gi", cat:"الأدوية والصيغ"},
+  {ar:"صيغ أمراض الكلى الأساسية", en:"Renal formulas", file:"pocket-medicine-meds-formulas.html", anchor:"renal", cat:"الأدوية والصيغ"},
+  {ar:"صيغ أمراض الدم", en:"Hematology formulas", file:"pocket-medicine-meds-formulas.html", anchor:"heme", cat:"الأدوية والصيغ"},
+  {ar:"صيغ أمراض الغدد الصماء", en:"Endocrine formulas", file:"pocket-medicine-meds-formulas.html", anchor:"endocrine", cat:"الأدوية والصيغ"},
+  {ar:"مقاييس سريرية أخرى", en:"Other clinical scores", file:"pocket-medicine-meds-formulas.html", anchor:"other-scores", cat:"الأدوية والصيغ"},
+  {ar:"الإحصاء التشخيصي", en:"Diagnostic statistics, sensitivity, specificity", file:"pocket-medicine-meds-formulas.html", anchor:"stats", cat:"الأدوية والصيغ"},
+
+  // ----- الجراحات الصغرى وقضايا الاستشارة -----
+  {ar:"ألم البطن", en:"Abdominal pain", file:"surgical-issues.html", anchor:"abdpain", cat:"الجراحات الصغرى وقضايا الاستشارة"},
+  {ar:"البطن الحاد", en:"Acute abdomen", file:"surgical-issues.html", anchor:"acuteabd", cat:"الجراحات الصغرى وقضايا الاستشارة"},
+  {ar:"حالات الطوارئ الطرفية", en:"Peripheral vascular/limb emergencies", file:"surgical-issues.html", anchor:"peripheral", cat:"الجراحات الصغرى وقضايا الاستشارة"},
+  {ar:"الأنابيب الجراحية والمصارف والجروح", en:"Surgical tubes, drains, wounds", file:"surgical-issues.html", anchor:"tubes", cat:"الجراحات الصغرى وقضايا الاستشارة"},
+  {ar:"النزيف المهبلي", en:"Vaginal bleeding", file:"surgical-issues.html", anchor:"vagbleed", cat:"الجراحات الصغرى وقضايا الاستشارة"},
+  {ar:"الإفرازات المهبلية", en:"Vaginal discharge", file:"surgical-issues.html", anchor:"vagdischarge", cat:"الجراحات الصغرى وقضايا الاستشارة"},
+  {ar:"كتلة الملحقات في المرأة غير الحامل", en:"Adnexal mass", file:"surgical-issues.html", anchor:"adnexal", cat:"الجراحات الصغرى وقضايا الاستشارة"},
+  {ar:"المشاكل والطوارئ العينية", en:"Ophthalmic emergencies", file:"surgical-issues.html", anchor:"eye", cat:"الجراحات الصغرى وقضايا الاستشارة"},
+
+];
+
+const input = document.getElementById('searchInput');
+const clearBtn = document.getElementById('searchClear');
+const resultsBox = document.getElementById('searchResults');
+const resultList = document.getElementById('resultList');
+const resultCount = document.getElementById('resultCount');
+const catsWrap = document.getElementById('cats');
+
+function normalize(s){
+  return s.toLowerCase()
+    .replace(/[إأآا]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه')
+    .replace(/[ًٌٍَُِّْ]/g,'');
+}
+
+function runSearch(q){
+  q = normalize(q.trim());
+  if(!q){
+    resultsBox.classList.remove('show');
+    catsWrap.style.display = '';
+    return;
+  }
+  catsWrap.style.display = 'none';
+  const matches = searchIndex.filter(item =>
+    normalize(item.ar).includes(q) || normalize(item.en).includes(q)
+  );
+  resultCount.textContent = matches.length ? `${matches.length} نتيجة` : '';
+  if(matches.length === 0){
+    resultList.innerHTML = '<div class="no-results">لا توجد نتائج مطابقة — جرّب مصطلحاً آخر.</div>';
+  } else {
+    resultList.innerHTML = matches.map(m => `
+      <a class="result-item" href="${m.file}#${m.anchor}">
+        <span class="result-badge">${m.cat}</span>
+        <span class="result-text">
+          <span class="result-title">${m.ar}</span><br>
+          <span class="result-en">${m.en}</span>
+        </span>
+      </a>
+    `).join('');
+  }
+  resultsBox.classList.add('show');
+}
+
+input.addEventListener('input', (e) => {
+  clearBtn.classList.toggle('show', !!e.target.value);
+  runSearch(e.target.value);
+});
+clearBtn.addEventListener('click', () => {
+  input.value = '';
+  clearBtn.classList.remove('show');
+  runSearch('');
+  input.focus();
+});
+</script>
+
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  function unlock(){
+    var s = document.getElementById('ca-gate-hide'); if(s) s.remove();
+    var l = document.getElementById('ca-gate-screen'); if(l) l.remove();
+  }
+  function lock(){
+    document.body.innerHTML = `
+      <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b0f14;color:#e8edf3;font-family:'IBM Plex Sans Arabic',sans-serif;text-align:center;padding:2rem;direction:rtl">
+        <div style="font-size:3rem;margin-bottom:1rem">🔒</div>
+        <h1 style="font-size:1.3rem;margin-bottom:.6rem">هذا المحتوى متاح للمشتركين فقط</h1>
+        <p style="color:#9fb0c3;max-width:420px;margin-bottom:1.6rem;line-height:1.8">اشترك الآن للوصول الكامل لمرجع Pocket Medicine وكل محتوى CardioArab.</p>
+        <a href="subscription.html" style="background:#8b5cf6;color:#fff;text-decoration:none;padding:.8rem 1.8rem;border-radius:10px;font-weight:700;margin-bottom:.8rem">📋 عرض خطط الاشتراك</a>
+        <a href="login.html" style="color:#3aa6ff;text-decoration:none;font-size:.9rem;margin-top:.6rem">🔐 لدي حساب بالفعل — تسجيل الدخول</a>
+      </div>`;
+  }
+  try{
+    const u = session.get();
+    if(u && u.is_admin){ unlock(); return; }
+    const ok = await session.isSubscribed();
+    if(ok){ unlock(); } else { lock(); }
+  }catch(e){ lock(); }
+})();
+</script>
+<script src="protection.js"></script>
+</body>
+</html>
