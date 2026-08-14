@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل 6 — متلازمات إقفارية أخرى | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a;
+    --bg2:#0f1524;
+    --panel:#111a2e;
+    --panel2:#0d1526;
+    --border:#1e2c47;
+    --teal:#2dd4bf;
+    --teal-dim:#1a7f74;
+    --gold:#fbbf24;
+    --text:#e6ecf5;
+    --text-dim:#93a2bd;
+    --text-dimmer:#5f7093;
+    --danger:#f87171;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, #0f1c33 0%, var(--bg) 45%);
+    color:var(--text);
+    font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9;
+    font-size:16px;
+    padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, rgba(10,14,26,.98), rgba(10,14,26,.94));
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+    padding:14px 20px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>محتويات الفصل 6</h3>
+  <div class="chgroup">
+    <span class="chtitle">الفصل 6 — متلازمات إقفارية أخرى</span>
+    <a href="#c6s1">I. التسلخ العفوي للشريان الإكليلي (SCAD)</a>
+    <a href="#c6s2">II. سوء وظيفة الأوعية الدقيقة الإكليلية</a>
+    <a href="#c6s3">III. اعتلال عضلة القلب تاكوتسوبو</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">مراجعة أمراض القلب — القسم الأول: داء القلب الإقفاري</span>
+    <h1>متلازمات إقفارية أخرى</h1>
+  </div>
+  <span class="chapno">6</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab</span>
+    <h2>الفصل 6: متلازمات إقفارية أخرى</h2>
+  </div>
+
+  <div class="chapter-divider" id="chapter6">
+    <div class="num">6</div>
+    <div class="txt">
+      <span class="eyebrow">الفصل السادس</span>
+      <h2>متلازمات إقفارية أخرى: التسلخ العفوي للشريان الإكليلي، سوء وظيفة الأوعية الدقيقة، واعتلال عضلة القلب تاكوتسوبو</h2>
+    </div>
+  </div>
+
+  <section class="roman" id="c6s1">
+    <div class="roman-head"><div class="roman-badge">I</div><h2>التسلخ العفوي للشريان الإكليلي (SCAD)</h2></div>
+
+    <h3 class="subhead">أ. المقدمة</h3>
+    <p>يُعرَّف التسلخ العفوي للشريان الإكليلي (SCAD) بأنه انفصال غير علاجي المنشأ (تسلخ) لطبقات جدار الشريان الإكليلي، غير مرتبط بورم عصيدي أو رض. تمتلئ المسافة بين الطبقات المنفصلة بالدم، وتُدعى الورم الدموي داخل الجدار (IMH). قد يحدث اضطراب تدفق الشريان الإكليلي بسبب شرفة التسلخ الباطنية المُعيقة للتدفق أو ضغط IMH على اللمعة الحقيقية. المريضات عادةً أصغر سنًا وإناث مقارنةً باحتشاء عضلة القلب العصيدي، بمتوسط عمر عند التظاهر 47-53 سنة. يُشكِّل SCAD نحو 20% من احتشاءات النساء دون 50 سنة، ونحو 20% من الاحتشاءات أثناء الحمل أو فترة ما حول الولادة.</p>
+
+    <h3 class="subhead">ب. التظاهر</h3>
+    <p>تظاهرات SCAD مشابهة للمتلازمة الإكليلية الحادة العصيدية، والألم الصدري أكثر الأعراض المُبلَّغ عنها. لدى المريضات عادةً عبء أقل من عوامل الخطورة القلبية الوعائية مقارنةً بمرضى الاحتشاء العصيدي وهنّ عادةً أصغر سنًا، مما يجعل نقص التحري أكثر شيوعًا. يتظاهر ما يصل لنصف المريضات باحتشاء مرتفع القطعة ST (STEMI)، ونسبة صغيرة لديهن اضطرابات نظم بطينية خبيثة أو صدمة قلبية عند التظاهر. قد يوجد مُحرِّض إجهادي عاطفي أو جسدي.</p>
+
+    <h3 class="subhead">ج. الآليات</h3>
+    <p>اعتُقد مبدئيًا أن SCAD يبدأ بشرفة تسلخ باطنية؛ لكن يُعتقَد حاليًا أن الحدث المُحرِّض هو تطور IMH عفوي. شوهد IMH بغياب شرفة تسلخ ظاهرة باستخدام التصوير داخل الإكليل. يُصنَّف SCAD لثلاثة أنماط رئيسية استنادًا للمظهر التصويري الوعائي:</p>
+    <ol>
+      <li><strong>النمط I:</strong> مظهر لمعة مزدوجة أو متعددة مع تأخر تصفية التباين، يدل على وجود لمعتين حقيقية وكاذبة.</li>
+      <li><strong>النمط II (الأكثر شيوعًا):</strong> تضيق أملس في قطعة إكليلية طويلة (عادةً >20 مم) بسبب ضغط اللمعة الحقيقية. قد تكون القطعة المُصابة بين قطعتين طبيعيتي المظهر (IIA) أو تمتد حتى الوعاء البعيد (IIB).</li>
+      <li><strong>النمط III (نادر):</strong> تضيق بؤري أو أنبوبي يُحاكي آفة عصيدية، ويتطلب عادةً تصويرًا داخل الإكليل لإثبات التشخيص.</li>
+    </ol>
+    <p>اقتُرح نمط رابع حيث يكون الوعاء مسدودًا تمامًا؛ يمكن وضع التشخيص في هذه الحالة بعد نفي الأسباب الصمّية واستعادة التدفق الإكليلي.</p>
+
+    <h3 class="subhead">د. التشخيص</h3>
+    <p>يُوضَع تشخيص SCAD عادةً بالتصوير الوعائي الإكليلي الغازي. قد يكون تصوير CT الوعائي الإكليلي (CTCA) تشخيصيًا، لكن CTCA الطبيعي لا ينفي SCAD نظرًا للدقة المكانية المحدودة، خصوصًا للأوعية البعيدة. ينبغي أن تُثير المتلازمة الإكليلية الحادة أو السكتة القلبية لدى مريضة شابة منخفضة خطورة الداء الوعائي القلبي القلق من SCAD. يُشاهَد المظهر التصويري الوعائي الكلاسيكي المميز لـ SCAD (النمط I) في أقل من ثلث الحالات. إذا اُشتبِه بـ SCAD نمط II استنادًا للمظهر التصويري، يُوصى بنتروغليسرين داخل الإكليل لنفي أي مكوّن تشنجي وعائي للقطعة المتضيقة. قد يوحي تعرُّج الأوعية الإكليلية وخلوّها من سمات عصيدية بـ SCAD. عند شك التشخيص، يفيد كثيرًا التصوير داخل الإكليل (IVUS أو OCT). قد يفيد تكرار التصوير الإكليلي (وعائي أو CT) بعد 6-8 أسابيع في حالة عدم اليقين التشخيصي أو تكرار الأعراض.</p>
+    <p>ينبغي متابعة مريضات SCAD في عيادة متخصصة. نظرًا للارتباط القوي بين SCAD وخلل التنسج الليفي العضلي (FMD)/الشذوذات الوعائية، ينبغي فحص المريضات بدقة، خصوصًا النبضات المحيطية وإصغاء الوشوشات. قد يُجرى تصوير للشرايين من الدماغ للحوض، عادةً بـ CT، لتقييم FMD، الذي يُصيب شائعًا الشرايين الكلوية والسباتية خارج القحف، بينما قد يكون لدى 20% من مرضى SCAD أم دم داخل قحفية أيضًا.</p>
+
+    <h3 class="subhead">هـ. العلاج</h3>
+    <p>تُدار معظم حالات SCAD بشكل محافظ، وتُظهر معظم آفاته شفاءً تصويريًا عند إعادة التصوير بعد 30 يومًا أو أكثر من الحدث المرجعي. ينبغي النظر بإعادة التوعية الإكليلية في حالات نقص التروية بسبب ضعف التدفق الإكليلي، عدم الاستقرار الديناميكي الدموي، أو موجودات تشريحية مرتفعة الخطورة كتسلخ الجذع الإكليلي الأيسر أو متعدد الأوعية القريب. في هذه الحالات، يمكن إجراء رأب وعائي بالبالون أو وضع شبكة (PCI) لاستعادة التدفق. في SCAD الجذع الإكليلي الأيسر أو عند فشل PCI، قد يلزم CABG طارئ. الخطورة الرئيسية مع PCI أو التدخل الجراحي هي توسّع IMH/التسلخ الأصلي والدخول غير المقصود بالسلك للمعة الكاذبة بدل الحقيقية، وكلاهما قد يُسوِّئ نقص التروية.</p>
+    <p>لدى المريضات المستقرات سريريًا دون ميزات مرتفعة الخطورة والمُدارات محافظةً، يُوصى بمراقبة استشفائية لمدة يومين أو ثلاثة على الأقل على الأقل. 15% من المريضات المُدارات طبيًا مبدئيًا يتدهورن ويحتجن لإعادة توعية طارئة. الدراسات السريرية العشوائية لدور العلاج الدوائي في SCAD جارية، والبيانات الداعمة لتداخلات دوائية خاصة بـ SCAD شحيحة. مع ذلك، تُلخَّص التوصيات المستندة لرأي الخبراء وبعض البيانات الرصدية الرجعية بإيجاز كما يلي:</p>
+    <ol>
+      <li><strong>العلاج المضاد للصفيحات:</strong> المريضات الخاضعات لـ PCI ينبغي إعطاؤهن علاجًا مضادًا للصفيحات وفق الإرشادات (أسبرين ومثبط P2Y12) لمدة 1-6 أشهر حسب نوع الشبكة. المريضات المُدارات محافظةً يُوصى لهن بالأسبرين لسنة واحدة على الأقل استنادًا لرأي الخبراء. يُوصي بعض الخبراء بمسار قصير من DAPT حتى شهر واحد بعد SCAD دون PCI إذا كانت خطورة النزف منخفضة.</li>
+      <li><strong>حاصرات بيتا:</strong> أظهرت دراسة رصدية أنها تُقلل خطر التكرار، ويُبرَّر استخدامها خصوصًا مع ارتفاع ضغط الدم المرافق. قد تساعد أيضًا في الذبحة أثناء شفاء SCAD.</li>
+      <li><strong>الستاتينات:</strong> لا توجد بيانات مبنية على الدليل لاستخدامها الروتيني في SCAD؛ ينبغي حصر استخدامها بمن لديهم استطباب مناسب.</li>
+      <li><strong>علاج قصور القلب:</strong> ينبغي إدارة المريضات ذوات الخلل الوظيفي الانقباضي البطيني الأيسر بالعلاج الطبي الموجَّه بالإرشادات.</li>
+      <li><strong>العلاج المضاد للذبحة:</strong> يمكن تقديمه لمتلازمة الألم الصدري بعد SCAD للتخفيف العرضي.</li>
+      <li><strong>تعديل نمط الحياة:</strong> يُنصح بتجنُّب التمارين المتساوية القياس والتحمّل عالي الشدة لتقليل خطورة التكرار.</li>
+      <li>الإحالة لإعادة التأهيل القلبي.</li>
+    </ol>
+
+    <h3 class="subhead">و. الإنذار</h3>
+    <p>الوفيات الاستشفائية بسبب SCAD منخفضة. يحدث تكرار SCAD في نحو 15-20% من الحالات خلال متابعة 3 سنوات وقد يُصيب نفس الشريان الإكليلي أو شريانًا آخر. تشمل مُنبِّئات تكرار SCAD تعرُّج الشريان الإكليلي الشديد، ارتفاع ضغط الدم، الصداع النصفي، ووجود FMD كامن. المريضات الحوامل اللواتي يُصَبن بـ SCAD لديهن إنذار أسوأ من غير الحوامل. يُوصى بالاستشارة قبل الحمل والمقاربة متعددة الاختصاصات للمريضات الراغبات بالحمل بعد SCAD.</p>
+  </section>
+
+  <section class="roman" id="c6s2">
+    <div class="roman-head"><div class="roman-badge">II</div><h2>سوء وظيفة الأوعية الدقيقة الإكليلية</h2></div>
+
+    <h3 class="subhead">أ. المقدمة</h3>
+    <p>نحو 50% من المرضى المُحالين لتصوير وعائي إكليلي بسبب ألم صدري ليس لديهم داء إكليلي انسدادي بالتصوير الوعائي. نحو نصف هؤلاء لديهم سوء وظيفة الأوعية الدقيقة الإكليلية (CMD)، الناتج عن شذوذات بنيوية و/أو وظيفية في الدوران الدقيق الإكليلي، تتميز بانخفاض التدفق الدموي الإكليلي و/أو زيادة المقاومة الدقيقة في ظروف زيادة الطلب القلبي على الأكسجين. الذبحة الدقيقة الوعائية (MVA) هي التظاهر السريري لـ CMD الناتج عن نقص تروية عضلة القلب. يرتبط CMD بزيادة خطورة الأحداث القلبية، الاستشفاء، الاحتشاء، وإعادة التوعية الإكليلية، والهدف الأساسي للعلاج هو تعديل عوامل الخطورة القلبية.</p>
+
+    <h3 class="subhead">ب. التظاهر</h3>
+    <p>كان يُشار للذبحة بغياب داء إكليلي انسدادي سابقًا بـ"متلازمة X"، لكن هذه المريضات يُشكِّلن مجموعة متغايرة تشمل التشنج الإكليلي والألم الصدري غير القلبي؛ لذا هُجِر هذا المصطلح إلى حد كبير. في الممارسة المعاصرة، يُستخدَم مصطلح "نقص التروية دون شرايين إكليلية انسدادية" (INOCA) أو "الذبحة دون شرايين إكليلية انسدادية" (ANOCA) للإشارة لهذه الفئة من المرضى ذوي الألم الصدري القلبي المشتبه دون داء إكليلي انسدادي. INOCA أكثر شيوعًا لدى الإناث. لدى مرضى INOCA وCMD معدلات أعلى من عوامل الخطورة العصيدية التقليدية كالسكري وارتفاع ضغط الدم مقارنةً بالأصحاء. ارتبطت الأمراض الالتهابية المزمنة أيضًا بمعدلات أعلى من CMD.</p>
+
+    <h3 class="subhead">ج. الآليات</h3>
+    <p>تنشأ الذبحة في الداء الإكليلي الانسدادي من تضيق فوق شغافي ثابت، مؤديًا لعدم كفاية تزويد الأكسجين لعضلة القلب أثناء فترات زيادة الطلب. بالمثل، ينتج INOCA عن اختلال بين عرض الأكسجين والطلب عليه، قد يكون سببه في هذا السياق CMD، الذبحة التشنجية الوعائية (VSA)، أو توليفة من الاثنين. ينشأ CMD عن تغيرات بنيوية (مثل سماكة جدار الوعاء، تضخم العضلات الملساء الوسطى)، اختلالات وظيفية (مثل اضطراب التنظيم الحركي الوعائي)، أو توليفة من الاثنين. يُعرَّف CMD بانخفاض احتياطي التدفق الإكليلي (CFR) و/أو ارتفاع المقاومة الدورانية الدقيقة. CFR هو نسبة التدفق الدموي القلبي أثناء ذروة الإجهاد أو التوسّع الوعائي إلى التدفق راحةً.</p>
+    <p>يُصنَّف CMD إضافةً لنوعين: <strong>CMD المعتمد على البطانة:</strong> يتميز بضعف التوسّع الوعائي الدقيق أو تضيق وعائي متناقض استجابةً للأسيتيل كولين داخل الإكليل. <strong>CMD غير المعتمد على البطانة:</strong> يُشخَّص عند انخفاض CFR (<2.0) أثناء الاحتقان الأقصى، عادةً بالأدينوزين.</p>
+
+    <h3 class="subhead">د. التشخيص</h3>
+    <p>بينما يمكن كشف الداء الإكليلي فوق الشغافي بموثوقية بكل من التصوير الوظيفي (تروية عضلة قلب نووية، ECG جهدي، إيكو إجهاد) والتصوير التشريحي (تصوير وعائي، CT)، يُشخَّص CMD عبر اختبار وظيفي، بإظهار انخفاض CFR، ارتفاع المقاومة الدقيقة، أو استجابة شاذة للأسيتيل كولين. يمكن قياس CFR غازيًا في مختبر القسطرة بسلك تدفق دوبلر أو سلك تخفيف حراري بقياسات داخل إكليلية، أو غير غازيًا بـ PET أو الرنين المغناطيسي القلبي الوعائي لتروية عضلة القلب راحةً وأثناء احتقان بالأدينوزين. يمكن أيضًا استخدام الإيكو بدوبلر لكن يتطلب مسبارًا خاصًا. تُعرِّف AHA وجود CMD بـ CFR ≤2.0، رغم أن القيم بين 2.0-2.5 تُعتبَر غالبًا أيضًا CMD، خصوصًا مع وجود مقاومة دقيقة شاذة.</p>
+
+    <h3 class="subhead">هـ. العلاج</h3>
+    <p>توجد ندرة في العلاجات المبنية على الدليل لـ CMD وINOCA نظرًا لقلة الدراسات العشوائية. تشمل التدابير العامة تعديل نمط الحياة وتحسين عوامل الخطورة. أظهرت الستاتينات، مثبطات ACE، وفقدان الوزن لدى مرضى جراحة السمنة تحسين الوظيفة البطانية في دراسات صغيرة. يُحسِّن ضبط ضغط الدم وسكر الدم لدى مرضى ارتفاع الضغط والسكري الوظيفة الدقيقة الوعائية. أظهر L-أرجينين تحسين الأعراض والتدفق الدموي الإكليلي في CMD المعتمد على البطانة. تشمل العوامل المضادة للذبحة حاصرات قنوات الكالسيوم، حاصرات بيتا، مثبطات ACE، والرانولازين. ينبغي إدارة مرضى VSA بحاصرات قنوات الكالسيوم (غالبًا بجرعات عالية) والنترات تحت اللسان للنوبات الحادة.</p>
+
+    <h3 class="subhead">و. الإنذار</h3>
+    <p>تاريخيًا، اُعتُبِر إنذار الذبحة مع شرايين إكليلية طبيعية مؤاتيًا عمومًا مع نتائج طويلة المدى جيدة. لكن يُعرَف حاليًا أن CMD يرتبط بزيادة معدلات الأحداث القلبية السلبية الكبرى، السكتة، قصور القلب، والموت. لذا يمكن لـ CFR المنخفض أن يكون له قيمة إنذارية إضافية عند دمجه في ملف خطورة المريض الإجمالي، مع ارتباط أدنى القيم بأسوأ النتائج.</p>
+  </section>
+
+  <section class="roman" id="c6s3">
+    <div class="roman-head"><div class="roman-badge">III</div><h2>اعتلال عضلة القلب تاكوتسوبو (الإجهادي)</h2></div>
+
+    <h3 class="subhead">أ. المقدمة</h3>
+    <p>اعتلال عضلة القلب تاكوتسوبو أو الإجهادي متلازمة من خلل وظيفي بطيني أيسر عابر، يحدث في سياق إجهاد جسدي أو عاطفي شديد. يُشتق مصطلح "تاكوتسوبو" من الكلمة اليابانية لمصيدة الأخطبوط، واختير لمظهر الانتفاخ القمي الكلاسيكي مع وظيفة انقباضية قاعدية محفوظة نسبيًا. تشمل الفيزيولوجيا المرضية لهذه المتلازمة خللًا وظيفيًا قلبيًا مُحرَّضًا بالكاتيكولامينات وCMD. يشيع اعتلال عضلة القلب تاكوتسوبو لدى النساء بعد سن اليأس، وقد يُحاكي تظاهره الاحتشاء الحاد بألم صدري، موجودات ECG شاذة، وخمائر قلبية إيجابية. لذا غالبًا ما يُؤكَّد التشخيص فقط وقت التصوير الوعائي الإكليلي عند عدم وجود داء إكليلي انسدادي.</p>
+
+    <h3 class="subhead">ب. التظاهر</h3>
+    <p>اعتلال عضلة القلب تاكوتسوبو غير شائع نسبيًا، يُصيب 2% فقط من مرضى ACS المشتبهة. الأغلبية الساحقة (90%) نساء و90% أكبر من 50 سنة. الإجهاد الجسدي كمرض حاد متداخل هو المُحرِّض الأكثر شيوعًا، لكن الإجهاد العاطفي أيضًا مُحرِّض شائع. في ثلث الحالات، لا يُحدَّد مُحرِّض. الإجهاد الجسدي أكثر انتشارًا كمُحرِّض لدى الرجال، بينما الإجهاد العاطفي أكثر انتشارًا لدى النساء. الألم الصدري وضيق التنفس أكثر الأعراض شيوعًا عند التظاهر، مع تظاهر 5-10% من المريضات بصدمة قلبية.</p>
+
+    <h3 class="subhead">ج. الآليات</h3>
+    <p>يُعتقَد أن الفيزيولوجيا المرضية الكامنة لاعتلال عضلة القلب الإجهادي هي فرط الكاتيكولامينات بسبب تفعيل محور الوطاء-النخامى-الكظر تحت ظرف إجهاد جسدي أو عاطفي شديد. وُصف خلل وظيفي بطيني أيسر مماثل في سياق استخدام كاتيكولامينات خارجية المنشأ وحالات أخرى من فرط إنتاج الكاتيكولامينات الداخلي، كورم القواتم. لمستويات الكاتيكولامينات فوق الفيزيولوجية تأثيرات ضارة على الخلية العضلية القلبية، تشمل تضخم الخلية، أذية البروتينات البنيوية والانقباضية الرئيسية، وفرط الكالسيوم. يرتبط اعتلال عضلة القلب الإجهادي أيضًا بخلل وظيفي حركي وعائي إكليلي على مستوى فوق الشغاف والأوعية الدقيقة، مع زيادة التضيق الوعائي المؤدي لتشنج ونقص تروية عضلي عابر. إضافةً لذلك، تشمل الاستجابة الجهازية لطفرات الكاتيكولامين تضيقًا وعائيًا محيطيًا يؤدي لزيادة حادة في الحمل البعدي للبطين الأيسر، مما قد يُسهم أكثر في الخلل الوظيفي الانقباضي. لدى قمة البطين الأيسر نسبة أعلى من مستقبلات بيتا الأدرينالية، مما قد يُفسِّر قابلية قمة البطين الأيسر للإصابة باعتلال عضلة القلب الإجهادي.</p>
+
+    <h3 class="subhead">د. التشخيص</h3>
+    <p>يُشخَّص اعتلال عضلة القلب تاكوتسوبو على أسس سريرية بموجودات مميزة من خلل وظيفي انقباضي بطيني أيسر جديد أو عابر، غياب عملية اعتلال عضلي بديلة (احتشاء حاد، التهاب عضلة قلب، تسرع قلب، ورم قواتم)، وتاريخ إجهاد جسدي أو عاطفي شديد. لدى الغالبية العظمى من المريضات ارتفاع في التروبونين القلبي، لكن الارتفاع نمطيًا خفيف. تشمل موجودات ECG ارتفاع القطعة ST الديناميكي وانقلاب موجة T.</p>
+    <p><strong>الإيكو:</strong> الموجودة المميزة هي نقص حركية أو انعدام حركية قمي شديد مع وظيفة قاعدية محفوظة نسبيًا. لكن أُبلغ عن أنماط غير قمية (متوسط البطين، قاعدي، بؤري، وشامل) بتواتر أقل، وكذلك إصابة البطين الأيمن. الكسر القذفي البطيني الأيسر منخفض عادةً بشدة أثناء المرحلة الحادة، لكن الوظيفة الانقباضية تتعافى لدى معظم المريضات خلال 4-6 أسابيع.</p>
+    <p><strong>الرنين المغناطيسي القلبي:</strong> لدى مريضات ذوات ECG شاذ، خلل وظيفي بطيني أيسر جديد، وخمائر قلبية إيجابية، يفيد الرنين المغناطيسي في تمييز تاكوتسوبو عن متلازمات أخرى مماثلة كالتهاب عضلة القلب أو ACS مع انسداد إكليلي معاد فتحه. لدى مريضات تاكوتسوبو، لا يُظهر الرنين شذوذات تروية أو دليلًا على تعزيز غادولينيوم متأخر موحٍ بندبة.</p>
+    <p><strong>قسطرة القلب:</strong> نظرًا للتداخل شبه الكامل بين التظاهر السريري للاحتشاء الحاد وتاكوتسوبو، يلزم تصوير وعائي إكليلي في معظم الحالات لنفي آفة إكليلية مسؤولة قد تُفسِّر الموجودات السريرية.</p>
+
+    <h3 class="subhead">هـ. العلاج</h3>
+    <p>علاج اعتلال عضلة القلب تاكوتسوبو متعدد الأوجه. ينبغي تحديد المُحرِّض الجسدي أو العاطفي الكامن وتخفيفه إن أمكن لمنع نوبات مستقبلية. في المرحلة الحادة، يُوجَّه العلاج للوقاية من وإدارة المضاعفات الكهربائية والميكانيكية الناتجة عن الخلل الوظيفي البطيني الأيسر الحاد، كتسرع القلب البطيني أو الصدمة القلبية، باستخدام العلاجات التقليدية لهذه المضاعفات. يُوصَف عادةً علاج طبي للخلل الوظيفي البطيني الأيسر، خصوصًا مثبطات ACE/حاصرات مستقبل الأنجيوتنسين وحاصرات بيتا، والتي قد تساعد في التفعيل الودي المستمر. لا يوجد علاج مُثبَت لمنع تكرار تاكوتسوبو.</p>
+
+    <h3 class="subhead">و. الإنذار</h3>
+    <p>تاريخيًا، اُعتُبِر إنذار تاكوتسوبو مؤاتيًا مقارنةً بالاحتشاء الحاد. لكن أبلغت بعض السلاسل عن وفيات استشفائية 2-7%، مماثلة للوفيات الاستشفائية لدى مرضى STEMI. قد تعكس الوفيات الاستشفائية المرتفعة نسبيًا ارتباطها غالبًا بأمراض حادة مرافقة غير قلبية أخرى. رغم أن الخلل الوظيفي البطيني الأيسر عابر نمطيًا، يمكن أن يرتبط باضطرابات نظم مميتة وفشل ميكانيكي كالصدمة القلبية أو انسداد مجرى خروج البطين الأيسر. معدل التكرار السنوي لتاكوتسوبو نحو 1-3% سنويًا، والتكرار أكثر شيوعًا لدى المريضات دون 50 سنة.</p>
+  </section>
+
+
+
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — مرجع طب القلب باللغة العربية
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+
+
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+</body>
+</html>
