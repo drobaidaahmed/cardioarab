@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>القضايا الجراحية والنسائية والعينية — Pocket Medicine | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0f14;
+    --bg-elev:#121821;
+    --bg-card:#161e29;
+    --border:#232e3d;
+    --text:#e8edf3;
+    --text-dim:#9fb0c3;
+    --text-faint:#6a7a8f;
+    --accent:#3aa6ff;
+    --accent-dim:#1c4a6e;
+    --gold:#d8b26a;
+    --rec-1:#2e9e5b;
+    --rec-2a:#c9a227;
+    --rec-2b:#c97a2c;
+    --rec-3:#c93a3a;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:radial-gradient(1200px 800px at 20% -10%, #10202e 0%, var(--bg) 55%) fixed;
+    color:var(--text);
+    font-family:'IBM Plex Sans Arabic', system-ui, sans-serif;
+    line-height:1.85;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:80px;
+  }
+  ::selection{background:var(--accent-dim); color:#fff;}
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,15,20,0.86);
+    backdrop-filter:saturate(160%) blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .top-inner{
+    max-width:920px; margin:0 auto; padding:14px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-badge{
+    width:36px;height:36px;border-radius:10px;
+    background:linear-gradient(135deg, var(--accent), #1a5a8a);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700; font-size:15px; color:#fff; flex:none;
+    box-shadow:0 4px 14px rgba(58,166,255,.25);
+  }
+  .brand-text{display:flex; flex-direction:column; line-height:1.25;}
+  .brand-text b{font-size:15px; letter-spacing:.2px;}
+  .brand-text span{font-size:11.5px; color:var(--text-faint); font-family:'IBM Plex Mono',monospace;}
+  .top-actions a{
+    font-size:13px; color:var(--text-dim); text-decoration:none;
+    border:1px solid var(--border); padding:7px 12px; border-radius:100px;
+  }
+  .hero{max-width:920px; margin:0 auto; padding:34px 18px 6px;}
+  .kicker{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em;
+    color:var(--accent); background:rgba(58,166,255,.09);
+    border:1px solid rgba(58,166,255,.25); padding:5px 12px; border-radius:100px;
+  }
+  h1.page-title{font-size:clamp(24px,5vw,34px); margin:16px 0 8px; font-weight:700; letter-spacing:-.01em;}
+  .subtitle{color:var(--text-dim); font-size:15px; max-width:70ch;}
+  .meta-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
+  .chip{
+    font-size:12.5px; color:var(--text-dim); border:1px solid var(--border);
+    background:var(--bg-elev); padding:5px 11px; border-radius:100px;
+  }
+  .toc-fab{
+    position:fixed; bottom:22px; right:22px; z-index:210;
+    width:52px; height:52px; border-radius:50%;
+    background:linear-gradient(135deg, var(--accent), #1a5a8a);
+    border:none; box-shadow:0 8px 22px rgba(0,0,0,.4);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; cursor:pointer;
+  }
+  .toc-fab svg{width:22px; height:22px;}
+  .toc-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,.55);
+    backdrop-filter:blur(2px);
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+    z-index:220;
+  }
+  .toc-backdrop.open{opacity:1; pointer-events:auto;}
+  .toc{
+    position:fixed; top:0; right:0; height:100dvh; width:min(320px,84vw);
+    max-width:920px; margin:0; padding:0;
+    background:var(--bg-elev); border-inline-start:1px solid var(--border);
+    box-shadow:-12px 0 30px rgba(0,0,0,.4);
+    transform:translateX(100%); transition:transform .28s ease;
+    z-index:230; overflow-y:auto;
+  }
+  .toc.open{transform:translateX(0);}
+  .toc-card{
+    background:transparent; border:none; border-radius:0;
+    padding:16px 16px 24px;
+  }
+  .toc-head-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .toc-card h2{font-size:13px; margin:0; color:var(--text-faint); font-weight:600; letter-spacing:.04em;}
+  .toc-close{
+    width:30px; height:30px; border-radius:50%; flex:none;
+    background:var(--bg-card); border:1px solid var(--border); color:var(--text-dim);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px;
+  }
+  .toc-grid{display:grid; grid-template-columns:1fr; gap:2px;}
+  .toc-grid a{
+    display:flex; align-items:center; gap:10px;
+    color:var(--text); text-decoration:none; font-size:14.5px;
+    padding:9px 6px; border-radius:8px; border-bottom:1px dashed var(--border);
+  }
+  .toc-grid a:last-child{border-bottom:none;}
+  .toc-grid a .n{color:var(--accent); font-family:'IBM Plex Mono',monospace; font-size:12px; flex:none; width:20px;}
+  .toc-grid a:active{background:var(--bg-card);}
+  main{max-width:920px; margin:0 auto; padding:0 18px;}
+  section.sec{margin-top:34px; scroll-margin-top:74px;}
+  .sec-head{
+    display:flex; align-items:baseline; gap:12px; margin-bottom:14px;
+    padding-bottom:10px; border-bottom:2px solid var(--accent-dim);
+  }
+  .sec-head .num{font-family:'IBM Plex Mono',monospace; color:var(--accent); font-size:13px; flex:none;}
+  .sec-head h2{margin:0; font-size:20px; font-weight:700;}
+  h3.sub{font-size:16.5px; margin:22px 0 8px; color:var(--gold); font-weight:600;}
+  h4.sub2{font-size:14.5px; margin:16px 0 6px; color:var(--text); font-weight:600; opacity:.92;}
+  p{margin:8px 0; color:var(--text);}
+  .lead{color:var(--text-dim);}
+  ul.clean{margin:8px 0; padding-inline-start:20px;}
+  ul.clean li{margin:6px 0;}
+  .card{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin:14px 0;}
+  .card.note{border-inline-start:3px solid var(--accent);}
+  .card.warn{border-inline-start:3px solid var(--rec-2b);}
+  .card.danger{border-inline-start:3px solid var(--rec-3);}
+  .ref{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-faint);}
+  .pill{display:inline-block; font-size:11.5px; padding:2px 9px; border-radius:100px; margin-inline-start:6px; font-family:'IBM Plex Mono',monospace; vertical-align:1px;}
+  .pill.up{background:rgba(46,158,91,.15); color:#5fd28c; border:1px solid rgba(46,158,91,.35);}
+  .pill.down{background:rgba(201,58,58,.15); color:#f08787; border:1px solid rgba(201,58,58,.35);}
+  .table-wrap{overflow-x:auto; margin:14px 0; border:1px solid var(--border); border-radius:12px;}
+  table{border-collapse:collapse; width:100%; min-width:460px; font-size:13.5px;}
+  table caption{text-align:right; font-size:12.5px; color:var(--text-faint); padding:8px 10px; background:var(--bg-elev);}
+  thead th{background:var(--bg-elev); color:var(--accent); text-align:right; font-weight:600; padding:10px 12px; border-bottom:1px solid var(--border); white-space:nowrap;}
+  tbody td{padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-dim);}
+  tbody td.k{color:var(--text); font-weight:600; white-space:nowrap;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover td{background:rgba(58,166,255,.04);}
+  details.block{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); margin:14px 0; overflow:hidden;}
+  details.block > summary{cursor:pointer; list-style:none; padding:14px 16px; font-weight:600; font-size:15px; display:flex; align-items:center; justify-content:space-between;}
+  details.block > summary::-webkit-details-marker{display:none;}
+  details.block > summary::after{content:"+"; color:var(--accent); font-size:20px; font-weight:400;}
+  details.block[open] > summary::after{content:"−";}
+  details.block > summary:hover{background:var(--bg-elev);}
+  .details-body{padding:0 16px 16px;}
+  footer{max-width:920px; margin:60px auto 0; padding:24px 18px; text-align:center; color:var(--text-faint); font-size:12.5px; border-top:1px solid var(--border);}
+  a.backtop{position:fixed; bottom:20px; inset-inline-end:18px; z-index:60; width:44px; height:44px; border-radius:50%; background:var(--accent); color:#04101a; display:flex; align-items:center; justify-content:center; text-decoration:none; font-weight:700; box-shadow:0 8px 24px rgba(58,166,255,.35);}
+  .part-divider{ max-width:920px; margin:50px auto 10px; padding:0 18px; }
+  .part-divider .line{ display:flex; align-items:center; gap:14px; color:var(--text-faint); font-size:12px; font-family:'IBM Plex Mono',monospace; letter-spacing:.08em; }
+  .part-divider .line::before, .part-divider .line::after{ content:""; flex:1; height:1px; background:var(--border); }
+  .intro{color:var(--text-dim); font-size:15px; margin:18px 0 26px; max-width:70ch;}
+</style>
+</head>
+<body>
+<style id="ca-gate-hide">body>*:not(#ca-gate-screen){display:none !important}</style>
+<div id="ca-gate-screen" style="position:fixed;inset:0;z-index:999999;background:#0b0f14;display:flex;align-items:center;justify-content:center;color:#8b5cf6;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:1rem;direction:rtl">جارِ التحقق من الاشتراك…</div>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <div class="brand-badge">CA</div>
+      <div class="brand-text">
+        <b>CardioArab</b>
+        <span>Pocket Medicine · Ch.6 Surgical Issues</span>
+      </div>
+    </div>
+    <div class="top-actions"><a href="#abdpain">تصفح الأقسام</a></div>
+  </div>
+</header>
+
+<div class="hero">
+  <span class="kicker">POCKET MEDICINE — 9th ed. 2026 · الجزء السادس (تتمة)</span>
+  <h1 class="page-title">القضايا الجراحية والنسائية والعينية</h1>
+  <p class="subtitle">مرجع عربي منظم يكمل الجزء السادس من Pocket Medicine — ألم البطن والبطن الحاد، طوارئ الأطراف، الأنابيب والمصارف والجروح الجراحية، النزيف والإفرازات المهبلية وكتلة الملحقات، والمشاكل والطوارئ العينية.</p>
+  <div class="meta-row">
+    <span class="chip">8 محاور</span>
+    <span class="chip">تكملة مباشرة لمرجع الأعصاب</span>
+    <span class="chip">مترجم ومنظم من Pocket Medicine</span>
+  </div>
+</div>
+
+<button class="toc-fab" id="tocFab" aria-label="فتح الفهرس">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>
+</button>
+<div class="toc-backdrop" id="tocBackdrop"></div>
+
+<nav class="toc" id="tocPanel">
+  <div class="toc-card">
+    <div class="toc-head-row">
+      <h2>محتويات هذه الصفحة</h2>
+      <button class="toc-close" id="tocClose" aria-label="إغلاق الفهرس">✕</button>
+    </div>
+    <div class="toc-grid">
+      <a href="#abdpain"><span class="n">01</span> ألم البطن</a>
+      <a href="#acuteabd"><span class="n">02</span> البطن الحاد</a>
+      <a href="#peripheral"><span class="n">03</span> حالات الطوارئ الطرفية</a>
+      <a href="#tubes"><span class="n">04</span> الأنابيب الجراحية والمصارف والجروح</a>
+      <a href="#vagbleed"><span class="n">05</span> النزيف المهبلي</a>
+      <a href="#vagdischarge"><span class="n">06</span> الإفرازات المهبلية</a>
+      <a href="#adnexal"><span class="n">07</span> كتلة الملحقات في المرأة غير الحامل</a>
+      <a href="#eye"><span class="n">08</span> المشاكل والطوارئ العينية</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<div class="part-divider"><div class="line">الجزء السادس — تتمة: القضايا الجراحية والنسائية والعينية</div></div>
+
+  <div class="intro">
+    تكملة مباشرة لمرجع <strong>الأعصاب (من الغيبوبة حتى انضغاط الجذر العصبي)</strong> — مُقتبسة ومترجمة من <strong>Pocket Medicine, 9th Edition</strong>، بنفس تنسيق ومنهجية التقييم السريع.
+  </div>
+
+<section class="sec" id="abdpain">
+  <div class="sec-head"><span class="num">01</span><h2>ألم البطن</h2></div>
+
+  <h3 class="sub">الألم الحشوي</h3>
+  <div class="table-wrap">
+    <table>
+      <caption>التقسيم التشريحي للأحشاء والمنطقة التي ينتشر إليها الألم</caption>
+      <thead><tr><th>التقسيم</th><th>الأحشاء</th><th>منطقة الانتشار</th></tr></thead>
+      <tbody>
+        <tr><td class="k">المعيدة الأمامية</td><td>المريء والاثنا عشر</td><td>شرسوفي</td></tr>
+        <tr><td class="k">المعيدة المتوسطة</td><td>الصائم إلى منتصف القولون المستعرض</td><td>سري</td></tr>
+        <tr><td class="k">المعيدة الخلفية</td><td>منتصف القولون المستعرض إلى المستقيم</td><td>تحت المعدة</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="lead">غالبًا ما ينتشر الألم الناتج عن التهاب البنكرياس وتحصي الكلية إلى الظهر.</p>
+
+  <h3 class="sub">التقييم الأولي</h3>
+  <ul class="clean">
+    <li><b>التاريخ المرضي:</b> بداية الألم، الموقع، العوامل المسببة/المخففة.</li>
+    <li><b>الأعراض المصاحبة:</b> حمى/قشعريرة، غثيان/قيء، تغير في عادات الأمعاء (إسهال/إمساك، قطر أو لون البراز، وجود دم بالبراز، ميلينا)، انتفاخ البطن، يرقان، تغير لون البول، تغير الوزن، تاريخ الحيض عند النساء.</li>
+    <li><b>التاريخ المرضي السابق:</b> الشقوق أو العمليات الجراحية البطنية السابقة؛ تاريخ أمراض النساء والتوليد.</li>
+    <li><b>الفحص:</b> العلامات الحيوية؛ وضعية المريض العامة؛ فحص البطن الشامل للبحث عن علامات التهاب الصفاق (الألم الارتدادي والتقلص اللاإرادي، تصلب جدار البطن، الألم مع القرع/اللمس البسيط)؛ وجود الفتوق؛ الفحص الشرجي/الحوضي.</li>
+    <li><b>المختبرات:</b> صورة دم كاملة، شوارد، وظائف الكبد، أميليز/ليباز، اختبار الحمل.</li>
+    <li><b>التصوير:</b> يعتمد على المسبب المشتبه به — موجات فوق صوتية للربع العلوي الأيمن (مرارة/كبد)، تصوير الكلى والحالبين والمثانة (انسداد الأمعاء)، تصوير مقطعي محوسب (التهاب بنكرياس، مرض أمعاء). لا تؤخر الإنعاش أو استشارة الجراح للمريض الخطر أثناء انتظار التصوير.</li>
+  </ul>
+</section>
+
+<section class="sec" id="acuteabd">
+  <div class="sec-head"><span class="num">02</span><h2>البطن الحاد</h2></div>
+
+  <h3 class="sub">التعريف</h3>
+  <p>ألم بطني حاد يشير إلى الحاجة لجراحة عاجلة.</p>
+
+  <h3 class="sub">المسببات</h3>
+  <ul class="clean">
+    <li>ثقب عضو مجوف ← التهاب الصفاق (قرحة مثقوبة، التهاب الرتج المعقد، رض).</li>
+    <li>نزيف داخل الصفاق أو خلف الصفاق (انظر أيضًا متلازمات الأبهر الحادة).</li>
+    <li>انسداد الأمعاء (التصاقات من عمليات جراحية سابقة، أورام خبيثة، فتق، انفتال).</li>
+    <li>نقص التروية المساريقي الحاد (خاصة مع رجفان أذيني، حالات تدفق منخفض، "ألم خارج نطاق الفحص").</li>
+    <li><b>محاكيات:</b> يمكن أن يشبه التهاب البنكرياس الشديد التهاب الصفاق؛ المغص الكلوي يسبب ألمًا بطنيًا شديدًا لكن دون تصلب بطني.</li>
+  </ul>
+
+  <h3 class="sub">التقييم الأولي</h3>
+  <ul class="clean">
+    <li>التاريخ والفحص كما هو مذكور بألم البطن.</li>
+    <li><b>المختبرات إضافة لما سبق:</b> زمن البروثرومبين/النسبة الطبيعية الدولية، الزمن الجزئي للثرومبوبلاستين، اللاكتات، الفصيلة والتصالب (إن كان هناك نزيف نشط).</li>
+    <li><b>التصوير:</b> تصوير صدر بالأشعة السينية بوضعية قائمة/تصوير الكلى والحالبين والمثانة؛ إن كان المريض مستقرًا: تصوير مقطعي محوسب للبطن والحوض مع صبغة وريدية (± فموية عند الاشتباه بالانسداد).</li>
+  </ul>
+
+  <h3 class="sub">الإدارة الأولية</h3>
+  <ul class="clean">
+    <li>استشارة جراحية فورية عند الاشتباه بالبطن الحاد.</li>
+    <li>منع الطعام الفموي، ابدأ سوائل وريدية (محلول ملحي طبيعي أو رينغر لاكتات)، قثطرة بولية، أنبوب أنفي معدي عند الاشتباه بالانسداد.</li>
+    <li>مضادات حيوية واسعة الطيف عند الاشتباه بالثقب.</li>
+  </ul>
+</section>
+
+<section class="sec" id="peripheral">
+  <div class="sec-head"><span class="num">03</span><h2>حالات الطوارئ الطرفية</h2></div>
+
+  <h3 class="sub">نقص تروية الطرف الحاد</h3>
+  <p class="lead">(انظر "مرض الشريان المحيطي" للتفاصيل)</p>
+  <ul class="clean">
+    <li><b>التعريف:</b> انخفاض مفاجئ بالتروية يهدد بقاء الطرف.</li>
+    <li><b>التقييم:</b> فحص وعائي مفصل (النبضات، إشارات الدوبلر، الوظيفة الحركية/الحسية)؛ تصوير وعائي مقطعي محوسب.</li>
+    <li><b>الإدارة الأولية:</b> مضادات تخثر للصمة/الخثار (هيبارين 80 وحدة/كجم بلعة، ثم 18 وحدة/كجم/ساعة وريديًا)؛ استشارة جراحية فورية.</li>
+  </ul>
+
+  <h3 class="sub">متلازمة الحيز</h3>
+  <ul class="clean">
+    <li><b>التعريف:</b> ارتفاع الضغط داخل الحيز مع إغلاق انضغاطي للأوردة ← قوة هيدروستاتيكية تؤدي لزيادات أخرى بضغط الحيز.</li>
+    <li><b>المسببات:</b> عظمية (كسر)، وعائية (نقص التروية-إعادة التروية)، علاجية المنشأ (إصابة وعائية بمريض مصاب بتخثر)، إصابة الأنسجة الرخوة (ضغط طرف مطول).</li>
+    <li><b>المظاهر السريرية:</b> ألم خاصة مع الحركة السلبية، حيز منتفخ/مشدود، تنمل، شحوب، انعدام النبض، شلل (متأخر).</li>
+    <li><b>التقييم:</b> تقييم جراحي لضغوط الحيز؛ ضغط داخل الحيز &gt;30 أو الفرق بين الضغط الانبساطي وضغط الحيز 10-30 هو تشخيصي.</li>
+    <li><b>العلاج:</b> بضع اللفافة.</li>
+  </ul>
+</section>
+
+<section class="sec" id="tubes">
+  <div class="sec-head"><span class="num">04</span><h2>الأنابيب الجراحية، المصارف، الجروح</h2></div>
+
+  <h3 class="sub">فغر القصبة الهوائية</h3>
+  <ul class="clean">
+    <li>عادةً أنبوب مزود بكفة، يخلق ختمًا محكمًا لتسهيل التهوية عبر الأنبوب.</li>
+    <li><b>صمام الكلام</b> (مثل Passy-Muir): صمام أحادي الاتجاه يسمح بالاستنشاق عبر الأنبوب، والزفير حول الأنبوب عبر الحبال الصوتية (ملاحظة: يجب ألا تكون الكفة منتفخة).</li>
+    <li>أول تغيير روتيني للأنابيب الموضوعة عن طريق الجلد يجب أن يكون بعد ~10 أيام من العملية؛ الأنابيب الموضوعة جراحيًا يمكن تغييرها بعد &gt;5 أيام. يجب أن يشرف على التغيير الأول شخص ذو خبرة.</li>
+    <li><b>الانخلاع العرضي:</b> خلال 7 أيام من الوضع ← استشارة جراحية طارئة (تنبيب من الأعلى إن كان ممكنًا تشريحيًا). بعد &gt;7 أيام ← استبدل بأنبوب مماثل الحجم أو أصغر.</li>
+  </ul>
+
+  <h3 class="sub">الأنابيب الصدرية</h3>
+  <ul class="clean">
+    <li>توضع لاسترواح الصدر، رضح الصدر، أو بعد جراحة الصدر لتصريف الهواء/السائل. تتراوح من صغيرة (8-14 Fr لاسترواح تلقائي/انصبابات) إلى كبيرة (24-32 Fr للاستئصال). يمكن وضع الأصغر عن طريق الجلد من قبل الفريق الجراحي أو أمراض الرئة التداخلية.</li>
+    <li>متصلة بنظام تصريف صدري من 3 غرف: الأولى (تجميع السائل الجنبي)؛ الثانية (ختم مائي يسمح بخروج الهواء أثناء الزفير ويمنع دخوله أثناء الشهيق)؛ الثالثة (تحكم بالشفط).</li>
+    <li>راقب الناتج ووجود تسرب هوائي (فقاقيع بغرفة الختم المائي).</li>
+    <li>الإزالة تُحدد بالنواتج اليومية الإجمالية وغياب تسرب الهواء.</li>
+    <li>عند الإزالة/الانخلاع العرضي: أزل الأنبوب بالكامل وضع ضمادة انسدادية (4×4 مغطاة بـTegaderm أو شريط حريري) فورًا. تصوير صدر فوري؛ يوضع أنبوب جديد إن استمر استرواح الصدر.</li>
+  </ul>
+
+  <h3 class="sub">أنابيب فغر المعدة/فغر الصائم</h3>
+  <ul class="clean">
+    <li>توضع للتغذية الأنبوبية، الترطيب، وإعطاء الأدوية.</li>
+    <li>لا تُزال لمدة ≥6-8 أسابيع للسماح بتكوّن قناة ناضجة.</li>
+    <li>الأنابيب المسدودة تُنظف بالسكب بعوامل مثل المياه الغازية، منعم اللحوم، وإنزيمات البنكرياس. يُقلل الانسداد بالسكب قبل وبعد الأدوية وكل 4-6 ساعات مع التغذية المستمرة.</li>
+    <li><b>الإزالة غير المقصودة:</b> ضع قسطرة فولي مماثلة الحجم أو أصغر في القناة فورًا لمنع إغلاق الفوهة، ثم يُستبدل الأنبوب ويُؤكد بدراسة تنظير فلوري.</li>
+  </ul>
+
+  <h3 class="sub">إزالة الخيوط الجراحية/الدبابيس</h3>
+  <ul class="clean">
+    <li>تتم بالتشاور مع الفريق الجراحي؛ التوقيت يعتمد على موقع الجرح.</li>
+    <li>لا تُزال إن كانت هناك علامات انفصال بالجرح أثناء الإزالة!</li>
+    <li>بعد الإزالة، يُقرَّب الجرح بشرائط ستيري سترب.</li>
+  </ul>
+
+  <h3 class="sub">القرحات الفراشية</h3>
+  <ul class="clean">
+    <li>قروح بالمناطق المعتمدة المعرضة للضغط المتكرر (شائعة بالعجز، الكعبين).</li>
+    <li><b>عوامل الخطر:</b> عدم الحركة، سوء الحالة التغذوية.</li>
+    <li><b>المراحل:</b> الأولى (احمرار غير قابل للابيضاض)؛ الثانية (سمك جزئي)؛ الثالثة (فقدان كامل لسماكة الجلد)؛ الرابعة (فقدان كامل للنسيج).</li>
+    <li><b>العلاج:</b> تخفيف الضغط عن المنطقة، مرتبة هوائية، وسائد و/أو أحذية دعم، دعم غذائي.</li>
+    <li>استشارة جراحية لتنضير القرحات ذات الأنسجة النخرية أو المصابة؛ قد تتطلب إعادة بناء بجراحة تجميل للقرحات المتقدمة بمجرد نظافتها.</li>
+  </ul>
+
+  <div class="card note">
+    <h4 class="sub2" style="margin-top:0">تعظيم الاستشارة الجراحية</h4>
+    <ul class="clean" style="margin:0;">
+      <li>بالنسبة للمريض المصاب بمرض خطير، اتصل بالاستشارة الجراحية مبكرًا، ولا تنتظر نتائج المختبرات والتصوير.</li>
+      <li>إن كانت هناك حالة جراحية طارئة محتملة: منع الطعام الفموي، ابدأ سوائل وريدية، افحص التخثرات، والفصيلة والتصالب.</li>
+      <li>يجب أن يكون الطبيب ذو المستوى المناسب الذي يعرف المريض وفحصه هو من يتصل بالاستشارة.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="vagbleed">
+  <div class="sec-head"><span class="num">05</span><h2>النزيف المهبلي</h2></div>
+  <p class="lead">نزيف من الجهاز التناسلي السفلي (الفرج، المهبل، عنق الرحم) أو العلوي (الرحم).</p>
+
+  <h3 class="sub">المسببات</h3>
+  <h4 class="sub2">قبل انقطاع الطمث</h4>
+  <ul class="clean">
+    <li><b>غير حامل:</b> الحيض؛ الجهاز السفلي (رض، عدوى منقولة جنسيًا، خلل تنسج/سرطان عنق الرحم)؛ النزيف الرحمي غير الطبيعي (سليلة، انتباذ بطاني رحمي، ورم ليفي، فرط تنسج/سرطان، اعتلال تخثر، خلل التبويض، بطانة الرحم، علاجي المنشأ).</li>
+    <li><b>حامل — الثلث الأول:</b> إجهاض مهدد، إجهاض تلقائي (فائت، غير كامل، أو كامل)، حمل خارج الرحم، حمل عنقودي (شامة مائية كاملة/جزئية).</li>
+    <li><b>حامل — الثلث الثاني أو الثالث:</b> ولادة مبكرة/مخاض، المشيمة المنزاحة، انفصال المشيمة.</li>
+  </ul>
+  <h4 class="sub2">بعد انقطاع الطمث</h4>
+  <p>ضمور، سليلة، ورم ليفي، فرط تنسج/سرطان بطانة الرحم.</p>
+
+  <h3 class="sub">التاريخ والفحص</h3>
+  <ul class="clean">
+    <li>العمر، حالة انقطاع الطمث، العمر الحملي إن كانت حاملاً، حجم ومدة النزيف الحالي.</li>
+    <li>إن كانت قبل انقطاع الطمث: تاريخ الحيض (عمر البداية، الفترة بين الدورات ومدتها)، الأعراض المصاحبة، آخر دورة شهرية لتقييم توقيتها.</li>
+    <li>تاريخ أمراض النساء والتوليد السابق: التشوهات الهيكلية، الأمراض المنقولة جنسيًا، وسائل منع الحمل.</li>
+    <li>الصيانة الصحية: مسحة عنق الرحم، فحص فيروس الورم الحليمي البشري، العنف المنزلي، مضادات التخثر/الصفيحات.</li>
+    <li>الفحص العام والبطني (الألم، الكتل). الفحص الحوضي: خارجي (كمية النزيف الظاهرة، آفات، رض)، بالمنظار (كمية النزيف، فتحة عنق الرحم مفتوحة/مغلقة والاتساع، سلائل)، باليدين (اتساع عنق الرحم، حجم/إيلام الرحم، كتلة/إيلام الملحقات).</li>
+  </ul>
+
+  <h3 class="sub">التقييم المختبري والتصوير</h3>
+  <ul class="clean">
+    <li>اختبار الحمل البولي (سريع) والمصلي (بيتا HCG)، الهيماتوكريت/الهيموغلوبين.</li>
+    <li>موجات فوق صوتية للحوض: تصوّر الأورام الليفية، وإن كانت حاملاً، الحمل داخل الرحم وموقع المشيمة لاستبعاد المشيمة المنزاحة/انفصال المشيمة.</li>
+    <li>إن كانت حاملاً ولم يُرَ حمل داخل الرحم: يجب استبعاد الحمل خارج الرحم كتشخيص مهدد للحياة (بيتا HCG ومنطقة التمييز؛ إن لم يتطابق ← متابعة بيتا HCG المتسلسلة).</li>
+  </ul>
+</section>
+
+<section class="sec" id="vagdischarge">
+  <div class="sec-head"><span class="num">06</span><h2>الإفرازات المهبلية</h2></div>
+  <p class="lead">سائل أو مخاط من المهبل، عنق الرحم، أو الرحم.</p>
+
+  <h3 class="sub">المسببات</h3>
+  <ul class="clean">
+    <li><b>معدية:</b> التهاب المهبل الجرثومي، التهاب الفرج والمهبل بالمبيضات، داء المشعرات.</li>
+    <li><b>غير معدية:</b> فسيولوجي (حامل/غير حامل)، تمزق الأغشية، تفاعل جسم غريب.</li>
+  </ul>
+
+  <h3 class="sub">التقييم الأولي</h3>
+  <ul class="clean">
+    <li>العمر، آخر دورة شهرية، العمر الحملي إن كانت حاملاً أو حالة انقطاع الطمث.</li>
+    <li>كمية الإفرازات، اللون، القوام، الرائحة، الأعراض المصاحبة (حكة، احمرار، ألم بطني/حوضي).</li>
+    <li>تاريخ أمراض النساء السابق: الأمراض المنقولة جنسيًا واستخدام وسائل منع الحمل (الواقي الذكري يقلل خطر الأمراض المنقولة جنسيًا).</li>
+    <li>استخدام السدادات القطنية أو الواقي الذكري كعوامل خطر لاحتجاز جسم غريب.</li>
+    <li>الفحص الحوضي: خارجي (كمية ونوعية الإفرازات على الفرج، آفات)، بالمنظار (الإفرازات، مظهر عنق الرحم)، باليدين (ألم حركة عنق الرحم).</li>
+    <li>المختبرات: درجة حموضة الإفرازات، الفحص المجهري (مسحات ملحية وKOH)، اختبار الحمل البولي.</li>
+  </ul>
+
+  <h3 class="sub">العلاج</h3>
+  <ul class="clean">
+    <li><b>التهاب المهبل الجرثومي:</b> ميترونيدازول أو كليندامايسين فموي/مهبلي.</li>
+    <li><b>التهاب الفرج والمهبل بالمبيضات:</b> أدوية مضادة للفطريات فموية/موضعية.</li>
+    <li><b>داء المشعرات:</b> ميترونيدازول فموي.</li>
+  </ul>
+</section>
+
+<section class="sec" id="adnexal">
+  <div class="sec-head"><span class="num">07</span><h2>كتلة الملحقات في المرأة غير الحامل</h2></div>
+  <p class="lead">كتلة تنشأ من المبيض، قناة فالوب، أو النسيج الضام المحيط.</p>
+
+  <h3 class="sub">المسببات</h3>
+  <ul class="clean">
+    <li><b>المبيض:</b> كيسة وظيفية (جريبية/جسم أصفر)، كيسة نزفية، بطانة الرحم المهاجرة، التواء المبيض، خراج المبيض البوقي، أورام المبيض الحميدة والخبيثة.</li>
+    <li><b>قناة فالوب:</b> كيسة مجاورة للبوق، موه البوق، التواء المبيض، خراج المبيض البوقي.</li>
+  </ul>
+
+  <h3 class="sub">التقييم الأولي</h3>
+  <ul class="clean">
+    <li>آخر دورة شهرية/حالة انقطاع الطمث، الأعراض المصاحبة من ألم بطني/حوضي، تاريخ عائلي لسرطانات أمراض النساء.</li>
+    <li>فحص البطن (انتفاخ، إيلام، كتل)، باليدين (كتل رحمية أو ملحقاتية).</li>
+    <li>اختبار الحمل إن كانت قبل انقطاع الطمث (إن كان إيجابيًا فمن المرجح أن تكون الكتلة حملاً)؛ CA-125 إن كانت بعد انقطاع الطمث.</li>
+    <li>موجات فوق صوتية للحوض (حتى لو تم تحديد الكتلة أولاً بتصوير مقطعي محوسب، لأن الموجات فوق الصوتية أفضل طريقة)؛ مظهر الكتلة بها عامل مهم لتحديد خطر السرطان.</li>
+  </ul>
+</section>
+
+<section class="sec" id="eye">
+  <div class="sec-head"><span class="num">08</span><h2>المشاكل والطوارئ العينية</h2></div>
+
+  <h3 class="sub">التقييم الأولي</h3>
+  <ul class="clean">
+    <li><b>الأعراض العينية:</b> البداية (مفاجئة أو تدريجية) ومدة الأعراض؛ أحادية الجانب مقابل ثنائية؛ الألم؛ رهاب الضوء؛ الإفرازات؛ تغير الرؤية القريبة (كالكتاب) أو البعيدة (كالتلفزيون).</li>
+    <li>الحالات العينية الموجودة مسبقًا، أدوية العين (بما في ذلك التغييرات)، تاريخ حديث لجراحة العين، الرض.</li>
+    <li>فحص العين: الرؤية (بتصحيح المريض — نظارات/عدسات لاصقة) لكل عين؛ فحص الحدقة؛ حركات العين الخارجية؛ المجالات البصرية بالتحدي (مهم عند اشتباه مشكلة بالجهاز العصبي المركزي).</li>
+    <li>بشكل عام: العلامات الحيوية، كبت المناعة، علامات العدوى، تاريخ الأورام الخبيثة، مشاكل الجهاز العصبي المركزي، تغيرات الأدوية، صورة دم كاملة، التخثرات.</li>
+  </ul>
+
+  <h3 class="sub">الأعراض البصرية الشائعة</h3>
+  <ul class="clean">
+    <li><b>تغيم الرؤية:</b> خطأ انكساري، ناتج عن الأدوية (ستيرويدات جهازية، علاج كيميائي)، فرط سكر الدم، جفاف العين (شائع)؛ قد يظهر العجز البصري كـ"رؤية ضبابية". <b>ثنائي الجانب:</b> الزرق (شائع)، آفة مركزية متماثلة بالجهاز العصبي المركزي. <b>ثنائي الصدغي:</b> الغدة النخامية، سام/تغذوي. <b>أحادي الجانب:</b> آفة بالمدار، الشبكية، أو العصب البصري المماثل.</li>
+    <li><b>العين الحمراء ثنائية الجانب:</b> التهاب الملتحمة الفيروسي (يبدأ بعين واحدة؛ مع تورم الجفن والإفرازات)؛ التهاب مزمن (جفاف العين، الوردية، أمراض مناعية ذاتية)؛ عدوى المتدثرة.</li>
+    <li><b>العين الحمراء أحادية الجانب:</b> نزف تحت الملتحمة، عدوى (الهربس البسيط)، أو التهاب (التهاب الظهارة الصلبة، التهاب القزحية، التهاب العنبية، التهاب الصلبة)؛ إغلاق الزاوية الحاد. التهاب الصلبة وإغلاق الزاوية الحاد يظهران بألم شديد وصداع وغثيان.</li>
+    <li><b>ازدواج الرؤية:</b> ثابت مع شلل عضلات العين من عملية مدارية أو شلل عصب قحفي (III، IV، VI)؛ عابر بسبب التعب أو التخدير.</li>
+    <li><b>الأضواء الوامضة/العوائم:</b> انفصال الجسم الزجاجي (شائع، حميد)؛ انفصال الشبكية (عجز بصري وحيد الجانب؛ استشارة طب عيون عاجلة)؛ نزيف؛ لمفوما داخل العين.</li>
+  </ul>
+
+  <h3 class="sub">التغيرات البصرية الحادة</h3>
+  <div class="table-wrap">
+    <table>
+      <caption>مسببات فقدان البصر الحاد (الخط المائل يشير إلى وجود ألم)</caption>
+      <thead><tr><th>المدة</th><th>أحادي الجانب</th><th>ثنائي الجانب</th></tr></thead>
+      <tbody>
+        <tr><td class="k">عابر (&lt;24 ساعة، غالبًا &lt;1 ساعة)</td><td>انسداد الشبكية بالصمة، انسداد الشريان الشبكي الوشيك (فقدان بصر عابر) أو الوريد، تشنج وعائي، مرض السباتي، مرض سطح العين (جفاف العين)</td><td>مرض السباتي الثنائي، نوبة إقفارية عابرة، شقيقة، ارتفاع الضغط داخل القحف (وذمة حليمة العصب البصري)</td></tr>
+        <tr><td class="k">مطول (&gt;24 ساعة)</td><td>انسداد الشريان/الوريد الشبكي، انفصال الشبكية، نزيف الشبكية/الزجاجي، التهاب الشبكية، اعتلال العصب البصري الأمامي/قرحة القرنية، التهاب الشرايين ذو الخلايا العملاقة، إغلاق الزاوية الحاد</td><td>سكتة القشرة البصرية، الاعتلال العصبي الإقفاري الخلفي (انخفاض ضغط دم عميق أثناء الجراحة)، متلازمة اعتلال الدماغ الخلفي العكوس، التهاب الشرايين ذو الخلايا العملاقة</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">الحالات العينية الشائعة (من الأمام إلى الخلف)</h3>
+  <ul class="clean">
+    <li><b>المدار:</b> التهاب النسيج الخلوي للمدار (حمى، جحوظ، انخفاض حركات العين الخارجية؛ مضادات حيوية طارئة، تصوير، وإحالة).</li>
+    <li><b>الجفون:</b> دمل أو بردة (شعيرة)؛ التهاب النسيج الخلوي قبل الحجاجي؛ الجفن المتدلي (عمر؛ متلازمة هورنر؛ شلل العصب القحفي الثالث — تقييد حركات العين الخارجية بجميع الاتجاهات باستثناء الجانبي "العين للأسفل وللخارج"، يرتبط بالجفن وتوسع الحدقة، يُرى بانفتاق الخطافي، أم دم الشريان الموصل الخلفي، التهاب الشرايين ذو الخلايا العملاقة، ارتفاع ضغط الدم، السكري)؛ إغلاق الجفن غير الكامل (شلل العصب القحفي السابع).</li>
+    <li><b>الملتحمة:</b> التهاب الملتحمة (عين حمراء، فيروسي أو بكتيري)؛ نزف تحت الملتحمة (ارتفاع ضغط الدم، مميعات الدم)؛ مرض سطح العين (جفاف العين)؛ التهاب الظهارة الصلبة/التهاب الصلبة (أوعية عميقة بالصلبة).</li>
+    <li><b>القرنية:</b> قرحة متعلقة بالعدسات اللاصقة؛ التهاب القرنية الهربسي/تندب/قرحات عصبية (شلل العصب القحفي الخامس)؛ ظفرة؛ القرنية المخروطية؛ ضمور القرنية؛ سمية دوائية (أميودارون، أدوية مضادة للسرطان).</li>
+    <li><b>الحجرة الأمامية:</b> التهاب القزحية (خلايا التهابية)؛ غرفة أمامية دموية (دم، بعد الرض).</li>
+    <li><b>الحدقة:</b> تفاوت الحدقتين (عدم تناسق فسيولوجي)؛ متلازمة هورنر، شلل العصب القحفي الثالث.</li>
+    <li><b>العدسة:</b> إعتام عدسة العين (عمر، رض، دواء، إشعاع، خلقي)؛ عدوى ما بعد جراحة إعتام عدسة العين.</li>
+    <li><b>الزجاجي/الشبكية/البقعة:</b> اعتلال الشبكية السكري؛ التنكس البقعي؛ انفصال الشبكية؛ نزيف الشبكية ± الزجاجي؛ التهاب الشبكية (عدوى)، سمية دوائية.</li>
+    <li><b>العصب البصري (II):</b> اعتلال عصبي إقفاري بفقدان بصري حاد أحادي الجانب وعجز بالمجال البصري؛ يرتبط بالتهاب الشرايين ذو الخلايا العملاقة (الشرياني)؛ يرتبط غير الشرياني بارتفاع ضغط الدم، فرط كوليسترول الدم، السكري، أهبة التخثر. <b>التهاب العصب البصري:</b> غالبًا عتمة مركزية أحادية الجانب، ألم مع حركات العين الخارجية، تفاقم فقدان البصر على أيام؛ يرتبط بأمراض إزالة الميالين (التصلب المتعدد)، الساركويد، وأمراض النسيج الضام. اعتلال العصب البصري (الزرق شائع).</li>
+  </ul>
+
+  <div class="card danger">
+    <h4 class="sub2" style="margin-top:0">حالات العين الطارئة</h4>
+    <ul class="clean" style="margin:0;">
+      <li><b>الرشح الكيميائي:</b> القلويات أسوأ من الأحماض؛ غسل العين فوريًا؛ الأس الهيدروجيني 7.3-7.4 طبيعي.</li>
+      <li><b>إغلاق الزاوية الحاد:</b> حدقة متوسعة ثابتة، وذمة قرنية، ارتفاع ضغط العين (عادةً &gt;50؛ الطبيعي 8-21). العلاج بقطرات موضعية؛ قد يتطلب سحب الخراج الأمامي/الليزر.</li>
+      <li><b>إصابة العين النافذة:</b> حماية العين (لا تضمد)، مضادات حيوية وريدية، كزاز، منع الطعام الفموي، تجهيز جراحي.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  CardioArab · مرجع مترجم من Pocket Medicine, 9th Edition (2026) — للاستخدام التعليمي فقط، راجع دائمًا المصدر الأصلي والإرشادات المحدثة.
+</footer>
+
+<a href="#" class="backtop" aria-label="العودة للأعلى">↑</a>
+
+<script>
+  const tocFab = document.getElementById('tocFab');
+  const tocPanel = document.getElementById('tocPanel');
+  const tocBackdrop = document.getElementById('tocBackdrop');
+  const tocClose = document.getElementById('tocClose');
+
+  function openToc(){
+    tocPanel.classList.add('open');
+    tocBackdrop.classList.add('open');
+  }
+  function closeToc(){
+    tocPanel.classList.remove('open');
+    tocBackdrop.classList.remove('open');
+  }
+  tocFab.addEventListener('click', openToc);
+  tocClose.addEventListener('click', closeToc);
+  tocBackdrop.addEventListener('click', closeToc);
+  tocPanel.querySelectorAll('.toc-grid a').forEach(a => {
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      const targetId = this.getAttribute('href').slice(1);
+      const target = document.getElementById(targetId);
+      closeToc();
+      if (target) {
+        setTimeout(() => {
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+        }, 200);
+      }
+    });
+  });
+</script>
+
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  function unlock(){
+    var s = document.getElementById('ca-gate-hide'); if(s) s.remove();
+    var l = document.getElementById('ca-gate-screen'); if(l) l.remove();
+  }
+  function lock(){
+    document.body.innerHTML = `
+      <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b0f14;color:#e8edf3;font-family:'IBM Plex Sans Arabic',sans-serif;text-align:center;padding:2rem;direction:rtl">
+        <div style="font-size:3rem;margin-bottom:1rem">🔒</div>
+        <h1 style="font-size:1.3rem;margin-bottom:.6rem">هذا المحتوى متاح للمشتركين فقط</h1>
+        <p style="color:#9fb0c3;max-width:420px;margin-bottom:1.6rem;line-height:1.8">اشترك الآن للوصول الكامل لمرجع Pocket Medicine وكل محتوى CardioArab.</p>
+        <a href="subscription.html" style="background:#8b5cf6;color:#fff;text-decoration:none;padding:.8rem 1.8rem;border-radius:10px;font-weight:700;margin-bottom:.8rem">📋 عرض خطط الاشتراك</a>
+        <a href="login.html" style="color:#3aa6ff;text-decoration:none;font-size:.9rem;margin-top:.6rem">🔐 لدي حساب بالفعل — تسجيل الدخول</a>
+      </div>`;
+  }
+  try{
+    const u = session.get();
+    if(u && u.is_admin){ unlock(); return; }
+    const ok = await session.isSubscribed();
+    if(ok){ unlock(); } else { lock(); }
+  }catch(e){ lock(); }
+})();
+</script>
+<script src="protection.js"></script>
+</body>
+</html>
