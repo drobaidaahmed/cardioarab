@@ -156,14 +156,14 @@
         <span>Pocket Medicine · فهرس شامل</span>
       </div>
     </div>
-    <div class="top-actions"><a href="#cats">تصفح الأقسام</a></div>
+    <div class="top-actions"><a href="index.html">🏠 الرئيسية</a><a href="#cats">تصفح الأقسام</a></div>
   </div>
 </header>
 
 <div class="hero">
   <span class="kicker">POCKET MEDICINE — 9th ed. 2026</span>
   <h1 class="page-title">الفهرس الشامل</h1>
-  <p class="subtitle">ابحث عن أي موضوع، مصطلح، أو تصنيف من كامل محتوى Pocket Medicine بالعربية أو الإنكليزية، أو تصفح الأقسام مباشرة حسب الاختصاص.</p>
+  <p class="subtitle">ابحث بالعربي أو الإنكليزي، أو تصفح الأقسام حسب الاختصاص.</p>
 </div>
 
 <div class="search-wrap">
@@ -362,7 +362,7 @@ const searchIndex = [
   {ar:"احتشاء عضلة القلب مع ارتفاع ST ومضاعفاته", en:"STEMI", file:"pocket-cardiology.html", anchor:"stemi", cat:"القلبية"},
   {ar:"الإدارة طويلة الأمد بعد المتلازمة التاجية الحادة", en:"Post-ACS management", file:"pocket-cardiology.html", anchor:"post-acs", cat:"القلبية"},
   {ar:"قسطرة الشريان الرئوي والعلاج المخصص", en:"PA catheter, Swan-Ganz", file:"pocket-cardiology.html", anchor:"pac", cat:"القلبية"},
-  {ar:"فشل القلب", en:"Heart failure, HFrEF, HFpEF", file:"pocket-cardiology.html", anchor:"hf", cat:"القلبية"},
+  {ar:"فشل القلب (قصور القلب)", en:"Heart failure, HFrEF, HFpEF", file:"pocket-cardiology.html", anchor:"hf", cat:"القلبية"},
   {ar:"اعتلالات عضلة القلب", en:"Cardiomyopathy, DCM, HCM, RCM", file:"pocket-cardiology.html", anchor:"cmp", cat:"القلبية"},
   {ar:"تضيق الصمام الأبهري", en:"Aortic stenosis, AS", file:"pocket-cardiology.html", anchor:"as", cat:"القلبية"},
   {ar:"قصور الصمام الأبهري", en:"Aortic regurgitation, AR", file:"pocket-cardiology.html", anchor:"ar", cat:"القلبية"},
@@ -620,9 +620,11 @@ function runSearch(q){
     return;
   }
   catsWrap.style.display = 'none';
-  const matches = searchIndex.filter(item =>
-    normalize(item.ar).includes(q) || normalize(item.en).includes(q)
-  );
+  const terms = q.split(/\s+/).filter(Boolean);
+  const matches = searchIndex.filter(item => {
+    const hay = normalize(item.ar) + ' ' + normalize(item.en) + ' ' + normalize(item.cat);
+    return terms.every(t => hay.includes(t));
+  });
   resultCount.textContent = matches.length ? `${matches.length} نتيجة` : '';
   if(matches.length === 0){
     resultList.innerHTML = '<div class="no-results">لا توجد نتائج مطابقة — جرّب مصطلحاً آخر.</div>';
