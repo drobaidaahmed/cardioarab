@@ -343,6 +343,7 @@ if ('serviceWorker' in navigator) {
   .drob-result{ background:var(--drob-surface); border:1px solid var(--drob-border); border-radius:14px; padding:12px 14px; }
   .drob-result-category{ font-weight:700; font-size:10.5px; color:var(--drob-text-muted); background:var(--drob-surface-2); display:inline-block; padding:2px 8px; border-radius:999px; margin-bottom:6px; }
   .drob-result-title{ font-weight:800; font-size:13.5px; color:var(--drob-teal-dark); margin-bottom:4px; }
+  .drob-result-subtitle{ font-weight:700; font-size:11.5px; color:var(--drob-text-muted); margin-bottom:6px; }
   .drob-result-snippet{ font-size:13px; color:var(--drob-text); font-weight:700; line-height:1.7; margin-bottom:8px; }
   .drob-result-link{ display:inline-block; font-size:12.5px; font-weight:700; color:#fff; background:var(--drob-teal); padding:6px 12px; border-radius:999px; text-decoration:none; }
   .drob-result-link:hover{ background:var(--drob-teal-dark); }
@@ -375,6 +376,7 @@ if ('serviceWorker' in navigator) {
     .drob-msg{ font-size:16px; }
     .drob-result-category{ font-size:11.5px; padding:3px 9px; }
     .drob-result-title{ font-size:15px; }
+    .drob-result-subtitle{ font-size:12.5px; }
     .drob-result-snippet{ font-size:14.5px; }
     .drob-result-link{ font-size:14px; padding:8px 14px; }
     .drob-chip{ font-size:13px; padding:8px 13px; }
@@ -536,15 +538,26 @@ if ('serviceWorker' in navigator) {
       }
       const h = document.createElement('div');
       h.className = 'drob-result-title';
-      h.textContent = r.section_title || r.page_title;
+      h.textContent = r.page_title || r.section_title;
+      if(r.section_title && r.section_title !== r.page_title){
+        const sub = document.createElement('div');
+        sub.className = 'drob-result-subtitle';
+        sub.textContent = '↳ ' + r.section_title;
+        card.appendChild(h); card.appendChild(sub);
+      } else {
+        card.appendChild(h);
+      }
       const p = document.createElement('div');
       p.className = 'drob-result-snippet';
-      p.textContent = r.snippet + (r.snippet && r.snippet.length >= 240 ? '…' : '');
+      p.style.whiteSpace = 'nowrap';
+      p.style.overflow = 'hidden';
+      p.style.textOverflow = 'ellipsis';
+      p.textContent = r.snippet || '';
       const a = document.createElement('a');
       a.className = 'drob-result-link';
       a.href = r.page_url + (r.anchor || '');
       a.textContent = 'فتح الصفحة ←';
-      card.appendChild(h); card.appendChild(p); card.appendChild(a);
+      card.appendChild(p); card.appendChild(a);
       wrap.appendChild(card);
     });
     msgs.appendChild(wrap);
@@ -574,7 +587,7 @@ if ('serviceWorker' in navigator) {
     input.value = '';
     const loading = addMsg('loading', 'عم دوّر بمحتوى الموقع...');
     try{
-      const { data, error } = await sb.rpc('drob_search_site', { q, match_count: 12 });
+      const { data, error } = await sb.rpc('drob_search_site', { q, match_count: 16 });
       loading.remove();
       if(error) throw error;
       if(!data || data.length === 0){
