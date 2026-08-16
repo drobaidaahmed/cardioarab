@@ -497,6 +497,22 @@ if ('serviceWorker' in navigator) {
     if(e.target.classList.contains('drob-chip')){ input.value = e.target.textContent; handleSend(); }
   });
 
+  function addSuggestion(term){
+    if(!term) return;
+    const d = document.createElement('div');
+    d.className = 'drob-msg bot';
+    d.style.cursor = 'pointer';
+    d.style.textDecoration = 'underline';
+    d.style.textUnderlineOffset = '3px';
+    d.textContent = '💡 هل تقصدين: ' + term + '؟';
+    d.addEventListener('click', ()=>{
+      input.value = term;
+      handleSend();
+    });
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
   function addMsg(role, text){
     const d = document.createElement('div');
     d.className = 'drob-msg ' + role;
@@ -563,8 +579,13 @@ if ('serviceWorker' in navigator) {
       if(error) throw error;
       if(!data || data.length === 0){
         addMsg('bot', 'ما لقيت نتيجة واضحة بالموقع لهالسؤال. جرب تصيغه بكلمات تانية، أو تواصل مباشرة عبر واتساب.');
+        try{
+          const { data: sug } = await sb.rpc('drob_suggest_term', { q });
+          if(sug) addSuggestion(sug);
+        }catch(e){ console.error(e); }
       } else {
         addResults(data);
+        if(data[0] && data[0].suggestion) addSuggestion(data[0].suggestion);
       }
     }catch(err){
       loading.remove();
