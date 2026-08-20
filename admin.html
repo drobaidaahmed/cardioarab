@@ -93,6 +93,20 @@
         <div class="stat-card red"><div class="num" id="statBlocked">—</div><div class="lbl">محظورون</div></div>
     </div>
 
+    <!-- المستخدمين الأونلاين الآن -->
+    <div class="section" id="online-users-card">
+        <div class="section-title">
+            <span style="display:flex;align-items:center;gap:8px">
+                <span style="width:9px;height:9px;border-radius:50%;background:#10b981;display:inline-block;box-shadow:0 0 8px #10b981"></span>
+                🟢 المستخدمين الأونلاين الآن
+            </span>
+            <span id="online-count-badge" style="background:#10b981;color:#0b0d12;font-weight:700;font-size:.8rem;padding:3px 10px;border-radius:999px">0</span>
+        </div>
+        <div id="online-users-list" style="display:flex;flex-direction:column;gap:.6rem;max-height:280px;overflow-y:auto">
+            <div class="empty">⏳ جارِ الاتصال...</div>
+        </div>
+    </div>
+
     <!-- تغيير كلمة المرور -->
     <div class="section">
         <div class="section-title">🔑 تغيير كلمة مرور المالك</div>
@@ -198,10 +212,57 @@
 
 </div>
 
+<!-- مكتبة Supabase JS (لازمة فقط لضمة "المستخدمين الأونلاين") -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SB_URL = 'https://ikisgwnsxadiujueeava.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlraXNnd25zeGFkaXVqdWVlYXZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NzU5ODYsImV4cCI6MjA5ODI1MTk4Nn0.Ar45kQJPOgJ9ITqGVv9XeSxpGgyx53s6CTmFCNDBa-g';
 const H = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+
+// ====== ضمة المستخدمين الأونلاين (Supabase Realtime Presence) ======
+(function(){
+  const PRESENCE_CHANNEL_NAME = 'cardioarab-online-users'; // لازم يطابق presence-tracker.js بباقي الصفحات
+  const presenceClient = window.supabase.createClient(SB_URL, SB_KEY);
+
+  function escapeHtml(str){
+    return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function renderOnlineUsers(stateObj){
+    const listEl = document.getElementById('online-users-list');
+    const badgeEl = document.getElementById('online-count-badge');
+    const entries = Object.values(stateObj).map(arr => arr[0]);
+    badgeEl.textContent = entries.length;
+
+    if(entries.length === 0){
+      listEl.innerHTML = '<div class="empty">ما في حالياً مستخدمين أونلاين</div>';
+      return;
+    }
+
+    entries.sort((a,b) => (a.is_guest === b.is_guest ? 0 : a.is_guest ? 1 : -1));
+
+    listEl.innerHTML = entries.map(u => {
+      const label = u.is_guest ? 'زائر' : (u.name || u.email || 'مستخدم');
+      const sub = (u.is_guest ? '' : (u.email||'')) + (u.page ? (u.is_guest?'':' · ') + u.page : '');
+      const badgeColor = u.is_guest ? '#8b8fa3' : '#10b981';
+      const badgeText = u.is_guest ? 'زائر' : 'مسجّل';
+      return `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-radius:10px;padding:8px 12px">
+          <div style="display:flex;flex-direction:column">
+            <span style="font-size:.87rem;font-weight:600">${escapeHtml(label)}</span>
+            <span style="font-size:.75rem;color:var(--text-dim,#8b8fa3)">${escapeHtml(sub)}</span>
+          </div>
+          <span style="font-size:.68rem;color:${badgeColor};border:1px solid ${badgeColor};padding:2px 8px;border-radius:999px">${badgeText}</span>
+        </div>`;
+    }).join('');
+  }
+
+  const onlineChannel = presenceClient.channel(PRESENCE_CHANNEL_NAME);
+  onlineChannel
+    .on('presence', {event:'sync'}, () => renderOnlineUsers(onlineChannel.presenceState()))
+    .subscribe(status => {
+      if(status === 'SUBSCRIBED') renderOnlineUsers(onlineChannel.presenceState());
+    });
+})();
 
 async function sbGet(t,q=''){const r=await fetch(`${SB_URL}/rest/v1/${t}${q}`,{headers:H});if(!r.ok)throw await r.json();return r.json();}
 async function sbPost(t,d){const r=await fetch(`${SB_URL}/rest/v1/${t}`,{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(d)});if(!r.ok)throw await r.json();return r.json();}
