@@ -420,11 +420,11 @@ async function confirmDelete(id,email){
 }
 
 async function resetDevice(id,name){
-    if(!confirm(`إعادة تصفير الجهاز للمستخدم:\n${name}؟`))return;
+    if(!confirm(`إعادة تصفير كل الأجهزة المرتبطة بالمستخدم:\n${name}؟\n(سيحتاج تسجيل الدخول من جديد على أي جهاز، وسيُربط أول جهازين يسجّلا الدخول تلقائياً)`))return;
     try{
-        await sbPatch('users',`?id=eq.${id}`,{device_id:null,device_changed_at:null});
-        await addLog(`إعادة تصفير جهاز المستخدم ${name}`);
-        alert(`✅ تم إعادة تصفير الجهاز للمستخدم ${name}`);
+        await sbDelete('user_devices',`?user_id=eq.${id}`);
+        await addLog(`إعادة تصفير أجهزة المستخدم ${name}`);
+        alert(`✅ تم تصفير كل الأجهزة المرتبطة بالمستخدم ${name}`);
         loadUsers();
     }catch{alert('❌ خطأ في إعادة التصفير');}
 }

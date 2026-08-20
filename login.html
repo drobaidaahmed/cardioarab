@@ -68,8 +68,25 @@ function showMsg(txt, type) {
   el.className = 'alert show alert-' + type;
 }
 
-const DEVICE_COOLDOWN_DAYS = 15;
-let pendingUser = null; // مستخدم بانتظار تأكيد "هذا جهازي الجديد"
+const MAX_DEVICES = 2;
+
+function getDeviceLabel() {
+  const ua = navigator.userAgent || '';
+  let os = 'جهاز غير معروف';
+  if (/iPhone|iPad/.test(ua)) os = 'iPhone/iPad';
+  else if (/Android/.test(ua)) os = 'Android';
+  else if (/Windows/.test(ua)) os = 'Windows';
+  else if (/Macintosh/.test(ua)) os = 'Mac';
+  else if (/Linux/.test(ua)) os = 'Linux';
+
+  let browser = '';
+  if (/Edg\//.test(ua)) browser = 'Edge';
+  else if (/Chrome\//.test(ua)) browser = 'Chrome';
+  else if (/Safari\//.test(ua)) browser = 'Safari';
+  else if (/Firefox\//.test(ua)) browser = 'Firefox';
+
+  return browser ? `${os} - ${browser}` : os;
+}
 
 async function handleLogin() {
   const email = document.getElementById('loginEmail').value.trim().toLowerCase();
@@ -97,35 +114,30 @@ async function handleLogin() {
       return;
     }
 
-    // فحص الجهاز — الحساب مقيّد بجهاز واحد فقط (لا يشمل حساب المالك)
+    // فحص الجهاز — الحساب مقيّد بجهازين كحد أقصى (لا يشمل حساب المالك)
     if (!user.is_admin) {
       const myDevice = device.getId();
+      const devices = await db.select('user_devices', `?user_id=eq.${user.id}&order=first_seen_at.asc`);
+      const matched = devices.find(d => d.device_id === myDevice);
 
-      if (!user.device_id) {
-        // أول تسجيل دخول على الإطلاق — اربط الحساب بهذا الجهاز
-        await db.update('users', `?id=eq.${user.id}`, {
+      if (matched) {
+        // جهاز معروف مسبقاً — حدّث آخر نشاط وتابع
+        await db.update('user_devices', `?id=eq.${matched.id}`, { last_seen_at: new Date().toISOString() });
+      } else if (devices.length < MAX_DEVICES) {
+        // جهاز جديد ولسا في مكان فاضي — اربطه تلقائياً
+        await db.insert('user_devices', {
+          user_id: user.id,
           device_id: myDevice,
-          device_changed_at: new Date().toISOString()
+          device_label: getDeviceLabel(),
+          first_seen_at: new Date().toISOString(),
+          last_seen_at: new Date().toISOString()
         });
-      } else if (user.device_id !== myDevice) {
-        // جهاز مختلف عن الجهاز المسجّل
-        const changedAt = user.device_changed_at ? new Date(user.device_changed_at) : null;
-        const daysSince = changedAt ? (Date.now() - changedAt.getTime()) / 86400000 : Infinity;
-
-        if (daysSince < DEVICE_COOLDOWN_DAYS) {
-          const remaining = Math.ceil(DEVICE_COOLDOWN_DAYS - daysSince);
-          showMsg(`🚫 هذا الحساب مستخدم على جهاز آخر. يمكن تغيير الجهاز بعد ${remaining} يوم، أو تواصل مع المالك`, 'danger');
-          btn.disabled = false; btn.textContent = 'تسجيل الدخول';
-          return;
-        }
-
-        // مضت 15 يوم أو أكثر — اسمح بالتبديل بعد تأكيد صريح من المستخدم
-        pendingUser = user;
-        showDeviceConfirm();
+      } else {
+        // وصل الحد الأقصى (جهازين) وهذا جهاز ثالث — يمنع، ويحتاج تواصل مع الإدارة
+        showMsg('🚫 هذا الحساب مستخدم على جهازين مسبقاً (الحد الأقصى). للدخول من هذا الجهاز، تواصل مع الإدارة لتصفير الأجهزة', 'danger');
         btn.disabled = false; btn.textContent = 'تسجيل الدخول';
         return;
       }
-      // نفس الجهاز — تابع الدخول عادي
     }
 
     await finishLogin(user, email);
@@ -135,33 +147,6 @@ async function handleLogin() {
     showMsg('❌ خطأ في الاتصال، حاول مرة أخرى', 'danger');
     btn.disabled = false; btn.textContent = 'تسجيل الدخول';
   }
-}
-
-function showDeviceConfirm() {
-  const el = document.getElementById('msg');
-  el.innerHTML = '⚠️ هذا الحساب مرتبط بجهاز آخر — لكن مضى أكثر من ' + DEVICE_COOLDOWN_DAYS + ' يوماً، فيمكنك ربط هذا الجهاز الآن.' +
-    '<br><button class="btn" style="margin-top:.75rem" onclick="confirmNewDevice()">✅ هذا جهازي الجديد</button>';
-  el.className = 'alert show alert-danger';
-}
-
-async function confirmNewDevice() {
-  if (!pendingUser) return;
-  const btn = document.getElementById('loginBtn');
-  btn.disabled = true;
-
-  try {
-    const myDevice = device.getId();
-    await db.update('users', `?id=eq.${pendingUser.id}`, {
-      device_id: myDevice,
-      device_changed_at: new Date().toISOString()
-    });
-    const email = pendingUser.email;
-    await finishLogin(pendingUser, email);
-  } catch (e) {
-    console.error(e);
-    showMsg('❌ خطأ في الاتصال، حاول مرة أخرى', 'danger');
-  }
-  btn.disabled = false; btn.textContent = 'تسجيل الدخول';
 }
 
 async function finishLogin(user, email) {

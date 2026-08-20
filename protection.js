@@ -162,13 +162,14 @@
       if (!myDevice) return;
 
       try {
-        const res = await fetch(`${SB_URL}/rest/v1/users?id=eq.${user.id}&select=device_id`, {
+        const res = await fetch(`${SB_URL}/rest/v1/user_devices?user_id=eq.${user.id}&device_id=eq.${myDevice}&select=id`, {
           headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
         });
         const rows = await res.json();
-        if (rows.length && rows[0].device_id && rows[0].device_id !== myDevice) {
+        if (!rows.length) {
+          // جهازي لم يعد ضمن الأجهزة المرتبطة بالحساب (تمت إزالته من قبل الإدارة)
           localStorage.removeItem('currentUser');
-          alert('⚠️ تم تسجيل الدخول إلى حسابك من جهاز آخر. تم تسجيل خروجك من هذا الجهاز.');
+          alert('⚠️ تم إلغاء ربط هذا الجهاز بحسابك من قبل الإدارة. الرجاء تسجيل الدخول من جديد.');
           location.href = 'login.html';
         }
       } catch (_) {}
