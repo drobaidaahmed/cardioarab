@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(----panel);border:1px solid var(----border);color:var(----text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(----accent);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مراجعة أمراض القلب — الصناديق والجداول والأشكال (مترجمة)</title>
@@ -10,6 +29,7 @@
   --accent:#4fc3f7; --accent2:#7c4dff; --gold:#ffca28; --green:#66bb6a;
   --red:#ef5350; --text:#e6edf3; --muted:#9aa7b8;
 }
+:root[data-theme="light"]{--bg:#f4f6fb;--panel:#ffffff;--panel2:#eef1f8;--border:#e1e6f0;--accent:#0492d2;--accent2:#3a00dc;--gold:#b78a00;--green:#327f36;--red:#c3100c;--text:#1b2434;--muted:#4b5568;}
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
@@ -71,6 +91,8 @@ footer{text-align:center; color:var(--muted); padding:20px; font-size:.85rem;}
 </style>
 </head>
 <body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
 <div id="gateOverlay" style="position:fixed;inset:0;z-index:999999;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:15px;text-align:center;direction:rtl;padding:20px;">
   <div>⏳ جارٍ التحقق من الاشتراك...</div>
 </div>
@@ -831,5 +853,26 @@ window.addEventListener('scroll', ()=>{
 <script src="notes.js"></script>
 
 <script src="presence-tracker.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+
 </body>
 </html>

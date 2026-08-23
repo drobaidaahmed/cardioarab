@@ -43,7 +43,7 @@ EXCLUDE_DIRS = {".git", "node_modules", ".github", "dist", "build", ".vscode"}
 # نمط الألوان الأساسي المعروف بملفات CardioArab (من التصميم الموحّد)
 ROOT_RE = re.compile(
     r"(:root\s*\{[^}]*--bg\s*:[^;]+;[^}]*--bg2\s*:[^;]+;[^}]*--border\s*:[^;]+;"
-    r"[^}]*--text\s*:[^;]+;[^}]*--text2\s*:[^;]+;[^}]*--accent\s*:[^;]+;[^}]*\})",
+    r"[^}]*--text\s*:[^;]+;[^}]*--text2\s*:[^;]+;[^}]*\})",
     re.IGNORECASE | re.DOTALL,
 )
 
@@ -70,7 +70,7 @@ LIGHT_VARS_TEMPLATE = (
 
 TOGGLE_BUTTON_STYLE = """
 <style>
-.theme-toggle{position:fixed;top:14px;left:14px;z-index:9999;width:38px;height:38px;
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
   border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
   font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
   transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}

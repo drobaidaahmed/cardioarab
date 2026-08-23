@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(----card);border:1px solid var(----border);color:var(----text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(----accent);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>الجزء الأول من برونوالد</title>
@@ -17,6 +36,7 @@
             --muted:#9fb0c5;
             --border:#3d4f6b;
         }
+:root[data-theme="light"]{--bg:#f4f6fb;--card:#ffffff;--card2:#eef1f8;--accent:#2dd4bf;--accent2:#0284be;--correct:#22c55e;--wrong:#b80a0a;--text:#1b2434;--muted:#4b5568;--border:#e1e6f0;}
         * {
             box-sizing: border-box;
             margin: 0;
@@ -99,8 +119,8 @@
             font-size: 11px;
             color: var(--muted);
         }
-        .score-pill b {
-            color: #facc15;
+        .score-pill b{
+            color:var(--text);
             font-size: 12px;
         }
         .score-pill .divider {
@@ -239,10 +259,10 @@
             flex-wrap: wrap;
             position: relative;
         }
-        .intro-card .stat b {
+        .intro-card .stat b{
             display: block;
             font-size: 13px;
-            color: #facc15;
+            color:var(--text);
             font-weight: 900;
         }
         .intro-card .stat span {
@@ -596,6 +616,8 @@
 </style>
 </head>
 <body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
     <div class="container" id="app">
         <a href="braunwald-index.html" style="display:inline-flex;align-items:center;gap:6px;color:#2a7de1;text-decoration:none;font-size:13px;font-weight:600;margin-bottom:10px;">← العودة إلى القائمة الرئيسية</a>
 
@@ -3609,5 +3631,26 @@ window.addEventListener('scroll', () => {
 <script src="protection.js"></script>
 <script src="notes.js"></script>
 <script src="presence-tracker.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+
 </body>
 </html>
