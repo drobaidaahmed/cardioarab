@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(----card);border:1px solid var(----border);color:var(----text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(----accent);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الجلسة الأولى | إضاءات على المستجدات في أمراض وجراحة القلب - كارديو عرب</title>
@@ -19,6 +38,7 @@
     --red:#f87171;
     --gold:#fbbf24;
   }
+:root[data-theme="light"]{--bg:#f4f6fb;--card:#ffffff;--card2:#eef1f8;--accent:#4706dc;--accent2:#4b5568;--text:#1b2434;--muted:#5b6577;--border:#e1e6f0;--green:#34d399;--red:#f30505;--gold:#af7e00;}
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
     font-family:'IBM Plex Sans Arabic', sans-serif;
@@ -44,7 +64,7 @@
   header h1{
     font-size:22px;
     margin-top:8px;
-    color:#fff;
+    color:var(--text);
   }
   header .sub{
     color:var(--muted);
@@ -89,7 +109,7 @@
   }
   .topic-head h2{
     font-size:17px;
-    color:#fff;
+    color:var(--text);
   }
   .topic-body{
     padding:20px;
@@ -202,6 +222,8 @@
 </style>
 </head>
 <body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
 <div class="top-bar" id="topBar">
   <a href="conference-index.html">← رجوع</a>
 </div>
@@ -609,5 +631,26 @@
 <script src="protection.js"></script>
 <script src="notes.js"></script>
 <script src="presence-tracker.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+
 </body>
 </html>
