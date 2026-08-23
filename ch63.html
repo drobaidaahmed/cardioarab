@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(----bg-panel);border:1px solid var(----border);color:var(----text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(----accent-63);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>المانويل ١١ (القسم ب، الجزء ٢): الفصل ٦٣ — القسطرة القلبية اليسرى | CardioArab</title>
@@ -15,6 +34,7 @@
   --good:#34d399; --warn:#fbbf24; --bad:#f87171;
   --radius:14px;
 }
+:root[data-theme="light"]{--bg:#f4f6fb;--bg-panel:#ffffff;--bg-card:#eef1f8;--border:#e1e6f0;--text:#1b2434;--text-dim:#4b5568;--text-mute:#5b6577;--accent-63:#0169e9;--accent-63-dim:#6b7385;--good:#34d399;--warn:#af7e00;--bad:#f30505;}
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif; background:var(--bg); color:var(--text); line-height:1.9; font-size:16.5px;}
@@ -37,7 +57,7 @@ h4.sub3-title{font-size:15.5px; color:var(--text-dim); margin:14px 0 8px; font-w
 p{margin-bottom:12px; color:#dbe4ee;}
 ul, ol{margin:10px 0 14px 0; padding-right:28px;}
 li{margin-bottom:8px; color:#dbe4ee;}
-strong{color:#fff; font-weight:600;}
+strong{color:var(--text); font-weight:600;}
 .callout{background:var(--bg-card); border:1px solid var(--border); border-right:4px solid var(--accent-63); border-radius:var(--radius); padding:16px 18px; margin:16px 0;}
 .callout.warn{border-right-color:var(--warn);}
 .callout.pearl{border-right-color:var(--good);}
@@ -65,7 +85,9 @@ tr:nth-child(even){background:rgba(255,255,255,.02);}
 </style>
 </head>
 <body>
-<a href="cleveland-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:#161a23;color:#e8cf7a;border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس كليفلاند</a>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
+<a href="cleveland-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--bg-card,var(--panel,var(--card,#161a23)));color:var(--gold,#e8cf7a);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس كليفلاند</a>
 <div id="progress"></div>
 <div class="layout">
 
@@ -403,5 +425,26 @@ window.addEventListener('scroll', () => {
 })();
 </script>
 <script src="presence-tracker.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+
 </body>
 </html>
