@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(----bg-elev);border:1px solid var(----border);color:var(----text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(----accent);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 <title>مرجع أمراض الدم — Pocket Medicine | CardioArab</title>
@@ -25,6 +44,7 @@
     --rec-3:#c93a3a;
     --radius:14px;
   }
+:root[data-theme="light"]{--bg:#f4f6fb;--bg-elev:#ffffff;--bg-card:#eef1f8;--border:#e1e6f0;--text:#1b2434;--text-dim:#4b5568;--text-faint:#5b6577;--accent:#006ec9;--accent-dim:#6b7385;--gold:#ac7d26;--rec-1:#2e9e5b;--rec-2a:#c9a227;--rec-2b:#c97a2c;--rec-3:#c93a3a;}
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
@@ -168,7 +188,9 @@
 </style>
 </head>
 <body>
-<style id="ca-gate-hide">body>*:not(#ca-gate-screen){display:none !important}</style>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
+<style id="ca-gate-hide">body>*:not(#ca-gate-screen):not(#themeToggle){display:none !important}</style>
 <div id="ca-gate-screen" style="position:fixed;inset:0;z-index:999999;background:#0b0f14;display:flex;align-items:center;justify-content:center;color:#8b5cf6;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:1rem;direction:rtl">جارِ التحقق من الاشتراك…</div>
 
 <header class="top">
@@ -984,5 +1006,26 @@
 </script>
 <script src="protection.js"></script>
 <script src="presence-tracker.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+
 </body>
 </html>
