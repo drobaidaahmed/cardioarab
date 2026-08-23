@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:16px;right:16px;z-index:50;width:42px;height:42px;
+  border-radius:10px;background:var(--card);border:1px solid var(--border);color:var(--gold-soft);
+  font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;}
+.theme-toggle:hover{border-color:var(--gold);transform:scale(1.06)}
+</style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>فهرس كليفلاند | CardioArab</title>
@@ -16,6 +32,16 @@
     --text-dim:#9aa3b5;
     --gold:#d4af37;
     --gold-soft:#e8cf7a;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb;
+    --bg-elev:#eef1f8;
+    --card:#ffffff;
+    --border:#e1e6f0;
+    --text:#1b2434;
+    --text-dim:#5b6577;
+    --gold:#a8791f;
+    --gold-soft:#8a5f13;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{
@@ -182,6 +208,7 @@
 </head>
 <body>
 
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
 <button class="toc-toggle" onclick="document.getElementById('drawer').classList.toggle('open')">☰</button>
 <nav class="toc-drawer" id="drawer">
   <a href="#s1">I — الداء القلبي الإقفاري</a>
@@ -452,5 +479,24 @@
 </script>
 <script src="protection.js"></script>
 <script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
 </body>
 </html>
