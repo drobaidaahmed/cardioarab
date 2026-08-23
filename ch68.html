@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(----bg-elev);border:1px solid var(----border);color:var(----text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(----teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الفصل 68 — بزل التامور | CardioArab</title>
@@ -30,6 +49,7 @@
   --font-head:'IBM Plex Sans Arabic','Tajawal',sans-serif;
   --font-en:'Inter',sans-serif;
 }
+:root[data-theme="light"]{--bg:#f4f6fb;--bg-elev:#ffffff;--bg-elev-2:#e6edf8;--card:#eef1f8;--border:#e1e6f0;--border-soft:#e1e6f0;--teal:#2dd4bf;--teal-dim:#7a8494;--gold:#b07f1b;--gold-dim:#6b7385;--text:#1b2434;--text-dim:#4b5568;--text-mute:#5b6577;--red:#b6251b;--blue:#22649f;--purple:#6034cd;}
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{
@@ -343,7 +363,9 @@ footer .attribution{color:var(--gold-dim);font-weight:600;}
 </style>
 </head>
 <body>
-<a href="cleveland-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:#161a23;color:#e8cf7a;border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس كليفلاند</a>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
+<a href="cleveland-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--bg-card,var(--panel,var(--card,#161a23)));color:var(--gold,#e8cf7a);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس كليفلاند</a>
 
 <main>
 <article class="chapter" id="ch68">
@@ -569,5 +591,26 @@ footer .attribution{color:var(--gold-dim);font-weight:600;}
 </script>
 
 <script src="presence-tracker.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+
 </body>
 </html>
