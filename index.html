@@ -405,6 +405,10 @@ if ('serviceWorker' in navigator) {
   .drob-launcher-wrap{ position:fixed; bottom:0px; left:12px; z-index:99998; display:flex; flex-direction:column; align-items:center; gap:0; transition:transform .7s cubic-bezier(.4,0,.2,1), opacity .7s ease; }
   .drob-launcher-wrap.drob-gone{ transform:translateX(-160%) scale(.5); opacity:0; }
 
+  .drob-restore{ position:fixed; bottom:16px; left:0; z-index:99997; background:var(--drob-teal,#0F9B8E); color:#fff; border:none; border-radius:0 20px 20px 0; padding:9px 12px 9px 10px; font-size:18px; line-height:1; cursor:pointer; box-shadow:0 4px 12px rgba(15,60,55,.25); display:none; align-items:center; }
+  .drob-restore.show{ display:flex; }
+  .drob-restore:hover{ padding-left:16px; }
+
   .drob-bubble{ position:relative; background:var(--drob-surface); border:1px solid var(--drob-border); color:var(--drob-text); font-size:13.5px; font-weight:700; padding:10px 14px; border-radius:14px 14px 14px 4px; box-shadow:0 6px 18px rgba(15,155,142,0.18); max-width:200px; line-height:1.6; opacity:0; transform:translateY(6px) scale(.96); pointer-events:none; transition:opacity .35s,transform .35s; margin-bottom:6px; align-self:flex-start; margin-right:auto; }
   .drob-bubble.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; cursor:pointer; }
   .drob-bubble .drob-x{ position:absolute; top:-8px; left:-8px; width:20px; height:20px; border-radius:50%; background:var(--drob-surface-2); border:1px solid var(--drob-border); color:var(--drob-text-muted); font-size:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
@@ -489,6 +493,7 @@ if ('serviceWorker' in navigator) {
 </style>
 
 <div id="drob-root">
+  <button class="drob-restore" id="drobRestore" title="إظهار سمير" aria-label="إظهار سمير">💬</button>
   <div class="drob-launcher-wrap">
     <div class="drob-bubble" id="drobBubble">
       <span class="drob-x" id="drobBubbleClose">✕</span>
@@ -544,12 +549,14 @@ if ('serviceWorker' in navigator) {
   const chips = document.getElementById('drobChips');
   const launcherWrap = document.querySelector('.drob-launcher-wrap');
   const avatarClose = document.getElementById('drobAvatarClose');
+  const restoreBtn = document.getElementById('drobRestore');
 
   let comeAndGoTimer = null;
 
   if(localStorage.getItem('drobDismissed') === '1'){
     launcherWrap.classList.add('drob-gone');
     launcherWrap.style.display = 'none';
+    restoreBtn.classList.add('show');
   } else {
     setTimeout(()=> bubble.classList.add('show'), 1600);
   }
@@ -570,6 +577,15 @@ if ('serviceWorker' in navigator) {
     if(comeAndGoTimer) clearInterval(comeAndGoTimer);
     launcherWrap.classList.add('drob-gone');
     localStorage.setItem('drobDismissed', '1');
+    restoreBtn.classList.add('show');
+  });
+  restoreBtn.addEventListener('click', ()=>{
+    localStorage.removeItem('drobDismissed');
+    launcherWrap.style.display = '';
+    launcherWrap.classList.remove('drob-gone');
+    restoreBtn.classList.remove('show');
+    if(!comeAndGoTimer) comeAndGoTimer = setInterval(comeAndGo, 24000);
+    setTimeout(()=> bubble.classList.add('show'), 500);
   });
 
   async function openPanel(){
