@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--accent);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CKM Syndrome — الجزء السادس: الرعاية متعددة الاختصاصات والمتابعة | AHA/ACC/ADA/ASN 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#14b8a6;--green:#10b981;--orange:#fbbf24;--blue:#3b82f6;--gold:#ea580c;--red:#ef4444;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+:root[data-theme="light"]{--bg:#f4f6fb;--bg2:#ffffff;--bg3:#eef1f8;--border:#e1e6f0;--text:#1b2434;--text2:#5b6577;--accent:#14b8a6;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));z-index:9999;transition:width .2s;width:0}
+  header{background:linear-gradient(135deg,#2e0a0a,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:var(--red);padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+  .back-btn:hover{background:rgba(239,68,68,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:var(--text)}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .part-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2rem;overflow-x:auto}
+  .part-nav-inner{max-width:1400px;margin:0 auto;display:flex;gap:.5rem}
+  .part-btn{padding:.4rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text2);background:transparent;white-space:nowrap;transition:all .2s}
+  .part-btn:hover{border-color:var(--red);color:var(--red)}
+  .part-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:var(--red);border-right-color:var(--red);background:rgba(239,68,68,.1)}
+  .toc .toc-sub{padding-right:1rem;font-size:.78rem}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:var(--red);color:#fff;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;flex-shrink:0}
+  .section h2{font-size:1.25rem;font-weight:700;color:var(--text)}
+  .section h3{font-size:1.05rem;font-weight:600;color:var(--red);margin:1.5rem 0 .75rem}
+  .section h4{font-size:.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 .5rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul,.section ol{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
+  .badge-i{background:var(--green);color:#fff}
+  .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
+  .rec-iia{background:rgba(251,191,36,.15);border-color:var(--orange)}
+  .badge-iia{background:var(--orange);color:#000}
+  .rec-iib{background:rgba(234,88,12,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#fff}
+  .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
+  .badge-iii{background:var(--red);color:#fff}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .highlight strong{color:var(--red)}
+  .warning{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .warning strong{color:var(--gold)}
+  .danger{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .danger strong{color:var(--red)}
+  .success{background:rgba(16,185,129,.1);border-color:var(--green)}
+  .success strong{color:var(--green)}
+  .info-blue{background:rgba(59,130,246,.1);border-color:var(--blue)}
+  .info-blue strong{color:var(--blue)}
+  .info-purple{background:rgba(139,92,246,.1);border-color:var(--purple)}
+  .info-purple strong{color:var(--purple)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(239,68,68,.15);color:var(--red);padding:.75rem 1rem;text-align:right;font-weight:600;white-space:nowrap}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:rgba(255,255,255,.03)}
+  .algo-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+  .algo-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  .algo-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .algo-num{background:var(--red);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:.2rem}
+  .algo-content h4{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+  .algo-content p{font-size:.83rem;color:var(--text2);margin:0}
+  .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0}
+  .type-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:3px solid var(--red)}
+  .type-card.t2{border-top-color:var(--gold)}
+  .type-card.t3{border-top-color:var(--blue)}
+  .type-card.t4{border-top-color:var(--teal)}
+  .type-name{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+  .type-def{font-size:.82rem;color:var(--text2);margin-bottom:.75rem}
+  .type-row{display:flex;justify-content:space-between;font-size:.8rem;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .type-row:last-child{border-bottom:none}
+  .type-label{color:var(--text2)}
+  .type-val{color:var(--text);font-weight:500}
+  .key-points{background:linear-gradient(135deg,rgba(239,68,68,.1),rgba(234,88,12,.06));border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+  .key-points h4{color:var(--red);margin-bottom:1rem;font-size:1rem}
+  .key-points ul{list-style:none;padding:0}
+  .key-points li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem}
+  .key-points li::before{content:'🔑';flex-shrink:0}
+  .next-prev{display:flex;justify-content:space-between;margin-top:2rem;gap:1rem}
+  .nav-btn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;text-decoration:none;transition:all .25s;flex:1;max-width:260px}
+  .nav-btn:hover{border-color:var(--red);background:rgba(239,68,68,.08)}
+  .nav-btn .dir{font-size:.75rem;color:var(--text2);margin-bottom:.25rem}
+  .nav-btn .title{font-size:.9rem;font-weight:700;color:var(--text)}
+  .nav-btn.next{text-align:left}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:2rem}
+  footer a{color:var(--red);text-decoration:none}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
+
+  header{transition:padding .3s ease}
+  .header-inner{transition:gap .3s ease}
+  .header-title h1{transition:font-size .3s ease}
+  .header-title p{transition:opacity .2s ease,max-height .3s ease,margin .3s ease;overflow:hidden}
+  .back-btn{transition:all .2s ease,padding .3s ease,font-size .3s ease,gap .3s ease}
+  header.shrink{padding:.3rem 1.25rem}
+  header.shrink .header-inner{gap:.6rem}
+  header.shrink .header-title h1{font-size:.85rem}
+  header.shrink .header-title p{opacity:0;max-height:0;margin:0}
+  header.shrink .back-btn{padding:.2rem .5rem;font-size:.7rem;gap:.2rem}
+</style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ef4444">
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="ckm-index.html" class="back-btn">← CKM Overview</a>
+    <div class="header-title">
+      <h1>الجزء السادس — الرعاية متعددة الاختصاصات والمتابعة</h1>
+      <p>AHA/ACC/ADA/ASN Guideline 2026 · Cardiovascular-Kidney-Metabolic Syndrome</p>
+    </div>
+  </div>
+</header>
+
+<div class="part-nav">
+  <div class="part-nav-inner">
+    <a href="ckm-part1.html" class="part-btn">١ · التعريف والتصنيف</a>
+    <a href="ckm-part2.html" class="part-btn">٢ · الفحص والتقييم</a>
+    <a href="ckm-part3.html" class="part-btn">٣ · نمط الحياة والوزن</a>
+    <a href="ckm-part4.html" class="part-btn">٤ · العلاج الدوائي</a>
+    <a href="ckm-part5.html" class="part-btn">٥ · الحماية الكلوية</a>
+    <a href="ckm-part6.html" class="part-btn active">٦ · الرعاية والمتابعة</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h3>محتويات الجزء السادس</h3>
+    <a href="#s1">١ · لماذا الرعاية متعددة الاختصاصات؟</a>
+    <a href="#s2">٢ · نموذج الفريق: قلب، غدد، كلى، رعاية أولية</a>
+    <a href="#s3">٣ · اعتبارات خاصة بقصور القلب ضمن CKM</a>
+    <a href="#s4">٤ · التحديات التنظيمية والتقنية للتطبيق</a>
+    <a href="#s5">٥ · الأسئلة البحثية المفتوحة</a>
+    <a href="#s6">٦ · خارطة طريق التطبيق العملي</a>
+    <a href="#keys">نقاط المفتاحية</a>
+  </nav>
+
+  <div class="content">
+
+    <!-- Section 1 -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">١</div>
+        <h2>لماذا الرعاية متعددة الاختصاصات؟</h2>
+      </div>
+      <p>يختم الغايدلاين بتأكيد فكرة محورية تجمع الأجزاء الخمسة السابقة: متلازمة CKM ليست مرضاً يخص جهازاً واحداً، بل حالة مركّبة تتقاطع فيها القلب والكلى والاستقلاب بعلاقات ثنائية الاتجاه — وبالتالي فإن علاجها ضمن نموذج رعاية تقليدي أحادي التخصص (طبيب قلب فقط، أو طبيب غدد فقط) يُعرّض المريض لتجزّؤ القرارات العلاجية وتضارب الأولويات.</p>
+      <div class="info-box highlight">
+        <strong>📌 مبدأ الغايدلاين</strong>
+        كلما تقدّمت مرحلة CKM (Stage 2 فأعلى، وخصوصاً Stage 3–4)، تزداد الحاجة إلى تنسيق فعلي بين التخصصات — لا مجرد تحويل متتابع من عيادة إلى أخرى، بل قرارات علاجية مشتركة تُبنى على الصورة الكاملة للمريض.
+      </div>
+      <p>هذا التوجّه ليس شكلياً؛ فقرارات مثل اختيار فئة دوائية معينة (مثبطات SGLT2، ACEi/ARB، ناهضات GLP-1، أو nsMRA كما فُصّل في الجزء الرابع والخامس) غالباً ما تحمل فائدة متداخلة عبر أكثر من جهاز، وتحديد الأولوية بينها يستلزم رؤية متعددة الاختصاصات بدلاً من قرار منعزل.</p>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">٢</div>
+        <h2>نموذج الفريق: قلب، غدد، كلى، رعاية أولية</h2>
+      </div>
+      <p>يقترح الغايدلاين نموذج فريق رعاية يضم أربعة محاور أساسية، مع تفاوت درجة انخراط كل محور بحسب مرحلة CKM ومدى تعقيد الحالة:</p>
+      <div class="type-grid">
+        <div class="type-card">
+          <div class="type-name">🫀 طب القلب</div>
+          <div class="type-def">قيادة القرار العلاجي غالباً في المراحل المتقدمة (Stage 3–4)، خصوصاً عند وجود مرض قلبي وعائي ظاهر أو قصور قلب مصاحب</div>
+        </div>
+        <div class="type-card t2">
+          <div class="type-name">🩸 الغدد الصماء والاستقلاب</div>
+          <div class="type-def">ضبط السكري والسمنة والدهون كعوامل مؤسِّسة، والإشراف على الأدوية الاستقلابية مزدوجة الفائدة</div>
+        </div>
+        <div class="type-card t3">
+          <div class="type-name">🫘 أمراض الكلى</div>
+          <div class="type-def">تقييم دقيق لتدهور eGFR وUACR، وتوجيه العلاج الحامي للكلى، وقيادة القرار في CKD المتقدم جداً</div>
+        </div>
+        <div class="type-card t4">
+          <div class="type-name">🩺 الرعاية الأولية</div>
+          <div class="type-def">نقطة الدخول الأولى للفحص (الجزء الثاني)، والمنسّق المستمر للمتابعة طويلة الأمد بين زيارات التخصصات</div>
+        </div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُعقل تبنّي نموذج رعاية منظَّم ومتعدد الاختصاصات لمرضى CKM من Stage 2 فأعلى، بحيث تُتخذ القرارات العلاجية الكبرى (خصوصاً اختيار الأدوية مزدوجة الفائدة) بتنسيق مشترك بدلاً من انعزال كل تخصص عن الآخر</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C-EO</span></div>
+      </div>
+      <p>يشدّد الغايدلاين على أن الرعاية الأولية ليست حلقة ثانوية في هذا النموذج، بل المنسّق الفعلي الذي يحافظ على استمرارية المتابعة ويمنع "ضياع" المريض بين التخصصات المتعددة — خصوصاً في مراحل CKM المبكرة (Stage 0–1) حيث لا تستدعي الحالة بعد تدخل تخصصي مكثف.</p>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">٣</div>
+        <h2>اعتبارات خاصة بقصور القلب ضمن CKM</h2>
+      </div>
+      <p>يُفرد الغايدلاين اهتماماً خاصاً لمرضى قصور القلب المصاحب لمتلازمة CKM، باعتبارها من أكثر الفئات تعقيداً من الناحية العلاجية — إذ تتقاطع فيها قرارات حماية القلب وحماية الكلى وضبط الاستقلاب في وقت واحد، وغالباً ما تتعارض بعض التدخلات ظاهرياً (مثل موازنة الحمل السائل مقابل الحفاظ على وظيفة الكلى).</p>
+      <div class="info-box warning">
+        <strong>⚠️ الفخ السريري الشائع</strong>
+        عند مريض CKM بقصور قلب مصاحب، قد يُهمَل التنسيق بين فريق القلب وفريق الكلى بخصوص جرعات المدرات والأدوية الحامية للكلى، مما يؤدي إما إلى تدهور وظيفة الكلى أو إلى تراكم سوائل غير مضبوط — وكلاهما نتيجة قابلة للتفادي بتنسيق مسبق.
+      </div>
+      <p>يوصي الغايدلاين بأن يكون طبيب القلب هو المنسّق الأساسي لهذه الفئة تحديداً عند وجود قصور قلب ظاهر سريرياً، مع إشراك مبكر ومستمر لأخصائي الكلى بدلاً من التحويل المتأخر بعد حدوث تدهور كلوي واضح.</p>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإشراك أخصائي الكلى مبكراً — لا بعد التدهور — في خطة رعاية مرضى CKM المصحوب بقصور قلب، نظراً للتفاعل الوثيق بين العلاج القلبي والوظيفة الكلوية في هذه الفئة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C-EO</span></div>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <h2>التحديات التنظيمية والتقنية للتطبيق</h2>
+      </div>
+      <p>يعترف الغايدلاين بصراحة بأن تطبيق نموذج الرعاية متعددة الاختصاصات على أرض الواقع يواجه عوائق حقيقية، لا سيّما خارج المراكز الأكاديمية الكبرى:</p>
+      <div class="algo-box">
+        <div class="algo-step">
+          <div class="algo-num">١</div>
+          <div class="algo-content">
+            <h4>محدودية الوصول إلى التخصصات</h4>
+            <p>ليست كل المناطق (خصوصاً الريفية أو محدودة الموارد) تملك وصولاً متكافئاً لأخصائيي الكلى والغدد والقلب في مكان واحد</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">٢</div>
+          <div class="algo-content">
+            <h4>تجزّؤ السجلات الطبية</h4>
+            <p>غياب أنظمة سجلات إلكترونية موحدة بين التخصصات يُصعّب مشاركة نتائج eGFR وUACR والفحوصات الاستقلابية في الوقت الفعلي</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">٣</div>
+          <div class="algo-content">
+            <h4>غياب مسارات إحالة واضحة</h4>
+            <p>عدم وجود بروتوكولات إحالة موحدة بين الرعاية الأولية والتخصصات يؤدي إلى تأخر أو تفويت الإحالات الضرورية</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">٤</div>
+          <div class="algo-content">
+            <h4>عوائق التغطية التأمينية والتكلفة</h4>
+            <p>بعض الأدوية مزدوجة الفائدة (كما في الجزء الرابع والخامس) قد تواجه قيوداً تأمينية تُعقّد تطبيق التوصيات عملياً</p>
+          </div>
+        </div>
+      </div>
+      <div class="info-box info-blue">
+        <strong>💡 توجّه عملي</strong>
+        يشجّع الغايدلاين على استخدام نماذج رعاية بديلة عند غياب الفريق الكامل — مثل الاستشارة عن بُعد (telehealth) بين الرعاية الأولية والتخصصات، أو بروتوكولات إدارة موحّدة تقودها الرعاية الأولية بدعم استشاري دوري بدلاً من إحالة كاملة لكل مريض.
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <h2>الأسئلة البحثية المفتوحة</h2>
+      </div>
+      <p>كما أُشير إليه في الجزء الخامس بخصوص فجوات الأدلة في CKD المتقدم، يختم الغايدلاين بقائمة من الأسئلة التي لا تزال بلا إجابة حاسمة، ويدعو المجتمع البحثي لمعالجتها:</p>
+      <ul>
+        <li>ما هو التسلسل الأمثل لبدء الأدوية مزدوجة أو ثلاثية الفائدة عند مريض CKM متعدد المشاكل من البداية؟</li>
+        <li>هل تختلف فعالية نموذج الرعاية متعددة الاختصاصات باختلاف مرحلة CKM، أم أن الفائدة ثابتة عبر جميع المراحل؟</li>
+        <li>ما هي أفضل مؤشرات الأداء (metrics) لقياس نجاح تطبيق هذا النموذج في الممارسة الواقعية؟</li>
+        <li>كيف يمكن تكييف نموذج الفريق في الأنظمة الصحية محدودة الموارد دون فقدان جوهر التنسيق؟</li>
+        <li>ما هو الدور الأمثل للأدوات الرقمية والذكاء الاصطناعي في دعم قرارات الفريق متعدد الاختصاصات؟</li>
+      </ul>
+      <div class="info-box danger">
+        <strong>🚨 حذر سريري ضروري</strong>
+        في ظل هذه الفجوات البحثية، يبقى الحكم السريري المشترك بين أعضاء الفريق — لا الالتزام الحرفي بخوارزمية واحدة — هو الأساس عند اتخاذ القرار في الحالات المعقدة التي لا تغطيها الأدلة المباشرة بشكل كافٍ.
+      </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">٦</div>
+        <h2>خارطة طريق التطبيق العملي</h2>
+      </div>
+      <p>يختم الغايدلاين هذا الجزء — والوثيقة ككل — بخارطة طريق مبسّطة لترجمة مفهوم CKM من إطار تصنيفي إلى ممارسة يومية:</p>
+      <div class="algo-box">
+        <div class="algo-step">
+          <div class="algo-num">١</div>
+          <div class="algo-content">
+            <h4>الفحص الموحّد أولاً</h4>
+            <p>تطبيق بروتوكول الفحص من الجزء الثاني (eGFR + UACR + الملف الاستقلابي) كخطوة أولى وموحّدة لكل مريض ضمن الرعاية الأولية</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">٢</div>
+          <div class="algo-content">
+            <h4>التصنيف المرحلي الفوري</h4>
+            <p>تحديد مرحلة CKM (Stage 0–4) فور توفر النتائج، لتوجيه شدّة المتابعة ودرجة إلحاحية الإحالة التخصصية</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">٣</div>
+          <div class="algo-content">
+            <h4>بناء خطة علاج مشتركة</h4>
+            <p>دمج تدخلات نمط الحياة (الجزء الثالث) مع العلاج الدوائي مزدوج الفائدة (الجزء الرابع والخامس) ضمن خطة واحدة متفق عليها بين أعضاء الفريق</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">٤</div>
+          <div class="algo-content">
+            <h4>متابعة دورية منظَّمة</h4>
+            <p>إعادة تقييم eGFR وUACR والملف الاستقلابي بفواصل زمنية تتناسب مع مرحلة CKM، مع إعادة تصنيف المرحلة عند كل متابعة</p>
+          </div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">٥</div>
+          <div class="algo-content">
+            <h4>تصعيد التنسيق مع تقدّم المرحلة</h4>
+            <p>زيادة كثافة إشراك التخصصات (قلب، كلى، غدد) تدريجياً مع تقدّم المريض من Stage 1 نحو Stage 3–4، بدلاً من نموذج ثابت لا يتغيّر</p>
+          </div>
+        </div>
+      </div>
+      <div class="info-box success">
+        <strong>✅ الرسالة الختامية للغايدلاين</strong>
+        الهدف النهائي من إطار CKM ليس مجرد تصنيف جديد، بل تحويل نموذج الرعاية من علاج تفاعلي لكل مضاعفة على حدة، إلى رعاية استباقية منسّقة تعالج الترابط الحقيقي بين القلب والكلى والاستقلاب — بدءاً من الفحص المبكر وانتهاءً بالمتابعة متعددة الاختصاصات طويلة الأمد.
+      </div>
+    </div>
+
+    <!-- Key Points -->
+    <div class="key-points" id="keys">
+      <h4>🔑 نقاط المفتاح — الجزء السادس</h4>
+      <ul>
+        <li>CKM حالة متعددة الأجهزة تستلزم رعاية متعددة الاختصاصات، لا علاجاً منعزلاً لكل مضاعفة</li>
+        <li>الفريق المثالي يضم القلب والغدد والكلى والرعاية الأولية، بتفاوت الانخراط حسب المرحلة</li>
+        <li>الرعاية الأولية هي المنسّق المستمر، لا مجرد نقطة إحالة أولى</li>
+        <li>قصور القلب المصاحب لـCKM يستلزم إشراكاً مبكراً لأخصائي الكلى، لا تحويلاً متأخراً بعد التدهور</li>
+        <li>التحديات التنظيمية (الوصول، السجلات، التأمين) واقعية وتستلزم نماذج بديلة كالاستشارة عن بُعد</li>
+        <li>خارطة الطريق تبدأ بالفحص الموحّد وتنتهي بتصعيد تدريجي للتنسيق التخصصي مع تقدّم المرحلة</li>
+      </ul>
+    </div>
+
+    <!-- Navigation -->
+    <div class="next-prev">
+      <a href="ckm-part5.html" class="nav-btn">
+        <div class="dir">← الجزء السابق</div>
+        <div class="title">أمراض الكلى المزمنة والحماية الكلوية</div>
+      </a>
+      <a href="ckm-index.html" class="nav-btn next">
+        <div class="dir">إنهاء السلسلة ←</div>
+        <div class="title">العودة إلى نظرة عامة على CKM</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>مبني على غايدلاين AHA/ACC/ADA/ASN 2026 لمتلازمة القلب-الكلى-الاستقلاب — للأغراض التعليمية | <a href="ckm-index.html">← CKM Overview</a> | <a href="guidelines-american.html">جميع الغايدات الأمريكية</a></p>
+</footer>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const __headerEl = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = p + '%';
+  if (window.scrollY > 80) { __headerEl && __headerEl.classList.add('shrink'); } else { __headerEl && __headerEl.classList.remove('shrink'); }
+});
+
+const toc = document.querySelectorAll('.toc a');
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      toc.forEach(a => a.classList.remove('active'));
+      const id = e.target.id;
+      const active = document.querySelector(`.toc a[href="#${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+<script src="notes.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(console.warn);
+  });
+}
+</script>
+<script src="pwa-install.js"></script>
+<script src="presence-tracker.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+
+</body>
+</html>
