@@ -697,21 +697,30 @@ if ('serviceWorker' in navigator) {
     msgs.scrollTop = msgs.scrollHeight;
   }
 
-  function addAnswer(answer, sources){
-    addMsg('bot', answer);
-    if(sources.length){
-      const wrap = document.createElement('div');
-      wrap.className = 'drob-results';
-      sources.forEach(s => {
-        const a = document.createElement('a');
-        a.className = 'drob-result-link';
-        a.href = s.url;
-        a.textContent = '↳ ' + s.title;
-        wrap.appendChild(a);
-      });
-      msgs.appendChild(wrap);
-      msgs.scrollTop = msgs.scrollHeight;
-    }
+  function addItems(items){
+    const wrap = document.createElement('div');
+    wrap.className = 'drob-results';
+    items.forEach(it => {
+      const card = document.createElement('div');
+      card.className = 'drob-result';
+      const h = document.createElement('div');
+      h.className = 'drob-result-title';
+      h.textContent = it.title;
+      card.appendChild(h);
+      const p = document.createElement('div');
+      p.className = 'drob-result-snippet';
+      p.style.whiteSpace = 'normal';
+      p.textContent = it.summary;
+      card.appendChild(p);
+      const a = document.createElement('a');
+      a.className = 'drob-result-link';
+      a.href = it.url;
+      a.textContent = '📄 للمزيد: افتحي الصفحة الكاملة ←';
+      card.appendChild(a);
+      wrap.appendChild(card);
+    });
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
   }
 
   // Phase 5: يجيب embedding للسؤال قبل البحث. أي فشل (شبكة/quota/غيره)
@@ -754,10 +763,10 @@ if ('serviceWorker' in navigator) {
       const { data, error } = await sb.functions.invoke('ask_samir', { body: { question: q } });
       loading.remove();
       if(error) throw error;
-      if(!data || !data.answer){
-        addMsg('bot', 'ما لقيت جواب واضح لهالسؤال. جرب تصيغه بكلمات تانية، أو تواصل عبر واتساب.');
+      if(!data || !data.items || data.items.length === 0){
+        addMsg('bot', 'ما لقيت معلومة واضحة بالموقع لهالسؤال. جرب تصيغه بكلمات تانية، أو تواصل عبر واتساب.');
       } else {
-        addAnswer(data.answer, data.sources || []);
+        addItems(data.items);
       }
     }catch(err){
       loading.remove();
