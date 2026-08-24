@@ -697,6 +697,23 @@ if ('serviceWorker' in navigator) {
     msgs.scrollTop = msgs.scrollHeight;
   }
 
+  function addAnswer(answer, sources){
+    addMsg('bot', answer);
+    if(sources.length){
+      const wrap = document.createElement('div');
+      wrap.className = 'drob-results';
+      sources.forEach(s => {
+        const a = document.createElement('a');
+        a.className = 'drob-result-link';
+        a.href = s.url;
+        a.textContent = '↳ ' + s.title;
+        wrap.appendChild(a);
+      });
+      msgs.appendChild(wrap);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+  }
+
   // Phase 5: يجيب embedding للسؤال قبل البحث. أي فشل (شبكة/quota/غيره)
   // بيرجع null بهدوء بدل ما يوقف البحث — هيك drob_hybrid_search بترجع
   // لنفس سلوك البحث النصي القديم تلقائياً.
@@ -734,19 +751,13 @@ if ('serviceWorker' in navigator) {
     input.value = '';
     const loading = addMsg('loading', 'عم دوّر بمحتوى الموقع...');
     try{
-      const query_embedding = await getQueryEmbedding(q);
-      const { data, error } = await sb.rpc('drob_hybrid_search', { q, query_embedding, match_count: 16 });
+      const { data, error } = await sb.functions.invoke('ask_samir', { body: { question: q } });
       loading.remove();
       if(error) throw error;
-      if(!data || data.length === 0){
-        addMsg('bot', 'ما لقيت نتيجة واضحة بالموقع لهالسؤال. جرب تصيغه بكلمات تانية، أو تواصل مباشرة عبر واتساب.');
-        try{
-          const { data: sug } = await sb.rpc('drob_suggest_term', { q });
-          if(sug) addSuggestion(sug);
-        }catch(e){ console.error(e); }
+      if(!data || !data.answer){
+        addMsg('bot', 'ما لقيت جواب واضح لهالسؤال. جرب تصيغه بكلمات تانية، أو تواصل عبر واتساب.');
       } else {
-        addResults(data);
-        if(data[0] && data[0].suggestion) addSuggestion(data[0].suggestion);
+        addAnswer(data.answer, data.sources || []);
       }
     }catch(err){
       loading.remove();
