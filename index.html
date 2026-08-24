@@ -697,6 +697,20 @@ if ('serviceWorker' in navigator) {
     msgs.scrollTop = msgs.scrollHeight;
   }
 
+  // Phase 5: يجيب embedding للسؤال قبل البحث. أي فشل (شبكة/quota/غيره)
+  // بيرجع null بهدوء بدل ما يوقف البحث — هيك drob_hybrid_search بترجع
+  // لنفس سلوك البحث النصي القديم تلقائياً.
+  async function getQueryEmbedding(q){
+    try{
+      const { data, error } = await sb.functions.invoke('embed', { body: { input: q, kind: 'query' } });
+      if(error || !data || !Array.isArray(data.embedding)) return null;
+      return data.embedding;
+    }catch(e){
+      console.error('تعذّر جلب embedding، رح يكمل البحث نصياً فقط:', e);
+      return null;
+    }
+  }
+
   let sending = false;
   async function handleSend(){
     if(panel.classList.contains('drob-locked')) return;
@@ -720,7 +734,8 @@ if ('serviceWorker' in navigator) {
     input.value = '';
     const loading = addMsg('loading', 'عم دوّر بمحتوى الموقع...');
     try{
-      const { data, error } = await sb.rpc('drob_search_site', { q, match_count: 16 });
+      const query_embedding = await getQueryEmbedding(q);
+      const { data, error } = await sb.rpc('drob_hybrid_search', { q, query_embedding, match_count: 16 });
       loading.remove();
       if(error) throw error;
       if(!data || data.length === 0){
