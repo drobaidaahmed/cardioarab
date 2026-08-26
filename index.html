@@ -427,7 +427,7 @@ if ('serviceWorker' in navigator) {
 
   .drob-panel{ position:fixed; bottom:24px; left:24px; z-index:99999; width:420px; max-width:calc(100vw - 24px); height:600px; max-height:calc(100vh - 48px); background:var(--drob-bg); border:1px solid var(--drob-border); border-radius:22px; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 24px 60px rgba(15,60,55,0.28); opacity:0; transform:translateY(16px) scale(.97); pointer-events:none; transition:opacity .28s,transform .28s; }
   .drob-panel.open{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
-  .drob-panel.drob-locked .drob-chips, .drob-panel.drob-locked .drob-inputrow{ display:none; }
+  .drob-panel.drob-locked .drob-chips, .drob-panel.drob-locked .drob-inputrow, .drob-panel.drob-locked .drob-sources{ display:none; }
 
   .drob-head{ display:flex; align-items:center; gap:12px; padding:12px 18px; border-bottom:1px solid var(--drob-border); background:var(--drob-surface); color:var(--drob-text); flex-shrink:0; }
   .drob-head .drob-avatar-img{ height:64px; width:auto; flex-shrink:0; }
@@ -455,6 +455,10 @@ if ('serviceWorker' in navigator) {
 
   .drob-chips{ display:flex; flex-wrap:wrap; gap:6px; padding:0 18px 12px; flex-shrink:0; }
   .drob-chip{ font-size:12px; background:var(--drob-surface-2); border:1px solid var(--drob-border); color:var(--drob-teal-dark); padding:7px 12px; border-radius:999px; cursor:pointer; font-weight:600; }
+
+  .drob-sources{ display:flex; flex-wrap:wrap; gap:6px; padding:0 18px 12px; flex-shrink:0; }
+  .drob-source-chip{ font-size:11.5px; background:var(--drob-surface-2); border:1px solid var(--drob-border); color:var(--drob-text-muted); padding:6px 11px; border-radius:999px; cursor:pointer; font-weight:700; transition:.15s; }
+  .drob-source-chip.active{ background:var(--drob-teal); border-color:var(--drob-teal); color:var(--text); }
 
   .drob-inputrow{ display:flex; gap:8px; padding:14px; border-top:1px solid var(--drob-border); background:var(--drob-surface); flex-shrink:0; }
   .drob-inputrow input{ flex:1; background:var(--drob-bg); border:1px solid var(--drob-border); color:var(--drob-text); border-radius:12px; padding:12px 14px; font-size:14.5px; }
@@ -486,6 +490,7 @@ if ('serviceWorker' in navigator) {
     .drob-result-snippet{ font-size:14.5px; }
     .drob-result-link{ font-size:14px; padding:8px 14px; }
     .drob-chip{ font-size:13px; padding:8px 13px; }
+    .drob-source-chip{ font-size:12.5px; padding:7px 12px; }
 
     .drob-inputrow input{ font-size:16px; padding:14px 16px; }
     .drob-inputrow button{ font-size:15px; padding:0 20px; }
@@ -521,6 +526,12 @@ if ('serviceWorker' in navigator) {
       <span class="drob-chip">CHA₂DS₂-VA 2024</span>
       <span class="drob-chip">بروتوكول الإنعاش</span>
     </div>
+    <div class="drob-sources" id="drobSources">
+      <span class="drob-source-chip active" data-source="">🔎 الكل</span>
+      <span class="drob-source-chip" data-source="cleveland">📘 كليفلاند</span>
+      <span class="drob-source-chip" data-source="pocket">📗 Pocket Medicine</span>
+      <span class="drob-source-chip" data-source="guidelines">📙 الغايدلاينز</span>
+    </div>
     <div class="drob-inputrow">
       <input type="text" id="drobInput" placeholder="اسأل عن أي شي بالموقع...">
       <button id="drobSend">إرسال</button>
@@ -548,6 +559,8 @@ if ('serviceWorker' in navigator) {
   const input = document.getElementById('drobInput');
   const sendBtn = document.getElementById('drobSend');
   const chips = document.getElementById('drobChips');
+  const sources = document.getElementById('drobSources');
+  let selectedSource = null;
   const launcherWrap = document.querySelector('.drob-launcher-wrap');
   const avatarClose = document.getElementById('drobAvatarClose');
   const restoreBtn = document.getElementById('drobRestore');
@@ -630,6 +643,13 @@ if ('serviceWorker' in navigator) {
   closeBtn.addEventListener('click', ()=> panel.classList.remove('open'));
   chips.addEventListener('click', (e)=>{
     if(e.target.classList.contains('drob-chip')){ input.value = e.target.textContent; handleSend(); }
+  });
+  sources.addEventListener('click', (e)=>{
+    const chip = e.target.closest('.drob-source-chip');
+    if(!chip) return;
+    sources.querySelectorAll('.drob-source-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    selectedSource = chip.dataset.source || null;
   });
 
   function addSuggestion(term){
@@ -760,7 +780,7 @@ if ('serviceWorker' in navigator) {
     input.value = '';
     const loading = addMsg('loading', 'عم دوّر بمحتوى الموقع...');
     try{
-      const { data, error } = await sb.functions.invoke('ask_samir', { body: { question: q } });
+      const { data, error } = await sb.functions.invoke('ask_samir', { body: { question: q, source: selectedSource } });
       loading.remove();
       if(error) throw error;
       if(!data || !data.items || data.items.length === 0){
