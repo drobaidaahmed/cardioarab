@@ -201,4 +201,71 @@
     setInterval(checkDevice, 60000); // كل دقيقة
   })();
 
+  // ─── 11. الانتقال التلقائي لمكان النتيجة (سمير) ─────────────────────────
+  // سمير بيحط بالرابط #ca-goto=<عنوان القسم>. هون منقرأه، منلاقي أقرب عنوان
+  // مطابق بالصفحة (h1-h6)، ومنعمل scroll إله + تظليل مؤقت.
+  (function scrollToSection() {
+    function normalize(s) {
+      return String(s || '')
+        .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '') // إزالة التشكيل
+        .replace(/[إأآا]/g, 'ا')
+        .replace(/ى/g, 'ي')
+        .replace(/ة/g, 'ه')
+        .replace(/[^\u0600-\u06FFa-zA-Z0-9]+/g, ' ')
+        .trim()
+        .toLowerCase();
+    }
+
+    function findTarget(rawHash) {
+      const m = rawHash.match(/^#ca-goto=(.+)$/);
+      if (!m) return null;
+      let target;
+      try { target = decodeURIComponent(m[1]); } catch (_) { target = m[1]; }
+      const normTarget = normalize(target);
+      if (!normTarget) return null;
+
+      const candidates = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      let best = null, bestScore = 0;
+      candidates.forEach(el => {
+        const normEl = normalize(el.textContent);
+        if (!normEl) return;
+        let score = 0;
+        if (normEl === normTarget) {
+          score = 100;
+        } else if (normEl.includes(normTarget) || normTarget.includes(normEl)) {
+          score = 60;
+        } else {
+          const targetWords = normTarget.split(' ').filter(Boolean);
+          const elWords = new Set(normEl.split(' ').filter(Boolean));
+          const overlap = targetWords.filter(w => elWords.has(w)).length;
+          score = targetWords.length ? (overlap / targetWords.length) * 40 : 0;
+        }
+        if (score > bestScore) { bestScore = score; best = el; }
+      });
+      return bestScore >= 20 ? best : null;
+    }
+
+    function highlight(el) {
+      const prevBg = el.style.backgroundColor;
+      el.style.transition = 'background-color .4s ease';
+      el.style.backgroundColor = 'rgba(139,92,246,0.35)';
+      setTimeout(() => { el.style.backgroundColor = prevBg; }, 2200);
+    }
+
+    function run() {
+      if (!location.hash) return;
+      const el = findTarget(location.hash);
+      if (!el) return;
+      // تأخير بسيط حتى تخلص الصفحة رسمها (خطوط/صور) قبل الـ scroll
+      setTimeout(() => {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        highlight(el);
+        try { history.replaceState(null, '', location.pathname + location.search); } catch (_) {}
+      }, 300);
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') run();
+    else document.addEventListener('DOMContentLoaded', run);
+  })();
+
 })();
