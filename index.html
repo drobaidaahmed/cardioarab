@@ -558,6 +558,7 @@ if ('serviceWorker' in navigator) {
   const chips = document.getElementById('drobChips');
   const sources = document.getElementById('drobSources');
   let selectedSource = null;
+  let recentQuestions = [];
   const launcherWrap = document.querySelector('.drob-launcher-wrap');
   const avatarClose = document.getElementById('drobAvatarClose');
   const restoreBtn = document.getElementById('drobRestore');
@@ -777,7 +778,9 @@ if ('serviceWorker' in navigator) {
     input.value = '';
     const loading = addMsg('loading', 'عم دوّر بمحتوى الموقع...');
     try{
-      const { data, error } = await sb.functions.invoke('ask_samir', { body: { question: q, source: selectedSource } });
+      const { data, error } = await sb.functions.invoke('ask_samir', { body: { question: q, source: selectedSource, history: recentQuestions.slice(-2) } });
+      recentQuestions.push(q);
+      if(recentQuestions.length > 5) recentQuestions.shift();
       loading.remove();
       if(error) throw error;
       if(!data || !data.items || data.items.length === 0){
