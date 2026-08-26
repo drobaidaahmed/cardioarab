@@ -786,13 +786,21 @@ if ('serviceWorker' in navigator) {
       if(!data || !data.items || data.items.length === 0){
         addMsg('bot', 'ما لقيت معلومة واضحة بالموقع لهالسؤال. جرب تصيغه بكلمات تانية، أو تواصل عبر واتساب.');
       } else {
+        if(data.fallback){ addMsg('bot', 'ℹ️ الخدمة الذكية مزدحمة مؤقتًا، هاي نتائج مباشرة من المحتوى بلا تلخيص:'); }
         addItems(data.items);
       }
     }catch(err){
       loading.remove();
-      const detail = (err && (err.message || err.error_description || err.hint)) || JSON.stringify(err);
-      addMsg('bot', '⚠️ تفصيل الخطأ (لإرساله للمطوّر):\n' + detail);
-      console.error(err);
+      let detail = (err && (err.message || err.error_description || err.hint)) || JSON.stringify(err);
+      if(err && err.context && typeof err.context.json === 'function'){
+        try{ const body = await err.context.json(); if(body && body.error) detail = body.error; }catch(_e){}
+      }
+      console.error(err, detail);
+      const isBusy = /quota|429|rate.?limit|RESOURCE_EXHAUSTED/i.test(detail);
+      const friendly = isBusy
+        ? '🙏 في ضغط كبير على الخدمة هلق (تجاوزنا الحد اليومي مؤقتًا). جربي بعد شوي أو بكرا.\n\n'
+        : '⚠️ صار خطأ تقني وقت البحث.\n\n';
+      addMsg('bot', friendly + 'تفصيل الخطأ (لإرساله للمطوّر):\n' + detail);
     }
     sending = false; sendBtn.disabled = false; input.focus();
   }
