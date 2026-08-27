@@ -158,6 +158,8 @@ footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
 .ss-item .ss-sub{font-size:12px;color:var(--text2);margin-top:2px}
 .ss-ai-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg2);border:1px dashed var(--accent);color:var(--accent);border-radius:12px;padding:12px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--font)}
 .ss-ai-btn:hover{background:var(--bg3)}
+.site-search-box input.ss-pulse{animation:ssPulse 1.5s ease}
+@keyframes ssPulse{0%,100%{box-shadow:none}30%{box-shadow:0 0 0 4px rgba(139,92,246,.35)}}
 
 /* RESPONSIVE */
 @media(max-width:600px){
@@ -660,8 +662,20 @@ if ('serviceWorker' in navigator) {
     msgs.appendChild(a);
     msgs.scrollTop = msgs.scrollHeight;
   }
-  btn.addEventListener('click', openPanel);
-  bubble.addEventListener('click', openPanel);
+  function tryOpenPanel(){
+    const searchedAlready = sessionStorage.getItem('caLocalSearchDone');
+    const box = document.getElementById('siteSearchInput');
+    if(!searchedAlready && box){
+      box.scrollIntoView({ behavior:'smooth', block:'center' });
+      box.focus();
+      box.classList.add('ss-pulse');
+      setTimeout(()=> box.classList.remove('ss-pulse'), 1500);
+      return;
+    }
+    openPanel();
+  }
+  btn.addEventListener('click', tryOpenPanel);
+  bubble.addEventListener('click', tryOpenPanel);
   bubbleClose.addEventListener('click', (e)=>{ e.stopPropagation(); bubble.classList.remove('show'); });
   closeBtn.addEventListener('click', ()=> panel.classList.remove('open'));
   chips.addEventListener('click', (e)=>{
@@ -931,6 +945,7 @@ if ('serviceWorker' in navigator) {
   input.addEventListener('input', async ()=>{
     const q = input.value.trim();
     if(q.length < 2){ resultsBox.classList.remove('show'); resultsBox.innerHTML = ''; return; }
+    sessionStorage.setItem('caLocalSearchDone', '1');
     const idx = await loadIndex();
     const nq = normalizeAr(q);
     const matches = idx.filter(r => r._title.includes(nq) || r._section.includes(nq) || r._cat.includes(nq));
