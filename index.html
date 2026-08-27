@@ -143,6 +143,22 @@ footer{text-align:center;padding:28px 20px;opacity:.65;font-size:13px;border-top
 footer strong{color:var(--accent)}
 footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
 
+/* SITE SEARCH — بحث محلي فوري بلا AI */
+.site-search-wrap{max-width:640px;margin:0 auto 26px;position:relative}
+.site-search-box{position:relative}
+.site-search-box input{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:14px;padding:14px 46px 14px 16px;font-size:15px;font-family:var(--font)}
+.site-search-box input:focus{outline:none;border-color:var(--accent)}
+.site-search-box .ss-icon{position:absolute;top:50%;right:16px;transform:translateY(-50%);opacity:.5;font-size:15px;pointer-events:none}
+.site-search-results{position:relative;margin-top:8px;display:none;flex-direction:column;gap:8px}
+.site-search-results.show{display:flex}
+.ss-item{display:block;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--text);transition:.15s}
+.ss-item:hover{border-color:var(--accent);background:var(--bg3)}
+.ss-item .ss-cat{font-size:10.5px;color:var(--text2);background:var(--bg3);display:inline-block;padding:2px 8px;border-radius:20px;margin-bottom:4px}
+.ss-item .ss-title{font-size:14px;font-weight:700}
+.ss-item .ss-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.ss-ai-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg2);border:1px dashed var(--accent);color:var(--accent);border-radius:12px;padding:12px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--font)}
+.ss-ai-btn:hover{background:var(--bg3)}
+
 /* RESPONSIVE */
 @media(max-width:600px){
   header h1{font-size:26px}
@@ -160,6 +176,7 @@ footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
   .container{padding:20px 16px}
   .top-bar{justify-content:center}
   .free-banner{flex-direction:column;align-items:center;padding:16px 18px}
+  .site-search-box input{font-size:16px;padding:13px 42px 13px 14px}
 }
 </style>
 <link rel="manifest" href="manifest.json">
@@ -197,6 +214,14 @@ footer .tr{display:block;font-size:12px;opacity:.5;margin-top:4px}
   <div class="free-banner">
     <a href="af-index.html" class="free-item">💜 تصفح الرجفان الأذيني <span class="tag">مجاني</span></a>
     <a href="pocket-index.html" class="free-item">📘 الدليل الإسعافي السريع — Pocket Medicine لكل أطباء الداخلية <span class="tag paid">🔒</span></a>
+  </div>
+
+  <div class="site-search-wrap">
+    <div class="site-search-box">
+      <input type="text" id="siteSearchInput" placeholder="دوّري بكل الموقع... (كليفلاند، Pocket، الغايدلاينز)" autocomplete="off">
+      <span class="ss-icon">🔍</span>
+    </div>
+    <div class="site-search-results" id="siteSearchResults"></div>
   </div>
 
   <div class="grid">
@@ -806,10 +831,117 @@ if ('serviceWorker' in navigator) {
   }
   sendBtn.addEventListener('click', handleSend);
   input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') handleSend(); });
+
+  // هوك بسيط حتى ميزات تانية بالصفحة (متل البحث المحلي بالرئيسية) تقدر تفتح
+  // سمير وتسأله مباشرة، بلا ما تحتاج توصل لمتغيرات الويدجت الداخلية
+  window.drobAskFromOutside = async function(q){
+    await openPanel();
+    if(panel.classList.contains('drob-locked')) return;
+    input.value = q;
+    handleSend();
+  };
 })();
 </script>
 
 <script src="presence-tracker.js"></script>
+
+<script>
+// ─── بحث محلي فوري بالرئيسية — بلا AI، ولو ما لقى نتيجة بيقترح سمير ───
+(function(){
+  const SUPABASE_URL = "https://ikisgwnsxadiujueeava.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_OMWeV5NY4sla53_UNojVmA_obrzCA8_";
+  const sb = (window.supabase && SUPABASE_URL.startsWith('http'))
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
+
+  const input = document.getElementById('siteSearchInput');
+  const resultsBox = document.getElementById('siteSearchResults');
+  if(!input || !resultsBox || !sb) return;
+
+  let index = null; // يتحمّل مرة وحدة، أول ما المستخدم يبلش يكتب
+
+  function normalizeAr(s){
+    return String(s || '')
+      .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '')
+      .replace(/[إأآا]/g, 'ا')
+      .replace(/ى/g, 'ي')
+      .replace(/ة/g, 'ه')
+      .trim()
+      .toLowerCase();
+  }
+
+  async function loadIndex(){
+    if(index) return index;
+    try{
+      const { data, error } = await sb.rpc('drob_site_index');
+      if(error) throw error;
+      index = (data || []).map(r => ({
+        ...r,
+        _title: normalizeAr(r.page_title),
+        _section: normalizeAr(r.section_title),
+        _cat: normalizeAr(r.category),
+      }));
+    }catch(e){
+      console.error('تعذّر تحميل فهرس البحث المحلي:', e);
+      index = [];
+    }
+    return index;
+  }
+
+  function render(query, items){
+    resultsBox.innerHTML = '';
+    if(items.length === 0){
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ss-ai-btn';
+      btn.textContent = '🤖 ما لقينا نتيجة مباشرة — اسألي سمير (AI)';
+      btn.addEventListener('click', ()=>{
+        resultsBox.classList.remove('show');
+        if(window.drobAskFromOutside) window.drobAskFromOutside(query);
+      });
+      resultsBox.appendChild(btn);
+      resultsBox.classList.add('show');
+      return;
+    }
+    items.slice(0, 8).forEach(it => {
+      const a = document.createElement('a');
+      a.className = 'ss-item';
+      a.href = it.page_url + '#ca-goto=' + encodeURIComponent(it.section_title || it.page_title || '');
+      if(it.category){
+        const cat = document.createElement('div');
+        cat.className = 'ss-cat';
+        cat.textContent = it.category;
+        a.appendChild(cat);
+      }
+      const title = document.createElement('div');
+      title.className = 'ss-title';
+      title.textContent = it.page_title;
+      a.appendChild(title);
+      if(it.section_title && it.section_title !== it.page_title){
+        const sub = document.createElement('div');
+        sub.className = 'ss-sub';
+        sub.textContent = '↳ ' + it.section_title;
+        a.appendChild(sub);
+      }
+      resultsBox.appendChild(a);
+    });
+    resultsBox.classList.add('show');
+  }
+
+  input.addEventListener('input', async ()=>{
+    const q = input.value.trim();
+    if(q.length < 2){ resultsBox.classList.remove('show'); resultsBox.innerHTML = ''; return; }
+    const idx = await loadIndex();
+    const nq = normalizeAr(q);
+    const matches = idx.filter(r => r._title.includes(nq) || r._section.includes(nq) || r._cat.includes(nq));
+    render(q, matches);
+  });
+
+  document.addEventListener('click', (e)=>{
+    if(!e.target.closest('.site-search-wrap')) resultsBox.classList.remove('show');
+  });
+})();
+</script>
 
 </body>
 </html>
