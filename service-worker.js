@@ -5,7 +5,7 @@
  * (حتى تبقى حالة الاشتراك وتسجيل الدخول محدّثة دائماً من الخادم)
  */
 
-const CACHE_NAME = 'cardioarab-shell-v1';
+const CACHE_NAME = 'cardioarab-shell-v2';
 
 // الصفحات الأساسية التي يتم تخزينها لتحميل أسرع (لا تشمل صفحات الإرشادات الطبية)
 const SHELL_URLS = [
