@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--accent);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HF 2026 — الجزء الثالث: العلاج الدوائي FMT و AMT | ESC 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--accent:#3b82f6;--green:#10b981;--orange:#fbbf24;--blue:#3b82f6;--gold:#ea580c;--red:#ef4444;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+:root[data-theme="light"]{--bg:#f4f6fb;--bg2:#ffffff;--bg3:#eef1f8;--border:#e1e6f0;--text:#1b2434;--text2:#5b6577;--accent:#044ec7;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#f59e0b,var(--gold));z-index:9999;transition:width .2s;width:0}
+  header{background:linear-gradient(135deg,#0a1a3a,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);color:#f59e0b;padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+  .back-btn:hover{background:rgba(245,158,11,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:var(--text)}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .part-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2rem;overflow-x:auto}
+  .part-nav-inner{max-width:1400px;margin:0 auto;display:flex;gap:.5rem}
+  .part-btn{padding:.4rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text2);background:transparent;white-space:nowrap;transition:all .2s}
+  .part-btn:hover{border-color:#f59e0b;color:#f59e0b}
+  .part-btn.active{background:#f59e0b;border-color:#f59e0b;color:#000}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:#f59e0b;border-right-color:#f59e0b;background:rgba(245,158,11,.1)}
+  .toc .toc-sub{padding-right:1rem;font-size:.78rem}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:#f59e0b;color:#000;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;flex-shrink:0}
+  .section h2{font-size:1.25rem;font-weight:700;color:var(--text)}
+  .section h3{font-size:1.05rem;font-weight:600;color:#f59e0b;margin:1.5rem 0 .75rem}
+  .section h4{font-size:.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 .5rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul,.section ol{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
+  .badge-i{background:var(--green);color:#fff}
+  .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
+  .rec-iia{background:rgba(251,191,36,.15);border-color:var(--orange)}
+  .badge-iia{background:var(--orange);color:#000}
+  .rec-iib{background:rgba(234,88,12,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#fff}
+  .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
+  .badge-iii{background:var(--red);color:#fff}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(239,68,68,.1);border-color:var(--red)}
+  .highlight strong{color:var(--red)}
+  .warning{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .warning strong{color:var(--gold)}
+  .success{background:rgba(16,185,129,.1);border-color:var(--green)}
+  .success strong{color:var(--green)}
+  .info-blue{background:rgba(59,130,246,.1);border-color:var(--blue)}
+  .info-blue strong{color:var(--blue)}
+  .info-purple{background:rgba(139,92,246,.1);border-color:var(--purple)}
+  .info-purple strong{color:var(--purple)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(245,158,11,.15);color:#f59e0b;padding:.75rem 1rem;text-align:right;font-weight:600;white-space:nowrap}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:rgba(255,255,255,.03)}
+  .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0}
+  .type-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:3px solid #f59e0b}
+  .type-card.t2{border-top-color:var(--green)}
+  .type-name{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+  .type-def{font-size:.82rem;color:var(--text2);margin-bottom:.75rem}
+  .type-row{display:flex;justify-content:space-between;font-size:.8rem;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .type-row:last-child{border-bottom:none}
+  .type-label{color:var(--text2)}
+  .type-val{color:var(--text);font-weight:500}
+  .key-points{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(234,88,12,.06));border:1px solid rgba(245,158,11,.3);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+  .key-points h4{color:#f59e0b;margin-bottom:1rem;font-size:1rem}
+  .key-points ul{list-style:none;padding:0}
+  .key-points li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem}
+  .key-points li::before{content:'🔑';flex-shrink:0}
+  .next-prev{display:flex;justify-content:space-between;margin-top:2rem;gap:1rem}
+  .nav-btn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;text-decoration:none;transition:all .25s;flex:1;max-width:260px}
+  .nav-btn:hover{border-color:#f59e0b;background:rgba(245,158,11,.08)}
+  .nav-btn .dir{font-size:.75rem;color:var(--text2);margin-bottom:.25rem}
+  .nav-btn .title{font-size:.9rem;font-weight:700;color:var(--text)}
+  .nav-btn.next{text-align:left}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:2rem}
+  footer a{color:#f59e0b;text-decoration:none}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
+
+  header{transition:padding .3s ease}
+  .header-inner{transition:gap .3s ease}
+  .header-title h1{transition:font-size .3s ease}
+  .header-title p{transition:opacity .2s ease,max-height .3s ease,margin .3s ease;overflow:hidden}
+  .back-btn{transition:all .2s ease,padding .3s ease,font-size .3s ease,gap .3s ease}
+  header.shrink{padding:.3rem 1.25rem}
+  header.shrink .header-inner{gap:.6rem}
+  header.shrink .header-title h1{font-size:.85rem}
+  header.shrink .header-title p{opacity:0;max-height:0;margin:0}
+  header.shrink .back-btn{padding:.2rem .5rem;font-size:.7rem;gap:.2rem}
+</style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f59e0b">
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="hf2026-index.html" class="back-btn">← HF 2026 Overview</a>
+    <div class="header-title">
+      <h1>الجزء الثالث — العلاج الدوائي: FMT و AMT عبر كل مجال EF</h1>
+      <p>ESC Guidelines 2026 · Heart Failure</p>
+    </div>
+  </div>
+</header>
+
+<div class="part-nav">
+  <div class="part-nav-inner">
+    <a href="hf2026-part1.html" class="part-btn">١ · التعريف الجديد</a>
+    <a href="hf2026-part2.html" class="part-btn">٢ · الوقاية A/B</a>
+    <a href="hf2026-part3.html" class="part-btn active">٣ · FMT/AMT</a>
+    <a href="hf2026-part4.html" class="part-btn">٤ · الأجهزة والمتقدم</a>
+    <a href="hf2026-part5.html" class="part-btn">٥ · اللا معاوض</a>
+    <a href="hf2026-part6.html" class="part-btn">٦ · المصاحبات والتغييرات</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h3>محتويات الجزء الثالث</h3>
+    <a href="#s1">١ · FMT المشترك: MRA و SGLT2i لكل EF</a>
+    <a href="#s2">٢ · AMT المشترك: المدرّرات وربطات البوتاسيوم</a>
+    <a href="#s3">٣ · FMT الكامل لـHFrEF</a>
+    <a href="#s4" class="toc-sub">· جدول الجرعات الكاملة</a>
+    <a href="#s5">٤ · الأدوية الإضافية (AMT) في HFrEF</a>
+    <a href="#s6">٥ · العلاج الدوائي لـHFpEF</a>
+    <a href="#s7">٦ · قصور القلب المتحسّن (HFimpEF)</a>
+    <a href="#keys">نقاط المفتاحية</a>
+  </nav>
+
+  <div class="content">
+
+    <!-- Section 1 -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">١</div>
+        <h2>🆕 FMT المشترك بين كل مرضى قصور القلب — MRA و SGLT2i</h2>
+      </div>
+
+      <div class="info-box highlight">
+        <strong>🚨 التوصية الأهم في هذا الجزء</strong>
+        MRA و SGLT2i أصبحا Class I A لكل مريض قصور قلب عرضي <strong>بغض النظر عن EF</strong> — هذا يشمل HFpEF بالكامل الآن، وليس فقط HFrEF كما كان الحال في 2021 (حيث كانت التوصية IIb C فقط لـHFmrEF السابقة).
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">SGLT2i (داباغليفلوزين أو إمباغليفلوزين) موصى به في مرضى قصور القلب العرضيين بغض النظر عن EF لتقليل خطر دخول المستشفى أو الوفاة القلبية الوعائية</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">MRA (فئة ستيرويدية sMRA لـHFrEF، وستيرويدية أو غير ستيرويدية sMRA/nsMRA لـHFpEF) موصى به في مرضى قصور القلب العرضيين بغض النظر عن EF لتقليل خطر دخول المستشفى أو الوفاة القلبية الوعائية</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <p>مبنية على تحليل تلوي جمع دراستي <strong>FINEARTS-HF</strong> (فنرينون) و<strong>TOPCAT</strong> (سبيرونولاكتون) أظهر فائدة معنوية على المركّب الأساسي في مرضى EF&gt;40%. وحده الأثر على الوفيات الكلية اقتصر على HFrEF، بينما في HFpEF قلّص المركّب مدفوعاً أساساً بانخفاض الاستشفاء.</p>
+
+      <div class="info-box info-blue">
+        <strong>📌 حذر عملي عند البدء بـMRA</strong>
+        تجنّب البدء إن كان eGFR&lt;25 أو البوتاسيوم ≥5.0 ملي مول/لتر. عند بوتاسيوم &gt;5.5 أعد الفحص أولاً، وخفّض الجرعة أو أوقف مؤقتاً حتى يتحسّن، ثم أعد البدء.
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">٢</div>
+        <h2>AMT المشترك — المدرّرات العروية وربطات البوتاسيوم</h2>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">الجرعة الديناميكية الفردية للمدرّرات العروية حسب حالة الحجم موصى بها في مرضى قصور القلب مع علامات/أعراض احتقان لتخفيف الأعراض وتحسين سعة الجهد وتقليل خطر الاستشفاء</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <p>لا توجد تجارب عشوائية كافية القوة تثبت أثر المدرّرات العروية على المراضة/الوفيات بمفردها، لكن كل دراسات العلاج المُعدِّل للمرض أُجريت مع استخدام خلفي واسع للمدرّرات — لذا التوصية بقيت بمستوى دليل A رغم غياب تجربة مخصصة، لاعتبارات أخلاقية (لا يمكن حرمان مريض محتقن من مدرّر لأغراض بحثية).</p>
+
+      <div class="info-box warning">
+        <strong>⚠️ تجنّب الثيازيدات المزمنة في المرضى المستقرين</strong>
+        الاستخدام المزمن لمدرّرات الثيازيد في المرضى المستقرين قد يُسبب اضطرابات كهرلية شديدة قد لا تُكتشف في العيادة الخارجية — يُفضَّل الاقتصار على الجرعة الأدنى الكافية من المدرّر العروي للحفاظ على سواء الحجم.
+      </div>
+
+      <p><strong>ربطات البوتاسيوم (paتيرومير وصوديوم زركونيوم سيكلوسيليكات):</strong> تساعد على استمرار أو تصعيد ACEi/ARNI/ARB وMRA عبر تفادي فرط البوتاسيوم، لكن لا توجد توصية رسمية بعد لعدم كفاية الدليل على تحسين النتائج السريرية — بل أظهرت REALIZE-K إشارة نحو مزيد من تدهور قصور القلب مع صوديوم زركونيوم سيكلوسيليكات مقارنة بالغفل (دون قوة إحصائية كافية).</p>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">٣</div>
+        <h2>FMT الكامل لـ HFrEF — العلاج الرباعي (EF &lt; 50% الآن)</h2>
+      </div>
+
+      <p>تعديل الجهاز الرينين-أنجيوتنسين-الألدوستيروني، الجهاز الودي، وتثبيط SGLT2 يُحسّن البقيا ويقلّل الاستشفاء والأعراض. لا يوجد دليل يفضّل ترتيباً معيّناً للبدء — الإجماع أن الأربعة يمكن أن تبدأ معاً بتفاوتات فردية حسب التقييم السريري، بمجرد تأكيد تشخيص HFrEF.</p>
+
+      <div class="rec rec-i">
+        <div class="rec-text">حاصر بيتا موصى به في مرضى HFrEF العرضيين المستقرين لتقليل خطر دخول المستشفى والوفاة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">ACEi أو ARNI موصى به في مرضى HFrEF العرضيين لتقليل خطر دخول المستشفى والوفاة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">التحوّل من ACEi أو ARB إلى ARNI موصى به في مرضى HFrEF العرضيين لتقليل خطر دخول المستشفى والوفاة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B1</span></div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">ARB موصى به إن تعذّر تحمّل ACEi أو ARNI لتقليل خطر دخول المستشفى والوفاة القلبية الوعائية</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+
+      <div class="info-box info-blue">
+        <strong>📌 لا دراسة عشوائية كبرى خُصِّصت حصراً لمجال EF 41-49%</strong>
+        رغم اندماج هذه الفئة ضمن HFrEF، لا يوجد RCT كبير أُجري حصراً عليها — لكن الأدلة الفرعية (subgroup) تشير إلى استجابة مشابهة لـFMT كما في EF&lt;40%، وهذا مبرر التوسيع.
+      </div>
+
+      <div id="s4"></div>
+      <h3>جدول الجرعات المرجعية (Table 11)</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الدواء</th><th>جرعة البدء</th><th>الجرعة الهدف</th></tr></thead>
+          <tbody>
+            <tr><td>إينالابريل (ACEi)</td><td>2.5 ملغ مرتين يومياً</td><td>10-20 ملغ مرتين يومياً</td></tr>
+            <tr><td>ساكوبيتريل-فالسارتان (ARNI)</td><td>49/51 ملغ مرتين يومياً</td><td>97/103 ملغ مرتين يومياً</td></tr>
+            <tr><td>كانديسارتان (ARB)</td><td>4 ملغ يومياً</td><td>32 ملغ يومياً</td></tr>
+            <tr><td>بيسوبرولول</td><td>1.25 ملغ يومياً</td><td>10 ملغ يومياً</td></tr>
+            <tr><td>كارفيديلول</td><td>3.125 ملغ مرتين يومياً</td><td>25 ملغ مرتين يومياً*</td></tr>
+            <tr><td>ميتوبرولول سكسينات (CR/XL)</td><td>12.5-25 ملغ يومياً</td><td>200 ملغ يومياً</td></tr>
+            <tr><td>سبيرونولاكتون (MRA)</td><td>12.5-25 ملغ يومياً</td><td>50 ملغ يومياً</td></tr>
+            <tr><td>إبلرينون (MRA)</td><td>25 ملغ يومياً</td><td>50 ملغ يومياً</td></tr>
+            <tr><td>فنرينون (nsMRA)</td><td>10-20 ملغ يومياً حسب eGFR</td><td>20-40 ملغ يومياً حسب eGFR</td></tr>
+            <tr><td>دابا/إمباغليفلوزين (SGLT2i)</td><td>10 ملغ يومياً</td><td>10 ملغ يومياً (جرعة ثابتة)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.8rem;color:var(--text2)">* حتى 50 ملغ مرتين يومياً في مرضى الوزن &gt;85 كغ. الجرعات الكاملة لكل فئات ARNI/ACEi/ARB/BB/Digoxin/Ivabradine/Vericiguat/Hydralazine متوفرة في الجدول 11 الأصلي.</p>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <h2>الأدوية الإضافية (AMT) في HFrEF</h2>
+      </div>
+
+      <div class="rec rec-iia">
+        <div class="rec-text">غليكوزيد قلبي (ديجوكسين أو ديجيتوكسين) ينبغي النظر فيه في مرضى HFrEF العرضيين مع EF ≤ 40%، رغم FMT الأمثل، لتقليل خطر دخول المستشفى</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B1</span></div>
+      </div>
+      <div class="info-box info-blue">
+        <strong>🆕 توصية معدَّلة عن 2021 (كانت IIb B)</strong>
+        الترقية إلى IIa B1 مبنية على دراسة DIGIT-HF (ديجيتوكسين) التي أظهرت انخفاضاً معنوياً في مركّب الوفاة/الاستشفاء (39.5% مقابل 44.1%؛ HR 0.82).
+      </div>
+
+      <div class="rec rec-iia">
+        <div class="rec-text">إيفابرادين ينبغي النظر فيه في مرضى HFrEF العرضيين، EF ≤ 35%، نظم جيبي، معدل قلب راحة &gt;70 نبضة/دقيقة، على أعلى جرعة متحمَّلة من ACEi/ARNI وMRA وSGLT2i وحاصرات بيتا</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B1</span></div>
+      </div>
+
+      <div class="rec rec-iib">
+        <div class="rec-text">فيريسيغوات قد يُنظر فيه في مرضى HFrEF العرضيين مع EF &lt; 45% رغم FMT الأمثل لتقليل خطر دخول المستشفى والوفاة القلبية الوعائية</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE B1</span></div>
+      </div>
+      <p>دراسة VICTOR الحديثة كانت محايدة على المركّب الأساسي (الوفاة القلبية الوعائية أو الاستشفاء) في مرضى FMT معاصر مستقرين — لكن التحليلات المجمّعة مع VICTORIA لا تزال تدعم فائدة عبر مدى HFrEF الأوسع.</p>
+
+      <div class="rec rec-iia">
+        <div class="rec-text">هيدرالازين ونترات ثنائية الإيزوسوربيد ينبغي النظر فيها في المرضى ذوي الأصول الأفريقية المصرّحين ذاتياً مع HFrEF عرضي EF ≤ 40% فوق FMT الأمثل</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B2</span></div>
+      </div>
+
+      <div class="rec rec-iib">
+        <div class="rec-text">هيدرالازين ونترات ثنائية الإيزوسوربيد قد تُنظر لمرضى HFrEF EF≤40% غير المتحملين لـARNI/ACEi/ARB</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ ميسينتيف الميوسين القلبي (أوميكامتيف ميكاربيل)</strong>
+        قلّل أحداث قصور القلب بشكل متواضع في GALACTIC-HF لكن بلا فائدة معنوية على الوفيات — الدواء غير معتمد حالياً للاستخدام السريري في قصور القلب.
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <h2>العلاج الدوائي لـ HFpEF</h2>
+      </div>
+
+      <p>FMT في HFpEF يقتصر على MRA و SGLT2i (القسم الأول أعلاه). مرضى HFpEF أكبر سناً، وأكثر أنوثة، وأثقل عبئاً بالمصاحبات (رجفان أذيني، كلية مزمنة، سمنة، سكري) — لذا العلاج غالباً موجَّه للمسببات والمصاحبات بقدر ما هو موجَّه للفينوتيب نفسه.</p>
+
+      <div class="rec rec-iib">
+        <div class="rec-text">ACEi/ARB/ARNI قد يُنظر فيها في مرضى HFpEF العرضيين لتقليل خطر دخول المستشفى</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <p>تحليل تلوي لدراستي PARADIGM-HF وPARAGON-HF أظهر فائدة لساكوبيتريل-فالسارتان مقارنة بفالسارتان في مرضى EF أقل من 60-65% تقريباً — ما يجعل ARNI خياراً معقولاً في الطرف الأدنى من مجال HFpEF تحديداً، رغم عدم بلوغ الدلالة الإحصائية في PARAGON-HF بمفردها.</p>
+
+      <div class="info-box success">
+        <strong>✅ سيماغلوتيد وتيرزيباتيد — إضافة جديدة مهمة</strong>
+        في مرضى HFpEF مع سمنة (بصرف النظر عن وجود سكري)، حسّنت هذه الأدوية جودة الحياة إضافة لخفض الوزن (تفاصيل كاملة في الجزء السادس ضمن قسم السمنة).
+      </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">٦</div>
+        <h2>قصور القلب المتحسّن (HFimpEF) — الحفاظ على العلاج مدى الحياة</h2>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">استمرار FMT على أعلى جرعة متحمَّلة موصى به في كل مرضى قصور القلب، بمن فيهم من أصبحوا بلا أعراض أو تحسّن EF لديهم، لتقليل خطر دخول المستشفى والوفاة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="rec rec-iib">
+        <div class="rec-text">السحب التدريجي لـFMT تحت مراقبة سريرية ومخبرية وتصويرية متكررة قد يُنظر فيه في مرضى مختارين بعناية شديدة، بلا أعراض، مع تطبيع كامل لوظيفة وحجوم البطين الأيسر والببتيدات الطبيعية بعد علاج سبب عكوس واضح، لمراعاة رغبة المريض</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="info-box danger">
+        <strong>🚨 لماذا هذا القرار خطير سريرياً؟</strong>
+        دراسة TRED-HF: 40% من المرضى انتكسوا خلال 6 أشهر من سحب العلاج التدريجي. الشفاء الظاهري في معظم الحالات هو "هدأة" (Remission) وليس شفاء حقيقياً يستمر بلا دواء. القرار بالسحب يجب أن يكون استثناءً نادراً، بطلب من المريض، وتحت مراقبة لصيقة جداً.
+      </div>
+
+      <p>حالات قصور القلب العكوس فعلياً (مثل متلازمة تاكوتسوبو، قصور مرتبط بعدم انتظام النظم، أو التهاب عضلة القلب) هي السياق الوحيد المعقول للتفكير بالسحب — وحتى فيها، غالباً ما تستدعي المصاحبات المرافقة الاستمرار بـFMT على أي حال.</p>
+    </div>
+
+    <!-- Key Points -->
+    <div class="key-points" id="keys">
+      <h4>🔑 نقاط المفتاح — الجزء الثالث</h4>
+      <ul>
+        <li>MRA و SGLT2i أصبحا Class I A لكل مرضى قصور القلب بغض النظر عن EF — هذا يشمل HFpEF كاملاً</li>
+        <li>FMT الكامل لـHFrEF (ARNI/ACEi/ARB + BB + MRA + SGLT2i) يمكن بدؤه معاً دون ترتيب مُلزم</li>
+        <li>الغليكوزيدات القلبية ترقّت من IIb B إلى IIa B1 استناداً على DIGIT-HF</li>
+        <li>ARNI معقول في HFpEF خصوصاً بالطرف الأدنى من مجال EF (حتى IIb C فقط)</li>
+        <li>لا يوجد دليل يفضّل ترتيباً معيناً لبدء الأدوية الأربعة في HFrEF — البدء المتزامن مقبول</li>
+        <li>استمرار FMT مدى الحياة إلزامي حتى بعد تحسّن EF أو زوال الأعراض — السحب استثناء نادر جداً</li>
+        <li>الجرعة الديناميكية الفردية للمدرّرات العروية هي المعيار، وليست جرعة ثابتة</li>
+      </ul>
+    </div>
+
+    <!-- Navigation -->
+    <div class="next-prev">
+      <a href="hf2026-part2.html" class="nav-btn">
+        <div class="dir">← الجزء السابق</div>
+        <div class="title">الوقاية — المرحلتان A و B</div>
+      </a>
+      <a href="hf2026-part4.html" class="nav-btn next">
+        <div class="dir">الجزء التالي ←</div>
+        <div class="title">الأجهزة وقصور القلب المتقدم</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>مبني على غايدلاين ESC 2026 الجديد لقصور القلب — للأغراض التعليمية | <a href="hf2026-index.html">← HF 2026 Overview</a> | <a href="guidelines.html">جميع الغايدات</a></p>
+</footer>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const __headerEl = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = p + '%';
+  if (window.scrollY > 80) { __headerEl && __headerEl.classList.add('shrink'); } else { __headerEl && __headerEl.classList.remove('shrink'); }
+});
+
+const toc = document.querySelectorAll('.toc a');
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      toc.forEach(a => a.classList.remove('active'));
+      const id = e.target.id;
+      const active = document.querySelector(`.toc a[href="#${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+<script src="notes.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(console.warn);
+  });
+}
+</script>
+<script src="pwa-install.js"></script>
+<script src="presence-tracker.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+
+</body>
+</html>
