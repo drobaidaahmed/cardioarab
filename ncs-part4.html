@@ -22,7 +22,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NCS — الجزء الرابع — إدارة الأدوية حول الجراحة | ESC 2022</title>
+<title>الجزء الرابع — الأدوية ومضادات التخثّر | NCS ESC 2022</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -123,6 +123,41 @@
   footer a{color:var(--red);text-decoration:none}
   @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
 
+  /* ---- flow / decision diagram (native, theme-aware) ---- */
+  .flow{display:flex;flex-direction:column;gap:0;margin:1.25rem 0}
+  .flow-node{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.85rem 1.1rem;font-size:.88rem;position:relative}
+  .flow-node.start{border-color:var(--blue);background:rgba(59,130,246,.08)}
+  .flow-node.decision{border-color:var(--gold);background:rgba(234,88,12,.08);font-weight:600}
+  .flow-node.action{border-color:var(--teal);background:rgba(20,184,166,.08)}
+  .flow-node.stop{border-color:var(--red);background:rgba(239,68,68,.1)}
+  .flow-node.go{border-color:var(--green);background:rgba(16,185,129,.1)}
+  .flow-node .n-title{font-weight:700;display:block;margin-bottom:.15rem}
+  .flow-node .n-sub{font-size:.8rem;color:var(--text2)}
+  .flow-arrow{width:2px;height:22px;background:var(--border);margin:0 auto;position:relative}
+  .flow-arrow::after{content:'▼';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:var(--border);font-size:.7rem}
+  .flow-branch{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.4rem 0}
+  .flow-branch .lbl{text-align:center;font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.3rem}
+  .flow-branch .yes .lbl{color:var(--green)}
+  .flow-branch .no .lbl{color:var(--red)}
+  @media(max-width:600px){.flow-branch{grid-template-columns:1fr}}
+  .three-tier{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1rem 0}
+  @media(max-width:800px){.three-tier{grid-template-columns:1fr}}
+  .tier{border-radius:12px;padding:1.1rem;border:1px solid var(--border)}
+  .tier.low{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.4)}
+  .tier.mid{background:rgba(234,88,12,.08);border-color:rgba(234,88,12,.4)}
+  .tier.high{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.4)}
+  .tier h4{font-size:1rem;margin-bottom:.2rem}
+  .tier.low h4{color:var(--green)} .tier.mid h4{color:var(--gold)} .tier.high h4{color:var(--red)}
+  .tier .pct{font-family:var(--mono);font-size:.8rem;color:var(--text2);margin-bottom:.6rem}
+  .tier ul{padding-right:1.1rem;margin:0} .tier li{font-size:.8rem;margin-bottom:.25rem;color:var(--text2)}
+.algo-title{font-weight:700;color:var(--red);font-size:.95rem;margin-bottom:.5rem}
+.algo-note{font-size:.75rem;color:var(--text2);margin-top:.75rem;font-style:italic}
+.flow-branch .branch{display:flex;flex-direction:column;gap:0}
+.branch-label{text-align:center;font-size:.78rem;font-weight:700;margin-bottom:.4rem;padding:.25rem;border-radius:6px;background:var(--bg2)}
+.branch.yes .branch-label{color:var(--green)}
+.branch.no .branch-label{color:var(--red)}
+.flow-node.action,.flow-node.go,.flow-node.stop{margin-top:.5rem}
+
   header{transition:padding .3s ease}
   .header-inner{transition:gap .3s ease}
   .header-title h1{transition:font-size .3s ease}
@@ -143,11 +178,12 @@
 
 <div id="progress-bar"></div>
 
+
 <header>
   <div class="header-inner">
     <a href="ncs-index.html" class="back-btn">← NCS Overview</a>
     <div class="header-title">
-      <h1>الجزء الرابع — إدارة الأدوية حول الجراحة</h1>
+      <h1>الجزء الرابع — الأدوية ومضادات التخثّر حول العملية</h1>
       <p>ESC Guidelines 2022 · Non-Cardiac Surgery</p>
     </div>
   </div>
@@ -168,251 +204,313 @@
 
   <nav class="toc">
     <h3>محتويات الجزء الرابع</h3>
-    <a href="#s1">١ · مضادات الصفيحات</a>
-    <a href="#s2" class="toc-sub">· Aspirin و P2Y12</a>
-    <a href="#s3">٢ · مضادات التخثر الفموية</a>
-    <a href="#s4" class="toc-sub">· VKA و DOACs</a>
-    <a href="#s5">٣ · حاصرات بيتا والستاتين</a>
-    <a href="#s6">٤ · ACEi / ARB</a>
-    <a href="#s7">٥ · أدوية السكري</a>
-    <a href="#s8">٦ · جدول شامل: استمرار أم إيقاف؟</a>
-    <a href="#keys">نقاط المفتاحية</a>
+    <a href="#s1">١ · مبدأ: الاستمرار مقابل الإيقاف</a>
+    <a href="#s2">٢ · نمط الحياة وعوامل الخطر</a>
+    <a href="#s3">٣ · الأدوية القلبية الوعائية</a>
+    <a href="#s4">٤ · مضادات الصفيحات</a>
+    <a href="#s5">٥ · خوارزمية إيقاف مضادات الصفيحات</a>
+    <a href="#s6">٦ · مضادات التخثّر الفموية OAC</a>
+    <a href="#s7">٧ · خوارزمية إيقاف NOAC</a>
+    <a href="#s8">٨ · الجسر Bridging والعكس</a>
+    <a href="#keys">النقاط المفتاحية</a>
   </nav>
 
   <div class="content">
 
-    <!-- Section 1 -->
     <div class="section" id="s1">
-      <div class="section-header">
-        <div class="section-num">١</div>
-        <h2>مضادات الصفيحات (Antiplatelets)</h2>
-      </div>
-
-      <p>القرار حول إيقاف أو استمرار مضادات الصفيحات هو توازن دقيق بين خطر النزيف الجراحي وخطر التخثر داخل الدعامة التاجية أو الحدث الإقفاري.</p>
-
-      <h3 id="s2">Aspirin</h3>
-      <ul>
-        <li>يُستمر به في معظم الجراحات — خطر النزيف الإضافي منه محدود في أغلب الإجراءات</li>
-        <li>يُوقف فقط في الجراحات ذات خطر النزيف العالي جداً (داخل القحف، بعض جراحات النخاع الشوكي، غرفة العين الخلفية)</li>
-        <li>عند الإيقاف: 5–7 أيام قبل الجراحة</li>
-      </ul>
-
-      <div class="rec rec-iia">
-        <div class="rec-text">يُنصح باستمرار Aspirin حول الجراحة في معظم الإجراءات غير القلبية، باستثناء الجراحات ذات خطر النزيف العالي جداً</div>
-        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
-      </div>
-
-      <h3>مثبطات P2Y12</h3>
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead><tr><th>الدواء</th><th>مدة الإيقاف قبل الجراحة</th><th>ملاحظات</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Clopidogrel</strong></td><td>5 أيام</td><td>الأكثر استخداماً كبديل مرن</td></tr>
-            <tr><td><strong>Ticagrelor</strong></td><td>3–5 أيام</td><td>ارتباط عكوس، استعادة الوظيفة أسرع</td></tr>
-            <tr><td><strong>Prasugrel</strong></td><td>7 أيام</td><td>أطول مدة إيقاف — تثبيط أقوى وأطول</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="info-box warning">
-        <strong>⚠️ الدعامة التاجية الحديثة تغيّر كل شيء</strong>
-        في المريض الذي وضع دعامة قبل أقل من المدة الدنيا الموصى بها لـ DAPT، إيقاف P2Y12 يحمل خطر تخثر حاد داخل الدعامة قد يكون قاتلاً — القرار يُتخذ حصراً ضمن Heart Team، وغالباً بتأجيل الجراحة الاختيارية.
-      </div>
-
-      <div class="rec rec-i">
-        <div class="rec-text">يُوصى بالحفاظ على العلاج المزدوج المضاد للصفيحات كاملاً في المرضى ضمن المدة الدنيا الحرجة بعد وضع الدعامة التاجية، وتأجيل أي جراحة اختيارية إلى ما بعد انتهاء هذه المدة</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      <div class="section-header"><div class="section-num">١</div><h2>مبدأ: الاستمرار مقابل الإيقاف</h2></div>
+      <p>معظم الأدوية القلبية الوعائية المزمنة <strong>تُستمرّ</strong> حول العملية لأن إيقافها المفاجئ قد يسبب ارتداداً خطيراً. الاستثناءات المحدودة (بعض مثبّطات RAAS، المدرّات يوم الجراحة، SGLT2i) لها منطق واضح. أما مضادات التخثّر والصفيحات فتُوازَن فيها خطورة النزف مقابل خطورة الخثار حالةً بحالة.</p>
+      <div class="info-box highlight">
+        <strong>🎯 القاعدة الذهبية</strong>
+        لا تُوقف دواءً وقائياً فعّالاً إلا حين يكون خطر إبقائه (نزف) أكبر من خطر إيقافه (خثار/ارتداد)، وبقرار متعدد الاختصاصات موثّق.
       </div>
     </div>
 
-    <!-- Section 2 -->
+    <div class="section" id="s2">
+      <div class="section-header"><div class="section-num">٢</div><h2>نمط الحياة وعوامل الخطر (Table 11)</h2></div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        الإقلاع عن التدخين قبل الجراحة بأكثر من ٤ أسابيع لتقليل المضاعفات والوفيات بعد العملية.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        ضبط عوامل الخطر القلبية الوعائية — ضغط الدم، شحوم الدم، السكري — قبل الجراحة.
+      </div>
+    </div>
+
     <div class="section" id="s3">
-      <div class="section-header">
-        <div class="section-num">٢</div>
-        <h2>مضادات التخثر الفموية</h2>
-      </div>
+      <div class="section-header"><div class="section-num">٣</div><h2>الأدوية القلبية الوعائية (Table 12)</h2></div>
 
-      <h3 id="s4">مضادات التخثر المباشرة (DOACs)</h3>
-      <p>توقيت إيقاف DOAC قبل الجراحة يعتمد على نوع الدواء، وظيفة الكلى، وخطر النزيف الجراحي — دون حاجة لقياس مستوى الدواء في معظم الحالات.</p>
-
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead><tr><th>خطر النزيف الجراحي</th><th>وظيفة الكلى طبيعية</th><th>قصور كلوي متوسط</th></tr></thead>
-          <tbody>
-            <tr><td><strong style="color:var(--green)">منخفض</strong></td><td>إيقاف 24 ساعة قبل</td><td>إيقاف 24–48 ساعة قبل</td></tr>
-            <tr><td><strong style="color:var(--red)">مرتفع</strong></td><td>إيقاف 48 ساعة قبل</td><td>إيقاف 48–72 ساعة قبل (خصوصاً Dabigatran)</td></tr>
-          </tbody>
-        </table>
-      </div>
-
+      <h3 style="color:var(--red);margin:.5rem 0">حاصرات بيتا</h3>
       <div class="rec rec-i">
-        <div class="rec-text">يُوصى بإدارة DOAC حول الجراحة اعتماداً على توقيت ثابت مبني على وظيفة الكلى ونوع الدواء وخطر النزيف الجراحي، دون الحاجة الروتينية للجسر بالهيبارين</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        <strong>الاستمرار</strong> حول العملية لمن يتناولها أصلاً.
       </div>
-
-      <h3>مضادات فيتامين K (Warfarin)</h3>
-      <ul>
-        <li>يُوقف 3–5 أيام قبل الجراحة بهدف INR &lt; 1.5</li>
-        <li>الجسر بالهيبارين (Bridging) يُحجز فقط لخطر صمّي عالٍ جداً: صمام ميكانيكي، رجفان أذيني مع CHA₂DS₂-VASc مرتفع جداً وسكتة حديثة، صمة وريدية حديثة جداً</li>
-        <li>في معظم مرضى الرجفان الأذيني العاديين، الجسر الروتيني يزيد النزيف دون فائدة إضافية واضحة</li>
-      </ul>
-
+      <div class="rec rec-iib">
+        <span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE A</span>
+        قد يُنظر ببدئها قبل الجراحة عالية الخطورة عند من لديه ≥ عاملَي خطر سريريين (بدء بجرعة منخفضة قبل الجراحة بـ ٣٠ إلى ≥ يومين).
+      </div>
+      <div class="rec rec-iib">
+        <span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE B</span>
+        قد يُنظر ببدئها عند معروف CAD أو إقفار عضلي.
+      </div>
       <div class="rec rec-iii">
-        <div class="rec-text">لا يُوصى بالجسر الروتيني بالهيبارين في معظم مرضى الرجفان الأذيني ذوي الخطر الصمّي غير العالي جداً الموقوف لديهم Warfarin قبل الجراحة</div>
-        <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span></div>
+        <span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE A</span>
+        <strong>لا يُوصى</strong> بالبدء الروتيني لحاصرات بيتا حول العملية (خطر هبوط ضغط وبطء قلب وسكتة).
       </div>
 
-      <h3>استئناف مضادات التخثر بعد الجراحة</h3>
-      <p>يُستأنف العلاج عادة خلال 24–72 ساعة بعد الجراحة، فور تحقق الإرقاء الكافي وحسب خطر النزيف المتبقي من الإجراء نفسه.</p>
-    </div>
-
-    <!-- Section 3 -->
-    <div class="section" id="s5">
-      <div class="section-header">
-        <div class="section-num">٣</div>
-        <h2>حاصرات بيتا والستاتين</h2>
-      </div>
-
-      <h3>حاصرات بيتا (Beta-Blockers)</h3>
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead><tr><th>الحالة</th><th>التوصية</th></tr></thead>
-          <tbody>
-            <tr><td>مريض يتناول حاصر بيتا مزمناً</td><td>يستمر حول الجراحة دون انقطاع — الإيقاف المفاجئ خطر</td></tr>
-            <tr><td>مريض لم يكن يتناول حاصر بيتا</td><td>لا يُبدأ روتينياً قبل الجراحة فقط لتقليل الخطر</td></tr>
-            <tr><td>مؤشر واضح لحاصر بيتا (HFrEF، رجفان أذيني)</td><td>يمكن البدء المبكر — قبل الجراحة بوقت كافٍ للتحمل، وليس صباح العملية</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="rec rec-iii">
-        <div class="rec-text">لا يُوصى ببدء حاصرات بيتا الروتيني في يوم الجراحة أو قبله بفترة قصيرة جداً بهدف الوقاية القلبية وحدها</div>
-        <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE A</span></div>
-      </div>
-
-      <div class="info-box danger">
-        <strong>🚨 درس POISE</strong>
-        بدء جرعة عالية من حاصر بيتا فجأة قبل الجراحة مباشرة قلّل الاحتشاء لكنه زاد السكتة الدماغية والوفيات الكلية — الرسالة: إذا كان هناك مؤشر لحاصر بيتا، ابدأه مبكراً وبجرعة منخفضة تُصعَّد تدريجياً، وليس في اللحظة الأخيرة.
-      </div>
-
-      <h3>الستاتين</h3>
-      <p>يُستمر بالستاتين دون انقطاع حول الجراحة في جميع المرضى الذين يتناولونه — له تأثيرات مثبِّتة للويحة العصيدية ومضادة للالتهاب مستقلة عن خفض الكوليسترول.</p>
-
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">الستاتينات</h3>
       <div class="rec rec-i">
-        <div class="rec-text">يُوصى باستمرار علاج الستاتين دون انقطاع في الفترة المحيطة بالجراحة في المرضى الذين يتناولونه بالفعل</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        <strong>الاستمرار</strong> حول العملية لمن يتناولها.
       </div>
-    </div>
-
-    <!-- Section 4 -->
-    <div class="section" id="s6">
-      <div class="section-header">
-        <div class="section-num">٤</div>
-        <h2>ACEi / ARB — الإيقاف يوم الجراحة</h2>
-      </div>
-
-      <p>مثبطات الإنزيم المحول للأنجيوتنسين وحاصرات مستقبلات الأنجيوتنسين ترتبط بخطر متزايد لانخفاض الضغط الشديد أثناء التخدير عند الاستمرار بها حتى صباح الجراحة.</p>
-
-      <ul>
-        <li>يُوقف ACEi/ARB في صباح يوم الجراحة (جرعة واحدة فقط تُحجب)</li>
-        <li>الاستثناء: مريض قصور قلب حاد يعتمد عليها لضبط الاحتقان — تُقيَّم الحالة فردياً</li>
-        <li>يُستأنف الدواء بعد الجراحة فور استقرار الضغط والحالة الكلوية</li>
-      </ul>
-
       <div class="rec rec-iia">
-        <div class="rec-text">يُنصح بإيقاف مثبطات ACE أو حاصرات مستقبلات الأنجيوتنسين في صباح يوم الجراحة لتقليل خطر انخفاض الضغط الشديد أثناء التخدير</div>
-        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
-      </div>
-    </div>
-
-    <!-- Section 5 -->
-    <div class="section" id="s7">
-      <div class="section-header">
-        <div class="section-num">٥</div>
-        <h2>أدوية السكري حول الجراحة</h2>
+        <span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span>
+        يُنظر ببدئها حول العملية عند وجود دواعٍ لها.
       </div>
 
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead><tr><th>الدواء</th><th>التوصية</th></tr></thead>
-          <tbody>
-            <tr><td><strong>SGLT2 Inhibitors</strong></td><td>إيقاف 3–4 أيام قبل الجراحة الكبرى — خطر الحماض الكيتوني السكري الطبيعي (Euglycemic DKA)</td></tr>
-            <tr><td><strong>Metformin</strong></td><td>يستمر عادة، يُوقف فقط عند خطر قصور كلوي حاد متوقع أو تباين وريدي كبير</td></tr>
-            <tr><td><strong>GLP-1 Agonists</strong></td><td>يُنظر في إيقافها قبل الجراحة (تأخير إفراغ المعدة) حسب بروتوكولات التخدير المحلية</td></tr>
-            <tr><td><strong>الإنسولين طويل المفعول</strong></td><td>يستمر بجرعة مخفّضة عادة (50–80%) صباح الجراحة</td></tr>
-            <tr><td><strong>الإنسولين قصير المفعول/سريع</strong></td><td>يُوقف صباح الجراحة إذا كان المريض صائماً</td></tr>
-          </tbody>
-        </table>
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">مثبّطات RAAS (ACEi / ARB) والمدرّات</h3>
+      <div class="rec rec-iib">
+        <span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span>
+        قد يُنظر باستمرار مثبّطات RAAS حول العملية (خاصةً في قصور القلب لتفادي الارتداد).
+      </div>
+      <div class="rec rec-iia">
+        <span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span>
+        في غير مرضى قصور القلب: يُنظر بإيقاف مثبّطات RAAS يوم الجراحة (لتفادي هبوط الضغط التخديري).
+      </div>
+      <div class="rec rec-iia">
+        <span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span>
+        في من يتناول مدرّات لعلاج فرط الضغط: يُنظر بإيقاف مؤقت يوم الجراحة.
       </div>
 
-      <div class="rec rec-i">
-        <div class="rec-text">يُوصى بإيقاف مثبطات SGLT2 قبل 3–4 أيام من الجراحة الكبرى الاختيارية للوقاية من الحماض الكيتوني السكري الطبيعي</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">مثبّطات SGLT2</h3>
+      <div class="rec rec-iia">
+        <span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span>
+        يُنظر بإيقافها ≥ ٣ أيام قبل الجراحة المتوسطة/العالية (خطر الحُماض الكيتوني السكري سوي السكر).
       </div>
-
       <div class="info-box warning">
-        <strong>⚠️ راقب سكر الدم بدقة حول الجراحة</strong>
-        الهدف هو تجنّب كل من نقص وارتفاع السكر الشديدين — نطاق مقبول عام 140–180 mg/dL أثناء وبعد الجراحة الكبرى في معظم المرضى.
+        <strong>⚠️ المدرّات والشوارد</strong>
+        نقص البوتاسيوم يحدث حتى في ٣٦٪ من مرضى الجراحة؛ يُصحَّح نقص البوتاسيوم والمغنيزيوم في وقت مناسب قبل العملية، دون أن يؤخّر ذلك الجراحة الإسعافية.
+      </div>
+
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">الأميودارون (5.2.2)</h3>
+      <div class="info-box info-blue">
+        <strong>💊 يُستمرّ عند من يتناوله</strong>
+        الأميودارون دواء مثبّت لضبط النظم؛ يُستمرّ حول العملية. نصف عمره طويل جداً (أسابيع) فإيقافه المؤقّت لا فائدة منه. يُنتبه للتداخلات الدوائية، وللتأثيرات الدرقية والرئوية عند الاستعمال المزمن، ولتأثيره المُطيل لـ QT مع أدوية التخدير.
+      </div>
+
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">حاصرات قنوات الكالسيوم (5.2.5)</h3>
+      <div class="info-box info-blue">
+        <strong>💊 تُستمرّ عموماً</strong>
+        تُستمرّ حول العملية، خصوصاً في الذبحة التشنّجية (variant/vasospastic) حيث توقيفها قد يُحرِّض تشنّجاً إكليلياً. غير ثنائية الهيدروبيريدين (فيراباميل/دلتيازيم) تفيد في ضبط المعدّل؛ الأدلة على تأثيرها في خفض المضاعفات محدودة لكن الاستمرار آمن.
+      </div>
+
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">ناهضات مستقبلات ألفا-2 (الكلونيدين) (5.2.6)</h3>
+      <div class="info-box warning">
+        <strong>⚠️ لا يُبدأ حول العملية</strong>
+        بيّنت تجربة POISE-2 أن بدء الكلونيدين حول العملية <strong>لا يقلّل</strong> الاحتشاء أو الوفاة، بل يزيد هبوط الضغط وبطء القلب المهمّين سريرياً. لذا لا يُبدأ وقائياً. أما من يتناوله مزمناً فيُتدرَّج في إيقافه لتفادي ارتداد فرط الضغط.
+      </div>
+
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">الإيفابرادين (5.2.8)</h3>
+      <div class="info-box info-blue">
+        <strong>💊 تسرّع القلب عامل خطر قابل للتعديل</strong>
+        معدّل القلب المرتفع منبئ مستقل للاحتشاء حول العملية. الإيفابرادين يُبطئ المعدّل دون تأثير في الضغط أو التقلّصية (يعمل على عقدة الجيب فقط). يُستمرّ عند من يتناوله؛ الأدلة على بدئه الوقائي محدودة ولا يُوصى به روتينياً.
       </div>
     </div>
 
-    <!-- Section 6 -->
-    <div class="section" id="s8">
-      <div class="section-header">
-        <div class="section-num">٦</div>
-        <h2>جدول شامل: استمرار أم إيقاف؟</h2>
+    <div class="section" id="s4">
+      <div class="section-header"><div class="section-num">٤</div><h2>مضادات الصفيحات (Table 13)</h2></div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        تأجيل الجراحة الانتقائية حتى ٦ أشهر بعد PCI انتقائي و١٢ شهراً بعد ACS.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        بعد PCI انتقائي: تأجيل الجراحة الحسّاسة للوقت حتى إكمال ما لا يقل عن شهر من DAPT.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        بعد PCI حديث: مناقشة تدبير مضادات الصفيحات بين الجرّاح والمخدّر وطبيب القلب.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        عند PCI سابق: استمرار الأسبرين حول العملية إن سمح خطر النزف.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        عند وجوب إيقاف مثبّط P2Y12: إيقاف تيكاغريلور ٣–٥ أيام، كلوبيدوغريل ٥ أيام، براسوغريل ٧ أيام قبل الجراحة.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        في الجراحة عالية خطر النزف (داخل قحفية، عصبية شوكية، شبكية زجاجية): إيقاف الأسبرين ≥ ٧ أيام قبلها.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        إعادة العلاج بأسرع وقت ممكن (خلال ٤٨ ساعة) بعد الجراحة وفق تقييم متعدد الاختصاصات.
       </div>
 
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead><tr><th>الدواء</th><th>القرار العام</th><th>التوقيت إن أُوقف</th></tr></thead>
+      <div class="data-table">
+        <table>
+          <thead><tr><th>الدواء</th><th>مدة الإيقاف قبل الجراحة</th><th>الآلية</th></tr></thead>
           <tbody>
-            <tr><td><strong>Aspirin</strong></td><td style="color:var(--green)">استمرار غالباً</td><td>5–7 أيام إن لزم الإيقاف</td></tr>
-            <tr><td><strong>Clopidogrel</strong></td><td style="color:var(--gold)">حسب دواعي الاستخدام</td><td>5 أيام</td></tr>
-            <tr><td><strong>Ticagrelor</strong></td><td style="color:var(--gold)">حسب دواعي الاستخدام</td><td>3–5 أيام</td></tr>
-            <tr><td><strong>Prasugrel</strong></td><td style="color:var(--gold)">حسب دواعي الاستخدام</td><td>7 أيام</td></tr>
-            <tr><td><strong>Warfarin</strong></td><td style="color:var(--red)">إيقاف مع/بدون جسر</td><td>3–5 أيام، هدف INR&lt;1.5</td></tr>
-            <tr><td><strong>DOACs</strong></td><td style="color:var(--red)">إيقاف حسب الجدول</td><td>24–48 (وأحياناً 72) ساعة</td></tr>
-            <tr><td><strong>Beta-Blocker</strong></td><td style="color:var(--green)">استمرار دائماً</td><td>—</td></tr>
-            <tr><td><strong>Statin</strong></td><td style="color:var(--green)">استمرار دائماً</td><td>—</td></tr>
-            <tr><td><strong>ACEi/ARB</strong></td><td style="color:var(--red)">إيقاف صباح الجراحة</td><td>جرعة واحدة فقط</td></tr>
-            <tr><td><strong>SGLT2 Inhibitors</strong></td><td style="color:var(--red)">إيقاف قبل الجراحة الكبرى</td><td>3–4 أيام</td></tr>
-            <tr><td><strong>Metformin</strong></td><td style="color:var(--green)">استمرار غالباً</td><td>—</td></tr>
-            <tr><td><strong>Diuretics</strong></td><td style="color:var(--gold)">تقييم فردي حسب الحجم</td><td>—</td></tr>
+            <tr><td>الأسبرين (جراحة عالية النزف)</td><td>≥ ٧ أيام</td><td>COX-1 لا عكوس</td></tr>
+            <tr><td>كلوبيدوغريل</td><td>٥ أيام</td><td>P2Y12 لا عكوس</td></tr>
+            <tr><td>تيكاغريلور</td><td>٣–٥ أيام</td><td>P2Y12 عكوس</td></tr>
+            <tr><td>براسوغريل</td><td>٧ أيام</td><td>P2Y12 لا عكوس</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- Key Points -->
+    <div class="section" id="s5">
+      <div class="section-header"><div class="section-num">٥</div><h2>خوارزمية إيقاف مضادات الصفيحات (Figures 5–6)</h2></div>
+      <div class="algo-box">
+        <div class="algo-title">مريض على مضاد صفيحات مُقرَّر له جراحة غير قلبية</div>
+        <div class="flow">
+          <div class="flow-node start">مريض على DAPT / أحادي</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">هل مضى وقت كافٍ منذ PCI/ACS؟ (٦ش PCI · ١٢ش ACS · ١ش أدنى للحسّاس للوقت)</div>
+          <div class="flow-branch">
+            <div class="branch yes">
+              <div class="branch-label">نعم</div>
+              <div class="flow-node decision">خطر نزف الجراحة؟</div>
+              <div class="flow-node go">منخفض → أكمل الأسبرين، أوقِف P2Y12 وفق المدد</div>
+              <div class="flow-node action">مرتفع → أوقِف الأسبرين ≥٧ أيام + P2Y12، أعِد خلال ٤٨س</div>
+            </div>
+            <div class="branch no">
+              <div class="branch-label">لا — مبكّر جداً</div>
+              <div class="flow-node action">أجّل الجراحة إن أمكن</div>
+              <div class="flow-node stop">جراحة لا تؤجَّل → فريق متعدد الاختصاصات، أقل إيقاف ممكن، جسر عند الحاجة</div>
+            </div>
+          </div>
+        </div>
+        <p class="algo-note">مخطط أصلي مبني على منطق الغايدلاين (الأشكال ٥–٦).</p>
+      </div>
+    </div>
+
+    <div class="section" id="s6">
+      <div class="section-header"><div class="section-num">٦</div><h2>مضادات التخثّر الفموية OAC (Table 14)</h2></div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        عند الحاجة لجراحة عاجلة: إيقاف NOAC فوراً.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        في الإجراءات منخفضة خطر النزف حيث يسهل ضبطه: إجراء الجراحة <strong>دون</strong> إيقاف OAC.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        في الإجراءات غير منخفضة النزف على NOAC: نظام إيقاف يعتمد على نوع الدواء ووظيفة الكلية وخطر النزف.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        في الإجراءات منخفضة النزف على NOAC: تُجرى عند مستوى القاع trough (عادةً ١٢–٢٤ ساعة بعد آخر جرعة).
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        LMWH بديلاً عن UFH للجسر عند حاملي الصمام الميكانيكي MHV مع خطر جراحي مرتفع.
+      </div>
+      <div class="rec rec-iii">
+        <span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span>
+        <strong>لا يُوصى</strong> بالجسر في مرضى الخطر الخثاري المنخفض/المتوسط.
+      </div>
+      <div class="rec rec-iii">
+        <span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE C</span>
+        <strong>لا يُوصى</strong> باستعمال جرعة NOAC مخفّضة لتقليل خطر النزف بعد العملية.
+      </div>
+    </div>
+
+    <div class="section" id="s7">
+      <div class="section-header"><div class="section-num">٧</div><h2>خوارزمية إيقاف NOAC (Figures 8–10)</h2></div>
+      <div class="algo-box">
+        <div class="algo-title">تدبير NOAC حسب خطر النزف ووظيفة الكلية</div>
+        <div class="flow">
+          <div class="flow-node start">مريض على NOAC + إجراء مُقرَّر</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">هل الإجراء طارئ؟</div>
+          <div class="flow-branch">
+            <div class="branch yes">
+              <div class="branch-label">طارئ</div>
+              <div class="flow-node action">أوقِف فوراً؛ فكّر بعامل عكس نوعي (إيداروسيزوماب للدابيغاتران / أندكسانيت ألفا لعوامل Xa) عند نزف مهدد للحياة</div>
+            </div>
+            <div class="branch no">
+              <div class="branch-label">مُخطَّط</div>
+              <div class="flow-node decision">خطر نزف الإجراء؟</div>
+              <div class="flow-node go">منخفض جداً → لا إيقاف، أو إجراء عند القاع (١٢–٢٤س)</div>
+              <div class="flow-node action">متوسط/مرتفع → إيقاف ٢٤–٤٨س (يُمدَّد مع تدهور CrCl، خصوصاً الدابيغاتران)</div>
+            </div>
+          </div>
+        </div>
+        <p class="algo-note">تعتمد مدة الإيقاف على التصفية الكلوية CrCl ونوع NOAC وخطر النزف. لا حاجة عادةً لجسر مع NOAC بسبب قصر نصف عمره. مخطط أصلي.</p>
+      </div>
+
+      <div class="data-table">
+        <table>
+          <thead><tr><th>الحالة</th><th>التدبير</th></tr></thead>
+          <tbody>
+            <tr><td>إجراء منخفض النزف</td><td>دون إيقاف، أو عند القاع ١٢–٢٤ ساعة</td></tr>
+            <tr><td>إجراء متوسط/عالي النزف</td><td>إيقاف ٢٤–٤٨ ساعة (أطول مع قصور الكلية)</td></tr>
+            <tr><td>جراحة عاجلة</td><td>إيقاف فوري ± عامل عكس نوعي</td></tr>
+            <tr><td>MHV + خطر جراحي مرتفع</td><td>جسر بـ LMWH (Class I B)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="s8">
+      <div class="section-header"><div class="section-num">٨</div><h2>الجسر Bridging والعكس (Figures 7 و11)</h2></div>
+      <div class="algo-box">
+        <div class="algo-title">Figure 7 · قرار الجسر لمرضى مضادات فيتامين ك VKA</div>
+        <div class="flow">
+          <div class="flow-node start">مريض على VKA + جراحة مُقرَّرة</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">مستوى الخطر الخثاري؟</div>
+          <div class="flow-branch">
+            <div class="branch yes">
+              <div class="branch-label">مرتفع (MHV + خطر جراحي عالٍ)</div>
+              <div class="flow-node action">جسر بـ LMWH (Class I B)</div>
+            </div>
+            <div class="branch no">
+              <div class="branch-label">منخفض/متوسط</div>
+              <div class="flow-node stop">لا جسر (Class III B) — أوقِف VKA واسمح للـ INR بالهبوط</div>
+            </div>
+          </div>
+        </div>
+        <p class="algo-note">الجسر غير الضروري يزيد النزف دون فائدة خثارية. مخطط أصلي.</p>
+      </div>
+      <div class="info-box info-blue">
+        <strong>💉 Figure 11 · العكس في النزف المهدِّد للحياة</strong>
+        الدابيغاتران → إيداروسيزوماب؛ عوامل Xa (ريفاروكسابان/أبيكسابان) → أندكسانيت ألفا أو مركّب عوامل التخثّر المُركّز PCC؛ VKA → فيتامين ك + PCC.
+      </div>
+    </div>
+
     <div class="key-points" id="keys">
-      <h4>🔑 نقاط المفتاح</h4>
+      <h4>🔑 النقاط المفتاحية — الجزء الرابع</h4>
       <ul>
-        <li>Aspirin يستمر في معظم الجراحات إلا عند خطر نزيف عالٍ جداً</li>
-        <li>الدعامة التاجية الحديثة (خصوصاً DES &lt;6 أشهر) تفرض تأجيل الجراحة الاختيارية إن أمكن</li>
-        <li>DOACs تُدار بجدول توقيت ثابت حسب وظيفة الكلى وخطر النزيف — دون جسر روتيني</li>
-        <li>الجسر بالهيبارين يُحجز لخطر صمّي عالٍ جداً فقط، وليس لكل مريض رجفان أذيني</li>
-        <li>حاصرات بيتا تستمر دائماً عند من يتناولها مزمناً — لا تُبدأ فجأة قبل الجراحة مباشرة (درس POISE)</li>
-        <li>الستاتين يستمر دون انقطاع دائماً حول الجراحة</li>
-        <li>ACEi/ARB يُوقف صباح الجراحة فقط (جرعة واحدة) لتقليل خطر انخفاض الضغط</li>
-        <li>SGLT2i يُوقف 3–4 أيام قبل الجراحة الكبرى للوقاية من الحماض الكيتوني الطبيعي</li>
+        <li>استمرار حاصرات بيتا والستاتين لمن يتناولها (I B)؛ لا بدء روتيني لحاصرات بيتا (III A).</li>
+        <li>RAAS: يُنظر بإيقافها يوم الجراحة في غير قصور القلب (IIa B)؛ SGLT2i تُوقف ≥٣ أيام (IIa C).</li>
+        <li>مضادات الصفيحات: أجّل الجراحة ٦ش بعد PCI و١٢ش بعد ACS (I A)؛ أدنى شهر DAPT للحسّاس للوقت (I B).</li>
+        <li>إيقاف P2Y12: تيكاغريلور ٣–٥ي · كلوبيدوغريل ٥ي · براسوغريل ٧ي؛ استمرار الأسبرين إن سمح النزف (I B).</li>
+        <li>NOAC: جراحة عاجلة → إيقاف فوري (I C)؛ إجراء منخفض النزف → عند القاع دون إيقاف (I B/C).</li>
+        <li>الجسر: فقط لـ MHV + خطر جراحي مرتفع (I B)؛ لا جسر في الخطر المنخفض/المتوسط (III B).</li>
+        <li>لا جرعة NOAC مخفّضة لتقليل النزف (III C)؛ إعادة التخثير بأسرع وقت آمن بعد العملية.</li>
       </ul>
     </div>
 
-    <!-- Navigation -->
     <div class="next-prev">
       <a href="ncs-part3.html" class="nav-btn">
-        <div class="dir">← العودة إلى</div>
+        <div class="dir">← الجزء السابق</div>
         <div class="title">الحالات القلبية المحددة</div>
       </a>
       <a href="ncs-part5.html" class="nav-btn next">
         <div class="dir">الجزء التالي ←</div>
-        <div class="title">التخدير والجراحة الطارئة</div>
+        <div class="title">التخدير والمراقبة وتدبير الدم</div>
       </a>
     </div>
 
   </div>
 </div>
+
 
 <footer>
   <p>مبني على غايدلاين ESC 2022 لتقييم القلب في الجراحة غير القلبية — للأغراض التعليمية | <a href="ncs-index.html">← NCS Overview</a> | <a href="guidelines.html">جميع الغايدات</a></p>

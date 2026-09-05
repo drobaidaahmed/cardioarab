@@ -22,7 +22,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NCS — الجزء الخامس — التخدير والجراحة الطارئة والحالات الخاصة | ESC 2022</title>
+<title>الجزء الخامس — التخدير والمراقبة وتدبير الدم | NCS ESC 2022</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -123,6 +123,41 @@
   footer a{color:var(--red);text-decoration:none}
   @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
 
+  /* ---- flow / decision diagram (native, theme-aware) ---- */
+  .flow{display:flex;flex-direction:column;gap:0;margin:1.25rem 0}
+  .flow-node{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.85rem 1.1rem;font-size:.88rem;position:relative}
+  .flow-node.start{border-color:var(--blue);background:rgba(59,130,246,.08)}
+  .flow-node.decision{border-color:var(--gold);background:rgba(234,88,12,.08);font-weight:600}
+  .flow-node.action{border-color:var(--teal);background:rgba(20,184,166,.08)}
+  .flow-node.stop{border-color:var(--red);background:rgba(239,68,68,.1)}
+  .flow-node.go{border-color:var(--green);background:rgba(16,185,129,.1)}
+  .flow-node .n-title{font-weight:700;display:block;margin-bottom:.15rem}
+  .flow-node .n-sub{font-size:.8rem;color:var(--text2)}
+  .flow-arrow{width:2px;height:22px;background:var(--border);margin:0 auto;position:relative}
+  .flow-arrow::after{content:'▼';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:var(--border);font-size:.7rem}
+  .flow-branch{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.4rem 0}
+  .flow-branch .lbl{text-align:center;font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.3rem}
+  .flow-branch .yes .lbl{color:var(--green)}
+  .flow-branch .no .lbl{color:var(--red)}
+  @media(max-width:600px){.flow-branch{grid-template-columns:1fr}}
+  .three-tier{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1rem 0}
+  @media(max-width:800px){.three-tier{grid-template-columns:1fr}}
+  .tier{border-radius:12px;padding:1.1rem;border:1px solid var(--border)}
+  .tier.low{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.4)}
+  .tier.mid{background:rgba(234,88,12,.08);border-color:rgba(234,88,12,.4)}
+  .tier.high{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.4)}
+  .tier h4{font-size:1rem;margin-bottom:.2rem}
+  .tier.low h4{color:var(--green)} .tier.mid h4{color:var(--gold)} .tier.high h4{color:var(--red)}
+  .tier .pct{font-family:var(--mono);font-size:.8rem;color:var(--text2);margin-bottom:.6rem}
+  .tier ul{padding-right:1.1rem;margin:0} .tier li{font-size:.8rem;margin-bottom:.25rem;color:var(--text2)}
+.algo-title{font-weight:700;color:var(--red);font-size:.95rem;margin-bottom:.5rem}
+.algo-note{font-size:.75rem;color:var(--text2);margin-top:.75rem;font-style:italic}
+.flow-branch .branch{display:flex;flex-direction:column;gap:0}
+.branch-label{text-align:center;font-size:.78rem;font-weight:700;margin-bottom:.4rem;padding:.25rem;border-radius:6px;background:var(--bg2)}
+.branch.yes .branch-label{color:var(--green)}
+.branch.no .branch-label{color:var(--red)}
+.flow-node.action,.flow-node.go,.flow-node.stop{margin-top:.5rem}
+
   header{transition:padding .3s ease}
   .header-inner{transition:gap .3s ease}
   .header-title h1{transition:font-size .3s ease}
@@ -143,11 +178,12 @@
 
 <div id="progress-bar"></div>
 
+
 <header>
   <div class="header-inner">
     <a href="ncs-index.html" class="back-btn">← NCS Overview</a>
     <div class="header-title">
-      <h1>الجزء الخامس — التخدير والجراحة الطارئة والحالات الخاصة</h1>
+      <h1>الجزء الخامس — التخدير والمراقبة وتدبير الدم والوقاية من الخثار</h1>
       <p>ESC Guidelines 2022 · Non-Cardiac Surgery</p>
     </div>
   </div>
@@ -168,211 +204,168 @@
 
   <nav class="toc">
     <h3>محتويات الجزء الخامس</h3>
-    <a href="#s1">١ · الجراحة الطارئة — نهج معدّل</a>
-    <a href="#s2">٢ · نوع التخدير: عام مقابل ناحي</a>
-    <a href="#s3">٣ · المراقبة الدموية داخل العملية</a>
-    <a href="#s4">٤ · كبار السن والهشاشة</a>
-    <a href="#s5">٥ · البدانة وانقطاع النفس النومي</a>
-    <a href="#s6">٦ · الحمل والجراحة غير القلبية</a>
-    <a href="#keys">نقاط المفتاحية</a>
+    <a href="#s1">١ · مبدأ الاستقرار الحركي الدموي</a>
+    <a href="#s2">٢ · المراقبة والتخدير</a>
+    <a href="#s3">٣ · خوارزمية منع هبوط الضغط</a>
+    <a href="#s4">٤ · الوقاية من الخثار الوريدي VTE</a>
+    <a href="#s5">٥ · تدبير دم المريض PBM</a>
+    <a href="#s6">٦ · فقر الدم والنقل</a>
+    <a href="#keys">النقاط المفتاحية</a>
   </nav>
 
   <div class="content">
 
-    <!-- Section 1 -->
     <div class="section" id="s1">
-      <div class="section-header">
-        <div class="section-num">١</div>
-        <h2>الجراحة الطارئة — نهج معدّل</h2>
-      </div>
-
-      <p>الجراحة الطارئة تختلف جذرياً عن الاختيارية: الوقت المتاح للتقييم محدود جداً، والخطر القلبي الأساسي للحالة الطارئة نفسها (إنتان، نزيف، صدمة) غالباً يفوق أي خطر إضافي من تخطي الفحوصات.</p>
-
-      <div class="algo-box">
-        <div class="algo-step">
-          <div class="algo-num">1</div>
-          <div class="algo-content">
-            <h4>مهدِّدة للحياة فوراً؟</h4>
-            <p>توجّه للجراحة مباشرة — تقييم سريري سريع فقط (فحص بدني، ECG إن أمكن دون تأخير)</p>
-          </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">2</div>
-          <div class="algo-content">
-            <h4>عاجلة لكن ساعات قليلة متاحة؟</h4>
-            <p>ECG + واسمات حيوية أساسية (Troponin، NT-proBNP) دون تأخير الجراحة لانتظار النتائج إن كانت الحالة تستدعي تدخلاً سريعاً</p>
-          </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">3</div>
-          <div class="algo-content">
-            <h4>عاجلة مع 24–72 ساعة متاحة؟</h4>
-            <p>تقييم مختصر بمشاركة طبيب القلب — تصحيح الاضطرابات القابلة للعلاج السريع فقط (اضطراب كهارل، احتقان رئوي حاد)</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="rec rec-i">
-        <div class="rec-text">لا يُوصى بتأخير الجراحة الطارئة المهدِّدة للحياة لإجراء أي تقييم أو فحص قلبي غير ضروري</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
-      </div>
-
-      <div class="info-box danger">
-        <strong>🚨 مراقبة Troponin بعد الجراحة الطارئة إلزامية عملياً</strong>
-        نظراً لغياب التقييم المسبق الكافي، تصبح مراقبة Troponin في الأيام الأولى بعد الجراحة الطارئة أداة أساسية للكشف عن إصابة قلبية فائتة (راجع الجزء السادس).
+      <div class="section-header"><div class="section-num">١</div><h2>مبدأ الاستقرار الحركي الدموي</h2></div>
+      <p>الأذية القلبية حول العملية غالباً تنجم عن <strong>اختلال التوازن بين حاجة العضلة القلبية للأكسجين وإمداده</strong>: هبوط الضغط، تسرّع القلب، فقر الدم، والألم كلها تدفع هذا التوازن نحو الإقفار. لذلك يتمحور التخدير الحديث حول الحفاظ على استقرار الضغط والتروية، لا مجرد إبقاء أرقام «طبيعية».</p>
+      <div class="info-box highlight">
+        <strong>🎯 الفكرة الجامعة</strong>
+        الوقاية من هبوط الضغط، وضبط الألم، وتصحيح فقر الدم، والوقاية من الخثار — أربع ركائز تقلّل المضاعفات القلبية أكثر من أي دواء وقائي مفرد.
       </div>
     </div>
 
-    <!-- Section 2 -->
     <div class="section" id="s2">
-      <div class="section-header">
-        <div class="section-num">٢</div>
-        <h2>نوع التخدير: عام مقابل ناحي/إقليمي</h2>
-      </div>
-
-      <p>لا يوجد دليل قوي على أن نوع التخدير وحده (عام مقابل شوكي/فوق جافية/ناحي محيطي) يغيّر النتائج القلبية الكبرى بشكل حاسم في معظم المرضى — لكن للتخدير الناحي فوائد ثانوية مهمة.</p>
-
-      <div class="type-grid">
-        <div class="type-card">
-          <div class="type-name">التخدير العام</div>
-          <div class="type-def">فقدان وعي كامل + تحكم كامل بالمجرى الهوائي</div>
-          <div class="type-row"><span class="type-label">يفضَّل في</span><span class="type-val">جراحات كبرى طويلة، عدم تعاون المريض</span></div>
-        </div>
-        <div class="type-card t2">
-          <div class="type-name">التخدير الناحي/الإقليمي</div>
-          <div class="type-def">شوكي، فوق جافية، حصار عصبي محيطي</div>
-          <div class="type-row"><span class="type-label">فوائد محتملة</span><span class="type-val">ألم أقل، خثار وريدي أقل، تنقّل أبكر</span></div>
-        </div>
-      </div>
-
-      <ul>
-        <li>التخدير فوق الجافية للجراحة الكبرى قد يقلل بعض المضاعفات الرئوية والخثارية دون فرق واضح بالوفيات القلبية</li>
-        <li>في تضيق الأبهر الشديد، يُتوخى حذر إضافي من انخفاض الضغط الحاد المصاحب للحصار الودي العميق في التخدير الشوكي</li>
-        <li>القرار النهائي يعود لطبيب التخدير حسب نوع الجراحة وحالة المريض الشاملة</li>
-      </ul>
-
-      <div class="rec rec-iib">
-        <div class="rec-text">يمكن النظر في التخدير الناحي كبديل أو مكمّل للتخدير العام في جراحات مختارة لتقليل بعض المضاعفات غير القلبية، دون دليل قوي على تفوقه في تقليل الوفيات القلبية</div>
-        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE B</span></div>
-      </div>
-    </div>
-
-    <!-- Section 3 -->
-    <div class="section" id="s3">
-      <div class="section-header">
-        <div class="section-num">٣</div>
-        <h2>المراقبة الدموية داخل العملية</h2>
-      </div>
-
-      <p>الحفاظ على استقرار الضغط الشرياني واستمرارية التروية هو أحد أهم محددات الوقاية من الإصابة القلبية والكلوية بعد الجراحة الكبرى.</p>
-
-      <ul>
-        <li>يُنصح بتجنّب انخفاض الضغط الشرياني المتوسط (MAP) عن 65 ممHg لفترات مطولة أثناء الجراحة</li>
-        <li>المراقبة الغازية (خط شرياني) تُستخدم في الجراحات الكبرى أو المرضى عاليي الخطر القلبي</li>
-        <li>العلاج الموجَّه بالهدف الدموي (Goal-Directed Fluid Therapy) قد يقلل بعض المضاعفات بعد الجراحة الكبرى</li>
-        <li>تجنّب فرط أو نقص الإماهة على حد سواء — كلاهما يزيد خطر الإصابة القلبية والكلوية</li>
-      </ul>
-
-      <div class="rec rec-iia">
-        <div class="rec-text">يُنصح بتجنب نوبات انخفاض الضغط الشرياني المتوسط عن 65 ممHg لأكثر من فترة قصيرة أثناء الجراحات ذات الخطورة المرتفعة</div>
-        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
-      </div>
-
-      <div class="info-box info-blue">
-        <strong>📌 لماذا يهم هذا؟</strong>
-        الدراسات الرصدية تربط بين مدة وشدة انخفاض الضغط أثناء الجراحة وبين معدل حدوث MINS (الإصابة القلبية بعد الجراحة) والأذية الكلوية الحادة — العلاقة تراكمية (Dose-dependent).
-      </div>
-    </div>
-
-    <!-- Section 4 -->
-    <div class="section" id="s4">
-      <div class="section-header">
-        <div class="section-num">٤</div>
-        <h2>كبار السن والهشاشة (Frailty)</h2>
-      </div>
-
-      <p>العمر التقويمي وحده مؤشر ضعيف — الهشاشة (Frailty) هي المحدِّد الأدق لخطر المضاعفات والوفيات بعد الجراحة الكبرى في كبار السن.</p>
-
-      <ul>
-        <li>يُنصح بتقييم الهشاشة (مقاييس معيارية مثل Clinical Frailty Scale) في المرضى ≥ 70 سنة قبل الجراحة الكبرى الاختيارية</li>
-        <li>الهشاشة مرتبطة بزيادة خطر الهذيان (Delirium) بعد الجراحة، وطول مدة الرقود، والوفيات</li>
-        <li>التقييم متعدد الأبعاد (وظيفي، معرفي، تغذوي) قبل الجراحة يسمح بتدخلات تحسينية (Prehabilitation)</li>
-      </ul>
-
-      <div class="rec rec-iia">
-        <div class="rec-text">يُنصح بتقييم الهشاشة في المرضى المسنين قبل الجراحة الكبرى الاختيارية كجزء من تقدير الخطر الشامل</div>
-        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
-      </div>
-    </div>
-
-    <!-- Section 5 -->
-    <div class="section" id="s5">
-      <div class="section-header">
-        <div class="section-num">٥</div>
-        <h2>البدانة وانقطاع النفس النومي الانسدادي</h2>
-      </div>
-
-      <ul>
-        <li>البدانة الشديدة (BMI ≥ 40) تزيد خطر المضاعفات التنفسية والقلبية بعد الجراحة الكبرى</li>
-        <li>انقطاع النفس النومي الانسدادي (OSA) غير المشخَّص شائع وغالباً غير مكتشف — يُنصح بفحص انتقائي (استبيان STOP-BANG) قبل الجراحة الكبرى</li>
-        <li>مرضى OSA المعروفون يحتاجون مراقبة تنفسية أوثق بعد الجراحة، خصوصاً مع المسكنات الأفيونية</li>
-      </ul>
-
-      <div class="rec rec-iib">
-        <div class="rec-text">يمكن النظر في فحص انتقائي لانقطاع النفس النومي الانسدادي قبل الجراحة الكبرى في المرضى ذوي عوامل الخطر السريرية</div>
-        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span></div>
-      </div>
-    </div>
-
-    <!-- Section 6 -->
-    <div class="section" id="s6">
-      <div class="section-header">
-        <div class="section-num">٦</div>
-        <h2>الحمل والجراحة غير القلبية</h2>
-      </div>
-
-      <p>الجراحة غير القلبية أثناء الحمل تتطلب موازنة بين سلامة الأم والجنين — تُجرى الجراحة غير الطارئة مثالياً في الثلث الثاني من الحمل عند الإمكان.</p>
-
-      <ul>
-        <li>تُفضَّل الجراحة الطارئة الضرورية دون تأخير بغض النظر عن مرحلة الحمل</li>
-        <li>يُتجنَّب استخدام معظم الأدوية القلبية المُشوِّهة للجنين (مثل بعض ACEi/ARB) — تُستبدل ببدائل آمنة أثناء الحمل عند الحاجة</li>
-        <li>المريضات الحوامل ذوات أمراض القلب المعروفة (خلقية، صمامية) تُدار ضمن فريق يشمل طب الأم والجنين وطب القلب</li>
-        <li>وضعية الجانب الأيسر أثناء الجراحة في الثلث الثالث تمنع ضغط الرحم على الوريد الأجوف السفلي</li>
-      </ul>
-
+      <div class="section-header"><div class="section-num">٢</div><h2>المراقبة والتخدير (Table 33)</h2></div>
       <div class="rec rec-i">
-        <div class="rec-text">يُوصى بإدارة الحوامل ذوات أمراض القلب المعروفة الخاضعات لجراحة غير قلبية ضمن فريق متعدد التخصصات يشمل طب الأم والجنين وطب القلب والتخدير</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        تطبيق العلاج الحركي الدموي الموجَّه بالهدف (goal-directed haemodynamic therapy) للحفاظ على الاستقرار القلبي الوعائي الأمثل.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        تجنّب هبوط متوسط الضغط الشرياني أثناء العملية بمقدار &gt; 20% عن الأساس، أو دون 60–70 mmHg لمدة ≥ ١٠ دقائق (لتقليل خطر خلل وظيفة الأعضاء).
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        تجنّب الألم الحادّ بعد العملية (الألم يرفع الكاتيكولامينات ويزيد استهلاك الأكسجين القلبي).
+      </div>
+      <div class="rec rec-iii">
+        <span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span>
+        <strong>لا يُوصى</strong> بمضادات الالتهاب غير الستيرويدية غير الأسبرين (non-aspirin NSAIDs) خطاً أولاً للتسكين عند المصابين بمرض قلبي وعائي ثابت أو عالي الخطر.
+      </div>
+      <div class="info-box info-blue">
+        <strong>ℹ️ التخدير الناحي مقابل العام</strong>
+        لا يوجد تفوّق قاطع لأحدهما على الآخر في خفض الوفيات القلبية عموماً؛ الاختيار فردي حسب المريض والإجراء. التخدير الناحي قد يقلّل بعض المضاعفات التنفسية والخثارية في حالات مختارة.
       </div>
     </div>
 
-    <!-- Key Points -->
+    <div class="section" id="s3">
+      <div class="section-header"><div class="section-num">٣</div><h2>خوارزمية منع هبوط الضغط أثناء العملية (Figure 16)</h2></div>
+      <div class="algo-box">
+        <div class="algo-title">الحفاظ على متوسط الضغط الشرياني MAP</div>
+        <div class="flow">
+          <div class="flow-node start">قياس MAP الأساسي قبل التخدير</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">هل هبط MAP &gt; 20% أو دون 60–70 mmHg؟</div>
+          <div class="flow-branch">
+            <div class="branch yes">
+              <div class="branch-label">نعم</div>
+              <div class="flow-node action">قيّم السبب: نقص حجم؟ توسّع وعائي تخديري؟ اضطراب نظم؟ نزف؟</div>
+              <div class="flow-node action">تدخّل موجَّه: سوائل عند نقص الحجم · مقبّض وعائي عند التوسّع · معالجة النزف/النظم</div>
+              <div class="flow-node go">عُد بالـ MAP لهدفه بأسرع وقت (النافذة الحرجة ≥١٠ دقائق)</div>
+            </div>
+            <div class="branch no">
+              <div class="branch-label">مستقر</div>
+              <div class="flow-node go">تابع المراقبة المستمرة + ضبط الألم + تفادي التسرّع</div>
+            </div>
+          </div>
+        </div>
+        <p class="algo-note">مدة ومقدار الهبوط كلاهما مهم: حتى فترات قصيرة متكررة تتراكم أثرها على القلب والكلية والدماغ. مخطط أصلي مبني على منطق الغايدلاين.</p>
+      </div>
+    </div>
+
+    <div class="section" id="s4">
+      <div class="section-header"><div class="section-num">٤</div><h2>الوقاية من الخثار الوريدي VTE (Table 15)</h2></div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        قرار الوقاية من الخثار يُبنى على عوامل خطر فردية وخاصة بالإجراء (نوع الجراحة، مدة عدم الحركة، عوامل المريض).
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        عند الحاجة للوقاية: اختيار النوع والمدة (LMWH أو NOAC أو فوندابارينوكس) وفق نوع الجراحة ومدة عدم الحركة وعوامل المريض.
+      </div>
+      <div class="rec rec-iia">
+        <span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE A</span>
+        يُنظر بالوقاية الممتدّة (٢–٤ أسابيع) بعد الجراحة عالية الخطر الخثاري (مثل جراحة السرطان البطنية/الحوضية الكبرى، أو تبديل مفصل الورك/الركبة).
+      </div>
+      <div class="rec rec-iib">
+        <span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE A</span>
+        قد يُنظر بـ NOAC بجرعة وقائية بديلاً عن LMWH في حالات مختارة.
+      </div>
+      <div class="info-box warning">
+        <strong>⚖️ التوازن</strong>
+        الوقاية من الخثار تُوازَن دائماً مع خطر النزف الجراحي؛ يُؤجَّل بدؤها أو يُعدَّل توقيتها حسب النزف، وتبدأ عادةً أثناء الإقامة وتُمدّ حسب الخطر.
+      </div>
+    </div>
+
+    <div class="section" id="s5">
+      <div class="section-header"><div class="section-num">٥</div><h2>تدبير دم المريض PBM (Table 16)</h2></div>
+      <p>تدبير دم المريض ثلاثي المحاور: <strong>تصحيح فقر الدم قبل الجراحة</strong>، <strong>تقليل الفقد أثناءها</strong>، و<strong>ترشيد النقل</strong>. فقر الدم — حتى الخفيف — عامل خطر مستقل للمضاعفات والوفيات.</p>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        قياس الخضاب (الهيموغلوبين) قبل الجراحة المتوسطة/العالية الخطورة.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        علاج فقر الدم مسبقاً قبل الجراحة لتقليل الحاجة لنقل الكريات الحمر (تحرٍّ عن عوز الحديد وعلاجه).
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        في الجراحة المتوقَّع فيها فقد دم ≥ 500 mL: استعمال استرجاع الخلايا المغسولة (cell salvage).
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        استعمال تشخيص نقطة الرعاية (point-of-care) لتوجيه علاج مكوّنات الدم عند توفّره.
+      </div>
+    </div>
+
+    <div class="section" id="s6">
+      <div class="section-header"><div class="section-num">٦</div><h2>فقر الدم والنزف والنقل (Tables 16–18)</h2></div>
+      <div class="info-box info-purple">
+        <strong>🩸 استراتيجية النقل التقييدية</strong>
+        الأدلة تدعم عتبة نقل تقييدية في معظم المرضى المستقرين؛ النقل غير المناسب مرتبط بزيادة المضاعفات الخثارية والوفيات. القرار يُفرَد حسب الأعراض والحالة القلبية لا الرقم وحده.
+      </div>
+      <div class="info-box warning">
+        <strong>⚠️ فقر الدم والإقفار القلبي</strong>
+        فقر الدم يفاقم الإقفار القلبي خصوصاً مع CAD؛ لذا تصحيحه المُسبق (بالحديد ± محفّزات الكريات عند الحاجة) أفضل من الاعتماد على النقل حول العملية.
+      </div>
+      <table class="data-table">
+        <thead><tr><th>المحور</th><th>الإجراء</th><th>الصنف</th></tr></thead>
+        <tbody>
+          <tr><td>كشف مُسبق</td><td>قياس الخضاب قبل الجراحة المتوسطة/العالية</td><td>I B</td></tr>
+          <tr><td>تصحيح فقر الدم</td><td>علاج مُسبق (حديد ± ESA)</td><td>I A</td></tr>
+          <tr><td>تقليل الفقد</td><td>cell salvage عند فقد ≥ 500mL</td><td>I A</td></tr>
+          <tr><td>توجيه العلاج</td><td>تشخيص نقطة الرعاية POC</td><td>I A</td></tr>
+          <tr><td>النقل</td><td>استراتيجية تقييدية موجَّهة بالأعراض</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <div class="key-points" id="keys">
-      <h4>🔑 نقاط المفتاح</h4>
+      <h4>🔑 النقاط المفتاحية — الجزء الخامس</h4>
       <ul>
-        <li>الجراحة الطارئة الحقيقية لا تُؤخَّر أبداً لأي فحص أو تقييم قلبي غير ضروري</li>
-        <li>لا يوجد دليل قوي بأن نوع التخدير وحده يغيّر النتائج القلبية الكبرى بشكل حاسم</li>
-        <li>تجنّب انخفاض MAP عن 65 ممHg لفترات مطولة يقلل خطر MINS والأذية الكلوية</li>
-        <li>الهشاشة أهم من العمر التقويمي وحده في تقدير الخطر لدى كبار السن</li>
-        <li>فحص OSA الانتقائي قبل الجراحة الكبرى يفيد المرضى ذوي عوامل الخطر</li>
-        <li>الحمل مع مرض قلبي معروف يُدار حصراً ضمن فريق متعدد التخصصات متخصص</li>
+        <li>العلاج الحركي الدموي الموجَّه بالهدف (I A) هو محور الاستقرار حول العملية.</li>
+        <li>تجنّب هبوط MAP &gt; 20% أو دون 60–70 mmHg لمدة ≥ ١٠ دقائق (I B).</li>
+        <li>تجنّب الألم الحادّ بعد العملية (I B)؛ لا NSAIDs غير الأسبرين خطاً أولاً في CVD (III B).</li>
+        <li>الوقاية من الخثار فردية حسب المريض والإجراء (I A)، مع وقاية ممتدّة في عالي الخطر (IIa A).</li>
+        <li>PBM ثلاثي: قياس الخضاب (I B)، علاج فقر الدم مسبقاً (I A)، cell salvage عند ≥500mL (I A)، POC (I A).</li>
+        <li>استراتيجية نقل تقييدية موجَّهة بالأعراض والحالة القلبية، لا بالرقم وحده.</li>
       </ul>
     </div>
 
-    <!-- Navigation -->
     <div class="next-prev">
       <a href="ncs-part4.html" class="nav-btn">
-        <div class="dir">← العودة إلى</div>
-        <div class="title">إدارة الأدوية حول الجراحة</div>
+        <div class="dir">← الجزء السابق</div>
+        <div class="title">الأدوية ومضادات التخثّر</div>
       </a>
       <a href="ncs-part6.html" class="nav-btn next">
         <div class="dir">الجزء التالي ←</div>
-        <div class="title">المضاعفات بعد الجراحة والمتابعة</div>
+        <div class="title">المضاعفات القلبية بعد العملية</div>
       </a>
     </div>
 
   </div>
 </div>
+
 
 <footer>
   <p>مبني على غايدلاين ESC 2022 لتقييم القلب في الجراحة غير القلبية — للأغراض التعليمية | <a href="ncs-index.html">← NCS Overview</a> | <a href="guidelines.html">جميع الغايدات</a></p>

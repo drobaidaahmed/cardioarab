@@ -22,7 +22,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NCS — الجزء السادس — المضاعفات بعد الجراحة والمتابعة | ESC 2022</title>
+<title>الجزء السادس — المضاعفات بعد العملية | NCS ESC 2022</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -123,6 +123,41 @@
   footer a{color:var(--red);text-decoration:none}
   @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
 
+  /* ---- flow / decision diagram (native, theme-aware) ---- */
+  .flow{display:flex;flex-direction:column;gap:0;margin:1.25rem 0}
+  .flow-node{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.85rem 1.1rem;font-size:.88rem;position:relative}
+  .flow-node.start{border-color:var(--blue);background:rgba(59,130,246,.08)}
+  .flow-node.decision{border-color:var(--gold);background:rgba(234,88,12,.08);font-weight:600}
+  .flow-node.action{border-color:var(--teal);background:rgba(20,184,166,.08)}
+  .flow-node.stop{border-color:var(--red);background:rgba(239,68,68,.1)}
+  .flow-node.go{border-color:var(--green);background:rgba(16,185,129,.1)}
+  .flow-node .n-title{font-weight:700;display:block;margin-bottom:.15rem}
+  .flow-node .n-sub{font-size:.8rem;color:var(--text2)}
+  .flow-arrow{width:2px;height:22px;background:var(--border);margin:0 auto;position:relative}
+  .flow-arrow::after{content:'▼';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:var(--border);font-size:.7rem}
+  .flow-branch{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.4rem 0}
+  .flow-branch .lbl{text-align:center;font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.3rem}
+  .flow-branch .yes .lbl{color:var(--green)}
+  .flow-branch .no .lbl{color:var(--red)}
+  @media(max-width:600px){.flow-branch{grid-template-columns:1fr}}
+  .three-tier{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1rem 0}
+  @media(max-width:800px){.three-tier{grid-template-columns:1fr}}
+  .tier{border-radius:12px;padding:1.1rem;border:1px solid var(--border)}
+  .tier.low{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.4)}
+  .tier.mid{background:rgba(234,88,12,.08);border-color:rgba(234,88,12,.4)}
+  .tier.high{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.4)}
+  .tier h4{font-size:1rem;margin-bottom:.2rem}
+  .tier.low h4{color:var(--green)} .tier.mid h4{color:var(--gold)} .tier.high h4{color:var(--red)}
+  .tier .pct{font-family:var(--mono);font-size:.8rem;color:var(--text2);margin-bottom:.6rem}
+  .tier ul{padding-right:1.1rem;margin:0} .tier li{font-size:.8rem;margin-bottom:.25rem;color:var(--text2)}
+.algo-title{font-weight:700;color:var(--red);font-size:.95rem;margin-bottom:.5rem}
+.algo-note{font-size:.75rem;color:var(--text2);margin-top:.75rem;font-style:italic}
+.flow-branch .branch{display:flex;flex-direction:column;gap:0}
+.branch-label{text-align:center;font-size:.78rem;font-weight:700;margin-bottom:.4rem;padding:.25rem;border-radius:6px;background:var(--bg2)}
+.branch.yes .branch-label{color:var(--green)}
+.branch.no .branch-label{color:var(--red)}
+.flow-node.action,.flow-node.go,.flow-node.stop{margin-top:.5rem}
+
   header{transition:padding .3s ease}
   .header-inner{transition:gap .3s ease}
   .header-title h1{transition:font-size .3s ease}
@@ -143,11 +178,12 @@
 
 <div id="progress-bar"></div>
 
+
 <header>
   <div class="header-inner">
     <a href="ncs-index.html" class="back-btn">← NCS Overview</a>
     <div class="header-title">
-      <h1>الجزء السادس — المضاعفات بعد الجراحة والمتابعة</h1>
+      <h1>الجزء السادس — المضاعفات القلبية الوعائية بعد العملية</h1>
       <p>ESC Guidelines 2022 · Non-Cardiac Surgery</p>
     </div>
   </div>
@@ -168,228 +204,202 @@
 
   <nav class="toc">
     <h3>محتويات الجزء السادس</h3>
-    <a href="#s1">١ · الإصابة القلبية بعد الجراحة MINS/PMI</a>
-    <a href="#s2" class="toc-sub">· تعريف وخوارزمية الكشف</a>
-    <a href="#s3">٢ · احتشاء عضلة القلب حول الجراحة</a>
-    <a href="#s4">٣ · الرجفان الأذيني الحديث بعد الجراحة</a>
-    <a href="#s5">٤ · القصور القلبي الحاد والصدمة</a>
-    <a href="#s6">٥ · المتابعة طويلة الأمد وإعادة التأهيل</a>
-    <a href="#s7">٦ · الخلاصة والتوصيات الرئيسية</a>
-    <a href="#keys">نقاط المفتاحية</a>
+    <a href="#s1">١ · الأذية العضلية حول العملية MINS/PMI</a>
+    <a href="#s2">٢ · مراقبة وتشخيص PMI</a>
+    <a href="#s3">٣ · تمييز أسباب ارتفاع التروبونين</a>
+    <a href="#s4">٤ · الاحتشاء والمتلازمات الحادة</a>
+    <a href="#s5">٥ · قصور القلب الحاد وتاكوتسوبو</a>
+    <a href="#s6">٦ · الانصمام الرئوي بعد العملية</a>
+    <a href="#s7">٧ · الرجفان الأذيني بعد العملية</a>
+    <a href="#s8">٨ · السكتة الدماغية</a>
+    <a href="#keys">النقاط المفتاحية</a>
   </nav>
 
   <div class="content">
 
-    <!-- Section 1 -->
     <div class="section" id="s1">
-      <div class="section-header">
-        <div class="section-num">١</div>
-        <h2>الإصابة القلبية بعد الجراحة غير القلبية (MINS/PMI)</h2>
+      <div class="section-header"><div class="section-num">١</div><h2>الأذية العضلية حول العملية MINS/PMI</h2></div>
+      <p>الأذية العضلية القلبية بعد الجراحة غير القلبية (MINS: Myocardial Injury after Non-cardiac Surgery) من أكثر المضاعفات القلبية شيوعاً وأخطرها على الإنذار، ومعظمها <strong>صامت سريرياً</strong> (بلا ألم صدري)، ويُكتشف فقط بالمراقبة الروتينية للتروبونين. الأذية حول العملية (PMI) مصطلح أوسع يشمل MINS والاحتشاء المصنَّف.</p>
+      <div class="info-box danger">
+        <strong>🚨 لماذا الخطورة؟</strong>
+        MINS مرتبط بارتفاع كبير في الوفيات خلال ٣٠ يوماً رغم غياب الأعراض؛ غياب الألم لا ينفي الأذية — التخدير والمسكّنات تُخفيها.
+      </div>
+    </div>
+
+    <div class="section" id="s2">
+      <div class="section-header"><div class="section-num">٢</div><h2>مراقبة وتشخيص PMI (Table 34)</h2></div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        وعي مرتفع بالمضاعفات القلبية حول العملية، مع مراقبة PMI بقياس التروبونين عالي الحساسية قبل الجراحة وعند ٢٤ و٤٨ ساعة بعدها في المؤهَّلين.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        استقصاء منهجي لـ PMI لتحديد الفيزيولوجيا المرضية الكامنة وتوجيه العلاج (تمييز السبب القلبي من غيره).
       </div>
 
-      <p>الإصابة القلبية بعد الجراحة غير القلبية (MINS — Myocardial Injury after Non-cardiac Surgery) هي ارتفاع Troponin بعد الجراحة يُعزى لسبب إقفاري، بغض النظر عن وجود أعراض — وهي أكثر شيوعاً بكثير من الاحتشاء العرضي الكلاسيكي.</p>
-
-      <div class="info-box highlight">
-        <strong>🎯 الحقيقة الأهم: معظم MINS صامتة سريرياً</strong>
-        دراسة VISION أظهرت أن أكثر من 80% من حالات MINS لا تترافق مع أي أعراض ذبحة صدرية — وهذا سبب رئيسي لضرورة القياس الروتيني للـ Troponin بعد الجراحة عالية الخطورة بدلاً من الاعتماد على الأعراض فقط.
-      </div>
-
-      <h3 id="s2">تعريف وخوارزمية الكشف</h3>
       <div class="algo-box">
-        <div class="algo-step">
-          <div class="algo-num">1</div>
-          <div class="algo-content">
-            <h4>قِس Troponin عالي الحساسية</h4>
-            <p>يوم 1 ويوم 2 بعد الجراحة في المرضى عاليي الخطر (RCRI≥1، عمر≥65، جراحة مرتفعة الخطورة)</p>
+        <div class="algo-title">Figure 19 · الاستقصاء المنهجي للأذية العضلية بعد العملية</div>
+        <div class="flow">
+          <div class="flow-node start">ارتفاع hs-cTn بعد العملية (أو ديناميكية صاعدة/هابطة)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node action">ECG ١٢ اتجاهاً + أعراض + مقارنة بالقيمة الأساسية</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">هل هناك إقفار (تغيّرات ECG / أعراض / حركة جدارية)؟</div>
+          <div class="flow-branch">
+            <div class="branch yes">
+              <div class="branch-label">نعم — احتشاء نوع ١ أو ٢</div>
+              <div class="flow-node action">فرّق: نوع ١ (تمزّق لويحة) ← نهج ACS؛ نوع ٢ (عدم توازن طلب/عرض) ← عالِج المُحرِّض</div>
+              <div class="flow-node go">إيكو + تقييم قلبي + علاج موجَّه بعد مناقشة خطر النزف</div>
+            </div>
+            <div class="branch no">
+              <div class="branch-label">لا إقفار واضح — MINS</div>
+              <div class="flow-node action">ابحث عن أسباب لا إقفارية (انصمام رئوي، إنتان، رجفان، قصور كلوي)</div>
+              <div class="flow-node go">راقب، صحّح المُحرِّضات، فكّر بوقاية ثانوية</div>
+            </div>
           </div>
         </div>
-        <div class="algo-step">
-          <div class="algo-num">2</div>
-          <div class="algo-content">
-            <h4>ارتفاع دال + بدون سبب آخر واضح</h4>
-            <p>استبعد أسباباً أخرى لارتفاع Troponin (صمة رئوية، إنتان، قصور كلوي حاد، رجفان أذيني سريع)</p>
-          </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">3</div>
-          <div class="algo-content">
-            <h4>صنّف الحالة</h4>
-            <p>مع تغيرات ECG/أعراض إقفارية = احتشاء عضلة قلب حول الجراحة · بدون ذلك = MINS</p>
-          </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">4</div>
-          <div class="algo-content">
-            <h4>فعّل مسار الإدارة</h4>
-            <p>استشارة قلبية، تحسين العلاج الوقائي الثانوي، تقييم الحاجة لمزيد من الفحوصات بعد استقرار المريض جراحياً</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="rec rec-i">
-        <div class="rec-text">يُوصى بقياس Troponin عالي الحساسية بشكل روتيني بعد الجراحة في المرضى عاليي الخطر القلبي الخاضعين لجراحة مرتفعة الخطورة، بغض النظر عن وجود الأعراض</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+        <p class="algo-note">مخطط أصلي مبني على منطق الغايدلاين (الشكل ١٩).</p>
       </div>
     </div>
 
-    <!-- Section 2 -->
     <div class="section" id="s3">
-      <div class="section-header">
-        <div class="section-num">٢</div>
-        <h2>احتشاء عضلة القلب حول الجراحة — الإدارة</h2>
-      </div>
-
-      <p>إدارة احتشاء عضلة القلب بعد الجراحة تختلف جوهرياً عن الاحتشاء التلقائي — القيود المفروضة بسبب خطر النزيف الجراحي الحديث تجعل بعض العلاجات القياسية (مضادات الصفيحات المزدوجة، مضادات التخثر الكاملة) محفوفة بمخاطر إضافية.</p>
-
-      <div class="type-grid">
-        <div class="type-card">
-          <div class="type-name">Type 1 MI</div>
-          <div class="type-def">تمزق لويحة عصيدية حقيقي مع تخثر</div>
-          <div class="type-row"><span class="type-label">الإدارة</span><span class="type-val">أقرب لبروتوكول ACS القياسي، بحذر من النزيف</span></div>
-        </div>
-        <div class="type-card t2">
-          <div class="type-name">Type 2 MI</div>
-          <div class="type-def">عدم توازن توصيل/طلب الأكسجين دون تمزق لويحة</div>
-          <div class="type-row"><span class="type-label">الإدارة</span><span class="type-val">علاج السبب المؤهب (فقر دم، نقص ضغط، تسرع)</span></div>
-        </div>
-      </div>
-
-      <ul>
-        <li>استشارة قلبية عاجلة لتحديد النوع والإدارة المناسبة</li>
-        <li>تصحيح العوامل المؤهبة: فقر الدم، نقص الأكسجة، نقص أو زيادة السوائل، الألم غير المضبوط</li>
-        <li>مضادات الصفيحات/التخثر تُضاف بحذر شديد بالتنسيق مع الفريق الجراحي حسب خطر النزيف في موقع الجراحة</li>
-        <li>القسطرة التداخلية العاجلة تُحجز للحالات مع عدم استقرار دموي أو دليل واضح على انسداد كبير</li>
-      </ul>
-
-      <div class="rec rec-i">
-        <div class="rec-text">يُوصى بطلب استشارة قلبية عاجلة لكل مريض يُشخَّص لديه احتشاء عضلة قلب أو MINS ذو دلالة بعد الجراحة غير القلبية</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
-      </div>
-
-      <div class="info-box warning">
-        <strong>⚠️ درس دراسة MANAGE</strong>
-        Dabigatran بعد MINS قلّل المضاعفات الوعائية الكبرى في مرضى مختارين — لكن القرار حول أي مضاد تخثر إضافي يبقى فردياً بدقة، موازناً بين الفائدة الوقائية وخطر النزيف بعد الجراحة الحديثة.
-      </div>
-    </div>
-
-    <!-- Section 3 -->
-    <div class="section" id="s4">
-      <div class="section-header">
-        <div class="section-num">٣</div>
-        <h2>الرجفان الأذيني الحديث بعد الجراحة (New-Onset POAF)</h2>
-      </div>
-
-      <p>الرجفان الأذيني الحديث بعد الجراحة غير القلبية شائع خصوصاً بعد الجراحات الكبرى داخل الصدر أو البطن، وغالباً ما يكون عابراً مرتبطاً بالاستجابة الالتهابية والإجهاد الفيزيولوجي الحاد.</p>
-
-      <ul>
-        <li>الخطوة الأولى دائماً: ابحث عن سبب مؤهب قابل للعلاج (إنتان، اضطراب كهارل، نقص أكسجة، ألم غير مضبوط، فرط نشاط درقي)</li>
-        <li>ضبط معدل النبض هو الهدف الأولي في معظم الحالات غير المستقرة دموياً بشدة</li>
-        <li>قرار مضاد التخثر يعتمد على خطر السكتة (CHA₂DS₂-VASc) موازَناً بخطر النزيف الجراحي الحديث — وليس تلقائياً لكل حالة</li>
-        <li>نسبة كبيرة تعود للنظم الجيبي تلقائياً مع زوال السبب المؤهب خلال أسابيع بعد الجراحة</li>
-      </ul>
-
-      <div class="rec rec-iia">
-        <div class="rec-text">يُنصح بالبحث عن الأسباب المؤهبة القابلة للعلاج ومعالجتها كخطوة أولى في إدارة الرجفان الأذيني الحديث بعد الجراحة غير القلبية</div>
-        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
-      </div>
-
+      <div class="section-header"><div class="section-num">٣</div><h2>تمييز أسباب ارتفاع التروبونين (Figure 18)</h2></div>
+      <p>ارتفاع التروبونين بعد العملية ليس مرادفاً للاحتشاء؛ التمييز ضروري لأن العلاج يختلف جذرياً.</p>
+      <table class="data-table">
+        <thead><tr><th>السبب</th><th>الآلية</th><th>التوجّه العلاجي</th></tr></thead>
+        <tbody>
+          <tr><td>احتشاء نوع ١</td><td>تمزّق لويحة + خثار</td><td>نهج ACS (مضادات صفيحات/تخثّر ± تروية) بعد موازنة النزف</td></tr>
+          <tr><td>احتشاء نوع ٢</td><td>عدم توازن طلب/عرض (تسرّع، هبوط ضغط، فقر دم)</td><td>تصحيح المُحرِّض الأساسي</td></tr>
+          <tr><td>MINS لا احتشائي</td><td>أذية دون معايير احتشاء</td><td>مراقبة + وقاية ثانوية</td></tr>
+          <tr><td>انصمام رئوي</td><td>إجهاد بطين أيمن</td><td>تخثير فوري</td></tr>
+          <tr><td>إنتان / قصور كلوي</td><td>أذية غير إكليلية</td><td>علاج السبب</td></tr>
+        </tbody>
+      </table>
       <div class="info-box info-blue">
-        <strong>📌 لا تنسَ إعادة التقييم لاحقاً</strong>
-        حتى مع عودة النظم الجيبي، يستحق المريض متابعة قلبية بعد الشفاء التام — الرجفان الأذيني الحديث بعد الجراحة مرتبط بزيادة خطر تكرره أو تطوره لاحقاً بشكل مزمن.
+        <strong>ℹ️ مفتاح التفريق</strong>
+        الديناميكية (ارتفاع/هبوط متسلسل) + السياق السريري + ECG + الإيكو، لا القيمة المفردة. القيمة الأساسية قبل الجراحة تجعل تفسير الارتفاع بعدها أدقّ.
       </div>
     </div>
 
-    <!-- Section 4 -->
-    <div class="section" id="s5">
-      <div class="section-header">
-        <div class="section-num">٤</div>
-        <h2>القصور القلبي الحاد والصدمة بعد الجراحة</h2>
-      </div>
-
-      <p>القصور القلبي الحاد بعد الجراحة الكبرى غالباً متعدد الأسباب — فرط تحميل السوائل، إصابة قلبية إقفارية، اضطراب نظم جديد، أو تفاقم قصور قلب مزمن سابق.</p>
-
-      <ul>
-        <li>إيكو سريع عند السرير (Point-of-Care) للتفريق بين فرط الحجم، ضعف الانقباض، والمضاعفات الميكانيكية</li>
-        <li>علاج داعم فوري: أكسجين، إدرار مناسب، دعم إينوتروبي عند الحاجة، تصحيح اضطراب النظم</li>
-        <li>الصدمة القلبية بعد الجراحة تحمل إنذاراً أسوأ من الصدمة القلبية التلقائية بسبب القيود على العلاج التداخلي الكامل</li>
-        <li>يُحوَّل المريض لوحدة عناية مركزة قلبية عند عدم الاستقرار</li>
-      </ul>
-
+    <div class="section" id="s4">
+      <div class="section-header"><div class="section-num">٤</div><h2>الاحتشاء والمتلازمات الحادة بعد العملية</h2></div>
       <div class="rec rec-i">
-        <div class="rec-text">يُوصى بإجراء تقييم دموي عاجل (سريري وبالإيكو عند السرير) لكل مريض يُظهر علامات قصور قلبي حاد أو عدم استقرار دموي بعد الجراحة غير القلبية</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        علاج STEMI وNSTE-ACS وقصور القلب الحاد وتسرّعات النظم بعد العملية وفق الغايدلاينات الخاصة بكلٍّ منها، بعد مناقشة متعددة الاختصاصات لخطر النزف الجراحي.
+      </div>
+      <div class="algo-box">
+        <div class="algo-title">Figure 12 (تطبيق بعد العملية) · STEMI / NSTE-ACS بعد الجراحة</div>
+        <div class="flow">
+          <div class="flow-node start">اشتباه ACS بعد العملية</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">STEMI؟</div>
+          <div class="flow-branch">
+            <div class="branch yes">
+              <div class="branch-label">STEMI</div>
+              <div class="flow-node action">تروية عاجلة (PCI مفضّل)؛ حالّات الخثرة غالباً مضادّ استطباب بعد الجراحة</div>
+              <div class="flow-node stop">قرار مضادات الصفيحات/التخثّر عبر فريق (نزف مقابل خثار)</div>
+            </div>
+            <div class="branch no">
+              <div class="branch-label">NSTE-ACS</div>
+              <div class="flow-node action">تقسيم خطر؛ استراتيجية باضعة موجَّهة بالخطر وحالة النزف</div>
+              <div class="flow-node go">علاج دوائي أمثل + مراقبة</div>
+            </div>
+          </div>
+        </div>
+        <p class="algo-note">حالّات الخثرة الجهازية عادةً مُمنَعة في فترة ما بعد الجراحة المبكّرة. مخطط أصلي.</p>
       </div>
     </div>
 
-    <!-- Section 5 -->
+    <div class="section" id="s5">
+      <div class="section-header"><div class="section-num">٥</div><h2>قصور القلب الحاد واعتلال تاكوتسوبو</h2></div>
+      <p>قصور القلب الحاد بعد العملية غالباً يُحرَّض بفرط تحميل السوائل، الإقفار، أو اضطراب النظم. أما اعتلال تاكوتسوبو (اعتلال العضلة الإجهادي) فيُحاكي ACS مع شرايين إكليلية سالكة، ويُحرَّض بالكرب الجراحي والكاتيكولامينات.</p>
+      <div class="info-box warning">
+        <strong>⚠️ تاكوتسوبو</strong>
+        يُشتبه به عند صورة ACS مع تضخّم قمّي نموذجي بالإيكو وشرايين طبيعية بالقسطرة؛ العلاج داعم غالباً، مع حذر من مقوّيات العضلة القلبية عند وجود انسداد المسيل.
+      </div>
+    </div>
+
     <div class="section" id="s6">
-      <div class="section-header">
-        <div class="section-num">٥</div>
-        <h2>المتابعة طويلة الأمد وإعادة التأهيل</h2>
+      <div class="section-header"><div class="section-num">٦</div><h2>الانصمام الرئوي بعد العملية</h2></div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        عند انصمام رئوي بعد العملية باحتمال سريري مرتفع أو متوسط: بدء التخثير دون تأخير (مع موازنة خطر النزف الجراحي).
       </div>
-
-      <ul>
-        <li>كل مريض شُخِّص لديه MINS أو احتشاء حول الجراحة يستحق متابعة قلبية بعد الخروج، حتى لو كان بدون أعراض</li>
-        <li>تحسين عوامل الخطر القلبية الوعائية طويلة الأمد (ضغط، سكري، دهون، تدخين) يبقى أولوية بعد الشفاء الجراحي</li>
-        <li>يُنظر في العلاج الوقائي الثانوي القياسي (Statin، Aspirin أو مضاد صفيحات مناسب) حسب الحالة الفردية بعد استقرار خطر النزيف الجراحي</li>
-        <li>إعادة التأهيل القلبي المبكر تفيد المرضى المؤهلين بعد الشفاء من الجراحة الكبرى</li>
-      </ul>
-
-      <div class="rec rec-iia">
-        <div class="rec-text">يُنصح بمتابعة قلبية منظمة بعد الخروج لكل مريض شُخِّص لديه إصابة قلبية أو احتشاء بعد الجراحة غير القلبية</div>
-        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        استمرار التخثير الفموي للانصمام الرئوي مدة ٣ أشهر على الأقل.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        عند وجود دواعٍ للتخثير الفموي بعد العملية: يُفضَّل NOAC عموماً على VKA.
       </div>
     </div>
 
-    <!-- Section 6 -->
     <div class="section" id="s7">
-      <div class="section-header">
-        <div class="section-num">٦</div>
-        <h2>الخلاصة والتوصيات الرئيسية</h2>
+      <div class="section-header"><div class="section-num">٧</div><h2>الرجفان الأذيني بعد العملية (Figure 20)</h2></div>
+      <div class="rec rec-iii">
+        <span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span>
+        <strong>لا يُوصى</strong> بالاستعمال الروتيني لحاصرات بيتا للوقاية من الرجفان الأذيني بعد العملية.
       </div>
-
-      <div class="key-points" style="margin:0">
-        <h4>🔑 الرسائل الجوهرية من الغايدلاين بأكمله</h4>
-        <ul>
-          <li>التقييم يوازن دائماً بين خطر الجراحة، خطر المريض، وإلحاح الإجراء — وليس قائمة فحوصات ثابتة</li>
-          <li>الحالة الوظيفية وRCRI والواسمات الحيوية (NT-proBNP) هي ركائز التقييم الأولي الحديث</li>
-          <li>الفحوصات التصويرية والوظيفية تُطلب فقط عندما تُغيّر القرار العلاجي</li>
-          <li>إعادة التوعية التاجية الوقائية الروتينية غير مبررة لمجرد تجهيز المريض للجراحة</li>
-          <li>إدارة الأدوية حول الجراحة قرار فردي دقيق — خصوصاً مضادات الصفيحات والتخثر</li>
-          <li>مراقبة Troponin بعد الجراحة عالية الخطورة أداة كشف أساسية لا غنى عنها</li>
-          <li>MINS شائعة وغالباً صامتة، لكنها ذات دلالة إنذارية قوية تستحق المتابعة</li>
-        </ul>
+      <div class="algo-box">
+        <div class="algo-title">Figure 20 · تدبير الرجفان الأذيني الحادث بعد العملية</div>
+        <div class="flow">
+          <div class="flow-node start">رجفان أذيني جديد بعد العملية</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">هل هناك عدم استقرار حركي دموي؟</div>
+          <div class="flow-branch">
+            <div class="branch yes">
+              <div class="branch-label">غير مستقر</div>
+              <div class="flow-node stop">تقويم نظم كهربائي إسعافي</div>
+            </div>
+            <div class="branch no">
+              <div class="branch-label">مستقر</div>
+              <div class="flow-node action">صحّح المُحرِّضات (شوارد، ألم، نقص أكسجة، سوائل) + ضبط المعدّل</div>
+              <div class="flow-node action">قيّم خطر السكتة (CHA₂DS₂-VASc) وخطر النزف لقرار التخثير</div>
+              <div class="flow-node go">تخثير فردي؛ NOAC مفضّل عند وجود دواعيه (I A)</div>
+            </div>
+          </div>
+        </div>
+        <p class="algo-note">الرجفان بعد العملية ليس دائماً عابراً؛ يزيد خطر السكتة بعيدة المدى ويستحق متابعة. مخطط أصلي.</p>
       </div>
     </div>
 
-    <!-- Key Points -->
+    <div class="section" id="s8">
+      <div class="section-header"><div class="section-num">٨</div><h2>السكتة الدماغية بعد العملية</h2></div>
+      <p>السكتة حول العملية مضاعفة نادرة لكن مدمّرة، أغلبها إقفاري (انصمامي من رجفان أو من لويحات، أو من هبوط تروية). الوقاية تبدأ من تقييم ما قبل الجراحة وتفادي هبوط الضغط الشديد أثناءها.</p>
+      <div class="info-box info-purple">
+        <strong>🧠 مبادئ عملية</strong>
+        استمرار مضادات الصفيحات عند وجود دواعيها متى سمح النزف؛ تفادي إيقاف التخثير المطوَّل بلا داعٍ في مرضى الرجفان عالي الخطر؛ والتعرّف المبكّر على العلامات العصبية بعد الإفاقة.
+      </div>
+    </div>
+
     <div class="key-points" id="keys">
-      <h4>🔑 نقاط المفتاح</h4>
+      <h4>🔑 النقاط المفتاحية — الجزء السادس</h4>
       <ul>
-        <li>معظم حالات MINS صامتة سريرياً — الكشف يعتمد على القياس الروتيني وليس الأعراض</li>
-        <li>احتشاء عضلة القلب حول الجراحة يُدار بحذر إضافي بسبب قيود خطر النزيف</li>
-        <li>Type 2 MI (عدم توازن الأكسجين) يتطلب علاج السبب المؤهب أولاً</li>
-        <li>الرجفان الأذيني الحديث بعد الجراحة غالباً عابر لكنه يستحق بحثاً عن سبب مؤهب ومتابعة لاحقة</li>
-        <li>القصور القلبي الحاد بعد الجراحة يتطلب تقييماً دموياً عاجلاً بالإيكو عند السرير</li>
-        <li>كل مريض بإصابة قلبية حول الجراحة يستحق متابعة قلبية منظمة بعد الخروج</li>
-        <li>التقييم والإدارة القلبية للجراحة غير القلبية عملية مستمرة — تبدأ قبل الجراحة ولا تنتهي عند خروج المريض</li>
+        <li>MINS/PMI غالباً صامت — يُكتشف بمراقبة التروبونين (قبل + ٢٤ + ٤٨ ساعة) لا بالأعراض (I B).</li>
+        <li>استقصاء منهجي للأذية لتمييز نوع ١/نوع ٢/MINS/أسباب لا إكليلية (I B).</li>
+        <li>علاج STEMI/NSTE-ACS/AHF/تسرّعات النظم وفق غايدلايناتها بعد مناقشة النزف (I C).</li>
+        <li>انصمام رئوي بعد العملية → تخثير دون تأخير (I C) لمدة ≥ ٣ أشهر (I C)؛ NOAC مفضّل (I A).</li>
+        <li>لا حاصرات بيتا روتينية للوقاية من الرجفان الأذيني بعد العملية (III B).</li>
+        <li>الرجفان الجديد بعد العملية يستحق تقييم خطر السكتة والتخثير الفردي، لا الاكتفاء بضبط المعدّل.</li>
+        <li>تاكوتسوبو يحاكي ACS مع شرايين سالكة — علاج داعم وحذر من مقوّيات العضلة عند انسداد المسيل.</li>
       </ul>
     </div>
 
-    <!-- Navigation -->
     <div class="next-prev">
       <a href="ncs-part5.html" class="nav-btn">
-        <div class="dir">← العودة إلى</div>
-        <div class="title">التخدير والجراحة الطارئة</div>
+        <div class="dir">← الجزء السابق</div>
+        <div class="title">التخدير والمراقبة وتدبير الدم</div>
       </a>
       <a href="ncs-index.html" class="nav-btn next">
-        <div class="dir">الجزء التالي ←</div>
-        <div class="title">نظرة عامة على NCS</div>
+        <div class="dir">العودة ←</div>
+        <div class="title">الصفحة الرئيسية</div>
       </a>
     </div>
 
   </div>
 </div>
+
 
 <footer>
   <p>مبني على غايدلاين ESC 2022 لتقييم القلب في الجراحة غير القلبية — للأغراض التعليمية | <a href="ncs-index.html">← NCS Overview</a> | <a href="guidelines.html">جميع الغايدات</a></p>

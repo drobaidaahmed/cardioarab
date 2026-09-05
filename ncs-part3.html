@@ -22,7 +22,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NCS — الجزء الثالث — الحالات القلبية المحددة | ESC 2022</title>
+<title>الجزء الثالث — الحالات القلبية المحددة | NCS ESC 2022</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -123,6 +123,41 @@
   footer a{color:var(--red);text-decoration:none}
   @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
 
+  /* ---- flow / decision diagram (native, theme-aware) ---- */
+  .flow{display:flex;flex-direction:column;gap:0;margin:1.25rem 0}
+  .flow-node{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.85rem 1.1rem;font-size:.88rem;position:relative}
+  .flow-node.start{border-color:var(--blue);background:rgba(59,130,246,.08)}
+  .flow-node.decision{border-color:var(--gold);background:rgba(234,88,12,.08);font-weight:600}
+  .flow-node.action{border-color:var(--teal);background:rgba(20,184,166,.08)}
+  .flow-node.stop{border-color:var(--red);background:rgba(239,68,68,.1)}
+  .flow-node.go{border-color:var(--green);background:rgba(16,185,129,.1)}
+  .flow-node .n-title{font-weight:700;display:block;margin-bottom:.15rem}
+  .flow-node .n-sub{font-size:.8rem;color:var(--text2)}
+  .flow-arrow{width:2px;height:22px;background:var(--border);margin:0 auto;position:relative}
+  .flow-arrow::after{content:'▼';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:var(--border);font-size:.7rem}
+  .flow-branch{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.4rem 0}
+  .flow-branch .lbl{text-align:center;font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.3rem}
+  .flow-branch .yes .lbl{color:var(--green)}
+  .flow-branch .no .lbl{color:var(--red)}
+  @media(max-width:600px){.flow-branch{grid-template-columns:1fr}}
+  .three-tier{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1rem 0}
+  @media(max-width:800px){.three-tier{grid-template-columns:1fr}}
+  .tier{border-radius:12px;padding:1.1rem;border:1px solid var(--border)}
+  .tier.low{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.4)}
+  .tier.mid{background:rgba(234,88,12,.08);border-color:rgba(234,88,12,.4)}
+  .tier.high{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.4)}
+  .tier h4{font-size:1rem;margin-bottom:.2rem}
+  .tier.low h4{color:var(--green)} .tier.mid h4{color:var(--gold)} .tier.high h4{color:var(--red)}
+  .tier .pct{font-family:var(--mono);font-size:.8rem;color:var(--text2);margin-bottom:.6rem}
+  .tier ul{padding-right:1.1rem;margin:0} .tier li{font-size:.8rem;margin-bottom:.25rem;color:var(--text2)}
+.algo-title{font-weight:700;color:var(--red);font-size:.95rem;margin-bottom:.5rem}
+.algo-note{font-size:.75rem;color:var(--text2);margin-top:.75rem;font-style:italic}
+.flow-branch .branch{display:flex;flex-direction:column;gap:0}
+.branch-label{text-align:center;font-size:.78rem;font-weight:700;margin-bottom:.4rem;padding:.25rem;border-radius:6px;background:var(--bg2)}
+.branch.yes .branch-label{color:var(--green)}
+.branch.no .branch-label{color:var(--red)}
+.flow-node.action,.flow-node.go,.flow-node.stop{margin-top:.5rem}
+
   header{transition:padding .3s ease}
   .header-inner{transition:gap .3s ease}
   .header-title h1{transition:font-size .3s ease}
@@ -143,11 +178,12 @@
 
 <div id="progress-bar"></div>
 
+
 <header>
   <div class="header-inner">
     <a href="ncs-index.html" class="back-btn">← NCS Overview</a>
     <div class="header-title">
-      <h1>الجزء الثالث — الحالات القلبية المحددة</h1>
+      <h1>الجزء الثالث — تدبير الحالات القلبية المحددة قبل الجراحة</h1>
       <p>ESC Guidelines 2022 · Non-Cardiac Surgery</p>
     </div>
   </div>
@@ -168,248 +204,416 @@
 
   <nav class="toc">
     <h3>محتويات الجزء الثالث</h3>
-    <a href="#s1">١ · مرض الشريان التاجي المستقر</a>
-    <a href="#s2" class="toc-sub">· PCI أو CABG سابق</a>
-    <a href="#s3">٢ · قصور القلب</a>
-    <a href="#s4" class="toc-sub">· HFrEF / HFmrEF / HFpEF</a>
-    <a href="#s5">٣ · أمراض الصمامات</a>
-    <a href="#s6" class="toc-sub">· تضيق الأبهر أولوية</a>
-    <a href="#s7">٤ · الرجفان الأذيني واضطرابات النظم</a>
-    <a href="#s8">٥ · ارتفاع ضغط الشريان الرئوي والقلب الخلقي</a>
-    <a href="#s9">٦ · أجهزة تنظيم النظم و ICD</a>
-    <a href="#keys">نقاط المفتاحية</a>
+    <a href="#s1">١ · مبدأ التفاعل: خطر الجراحة × خطر المريض</a>
+    <a href="#s2">٢ · الداء الإكليلي CAD</a>
+    <a href="#s3">٣ · قصور القلب HF</a>
+    <a href="#s4">٤ · الأمراض الصمامية VHD</a>
+    <a href="#s5">٥ · القلب الخلقي عند البالغ ACHD</a>
+    <a href="#s6">٦ · اضطرابات النظم والأجهزة المزروعة</a>
+    <a href="#s7">٧ · الأمراض الرئوية وفرط ضغط الرئوي</a>
+    <a href="#s8">٨ · ارتفاع ضغط الدم</a>
+    <a href="#s9">٩ · الداء الشرياني المحيطي والدماغي</a>
+    <a href="#s10">١٠ · الكلية والبدانة والسكري والتأمور</a>
+    <a href="#s11">١١ · مرضى السرطان</a>
+    <a href="#s12">١٢ · كوفيد-١٩</a>
+    <a href="#s13">١٣ · الفروق بين الجنسين</a>
+    <a href="#keys">النقاط المفتاحية</a>
   </nav>
 
   <div class="content">
 
-    <!-- Section 1 -->
     <div class="section" id="s1">
-      <div class="section-header">
-        <div class="section-num">١</div>
-        <h2>مرض الشريان التاجي المستقر</h2>
-      </div>
-
-      <p>معظم مرضى مرض الشريان التاجي المستقر يمكنهم الخضوع للجراحة غير القلبية بأمان مع إدارة دوائية مناسبة، دون الحاجة لإعادة توعية وقائية.</p>
-
-      <h3 id="s2">PCI أو CABG سابق</h3>
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead><tr><th>الحالة</th><th>التوصية</th></tr></thead>
-          <tbody>
-            <tr><td>CABG سابق &gt; 6 أسابيع، مستقر</td><td>تابع للجراحة كالمعتاد</td></tr>
-            <tr><td>PCI بالبالون فقط، &gt; 2 أسبوع</td><td>تابع للجراحة بعد إيقاف Aspirin وحده إذا لزم</td></tr>
-            <tr><td>Stent معدني عادي (BMS) &lt; 4 أسابيع</td><td>أجّل الجراحة الاختيارية حتى إتمام DAPT الأساسي</td></tr>
-            <tr><td>Stent دوائي (DES) &lt; 3–6 أشهر</td><td>أجّل الجراحة الاختيارية إن أمكن</td></tr>
-            <tr><td>Stent دوائي (DES) &gt; 6 أشهر، مستقر</td><td>تابع للجراحة مع استمرار Aspirin عادة</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="rec rec-i">
-        <div class="rec-text">يُوصى بتأجيل الجراحة الاختيارية غير القلبية حتى إتمام المدة الدنيا الموصى بها للعلاج المزدوج المضاد للصفيحات بعد وضع الدعامة التاجية</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
-      </div>
-
-      <div class="info-box warning">
-        <strong>⚠️ الجراحة العاجلة بعد PCI حديث</strong>
-        عند تعذّر التأجيل، تُدار الحالة ضمن Heart Team بالحفاظ على Aspirin على الأقل واستئناف P2Y12 بأسرع وقت آمن بعد الجراحة — راجع تفاصيل إدارة مضادات الصفيحات في الجزء الرابع.
+      <div class="section-header"><div class="section-num">١</div><h2>مبدأ التفاعل: خطر الجراحة × خطر المريض</h2></div>
+      <p>خطر المضاعفات القلبية حول العملية ينشأ من تفاعل معقّد بين خطورة الجراحة نفسها (منخفض/متوسط/مرتفع) وحالة المريض القلبية الأساسية. كل حالة قلبية محددة تُعدّل هذا الخطر بطريقتها، وتفرض استراتيجية تقييم وتدبير خاصة قبل الجراحة. المبدأ الحاكم في كل ما يلي: <strong>لا نؤجّل جراحة ضرورية إلا حين يكون للتأجيل فائدة تفوق خطر التأخير</strong>، ولا نتدخّل قلبياً قبل الجراحة إلا وفق الدواعي نفسها المعتمدة خارج السياق الجراحي.</p>
+      <div class="info-box highlight">
+        <strong>🎯 قاعدة عامة تتكرر عبر الحالات</strong>
+        التقييم السريري + الإيكو (عند الحاجة) هو حجر الأساس؛ والتدخّل القلبي (إعادة تروية، تبديل صمام، إجراء كهربائي) يُقرَّر وفق دواعيه المستقلة، لا لمجرد أن هناك جراحة قادمة.
       </div>
     </div>
 
-    <!-- Section 2 -->
-    <div class="section" id="s3">
-      <div class="section-header">
-        <div class="section-num">٢</div>
-        <h2>قصور القلب (Heart Failure)</h2>
-      </div>
-
-      <p>قصور القلب — بغض النظر عن الكسر القذفي — هو أحد أقوى عوامل الخطر للمضاعفات القلبية الوعائية حول الجراحة، وأقوى من مرض الشريان التاجي المستقر نفسه.</p>
-
-      <h3 id="s4">HFrEF / HFmrEF / HFpEF</h3>
-      <div class="type-grid">
-        <div class="type-card">
-          <div class="type-name">HFrEF</div>
-          <div class="type-def">كسر قذفي ≤ 40%</div>
-          <div class="type-row"><span class="type-label">الخطر</span><span class="type-val">الأعلى بين الأنواع الثلاثة</span></div>
-        </div>
-        <div class="type-card t2">
-          <div class="type-name">HFmrEF</div>
-          <div class="type-def">كسر قذفي 41–49%</div>
-          <div class="type-row"><span class="type-label">الخطر</span><span class="type-val">متوسط — يقترب من HFrEF</span></div>
-        </div>
-        <div class="type-card t3">
-          <div class="type-name">HFpEF</div>
-          <div class="type-def">كسر قذفي ≥ 50% مع خلل انبساطي</div>
-          <div class="type-row"><span class="type-label">الخطر</span><span class="type-val">مرتفع أيضاً — لا يُهمَل</span></div>
-        </div>
-      </div>
-
-      <ul>
-        <li>يجب أن تكون الحالة معاوَضة (Euvolemic) قبل الجراحة الاختيارية قدر الإمكان</li>
-        <li>يُستمر بالعلاج المُعدِّل للمرض (GDMT) — Beta-blocker، ACEi/ARB/ARNI، MRA — إلا عند خطر انخفاض ضغط أو قصور كلوي حاد</li>
-        <li>SGLT2i يُوقف مؤقتاً قبل الجراحة الكبرى (راجع الجزء الرابع لتفاصيل التوقيت)</li>
-        <li>يُنصح بقياس NT-proBNP كخط أساس ومراقبة الوزن/الاحتقان بعد الجراحة</li>
-      </ul>
+    <div class="section" id="s2">
+      <div class="section-header"><div class="section-num">٢</div><h2>الداء الإكليلي CAD — التوقيت وإعادة التروية</h2></div>
+      <p>ينقسم التدبير بين متلازمة إكليلية مزمنة (CCS) ومتلازمة إكليلية حادة (ACS). المبدأ الجوهري: <strong>إعادة التروية الوقائية الروتينية قبل الجراحة لا تحسّن الإنذار</strong> في معظم مرضى CCS، بينما ACS تفرض أولوية علاجية خاصة.</p>
 
       <div class="rec rec-i">
-        <div class="rec-text">يُوصى بتحسين حالة الاحتقان والوصول لحالة معاوَضة قدر الإمكان قبل الجراحة الاختيارية في مرضى قصور القلب</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        <strong>مرضى CCS:</strong> عند الحاجة إلى PCI قبل الجراحة، تُفضَّل الدعامات الدوائية حديثة الجيل (new-generation DES) على الدعامات المعدنية العارية (BMS) والرأب بالبالون.
       </div>
-    </div>
-
-    <!-- Section 3 -->
-    <div class="section" id="s5">
-      <div class="section-header">
-        <div class="section-num">٣</div>
-        <h2>أمراض الصمامات القلبية</h2>
-      </div>
-
-      <h3 id="s6">تضيق الأبهر (Aortic Stenosis) — أولوية قصوى</h3>
-      <p>تضيق الأبهر الشديد العرضي هو أحد أخطر الحالات الصمامية قبل الجراحة غير القلبية — يترافق مع خطر مرتفع جداً لانخفاض ضغط حاد وصدمة قلبية أثناء التخدير.</p>
-
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead><tr><th>الحالة</th><th>التوصية قبل الجراحة الاختيارية</th></tr></thead>
-          <tbody>
-            <tr><td><strong style="color:var(--red)">تضيق أبهر شديد عرضي</strong></td><td>عالج الصمام (TAVI/SAVR) قبل الجراحة إن أمكن</td></tr>
-            <tr><td>تضيق أبهر شديد لاعرضي</td><td>يمكن المتابعة للجراحة منخفضة/متوسطة الخطورة بمراقبة دموية دقيقة</td></tr>
-            <tr><td>تضيق أبهر متوسط</td><td>تابع للجراحة مع مراقبة دموية حذرة</td></tr>
-            <tr><td>قلس تاجي أو أبهري شديد عرضي مع خلل بطيني</td><td>قيّم ضمن Heart Team قبل الجراحة الكبرى</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="rec rec-i">
-        <div class="rec-text">يُوصى بتقييم شدة تضيق الأبهر بالإيكو في أي مريض لديه نفخة انقباضية مشتبهة قبل الجراحة الاختيارية ذات الخطورة المرتفعة</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
-      </div>
-
       <div class="rec rec-iia">
-        <div class="rec-text">يُنصح بمعالجة تضيق الأبهر الشديد العرضي (TAVI أو الجراحة) قبل الجراحة غير القلبية الاختيارية ذات الخطورة المرتفعة</div>
-        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+        <span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span>
+        يُنظر في تقييم فريق خبير (جرّاح + طبيب قلب) قبل الجراحة الانتقائية عند وجود دواعٍ لـ PCI.
       </div>
-
-      <div class="info-box danger">
-        <strong>🚨 تجنّب نقص الحجم وانخفاض المقاومة الوعائية</strong>
-        في تضيق الأبهر الشديد، الحفاظ على الحمل الأولي (Preload) والمقاومة الوعائية الطرفية أمر حاسم — تجنّب التخدير الشوكي/فوق الجافية العميق دون احتياط.
+      <div class="rec rec-iib">
+        <span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE B</span>
+        قد يُنظر في إعادة تروية عضلة القلب قبل الجراحة الانتقائية عالية الخطورة، تبعاً لكمية العضلة المُقفَرة والأعراض المُعنّدة على العلاج الأمثل.
       </div>
-    </div>
-
-    <!-- Section 4 -->
-    <div class="section" id="s7">
-      <div class="section-header">
-        <div class="section-num">٤</div>
-        <h2>الرجفان الأذيني واضطرابات النظم</h2>
+      <div class="rec rec-iii">
+        <span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span>
+        <strong>لا يُوصى</strong> بإعادة التروية الروتينية قبل الجراحة منخفضة/متوسطة الخطورة في مرضى CCS.
       </div>
-
-      <ul>
-        <li>يُفضَّل ضبط معدل النبض (Rate Control) قبل الجراحة الاختيارية — الهدف عادة &lt; 110 نبضة/دقيقة في الراحة</li>
-        <li>قرار إيقاف/استمرار مضاد التخثر الفموي يعتمد على خطر النزيف الجراحي (تفاصيل كاملة في الجزء الرابع)</li>
-        <li>لا يُوقف علاج مضاد اضطراب النظم المزمن (Amiodarone وغيره) قبل الجراحة عادة</li>
-        <li>اضطراب نظم بطيني خطير غير مضبوط يستدعي تأجيل الجراحة الاختيارية ومعالجته أولاً</li>
-      </ul>
-
       <div class="rec rec-i">
-        <div class="rec-text">يُوصى بضبط معدل نبض الرجفان الأذيني قبل الجراحة الاختيارية غير القلبية لتقليل خطر عدم الاستقرار الدموي حول الجراحة</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        <strong>مرضى ACS:</strong> إذا أمكن تأجيل الجراحة بأمان (٣ أشهر مثلاً)، يخضع مريض ACS للتقييم والتدخّل التشخيصي/العلاجي كما لأي مريض ACS عموماً.
       </div>
-    </div>
-
-    <!-- Section 5 -->
-    <div class="section" id="s8">
-      <div class="section-header">
-        <div class="section-num">٥</div>
-        <h2>ارتفاع ضغط الشريان الرئوي وأمراض القلب الخلقية</h2>
+      <div class="rec rec-iia">
+        <span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span>
+        في NSTE-ACS مع دواعٍ لإعادة التروية، يُنظر في أولويات الجراحة حالةً بحالة عبر فريق متعدد الاختصاصات.
       </div>
-
-      <p>ارتفاع ضغط الشريان الرئوي (PH) يزيد خطر فشل البطين الأيمن الحاد أثناء وبعد الجراحة، خصوصاً مع التخدير العام والتهوية الآلية.</p>
-
-      <ul>
-        <li>يُفضَّل تحسين حالة PH دوائياً قبل الجراحة الاختيارية الكبرى</li>
-        <li>تجنّب نقص الأكسجة وفرط ثاني أكسيد الكربون والحماض أثناء التخدير — كلها تزيد المقاومة الوعائية الرئوية</li>
-        <li>مرضى أمراض القلب الخلقية عند البالغين (ACHD) يُحوَّلون لمراكز متخصصة للحالات المعقدة (مثل Fontan، Eisenmenger)</li>
-      </ul>
-
-      <div class="rec rec-i">
-        <div class="rec-text">يُوصى بإجراء الجراحة غير القلبية الكبرى للمرضى ذوي ارتفاع ضغط الشريان الرئوي الشديد أو أمراض القلب الخلقية المعقدة في مراكز ذات خبرة متخصصة</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
-      </div>
-    </div>
-
-    <!-- Section 6 -->
-    <div class="section" id="s9">
-      <div class="section-header">
-        <div class="section-num">٦</div>
-        <h2>أجهزة تنظيم النظم و ICD حول الجراحة</h2>
-      </div>
-
-      <p>الكهرباء الجراحية (Electrocautery) قد تتداخل مع عمل أجهزة تنظيم النظم والـ ICD — التخطيط المسبق يمنع مضاعفات خطيرة.</p>
 
       <div class="algo-box">
-        <div class="algo-step">
-          <div class="algo-num">1</div>
-          <div class="algo-content">
-            <h4>حدّد نوع الجهاز واعتمادية المريض عليه</h4>
-            <p>راجع آخر فحص للجهاز (Device Interrogation) — يُفضَّل خلال آخر 12 شهراً</p>
+        <div class="algo-title">Figure 12 · مسار مريض CAD المُقرَّر له جراحة غير قلبية</div>
+        <div class="flow">
+          <div class="flow-node start">مريض CAD مُقرَّر له NCS</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">هل هي متلازمة إكليلية حادة ACS؟</div>
+          <div class="flow-branch">
+            <div class="branch yes">
+              <div class="branch-label">نعم — ACS</div>
+              <div class="flow-node decision">هل الجراحة قابلة للتأجيل ≥ ٣ أشهر؟</div>
+              <div class="flow-node action">قابلة للتأجيل → تدبير ACS كاملاً أولاً ثم الجراحة لاحقاً (Class I A)</div>
+              <div class="flow-node stop">غير قابلة (طارئة/عاجلة) → فريق متعدد الاختصاصات: أقل خطر إجمالي، تدبير متزامن</div>
+            </div>
+            <div class="branch no">
+              <div class="branch-label">لا — CCS مستقرة</div>
+              <div class="flow-node decision">خطورة الجراحة؟</div>
+              <div class="flow-node go">منخفضة/متوسطة → المضي دون إعادة تروية روتينية (Class III B)</div>
+              <div class="flow-node action">مرتفعة + عضلة مُقفَرة واسعة/أعراض معنّدة → يُنظر بإعادة التروية (Class IIb B)</div>
+            </div>
           </div>
         </div>
-        <div class="algo-step">
-          <div class="algo-num">2</div>
-          <div class="algo-content">
-            <h4>ICD — عطّل وظيفة الصدمة أثناء الجراحة فقط</h4>
-            <p>عبر برمجة الجهاز أو المغناطيس، مع مراقبة قلبية مستمرة ومزيل رجفان خارجي جاهز</p>
-          </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">3</div>
-          <div class="algo-content">
-            <h4>Pacemaker — قيّم الحاجة لوضع Asynchronous Mode</h4>
-            <p>خصوصاً إذا كان المريض معتمداً كلياً على الجهاز والكهرباء الجراحية قريبة من الصدر</p>
-          </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">4</div>
-          <div class="algo-content">
-            <h4>بعد الجراحة</h4>
-            <p>أعد برمجة الجهاز لوضعه الطبيعي وتأكد من عمله السليم قبل خروج المريض من الرقود</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="rec rec-i">
-        <div class="rec-text">يُوصى بالتخطيط المسبق مع فريق أجهزة تنظيم النظم لأي مريض حامل لجهاز تنظيم نظم أو ICD قبل جراحة تُستخدم فيها الكهرباء الجراحية</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+        <p class="algo-note">مبني على منطق الغايدلاين ورُسم كمخطط أصلي — ليس نسخاً للشكل الأصلي.</p>
       </div>
     </div>
 
-    <!-- Key Points -->
+    <div class="section" id="s3">
+      <div class="section-header"><div class="section-num">٣</div><h2>قصور القلب HF</h2></div>
+      <p>قصور القلب من أقوى منبئات المضاعفات والوفيات حول العملية، خصوصاً القصور اللا معاوَض. القاعدة: <strong>لا جراحة انتقائية في قصور قلب لا معاوَض</strong>، ويجب تحسين العلاج الموجَّه بالدليل قبلها.</p>
+
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        عند الاشتباه بـ HF أو معرفته قبل جراحة عالية الخطورة: يُوصى بتقييم وظيفة البطين الأيسر بالإيكو وقياس NT-proBNP/BNP (ما لم يُجرَ حديثاً).
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        يتلقّى مريض HS العلاج الدوائي الأمثل وفق غايدلاينات ESC الحالية قبل الجراحة.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        يُقيَّم حجم السوائل وعلامات تروية الأعضاء بانتظام حول العملية.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        عند وجود دعم دوراني ميكانيكي (MCS/VAD): فريق متعدد الاختصاصات يضم اختصاصيي الأجهزة لإدارة الفترة حول العملية، ويُفضَّل إجراء الجراحة في مركز لديه فريق VAD.
+      </div>
+      <div class="info-box warning">
+        <strong>⚠️ ملاحظة عملية</strong>
+        يُتجنّب إجراء جراحة انتقائية أثناء عدم المعاوضة؛ ولا يُعتمد إيكو أقدم من ٦ أشهر أو يُعاد قبل الجراحة عند أي تدهور سريري.
+      </div>
+
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">اعتلال العضلة الضخامي الانسدادي HOCM</h3>
+      <p>مرضى HOCM مع انسداد مسيل البطين الأيسر (LVOT) يحتاجون عناية خاصة: يُوصى بإجراء TTE قبل الجراحة لتحديد شدّة الانسداد. الهدف التخديري هو <strong>الحفاظ على الحِمل القَبْلي والحِمل البَعْدي وتفادي كل ما يزيد الانسداد</strong>.</p>
+      <div class="info-box warning">
+        <strong>⚠️ مبادئ التدبير في HOCM</strong>
+        حافظ على حجم الضربة وتفادَ نقص الحجم؛ تجنّب الموسّعات الوعائية ومقوّيات التقلّص القوية (تزيد الانسداد)؛ أبقِ المعدّل منخفضاً (٦٠–٦٥ نبضة/د) وتجنّب الرجفان الأذيني؛ واستمرّ بأدوية علاج الانسداد (حاصرات بيتا/فيراباميل) حول العملية.
+      </div>
+    </div>
+
+    <div class="section" id="s4">
+      <div class="section-header"><div class="section-num">٤</div><h2>الأمراض الصمامية VHD</h2></div>
+      <p>يتناسب الخطر مع شدّة الآفة ونوع الجراحة، ويشتدّ في الآفات الانسدادية. التقييم السريري + الإيكو أساس، ودواعي التدخّل الصمامي قبل الجراحة هي دواعيه العامة نفسها.</p>
+
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        تقييم سريري وإيكو (إن لم يُجرَ حديثاً) لكل مريض بـ VHD معروف/مشتبه مُقرَّر لجراحة انتقائية متوسطة أو عالية الخطورة.
+      </div>
+
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">التضيّق الأبهري AS</h3>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        AVR (جراحي SAVR أو TAVI) في التضيّق الأبهري الشديد <strong>العَرَضي</strong> قبل الجراحة الانتقائية المتوسطة/العالية.
+      </div>
+      <div class="rec rec-iia">
+        <span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span>
+        في AS الشديد <strong>اللا عَرَضي</strong> المُقرَّر لجراحة عالية الخطورة انتقائية: يُنظر بـ AVR بعد مناقشة فريق القلب.
+      </div>
+      <div class="rec rec-iib">
+        <span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span>
+        في AS الشديد العَرَضي المحتاج لجراحة حسّاسة للوقت أو حين تعذُّر TAVI/SAVR: قد يُنظر برأب الصمام بالبالون (BAV) جسراً للإصلاح النهائي.
+      </div>
+
+      <div class="algo-box">
+        <div class="algo-title">Figure 13 · تدبير التضيّق الأبهري الشديد قبل NCS</div>
+        <div class="flow">
+          <div class="flow-node start">AS شديد + جراحة مُقرَّرة</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">هل هو عَرَضي؟</div>
+          <div class="flow-branch">
+            <div class="branch yes">
+              <div class="branch-label">عَرَضي</div>
+              <div class="flow-node decision">هل يمكن تأجيل الجراحة؟</div>
+              <div class="flow-node go">قابلة للتأجيل → AVR (SAVR/TAVI) أولاً (Class I)</div>
+              <div class="flow-node action">حسّاسة للوقت → TAVI خيار معقول؛ فإن تعذّر → BAV جسراً (Class IIb)</div>
+            </div>
+            <div class="branch no">
+              <div class="branch-label">لا عَرَضي</div>
+              <div class="flow-node decision">خطورة الجراحة؟</div>
+              <div class="flow-node action">عالية → يُنظر بـ AVR بعد فريق القلب (Class IIa)</div>
+              <div class="flow-node go">منخفضة/متوسطة → المضي بالجراحة مع مراقبة دقيقة</div>
+            </div>
+          </div>
+        </div>
+        <p class="algo-note">لا علاج دوائي للتضيّق الأبهري بحدّ ذاته؛ العلاج الدوائي للمضاعفات فقط (رجفان، قصور قلب). مخطط أصلي مبني على منطق الغايدلاين.</p>
+      </div>
+
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">القصور الأبهري AR والتضيّق التاجي MS</h3>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        <strong>AR:</strong> جراحة الصمام قبل الجراحة الانتقائية المتوسطة/العالية عند AR شديد عَرَضي، أو لا عَرَضي مع LVESD &gt; 50mm أو LVESDi &gt; 25mm/m² (صغار الجسم) أو LVEF ≤ 50%.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        <strong>MS الروماتيزمي متوسط–شديد:</strong> تدخّل صمامي (بضع تاجي عبر الجلد أو جراحة) قبل الجراحة الانتقائية المتوسطة/العالية عند وجود أعراض أو SPAP &gt; 50 mmHg.
+      </div>
+
+      <div class="algo-box">
+        <div class="algo-title">Figure 14 · تدبير القصور التاجي الثانوي الشديد قبل NCS</div>
+        <div class="flow">
+          <div class="flow-node start">MR ثانوي شديد + جراحة مُقرَّرة</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node action">فحص سريري + ECG + واسمات + TTE ± TEE (Class I)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node action">علاج دوائي موجَّه GDMT + CRT عند وجود دواعيه (Class I)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">استمرار الأعراض رغم العلاج الأمثل؟</div>
+          <div class="flow-node action">نعم → يُنظر بإصلاح عبر الجلد TEER أو جراحة (الإصلاح متى أمكن) (Class IIa)</div>
+        </div>
+        <p class="algo-note">مخطط أصلي مبني على منطق الغايدلاين.</p>
+      </div>
+
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">الصمامات الصناعية</h3>
+      <p>الصمام الميكانيكي مستقرّ حركياً دموياً لكنه يفرض تخثيراً مدى الحياة، فالتحدّي الأساسي هو <strong>تدبير التخثير حول العملية</strong> (يُراجَع بالتفصيل في الجزء الرابع). الصمام الحيوي يحتاج تخثيراً مؤقّتاً غالباً فقط.</p>
+      <div class="info-box info-blue">
+        <strong>🫀 نقاط عملية</strong>
+        الجسر بـ LMWH مُوصى به لحاملي الصمام الميكانيكي MHV مع خطر جراحي مرتفع (Class I B)؛ يُنتبه لخطر التهاب الشغاف عند الإجراءات عالية الجرثمة؛ ويُقيَّم عمل الصمام بالإيكو عند أي اشتباه بخلل وظيفته قبل الجراحة.
+      </div>
+    </div>
+
+    <div class="section" id="s5">
+      <div class="section-header"><div class="section-num">٥</div><h2>القلب الخلقي عند البالغ ACHD</h2></div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        استشارة اختصاصي ACHD قبل الجراحة المتوسطة أو العالية الخطورة.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        إجراء الجراحة الانتقائية المتوسطة/العالية في مركز ذي خبرة في رعاية مرضى ACHD.
+      </div>
+      <div class="info-box info-blue">
+        <strong>ℹ️ لماذا مركز خبير؟</strong>
+        فيزيولوجيا ACHD (تحويلات، بطين وحيد، دوران فونتان، ازرقاق مزمن) تتطلّب خبرة تخديرية ومراقبة خاصة لا تتوفّر في كل مركز.
+      </div>
+    </div>
+
+    <div class="section" id="s6">
+      <div class="section-header"><div class="section-num">٦</div><h2>اضطرابات النظم والأجهزة المزروعة CIED</h2></div>
+
+      <h3 style="color:var(--red);margin:.5rem 0">اضطرابات النظم</h3>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        في SVT المضبوط بالدواء: تُستمرّ مضادات اضطراب النظم (AADs) حول العملية.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        في رجفان أذيني مع عدم استقرار حركي دموي حادّ/متفاقم: تقويم نظم كهربائي إسعافي.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        في VT وحيدة الشكل مستمرة عَرَضية مرتبطة بندبة عضلية ومُعاوِدة رغم العلاج الأمثل: يُوصى بالاجتثاث قبل الجراحة الانتقائية.
+      </div>
+      <div class="rec rec-iii">
+        <span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE C</span>
+        <strong>لا يُوصى</strong> ببدء علاج للـ PVC اللا عَرَضية أثناء الفترة حول الجراحة.
+      </div>
+
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">الأجهزة المزروعة (ناظمات/مُقوّمات ICD)</h3>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        مريض ICD مُعطَّل مؤقتاً: مراقبة ECG مستمرة، وبرفقة كادر ماهر بالكشف والعلاج المبكّر لاضطراب النظم. وفي عالي الخطر (معتمد على الناظم/ICD أو تعذُّر الوصول للصدر): وضع صفيحتين عبر الجلد للتقويم/التنظيم.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        كل جهاز أُعيدت برمجته قبل الجراحة: إعادة فحص وإعادة برمجة لازمة بأسرع وقت بعدها (قبل مغادرة وحدة المراقبة).
+      </div>
+      <div class="info-box warning">
+        <strong>⚡ الكيّ الكهربائي والتداخل</strong>
+        الكيّ أحادي القطب مصدر رئيس للتداخل الكهرمغناطيسي؛ يُفضَّل ثنائي القطب، ولوحة أرضي بعيدة عن الجهاز، ونبضات قصيرة متقطّعة.
+      </div>
+    </div>
+
+    <div class="section" id="s7">
+      <div class="section-header"><div class="section-num">٧</div><h2>الأمراض الرئوية وفرط ضغط الشريان الرئوي PAH</h2></div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        استمرار العلاج المزمن لـ PAH في الفترة حول العملية.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        استمرار المراقبة الحركية الدموية ≥ ٢٤ ساعة بعد العملية في PAH الشديد.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        عند تفاقم قصور القلب الأيمن بعد العملية: رفع جرعة المُدرّ، وبدء بروستاسيكلين وريدي (مع/بدون مقوٍّ عضلي قلبي) بإشراف خبير PAH.
+      </div>
+      <div class="info-box danger">
+        <strong>🚨 خطر خاص</strong>
+        القصور القلبي الأيمن الحاد هو سبب الوفاة الأول في هؤلاء المرضى؛ يُتجنّب الهبوط في المقاومة الجهازية والزيادة في المقاومة الرئوية (نقص أكسجة، فرط ثنائي أكسيد الكربون، حماض).
+      </div>
+
+      <h3 style="color:var(--red);margin:1.5rem 0 .5rem">الأمراض الرئوية (COPD وانقطاع النفس النومي)</h3>
+      <div class="info-box info-blue">
+        <strong>🫁 نقاط عملية</strong>
+        الداء الرئوي الساد المزمن COPD وانقطاع النفس النومي الانسدادي OSA يرفعان خطر المضاعفات التنفسية والقلبية (فرط ضغط رئوي، قصور أيمن، اضطراب نظم). يُنصح بتحسين الحالة الرئوية قبل الجراحة، ومتابعة الإشباع والـ CO₂ بعدها، ومواصلة CPAP لمرضى OSA. لا يُوصى بتأجيل الجراحة لمجرد وجود COPD مستقر.
+      </div>
+    </div>
+
+    <div class="section" id="s8">
+      <div class="section-header"><div class="section-num">٨</div><h2>ارتفاع ضغط الدم</h2></div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span>
+        تجنّب التقلّبات الكبيرة في ضغط الدم حول العملية (خاصةً الهبوط) في المصابين بفرط ضغط مزمن مُقرَّر لهم جراحة انتقائية.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        في فرط الضغط حديث التشخيص قبل جراحة عالية الخطورة: تحرٍّ عن أذية الأعضاء المستهدفة (HMOD) وعوامل الخطر القلبية الوعائية.
+      </div>
+      <div class="rec rec-iii">
+        <span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE C</span>
+        <strong>لا يُوصى</strong> بتأجيل الجراحة بسبب فرط ضغط من المرحلة ١ أو ٢ (أي لا داعي لتأجيل الجراحة لضبط ضغط خفيف–متوسط).
+      </div>
+    </div>
+
+    <div class="section" id="s9">
+      <div class="section-header"><div class="section-num">٩</div><h2>الداء الشرياني المحيطي PAD والدماغي الوعائي</h2></div>
+      <p>نقطة مفصلية: مرضى PAD/أمّ الدم الأبهرية BSA غالباً مصابون بداء إكليلي مصاحب، لكن ذلك <strong>لا يبرّر</strong> تقييماً قلبياً روتينياً موسّعاً قبل جراحتهم.</p>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        عند قدرة وظيفية ضعيفة أو عوامل خطر قلبية مهمّة (مثل قصور قلب لا معاوَض، آفة صمامية مهمّة، اضطراب نظم مهم): إحالة لتقييم قلبي وتحسين قبل جراحة PAD/AAA.
+      </div>
+      <div class="rec rec-iii">
+        <span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE C</span>
+        <strong>لا يُوصى</strong> بالإحالة الروتينية للتقييم القلبي أو تصوير الإكليلي أو اختبار الجهد القلبي التنفسي (CPET) قبل جراحة PAD/AAA الانتقائية.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        <strong>الدماغي الوعائي:</strong> تصوير الشريان السباتي والدماغ قبل الجراحة عند مريض عانى TIA أو سكتة خلال الأشهر الستة السابقة (دون إعادة تروية مماثلة الجهة).
+      </div>
+      <div class="rec rec-iii">
+        <span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE C</span>
+        <strong>لا يُوصى</strong> بتصوير سباتي روتيني قبل الجراحة لعموم المرضى.
+      </div>
+    </div>
+
+    <div class="section" id="s10">
+      <div class="section-header"><div class="section-num">١٠</div><h2>الكلية والبدانة والسكري والتأمور</h2></div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        <strong>الكلية:</strong> عند وجود عوامل خطر قبل جراحة متوسطة/عالية: تحرٍّ عن داء كلوي بقياس الكرياتينين المصلي وتقدير GFR.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        <strong>البدانة:</strong> تقييم اللياقة القلبية التنفسية لتقدير الخطر القلبي حول العملية، مع اهتمام خاص بمن لديهم مؤشرات إضافية.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span>
+        <strong>السكري:</strong> تقييم قبل الجراحة للحالات القلبية المصاحبة عند مريض السكري المعروف/المشتبه بـ CAD، أو مع اعتلال عصبي ذاتي/شبكي/كلوي.
+      </div>
+      <div class="rec rec-i">
+        <span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span>
+        <strong>السكري:</strong> قياس HbA1c قبل الجراحة إن لم يُقَس خلال ٣ أشهر؛ ويُنظر بتأجيل الجراحة الانتقائية إن كان HbA1c ≥ 8.5% (69 mmol/mol).
+      </div>
+      <div class="info-box info-purple">
+        <strong>🫀 التأمور</strong>
+        في الانصباب/التضيّق التأموري المهم حركياً دموياً: يُقيَّم ويُدبَّر قبل الجراحة الانتقائية؛ والتخدير قد يكشف انهياراً دورانياً في الاندحاس القلبي غير المشخّص.
+      </div>
+    </div>
+
+    <div class="section" id="s11">
+      <div class="section-header"><div class="section-num">١١</div><h2>مرضى السرطان</h2></div>
+      <p>مريض السرطان أمام معادلة مزدوجة: <strong>خطر تأجيل جراحة الورم</strong> مقابل <strong>السُّمّية القلبية للعلاجات</strong>. كثير من علاجات السرطان (أنثراسيكلينات، تراستوزوماب، مثبّطات نقاط التفتيش المناعية، مثبّطات VEGF، الإشعاع الصدري) تسبّب اعتلال عضلة، قصور قلب، ارتفاع ضغط، أو اضطراب نظم.</p>
+      <div class="info-box highlight">
+        <strong>🎯 المبدأ</strong>
+        غالباً <strong>لا تُؤجَّل</strong> جراحة السرطان لأسباب قلبية إلا لضرورة قصوى، لأن التأخير يسوء الإنذار الورمي. الحل: تقييم قلبي مُركَّز سريع (إيكو + واسمات) وتحسين متوازٍ، لا تأخير.
+      </div>
+      <div class="info-box warning">
+        <strong>⚠️ نقاط عملية</strong>
+        قيّم وظيفة البطين الأيسر قبل الجراحة عند من تلقّى أنثراسيكلينات/تراستوزوماب أو إشعاعاً صدرياً؛ انتبه لفرط الضغط مع مثبّطات VEGF، ولالتهاب العضلة مع مثبّطات نقاط التفتيش المناعية؛ وراعِ فرط خطر الخثار الوريدي في الأورام (يُراجَع الجزء الخامس).
+      </div>
+    </div>
+
+    <div class="section" id="s12">
+      <div class="section-header"><div class="section-num">١٢</div><h2>كوفيد-١٩ (COVID-19)</h2></div>
+      <p>عدوى كوفيد الحديثة ترفع خطر المضاعفات القلبية الوعائية والوفيات حول العملية بشكل واضح، خصوصاً الأحداث الخثارية. القرار الجوهري هو <strong>توقيت الجراحة الانتقائية بعد الإصابة</strong>.</p>
+      <div class="info-box info-blue">
+        <strong>⏱ توقيت الجراحة الانتقائية بعد الإصابة</strong>
+        يُؤجَّل الإجراء الانتقائي حتى التعافي؛ وتقترح البيانات تأخيراً يتناسب مع شدّة الإصابة (عدة أسابيع بعد العدوى الخفيفة، وأطول بعد الشديدة أو مع أعراض مستمرة)، مع تقييم فردي للأعراض القلبية التنفسية المتبقّية قبل المضي.
+      </div>
+      <div class="info-box warning">
+        <strong>⚠️ الجراحة العاجلة/الطارئة</strong>
+        لا تُؤجَّل الجراحة الضرورية؛ بل تُتّخذ احتياطات إضافية: مراقبة قلبية تنفسية دقيقة، انتباه لخطر الخثار المرتفع (وقاية فعّالة)، وتقييم لاحتمال أذية عضلية قلبية (تروبونين) بعد العملية.
+      </div>
+    </div>
+
+    <div class="section" id="s13">
+      <div class="section-header"><div class="section-num">١٣</div><h2>الفروق بين الجنسين</h2></div>
+      <p>الجنس (sex) والنوع الاجتماعي (gender) قد يؤثّران بوضوح في تدبير مرضى الجراحة غير القلبية وفي مآلاتهم. توجد أنماط ظاهرية مختلفة للأمراض المرافقة وعوامل الخطر تبعاً للجنس، وقد تنعكس على المراضة والوفيات حول العملية. مع ذلك، البيانات التي تدرس تحديداً تفاعل الجنس مع العمر والأمراض المرافقة في سياق الجراحة غير القلبية ما تزال قليلة.</p>
+      <div class="info-box info-blue">
+        <strong>ℹ️ نقاط جوهرية</strong>
+        قد يؤخذ الجنس في الحسبان عند التقييم قبل الجراحة، إذ إنّ حدوث الأمراض القلبية الوعائية المُعدَّل حسب العمر أقلّ لدى النساء. كما أنّ فروقاً في الفيزيولوجيا والحرائك/الديناميكا الدوائية لأدوية التخدير قد تؤثّر في خطة التخدير وتدبير الألم والتعافي بعد العملية.
+      </div>
+      <div class="info-box info-purple">
+        <strong>🩸 تدبير الدم واضطرابات النظم</strong>
+        تستفيد النساء بشكل خاص من برامج تدبير دم المريض في الجراحة غير القلبية (حجم دم أقل ومعدّلات نقل أعلى). وقد سُجّلت فروق جنسية في العرض والركيزة الكهربائية والمضاعفات والمآل بعيد المدى لدى مرضى الأجهزة المزروعة CIED، والجنس الأنثوي عامل خطر معروف للسكتة في الرجفان الأذيني — وإن لم تتوفّر بعدُ بيانات نوعية على فروق الخطر أو المآل في مرضى CIED/اضطرابات النظم الخاضعين تحديداً للجراحة غير القلبية.
+      </div>
+      <div class="info-box warning">
+        <strong>⚠️ الخلاصة العملية</strong>
+        الوعي بالفروق الجنسية جزء من التقييم الفردي — لا سيّما في تفسير الأعراض القلبية (قد تكون لا نمطية أكثر لدى النساء)، وتدبير الدم، وتقدير خطر السكتة في الرجفان. لكن ندرة الأدلة النوعية تعني أنّ التوصيات الرسمية تبقى مشتركة بين الجنسين حتى الآن.
+      </div>
+    </div>
+
     <div class="key-points" id="keys">
-      <h4>🔑 نقاط المفتاح</h4>
+      <h4>🔑 النقاط المفتاحية — الجزء الثالث</h4>
       <ul>
-        <li>قصور القلب بجميع أنواعه (HFrEF/HFmrEF/HFpEF) عامل خطر أقوى من مرض الشريان التاجي المستقر وحده</li>
-        <li>الجراحة الاختيارية بعد وضع دعامة تاجية تُؤجَّل حتى إتمام المدة الدنيا لـ DAPT</li>
-        <li>تضيق الأبهر الشديد العرضي يستحق معالجة الصمام قبل الجراحة الكبرى عند الإمكان</li>
-        <li>الحفاظ على الحمل الأولي والمقاومة الوعائية أساسي في تضيق الأبهر أثناء التخدير</li>
-        <li>ضبط معدل نبض الرجفان الأذيني قبل الجراحة الاختيارية يقلل خطر عدم الاستقرار</li>
-        <li>ارتفاع ضغط الشريان الرئوي الشديد يستدعي تحويلاً لمراكز متخصصة</li>
-        <li>التخطيط المسبق لأجهزة تنظيم النظم و ICD يمنع مضاعفات خطيرة أثناء استخدام الكهرباء الجراحية</li>
+        <li>CAD: الدعامات حديثة الجيل عند الحاجة لـ PCI (I A)؛ لا إعادة تروية روتينية قبل جراحة منخفضة/متوسطة في CCS (III B).</li>
+        <li>HF: إيكو + NT-proBNP قبل الجراحة عالية الخطورة (I B) وعلاج دوائي أمثل (I A)؛ لا جراحة انتقائية في قصور لا معاوَض.</li>
+        <li>AS الشديد العَرَضي → AVR قبل الجراحة الانتقائية المتوسطة/العالية (I C)؛ TAVI خيار للحسّاس للوقت.</li>
+        <li>AR/MS: جراحة/تدخّل صمامي وفق معايير محددة (LVESD, LVEF, أعراض, SPAP) قبل الجراحة (I C).</li>
+        <li>ACHD: استشارة اختصاصي + مركز خبير (I C).</li>
+        <li>ICD مُعطَّل → مراقبة ECG مستمرة + صفيحتان عبر الجلد في عالي الخطر (I C)؛ لا علاج لـ PVC لا عَرَضية (III C).</li>
+        <li>PAH: استمرار العلاج + مراقبة ≥ 24h بعد العملية (I C)؛ القصور الأيمن الحاد أخطر مضاعفة.</li>
+        <li>فرط الضغط: تجنّب التقلّبات (I A)؛ لا تأجيل لمرحلة ١–٢ (III C).</li>
+        <li>PAD/AAA: لا تقييم قلبي روتيني (III C) إلا عند دواعٍ سريرية واضحة (I C).</li>
+        <li>السكري: HbA1c قبل الجراحة؛ يُنظر بالتأجيل إن ≥ 8.5% (I B).</li>
+        <li>HOCM: حافظ على الحِمل القَبْلي، تجنّب الموسّعات ومقوّيات التقلّص القوية، وأبقِ المعدّل منخفضاً.</li>
+        <li>السرطان: لا تُؤجَّل جراحة الورم لأسباب قلبية إلا لضرورة — تقييم سريع وتحسين متوازٍ؛ انتبه لسُمّية العلاجات القلبية.</li>
+        <li>كوفيد: أجّل الجراحة الانتقائية حسب شدّة الإصابة؛ احتراس خاص من الخثار والأذية العضلية.</li>
+        <li>الفروق بين الجنسين: أعراض قلبية قد تكون لا نمطية لدى النساء، فائدة أكبر من تدبير الدم، والجنس الأنثوي عامل خطر للسكتة في الرجفان — والأدلة النوعية ما زالت قليلة.</li>
       </ul>
     </div>
 
-    <!-- Navigation -->
     <div class="next-prev">
       <a href="ncs-part2.html" class="nav-btn">
-        <div class="dir">← العودة إلى</div>
+        <div class="dir">← الجزء السابق</div>
         <div class="title">الفحوصات القلبية التشخيصية</div>
       </a>
       <a href="ncs-part4.html" class="nav-btn next">
         <div class="dir">الجزء التالي ←</div>
-        <div class="title">إدارة الأدوية حول الجراحة</div>
+        <div class="title">الأدوية ومضادات التخثّر</div>
       </a>
     </div>
 
   </div>
 </div>
+
 
 <footer>
   <p>مبني على غايدلاين ESC 2022 لتقييم القلب في الجراحة غير القلبية — للأغراض التعليمية | <a href="ncs-index.html">← NCS Overview</a> | <a href="guidelines.html">جميع الغايدات</a></p>

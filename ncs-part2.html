@@ -22,7 +22,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NCS — الجزء الثاني — الفحوصات القلبية التشخيصية قبل الجراحة | ESC 2022</title>
+<title>NCS — الجزء الثاني: الفحوصات القلبية التشخيصية | ESC 2022</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -123,6 +123,34 @@
   footer a{color:var(--red);text-decoration:none}
   @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
 
+  /* ---- flow / decision diagram (native, theme-aware) ---- */
+  .flow{display:flex;flex-direction:column;gap:0;margin:1.25rem 0}
+  .flow-node{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.85rem 1.1rem;font-size:.88rem;position:relative}
+  .flow-node.start{border-color:var(--blue);background:rgba(59,130,246,.08)}
+  .flow-node.decision{border-color:var(--gold);background:rgba(234,88,12,.08);font-weight:600}
+  .flow-node.action{border-color:var(--teal);background:rgba(20,184,166,.08)}
+  .flow-node.stop{border-color:var(--red);background:rgba(239,68,68,.1)}
+  .flow-node.go{border-color:var(--green);background:rgba(16,185,129,.1)}
+  .flow-node .n-title{font-weight:700;display:block;margin-bottom:.15rem}
+  .flow-node .n-sub{font-size:.8rem;color:var(--text2)}
+  .flow-arrow{width:2px;height:22px;background:var(--border);margin:0 auto;position:relative}
+  .flow-arrow::after{content:'▼';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:var(--border);font-size:.7rem}
+  .flow-branch{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.4rem 0}
+  .flow-branch .lbl{text-align:center;font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.3rem}
+  .flow-branch .yes .lbl{color:var(--green)}
+  .flow-branch .no .lbl{color:var(--red)}
+  @media(max-width:600px){.flow-branch{grid-template-columns:1fr}}
+  .three-tier{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1rem 0}
+  @media(max-width:800px){.three-tier{grid-template-columns:1fr}}
+  .tier{border-radius:12px;padding:1.1rem;border:1px solid var(--border)}
+  .tier.low{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.4)}
+  .tier.mid{background:rgba(234,88,12,.08);border-color:rgba(234,88,12,.4)}
+  .tier.high{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.4)}
+  .tier h4{font-size:1rem;margin-bottom:.2rem}
+  .tier.low h4{color:var(--green)} .tier.mid h4{color:var(--gold)} .tier.high h4{color:var(--red)}
+  .tier .pct{font-family:var(--mono);font-size:.8rem;color:var(--text2);margin-bottom:.6rem}
+  .tier ul{padding-right:1.1rem;margin:0} .tier li{font-size:.8rem;margin-bottom:.25rem;color:var(--text2)}
+
   header{transition:padding .3s ease}
   .header-inner{transition:gap .3s ease}
   .header-title h1{transition:font-size .3s ease}
@@ -168,244 +196,178 @@
 
   <nav class="toc">
     <h3>محتويات الجزء الثاني</h3>
-    <a href="#s1">١ · تخطيط القلب الكهربائي</a>
-    <a href="#s2" class="toc-sub">· من يحتاج ECG قبل الجراحة؟</a>
-    <a href="#s3">٢ · تخطيط صدى القلب</a>
-    <a href="#s4" class="toc-sub">· دواعي الاستخدام</a>
-    <a href="#s5">٣ · اختبارات الجهد والتصوير الوظيفي</a>
-    <a href="#s6">٤ · CT التاجي والقسطرة التشخيصية</a>
-    <a href="#s7">٥ · خوارزمية اختيار الفحص المناسب</a>
-    <a href="#s8">٦ · التقييم قبل الجراحة الوعائية</a>
-    <a href="#keys">نقاط المفتاحية</a>
+    <a href="#s1">١ · منطق اختيار الفحص</a>
+    <a href="#s2">٢ · تخطيط القلب ECG</a>
+    <a href="#s3">٣ · الإيكو عبر الصدر TTE</a>
+    <a href="#s4">٤ · اختبارات الجهد</a>
+    <a href="#s5">٥ · التصوير بالجهد Stress imaging</a>
+    <a href="#s6">٦ · CCTA والقسطرة ICA</a>
+    <a href="#s7">٧ · خوارزمية اختيار الفحص</a>
+    <a href="#s8">٨ · قبل الجراحة الوعائية</a>
+    <a href="#keys">النقاط المفتاحية</a>
   </nav>
 
   <div class="content">
 
-    <!-- Section 1 -->
     <div class="section" id="s1">
-      <div class="section-header">
-        <div class="section-num">١</div>
-        <h2>تخطيط القلب الكهربائي (12-lead ECG)</h2>
-      </div>
-
-      <p>تخطيط القلب الكهربائي هو الفحص القلبي الأبسط والأكثر توفراً، لكنه ليس ضرورياً لكل مريض — الغايدلاين يوجّه استخدامه بشكل انتقائي حسب عوامل الخطر ونوع الجراحة.</p>
-
-      <h3 id="s2">من يحتاج ECG قبل الجراحة؟</h3>
-      <ul>
-        <li>مرضى معروف لديهم مرض قلب وعائي (شريان تاجي، صمامي، عضلة قلب، نظم)</li>
-        <li>عمر ≥ 65 سنة قبل جراحة ذات خطورة مرتفعة</li>
-        <li>وجود عامل خطر واحد على الأقل من RCRI</li>
-        <li>أعراض قلبية جديدة أو غير مفسّرة (ألم صدري، خفقان، دوار)</li>
-      </ul>
-
-      <div class="rec rec-i">
-        <div class="rec-text">يُوصى بإجراء ECG قبل الجراحة في المرضى الذين لديهم مرض قلبي وعائي معروف أو عوامل خطر قلبية، الخاضعين لجراحة ذات خطورة مرتفعة</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
-      </div>
-
-      <div class="rec rec-iii">
-        <div class="rec-text">لا يُوصى بإجراء ECG الروتيني في المرضى الشباب اللاعرضيين بدون عوامل خطر، الخاضعين لجراحة منخفضة الخطورة</div>
-        <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span></div>
-      </div>
-
-      <div class="info-box warning">
-        <strong>⚠️ لا تعتمد على ECG وحده</strong>
-        ECG طبيعي لا ينفي وجود مرض شريان تاجي كامن ذي دلالة — هو أداة كشف أولية للاضطرابات الحادة (احتشاء قديم، تضخم بطين، اضطراب نظم) وليس أداة استبعاد شاملة.
-      </div>
-    </div>
-
-    <!-- Section 2 -->
-    <div class="section" id="s3">
-      <div class="section-header">
-        <div class="section-num">٢</div>
-        <h2>تخطيط صدى القلب (Transthoracic Echocardiography)</h2>
-      </div>
-
-      <p>الإيكو ليس فحصاً روتينياً قبل الجراحة، بل يُطلب بدواعٍ سريرية محددة — أهمها الاشتباه بمرض صمامي أو قصور قلب غير مقيَّم سابقاً.</p>
-
-      <h3 id="s4">دواعي طلب الإيكو قبل الجراحة</h3>
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead><tr><th>الدواعي</th><th>الهدف من الفحص</th></tr></thead>
-          <tbody>
-            <tr><td>ضيق نفس جديد أو غير مفسَّر</td><td>تقييم وظيفة البطين واستبعاد قصور قلب خفي</td></tr>
-            <tr><td>نفخة قلبية جديدة أو مشتبه بها سريرياً</td><td>استبعاد مرض صمامي شديد (خصوصاً تضيق الأبهر)</td></tr>
-            <tr><td>قصور قلب معروف مع تغيّر بالحالة السريرية</td><td>إعادة تقييم EF وحالة الاحتقان</td></tr>
-            <tr><td>اعتلال عضلة قلب معروف قبل جراحة كبرى</td><td>تحديد درجة الخلل الوظيفي الحالية</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="rec rec-i">
-        <div class="rec-text">يُوصى بإجراء Echocardiography في المرضى الذين لديهم ضيق نفس غير مفسَّر أو نفخة قلبية مشتبهة قبل الجراحة الاختيارية ذات الخطورة المرتفعة</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
-      </div>
-
-      <div class="rec rec-iii">
-        <div class="rec-text">لا يُوصى بالإيكو الروتيني في المرضى اللاعرضيين بدون شك سريري بمرض قلبي هيكلي</div>
-        <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span></div>
-      </div>
-    </div>
-
-    <!-- Section 3 -->
-    <div class="section" id="s5">
-      <div class="section-header">
-        <div class="section-num">٣</div>
-        <h2>اختبارات الجهد والتصوير الوظيفي</h2>
-      </div>
-
-      <p>الهدف من اختبار الجهد (Stress Testing) قبل الجراحة ليس تشخيص مرض الشريان التاجي بحد ذاته، بل الإجابة عن سؤال محدد: هل نتيجة الفحص ستغيّر القرار الجراحي أو العلاجي؟</p>
-
-      <div class="type-grid">
-        <div class="type-card">
-          <div class="type-name">Exercise ECG</div>
-          <div class="type-def">اختبار الجهد التقليدي على جهاز المشي</div>
-          <div class="type-row"><span class="type-label">يتطلب</span><span class="type-val">قدرة على المشي + ECG قابل للتفسير</span></div>
-        </div>
-        <div class="type-card t2">
-          <div class="type-name">Stress Echo / MPI</div>
-          <div class="type-def">تصوير دوائي (Dobutamine/Vasodilator) عند تعذّر الجهد الفيزيائي</div>
-          <div class="type-row"><span class="type-label">يفيد في</span><span class="type-val">ضعف القدرة الوظيفية أو ECG غير قابل للتفسير</span></div>
-        </div>
-        <div class="type-card t3">
-          <div class="type-name">CMR بالإجهاد</div>
-          <div class="type-def">بديل عالي الدقة في مراكز متخصصة</div>
-          <div class="type-row"><span class="type-label">يفيد في</span><span class="type-val">نتائج غير حاسمة بالطرق الأخرى</span></div>
-        </div>
-      </div>
-
-      <div class="rec rec-iia">
-        <div class="rec-text">يُنصح بإجراء اختبار جهد أو تصوير وظيفي غير جراحي في المرضى ذوي القدرة الوظيفية الضعيفة (&lt;4 METs) أو غير المعروفة، الخاضعين لجراحة ذات خطورة مرتفعة، عندما ستُغيّر النتيجة القرار العلاجي</div>
-        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
-      </div>
-
-      <div class="rec rec-iii">
-        <div class="rec-text">لا يُوصى بالفحص الوظيفي الروتيني قبل جراحة منخفضة أو متوسطة الخطورة بغض النظر عن الحالة الوظيفية</div>
-        <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span></div>
-      </div>
-
+      <div class="section-header"><div class="section-num">١</div><h2>منطق اختيار الفحص التشخيصي</h2></div>
+      <p>القاعدة الحاكمة: لا يُطلب الفحص إلا إذا كانت نتيجته ستغيّر التدبير (تأجيل الجراحة، تعديل الأدوية، إعادة تروية، أو تكثيف المراقبة). الفحوص الروتينية غير الموجَّهة تؤخّر الجراحة وقد تسوء إنذار المريض بلا فائدة.</p>
       <div class="info-box highlight">
-        <strong>🎯 السؤال الذهبي قبل طلب أي فحص</strong>
-        "هل ستغيّر نتيجة هذا الفحص خطة العلاج أو التدخل قبل الجراحة؟" — إذا كانت الإجابة لا، فالفحص غير مبرر مهما بدا "شاملاً".
+        <strong>🎯 متى نتجاوز الواسمات وECG إلى فحص أعمق؟</strong>
+        عند ضعف القدرة الوظيفية (&lt;4 METs أو غير معروفة) و/أو ارتفاع NT-proBNP/BNP و/أو نتائج ECG/تروبونين غير طبيعية — خصوصاً قبل الجراحة عالية الخطورة.
+      </div>
+      <div class="info-box warning">
+        <strong>ترتيب منطقي</strong>
+        تقييم سريري + ECG + واسمات ← إن اختلّت أو ضعفت القدرة الوظيفية ← TTE ← عند الحاجة تصوير بالجهد ← ثم CCTA/ICA وفق دواعي الحالة غير الجراحية.
       </div>
     </div>
 
-    <!-- Section 4 -->
-    <div class="section" id="s6">
-      <div class="section-header">
-        <div class="section-num">٤</div>
-        <h2>تصوير الشرايين التاجية بالـ CT والقسطرة التشخيصية</h2>
+    <div class="section" id="s2">
+      <div class="section-header"><div class="section-num">٢</div><h2>تخطيط القلب الكهربائي (ECG)</h2></div>
+      <p>الـ ECG بـ 12 مسرى أداة متاحة وبسيطة ورخيصة. يكشف الاحتشاء القديم (موجات Q)، الإقفار (تغيّرات ST-T)، اضطراب النظم، والحصار، ويُتيح كشف تغيّرات ECG داخل/بعد الجراحة عند مقارنته بتخطيط سابق.</p>
+      <div class="rec rec-i">
+        <div class="rec-text">في مرضى CVD المعروف أو عوامل الخطر (بما فيها العمر ≥65) أو أعراض/علامات توحي بـ CVD → يُوصى بـ ECG بـ 12 مسرى قبل الجراحة متوسطة وعالية الخطورة.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
       </div>
-
-      <p>دواعي CT التاجي (CCTA) والقسطرة التشخيصية قبل الجراحة غير القلبية هي نفسها دواعيها خارج السياق الجراحي — أي الاشتباه بمرض شريان تاجي ذي دلالة سريرية يستحق التقييم بغض النظر عن الجراحة القادمة.</p>
-
-      <ul>
-        <li>أعراض ذبحة صدرية غير مستقرة أو متسارعة قبل الجراحة</li>
-        <li>نتيجة فحص وظيفي إيجابية بشدة عالية (نقص تروية واسع)</li>
-        <li>اشتباه بمتلازمة شريان تاجي حادة يتطلب استبعاداً عاجلاً</li>
-      </ul>
-
-      <div class="info-box danger">
-        <strong>🚨 القسطرة التداخلية الوقائية الروتينية غير مبررة</strong>
-        لا تُوصى إعادة توعية الشريان التاجي الوقائية الروتينية (PCI/CABG) في المريض المستقر لمجرد "تجهيزه" للجراحة غير القلبية — الفائدة لم تثبت إلا في حالات محددة جداً (Left main، مرض ثلاثي الأوعية عرضي).
-      </div>
-
       <div class="rec rec-iii">
-        <div class="rec-text">لا يُوصى بإعادة التوعية التاجية الوقائية الروتينية قبل الجراحة غير القلبية في مرضى مرض الشريان التاجي المستقر فقط لتقليل الخطر الجراحي</div>
+        <div class="rec-text">لا يُنصح بـ ECG روتيني قبل الجراحة في المرضى منخفضي الخطر الخاضعين لجراحة منخفضة/متوسطة الخطورة.</div>
         <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span></div>
       </div>
-    </div>
-
-    <!-- Section 5 -->
-    <div class="section" id="s7">
-      <div class="section-header">
-        <div class="section-num">٥</div>
-        <h2>خوارزمية اختيار الفحص المناسب</h2>
-      </div>
-
-      <div class="algo-box">
-        <div class="algo-step">
-          <div class="algo-num">1</div>
-          <div class="algo-content">
-            <h4>جراحة منخفضة الخطورة؟</h4>
-            <p>نعم → لا حاجة لأي فحص تصويري أو وظيفي إضافي مهما كانت الحالة الوظيفية</p>
-          </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">2</div>
-          <div class="algo-content">
-            <h4>جراحة مرتفعة الخطورة + قدرة وظيفية جيدة (≥4 METs)؟</h4>
-            <p>نعم → تابع للجراحة، فكّر بمراقبة Troponin بعد العملية فقط</p>
-          </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">3</div>
-          <div class="algo-content">
-            <h4>قدرة وظيفية ضعيفة أو غير معروفة + أعراض/RCRI مرتفع؟</h4>
-            <p>اطلب اختبار جهد أو تصوير وظيفي — فقط إذا كانت النتيجة ستغيّر القرار</p>
-          </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">4</div>
-          <div class="algo-content">
-            <h4>نتيجة الفحص الوظيفي إيجابية بشدة عالية؟</h4>
-            <p>ناقش الحالة ضمن Heart Team — فكّر بالقسطرة التشخيصية فقط إذا كانت ستُغيّر الإدارة قبل الجراحة</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 6 -->
-    <div class="section" id="s8">
-      <div class="section-header">
-        <div class="section-num">٦</div>
-        <h2>التقييم قبل الجراحة الوعائية تحديداً</h2>
-      </div>
-
-      <p>مرضى الجراحة الوعائية الكبرى (تمدد الأبهر البطني، Bypass الأطراف السفلية) يشكّلون فئة خاصة — لأن مرض الشريان التاجي المصاحب شائع جداً فيهم (تصلب الشرايين مرض جهازي) حتى لو كانوا لاعرضيين.</p>
-
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead><tr><th>الإجراء</th><th>التوصية</th></tr></thead>
-          <tbody>
-            <tr><td>ECG أساسي قبل الجراحة</td><td>موصى به لجميع مرضى الجراحة الوعائية الكبرى</td></tr>
-            <tr><td>NT-proBNP/BNP</td><td>موصى به قبل الجراحة الوعائية المفتوحة</td></tr>
-            <tr><td>فحص وظيفي روتيني في اللاعرضيين</td><td>غير موصى به إن كانت القدرة الوظيفية جيدة</td></tr>
-            <tr><td>Troponin بعد الجراحة</td><td>موصى به روتينياً — خطورة عالية جداً لـ MINS</td></tr>
-          </tbody>
-        </table>
-      </div>
-
       <div class="info-box info-blue">
-        <strong>📌 التداخل الوعائي داخل الأوعية (EVAR) أقل خطورة</strong>
-        الإصلاح داخل الأوعية لتمدد الأبهر (EVAR) يحمل خطراً قلبياً أقل بكثير من الجراحة المفتوحة — يُفضَّل عند توفره وملاءمته تشريحياً في المرضى عاليي الخطر القلبي.
+        <strong>💡 نصيحة عملية</strong>
+        قارن دائماً بتخطيط سابق إن وُجد — فالتغيّر عن خط الأساس أهم من التخطيط المعزول، وهو مرجع لتفسير أي تغيّر بعد الجراحة.
       </div>
+    </div>
 
+    <div class="section" id="s3">
+      <div class="section-header"><div class="section-num">٣</div><h2>الإيكو عبر الصدر (TTE) — Table 8</h2></div>
+      <p>لا يُنصح بالإيكو الروتيني لكل المرضى، بل يُوجَّه حسب القدرة الوظيفية والواسمات والعلامات. القيمة الأساسية للإيكو هي إتاحة استراتيجيات خفض الخطر (مثل معالجة تضيّق أبهري شديد قبل الجراحة).</p>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بـ TTE في المرضى ذوي القدرة الوظيفية الضعيفة و/أو ارتفاع NT-proBNP/BNP، أو عند وجود نفخة، قبل الجراحة عالية الخطورة — بهدف اتخاذ إجراءات خفض الخطر.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
       <div class="rec rec-iia">
-        <div class="rec-text">يُنصح بتفضيل الإصلاح داخل الأوعية (EVAR) على الجراحة المفتوحة عند الملاءمة التشريحية في المرضى ذوي الخطورة القلبية المرتفعة</div>
+        <div class="rec-text">يُنصح بـ TTE في المرضى مع اشتباه CVD جديد أو علامات/أعراض غير مُفسَّرة توحي بمرض قلبي.</div>
         <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
       </div>
+      <div class="rec rec-iib">
+        <div class="rec-text">يمكن التفكير بـ TTE في المرضى ذوي القدرة الوظيفية الضعيفة، أو ECG غير طبيعي، أو ارتفاع NT-proBNP/BNP، أو وجود عامل خطر سريري ≥1 — قبل الجراحة متوسطة الخطورة.</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iib">
+        <div class="rec-text">يمكن التفكير بالإيكو المُركَّز (FOCUS) الذي يجريه اختصاصيون مُدرَّبون لتحسين دقّة التقييم السريري.</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iii">
+        <div class="rec-text">لا يُنصح بالتقييم الروتيني لوظيفة البطين الأيسر قبل الجراحة.</div>
+        <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
     </div>
 
-    <!-- Key Points -->
+    <div class="section" id="s4">
+      <div class="section-header"><div class="section-num">٤</div><h2>اختبار الجهد بالتمرين (Exercise Stress Test)</h2></div>
+      <p>يوفّر تقديراً للقدرة الوظيفية ويقيّم استجابة الضغط والنظم للجهد. حساسيّته 74–92% ونوعيّته 60–80% لكشف الإقفار، وقيمته التشخيصية محدودة عند وجود شذوذ ST مسبق على ECG الراحة أو تناول ديجيتال.</p>
+      <div class="info-box warning">
+        <strong>⚠️ متى نستخدم اختبار الجهد بالتمرين وحده؟</strong>
+        يُفضَّل التصوير بالجهد. اختبار الجهد بالتمرين وحده يُنصح به فقط عند عدم توفّر التصوير بالجهد، أو لتقييم القدرة الوظيفية حين تكون غير معروفة.
+      </div>
+    </div>
+
+    <div class="section" id="s5">
+      <div class="section-header"><div class="section-num">٥</div><h2>التصوير بالجهد (Stress Imaging) — Table 9</h2></div>
+      <p>يناسب التقييم عند وجود عوامل خطر سريرية وقدرة وظيفية ضعيفة. يشمل إيكو الجهد بالدوبوتامين (DSE) وتصوير التروية العضلية (MPI)، وبدرجة أقل الرنين المغناطيسي بالجهد. الفحص الطبيعي بلا شذوذ راحة له قيمة تنبؤية سلبية عالية، بينما القيمة التنبؤية الإيجابية للأحداث بعد الجراحة أضعف وقد تحتاج تأكيداً.</p>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بالتصوير بالجهد قبل الجراحة الاختيارية عالية الخطورة في المرضى ذوي القدرة الوظيفية الضعيفة والاحتمال العالي لـ CAD أو الخطر السريري المرتفع.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنصح بالتصوير بالجهد قبل إعادة التروية بالمجازة (CABG) عند الحاجة لتقدير الإقفار القابل للاستحداث.</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iib">
+        <div class="rec-text">يمكن التفكير بالتصوير بالجهد في المرضى ذوي عوامل الخطر السريرية والقدرة الوظيفية الضعيفة قبل الجراحة متوسطة الخطورة عند وجود قلق سريري.</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iii">
+        <div class="rec-text">لا يُنصح بالتصوير بالجهد روتينياً قبل الجراحة.</div>
+        <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <div class="section" id="s6">
+      <div class="section-header"><div class="section-num">٦</div><h2>CCTA والقسطرة التاجية (ICA) — Table 10</h2></div>
+      <p>المبدأ الأساسي: دواعي القسطرة التاجية الغازية وإعادة التروية قبل الجراحة هي <strong>نفسها</strong> دواعيها في السياق غير الجراحي — فالجراحة لا تخلق دواعي جديدة. القسطرة الروتينية قبل الجراحة تضيف خطراً إجرائياً وتؤخّر العملية بلا فائدة مثبتة.</p>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى باستخدام نفس دواعي القسطرة الغازية (ICA) وإعادة التروية قبل الجراحة كما في السياق غير الجراحي.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنصح بـ CCTA لنفي CAD في المرضى ذوي الاحتمال السريري المنخفض–المتوسط لـ CAD، أو غير المُشخَّصين سابقاً، خاصة مع تروبونين/ECG طبيعي أو غير حاسم.</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iib">
+        <div class="rec-text">يمكن التفكير بـ ICA قبل الجراحة في مرضى المتلازمة الإكليلية المزمنة المستقرين (CCS) المُقرَّر لهم استئصال باطنة السبات الاختياري (CEA).</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iii">
+        <div class="rec-text">لا يُنصح بـ ICA الروتينية قبل الجراحة في مرضى CCS المستقرين الخاضعين لجراحة منخفضة/متوسطة الخطورة.</div>
+        <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="info-box info-purple">
+        <strong>🔎 قيمة CCTA</strong>
+        قوّتها في قيمتها التنبؤية السلبية العالية لنفي CAD؛ وتقلّ فائدتها عند ارتفاع درجة الكلس التاجي. يمكن دمجها مع FFR-CT لتقدير الأهمية الوظيفية للتضيّق.
+      </div>
+    </div>
+
+    <div class="section" id="s7">
+      <div class="section-header"><div class="section-num">٧</div><h2>خوارزمية اختيار الفحص المناسب</h2></div>
+      <div class="algo-box">
+        <div class="flow">
+          <div class="flow-node start"><span class="n-title">تقييم سريري + ECG + واسمات حيوية</span><span class="n-sub">حسب فئة المريض وخطورة الجراحة (الجزء الأول)</span></div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision"><span class="n-title">القدرة الوظيفية جيدة (≥4 METs) والواسمات طبيعية؟</span></div>
+          <div class="flow-branch">
+            <div class="yes"><div class="lbl">نعم</div><div class="flow-node go"><span class="n-title">للجراحة</span><span class="n-sub">لا حاجة لفحص تصويري إضافي · مراقبة hs-cTn بعد العملية في عاليي الخطر</span></div></div>
+            <div class="no"><div class="lbl">لا / غير معروفة</div><div class="flow-node action"><span class="n-title">TTE</span><span class="n-sub">لتقييم البنية والوظيفة والصمامات (Table 8)</span></div></div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision"><span class="n-title">احتمال CAD مرتفع + خطر سريري مرتفع قبل جراحة عالية الخطورة؟</span></div>
+          <div class="flow-branch">
+            <div class="yes"><div class="lbl">نعم</div><div class="flow-node action"><span class="n-title">تصوير بالجهد (DSE/MPI)</span><span class="n-sub">Class I B — لتقدير الإقفار القابل للاستحداث</span></div></div>
+            <div class="no"><div class="lbl">احتمال منخفض–متوسط</div><div class="flow-node action"><span class="n-title">CCTA لنفي CAD</span><span class="n-sub">Class IIa C — قيمة تنبؤية سلبية عالية</span></div></div>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node stop"><span class="n-title">إقفار مهم مثبت؟ → ICA وإعادة تروية</span><span class="n-sub">بنفس دواعي السياق غير الجراحي (Table 10)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="s8">
+      <div class="section-header"><div class="section-num">٨</div><h2>التقييم قبل الجراحة الوعائية تحديداً</h2></div>
+      <p>مرضى الجراحة الوعائية من أعلى فئات الخطر، لكن الأدلّة (مثل توجّه دراسة DECREASE-V) لا تدعم الفحص الوظيفي/التصويري الروتيني في اللاعرضيين ذوي القدرة الوظيفية المقبولة؛ ولا تدعم إعادة التروية الوقائية الروتينية قبل الجراحة الوعائية في غياب دواعيها المستقلة. التفاصيل الكاملة لمرضى الشريان المحيطي وأمراض السبات في الجزء الثالث.</p>
+      <div class="info-box success">
+        <strong>✅ الخلاصة</strong>
+        الجراحة الوعائية «عالية الخطر» لا تعني «فحص روتيني للجميع» — بل تقييم موجَّه بالقدرة الوظيفية والواسمات، وفحص أعمق فقط لمن ستغيّر نتيجته التدبير.
+      </div>
+    </div>
+
     <div class="key-points" id="keys">
-      <h4>🔑 نقاط المفتاح</h4>
+      <h4>🔑 النقاط المفتاحية — الجزء الثاني</h4>
       <ul>
-        <li>الفحص القلبي يُطلب فقط إذا كانت نتيجته ستغيّر القرار العلاجي أو الجراحي</li>
-        <li>ECG موصى به انتقائياً — ليس روتينياً لكل مريض</li>
-        <li>الإيكو يُطلب بدواعٍ سريرية محددة (نفخة، ضيق نفس، تغيّر بحالة قصور القلب)</li>
-        <li>اختبار الجهد/التصوير الوظيفي يُحجز للقدرة الوظيفية الضعيفة قبل جراحة مرتفعة الخطورة</li>
-        <li>إعادة التوعية التاجية الوقائية الروتينية غير مبررة لمجرد "تجهيز" المريض للجراحة</li>
-        <li>الجراحة الوعائية الكبرى فئة خاصة تستحق تقييماً أكثر شمولية حتى بغياب الأعراض</li>
-        <li>EVAR يُفضَّل على الجراحة المفتوحة في المرضى عاليي الخطر القلبي عند الإمكان</li>
+        <li>لا فحص إلا إذا كانت نتيجته ستغيّر التدبير — لا فحوص روتينية غير موجَّهة.</li>
+        <li>ECG (Class I) وwaسمات في المؤهَّلين؛ لا ECG/واسمات روتينية في منخفضي الخطر (Class III).</li>
+        <li>TTE موجَّه بالقدرة الوظيفية/الواسمات/النفخة؛ لا تقييم روتيني لوظيفة البطين الأيسر (Class III).</li>
+        <li>التصوير بالجهد Class I قبل الجراحة عالية الخطورة مع قدرة ضعيفة واحتمال CAD مرتفع.</li>
+        <li>القيمة التنبؤية السلبية للفحوص أقوى من الإيجابية — الفحص الطبيعي يطمئن أكثر مما يُقلق الإيجابي.</li>
+        <li>دواعي ICA وإعادة التروية قبل الجراحة = دواعيها في السياق غير الجراحي (Class I).</li>
+        <li>CCTA أداة نفي (rule-out) ممتازة في الاحتمال المنخفض–المتوسط (Class IIa).</li>
       </ul>
     </div>
 
-    <!-- Navigation -->
     <div class="next-prev">
       <a href="ncs-part1.html" class="nav-btn">
-        <div class="dir">← العودة إلى</div>
-        <div class="title">التقييم الأولي وتقييم الخطر العام</div>
+        <div class="dir">← الجزء السابق</div>
+        <div class="title">التقييم الأولي وتقييم الخطر</div>
       </a>
       <a href="ncs-part3.html" class="nav-btn next">
         <div class="dir">الجزء التالي ←</div>

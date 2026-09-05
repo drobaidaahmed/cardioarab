@@ -123,6 +123,34 @@
   footer a{color:var(--red);text-decoration:none}
   @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
 
+  /* ---- flow / decision diagram (native, theme-aware) ---- */
+  .flow{display:flex;flex-direction:column;gap:0;margin:1.25rem 0}
+  .flow-node{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.85rem 1.1rem;font-size:.88rem;position:relative}
+  .flow-node.start{border-color:var(--blue);background:rgba(59,130,246,.08)}
+  .flow-node.decision{border-color:var(--gold);background:rgba(234,88,12,.08);font-weight:600}
+  .flow-node.action{border-color:var(--teal);background:rgba(20,184,166,.08)}
+  .flow-node.stop{border-color:var(--red);background:rgba(239,68,68,.1)}
+  .flow-node.go{border-color:var(--green);background:rgba(16,185,129,.1)}
+  .flow-node .n-title{font-weight:700;display:block;margin-bottom:.15rem}
+  .flow-node .n-sub{font-size:.8rem;color:var(--text2)}
+  .flow-arrow{width:2px;height:22px;background:var(--border);margin:0 auto;position:relative}
+  .flow-arrow::after{content:'▼';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:var(--border);font-size:.7rem}
+  .flow-branch{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.4rem 0}
+  .flow-branch .lbl{text-align:center;font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.3rem}
+  .flow-branch .yes .lbl{color:var(--green)}
+  .flow-branch .no .lbl{color:var(--red)}
+  @media(max-width:600px){.flow-branch{grid-template-columns:1fr}}
+  .three-tier{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1rem 0}
+  @media(max-width:800px){.three-tier{grid-template-columns:1fr}}
+  .tier{border-radius:12px;padding:1.1rem;border:1px solid var(--border)}
+  .tier.low{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.4)}
+  .tier.mid{background:rgba(234,88,12,.08);border-color:rgba(234,88,12,.4)}
+  .tier.high{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.4)}
+  .tier h4{font-size:1rem;margin-bottom:.2rem}
+  .tier.low h4{color:var(--green)} .tier.mid h4{color:var(--gold)} .tier.high h4{color:var(--red)}
+  .tier .pct{font-family:var(--mono);font-size:.8rem;color:var(--text2);margin-bottom:.6rem}
+  .tier ul{padding-right:1.1rem;margin:0} .tier li{font-size:.8rem;margin-bottom:.25rem;color:var(--text2)}
+
   header{transition:padding .3s ease}
   .header-inner{transition:gap .3s ease}
   .header-title h1{transition:font-size .3s ease}
@@ -168,17 +196,17 @@
 
   <nav class="toc">
     <h3>محتويات الجزء الأول</h3>
-    <a href="#s1">١ · المبادئ العامة</a>
-    <a href="#s2" class="toc-sub">· فريق التقييم متعدد التخصصات</a>
-    <a href="#s3">٢ · تصنيف خطورة الجراحة</a>
-    <a href="#s4" class="toc-sub">· أمثلة على كل فئة</a>
-    <a href="#s5">٣ · الحالة الوظيفية</a>
-    <a href="#s6" class="toc-sub">· مقياس DASI</a>
-    <a href="#s7">٤ · مؤشر الخطر القلبي RCRI</a>
-    <a href="#s8">٥ · الواسمات الحيوية</a>
-    <a href="#s9">٦ · خوارزمية التقييم الشامل</a>
-    <a href="#s10">٧ · متى نؤجل الجراحة</a>
-    <a href="#keys">نقاط المفتاحية</a>
+    <a href="#s1">١ · المبادئ العامة والفريق</a>
+    <a href="#s2">٢ · توقيت الجراحة ونوع المقاربة</a>
+    <a href="#s3">٣ · تصنيف خطورة الجراحة</a>
+    <a href="#s4">٤ · التقييم حسب فئة المريض</a>
+    <a href="#s5">٥ · النفخة / ألم الصدر / الزلة / الوذمة</a>
+    <a href="#s6">٦ · الحالة الوظيفية والهشاشة</a>
+    <a href="#s7">٧ · أدوات تقييم الخطر (RCRI)</a>
+    <a href="#s8">٨ · الواسمات الحيوية</a>
+    <a href="#s9">٩ · خوارزمية التقييم الشامل</a>
+    <a href="#s10">١٠ · التأجيل ومعلومات المريض</a>
+    <a href="#keys">النقاط المفتاحية</a>
   </nav>
 
   <div class="content">
@@ -187,123 +215,262 @@
     <div class="section" id="s1">
       <div class="section-header">
         <div class="section-num">١</div>
-        <h2>المبادئ العامة للتقييم القلبي قبل الجراحة</h2>
+        <h2>المبادئ العامة والفريق متعدد التخصصات</h2>
       </div>
 
-      <p>الهدف الأساسي من التقييم القلبي قبل الجراحة غير القلبية ليس منع المريض من إجراء الجراحة، بل تحديد المرضى المعرّضين لخطر مضاعفات قلبية وعائية حول الجراحة، وتحسين حالتهم قدر الإمكان دون تأخير غير مبرر للعملية الضرورية.</p>
+      <p>الهدف من التقييم القلبي قبل الجراحة غير القلبية (NCS) ليس منع المريض من الجراحة، بل تحديد من هم عرضة لمضاعفات قلبية وعائية حول الجراحة، وتحسين حالتهم قدر الإمكان دون تأخير غير مبرَّر للعملية الضرورية. تنشأ المضاعفات من تفاعل بين الخطر الجوهري للجراحة نفسها والخطر المرتبط بالمريض؛ لذا يجب دائماً موازنة خطر الجراحة، والحالة القلبية للمريض، وإلحاح العملية معاً — لا مجرد اتّباع قائمة فحوصات روتينية.</p>
 
       <div class="info-box highlight">
-        <strong>🎯 المبدأ الجوهري في غايدلاين 2022</strong>
-        القرار حول أي فحص أو تدخل قبل الجراحة يجب أن يوازن دائماً بين خطر الجراحة نفسها، والحالة القلبية للمريض، وإلحاح الجراحة — وليس مجرد اتباع قائمة فحوصات روتينية.
+        <strong>🎯 المبدأ الجوهري (Figure 1 — الخطر الكلي)</strong>
+        الخطر الكلي = تفاعل «خطر مرتبط بالمريض» × «خطر مرتبط بالجراحة». الهدف دفع كلا المحورين نحو أدنى قيمة ممكنة قبل العملية — عبر تحسين الحالة القلبية واختيار المقاربة الجراحية الأقل خطورة حين يكون ذلك ممكناً.
       </div>
 
-      <h3 id="s2">فريق التقييم متعدد التخصصات (Heart Team / Perioperative Team)</h3>
-      <p>يوصي الغايدلاين بمقاربة تعاونية تجمع الجرّاح، طبيب التخدير، وطبيب القلب — خصوصاً في المرضى عاليي الخطر أو الجراحات الكبرى غير الاختيارية.</p>
-
+      <h3>الفريق متعدد التخصصات (Perioperative / Heart Team)</h3>
+      <p>يُوصى بمقاربة تعاونية تجمع الجرّاح وطبيب التخدير وطبيب القلب — خصوصاً في المرضى عاليي الخطر أو الجراحات الكبرى. لكل عضو دور محدد:</p>
       <ul>
-        <li>الجرّاح: يحدّد إلحاح الجراحة وخطورتها النوعية ومدى إمكانية تأجيلها</li>
-        <li>طبيب التخدير: يقيّم الخطر التخديري العام ونوع التخدير الأنسب</li>
-        <li>طبيب القلب: يقيّم الحالة القلبية الأساسية ويوصي بالتحسين قبل الجراحة إن لزم</li>
-        <li>في الحالات المعقدة (صمامات، قصور قلب متقدم): تُناقش الحالة ضمن Heart Team رسمي</li>
+        <li><strong>الجرّاح:</strong> يحدّد إلحاح الجراحة وخطورتها النوعية وإمكانية استبدالها بمقاربة أقل بضعاً.</li>
+        <li><strong>طبيب التخدير:</strong> يقيّم الخطر التخديري ونوع التخدير الأنسب والمراقبة داخل العملية.</li>
+        <li><strong>طبيب القلب:</strong> يقيّم الحالة القلبية الأساسية ويوصي بالتحسين قبل الجراحة عند الحاجة.</li>
+        <li>في الحالات المعقدة (تضيق أبهري شديد، قصور قلب متقدم، ارتفاع ضغط رئوي) تُناقش الحالة ضمن <em>Heart Team</em> رسمي.</li>
       </ul>
 
+      <h4>توصيات لكل المرضى المُقرَّر لهم جراحة (Table 2)</h4>
       <div class="rec rec-i">
-        <div class="rec-text">يُوصى بتقييم قلبي شامل قبل أي جراحة غير قلبية اختيارية في المرضى المعروف لديهم مرض قلبي وعائي أو عوامل خطر قلبية وعائية أو أعراض توحي بذلك</div>
+        <div class="rec-text">في جميع المرضى المُقرَّر لهم جراحة غير قلبية، يُوصى بأخذ قصة دقيقة وإجراء فحص سريري دقيق.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإجراء تقييم للخطر قبل الجراحة، ويُفضَّل في نفس توقيت اتخاذ قرار الجراحة.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">إذا سمح الوقت، يُوصى بتحسين علاج المرض القلبي الوعائي وعوامل الخطر القلبية وفق التوصيات المعتمدة قبل الجراحة.</div>
         <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
       </div>
     </div>
 
     <!-- Section 2 -->
-    <div class="section" id="s3">
+    <div class="section" id="s2">
       <div class="section-header">
         <div class="section-num">٢</div>
-        <h2>تصنيف خطورة الجراحة</h2>
+        <h2>توقيت الجراحة ونوع المقاربة الجراحية</h2>
       </div>
 
-      <p>غيّر غايدلاين 2022 التصنيف الثلاثي القديم (منخفضة/متوسطة/عالية) إلى تصنيف ثنائي أبسط اعتماداً على خطر الوفاة القلبية والاحتشاء خلال 30 يوماً بعد الجراحة.</p>
-
-      <div class="table-wrap" id="s4">
+      <h3>تصنيف التوقيت (Timing)</h3>
+      <p>يميّز الغايدلاين أربع درجات من الإلحاح، وهي تحدّد كم من التقييم القلبي يمكن إجراؤه فعلياً:</p>
+      <div class="table-wrap">
         <table class="data-table">
-          <thead>
-            <tr><th>الفئة</th><th>الخطر 30 يوماً</th><th>أمثلة نموذجية</th></tr>
-          </thead>
+          <thead><tr><th>الفئة</th><th>التعريف</th></tr></thead>
           <tbody>
-            <tr><td><strong style="color:var(--green)">Low Risk</strong></td><td>&lt; 1%</td><td>جراحة العين، الثدي، الغدة الدرقية، تنظير بسيط، جراحة تجميلية سطحية، جراحة اليد</td></tr>
-            <tr><td><strong style="color:var(--red)">Elevated Risk</strong></td><td>≥ 1%</td><td>جراحة الأوعية الدموية الكبرى، جراحة البطن الكبرى، زراعة الأعضاء، جراحة الصدر، جراحة العظام الكبرى (ورك/حوض)</td></tr>
+            <tr><td><strong style="color:var(--red)">فورية Immediate</strong></td><td>تُجرى دون أي تأخير لإنقاذ الحياة أو العضو — لا مجال لأي فحص قلبي.</td></tr>
+            <tr><td><strong style="color:var(--gold)">عاجلة Urgent</strong></td><td>تُجرى دون تأخير غير ضروري لإنقاذ الحياة أو الطرف أو العضو.</td></tr>
+            <tr><td><strong style="color:var(--blue)">حساسة للوقت Time-sensitive</strong></td><td>تأخيرها يزيد خطر فقدان العضو/الطرف أو المضاعفات (مثل جراحة السرطان، أو استئصال باطنة السبات في حالة عرضية). إن سمح الوقت تُدار كالاختيارية.</td></tr>
+            <tr><td><strong style="color:var(--green)">اختيارية Elective</strong></td><td>يمكن تأجيلها دون خطر يُذكر — هنا للتقييم القلبي أعلى قيمة تنبؤية.</td></tr>
           </tbody>
         </table>
       </div>
 
-      <div class="info-box info-blue">
-        <strong>📌 ملاحظة مهمة 2022</strong>
-        الجراحة الوعائية الكبرى (Open aortic، Bypass الأطراف السفلية) تبقى من أعلى فئات الخطر — تستحق تقييماً دقيقاً حتى عند غياب الأعراض.
-      </div>
-
-      <div class="info-box warning">
-        <strong>⚠️ إلحاح الجراحة يتجاوز تصنيف الخطر</strong>
-        في الجراحة الطارئة المهدِّدة للحياة (نزيف نشط، انثقاب معوي، إنتان حاد) لا تُؤخَّر الجراحة لأي فحص قلبي — التقييم يكون سريرياً سريعاً فقط.
+      <h3>نوع المقاربة الجراحية (Table 1)</h3>
+      <p>أُدخلت تقنيات أقل بضعاً لتقليل الخطر الكلي. لكن تنبيه مهم: تنظير البطن (Laparoscopy) لا يُقلّل بالضرورة الخطر القلبي عند مرضى القلب، لأنّ <em>استرواح الصفاق</em> ووضعية Trendelenburg يرفعان الضغط داخل البطن والضغط الوريدي المركزي والمقاومة الوعائية الجهازية ويُضعفان العود الوريدي والوظيفة القلبية — لذا يُقيَّم المريض بنفس الطريقة سواء أُجريت المقاربة مفتوحة أم تنظيرية.</p>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنصح بالمقاربة داخل الأوعية (Endovascular) أو بمساعدة الفيديو (VATS) للمرضى ذوي الخطر القلبي المرتفع الخاضعين لجراحة وعائية أو رئوية.</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
       </div>
     </div>
 
     <!-- Section 3 -->
-    <div class="section" id="s5">
+    <div class="section" id="s3">
       <div class="section-header">
         <div class="section-num">٣</div>
-        <h2>الحالة الوظيفية (Functional Capacity)</h2>
+        <h2>تصنيف خطورة الجراحة — ثلاث فئات (Table 5)</h2>
       </div>
 
-      <p>تقييم الحالة الوظيفية بوحدات METs (Metabolic Equivalents) هو حجر الأساس في قرار الحاجة لفحوصات إضافية — وهو أهم من العمر وحده.</p>
+      <p>يعتمد غايدلاين 2022 تصنيفاً <strong>ثلاثياً</strong> لخطورة الجراحة بناءً على تقدير خطر الوفاة القلبية والاحتشاء والسكتة خلال 30 يوماً، ويأخذ في الحسبان نوع الجراحة فقط (دون أمراض المريض المرافقة).</p>
+
+      <div class="three-tier">
+        <div class="tier low">
+          <h4>خطر منخفض</h4>
+          <div class="pct">&lt; 1% خلال 30 يوماً</div>
+          <ul>
+            <li>جراحة سطحية، الثدي، الأسنان</li>
+            <li>العين، الغدة الدرقية</li>
+            <li>جراحة تجميلية / ترميمية</li>
+            <li>عظمية صغرى (استئصال غضروف هلالي)</li>
+            <li>بولية صغرى (استئصال بروستات عبر الإحليل)</li>
+            <li>استئصال باطنة السبات/دعامة سباتية لا عرضية</li>
+          </ul>
+        </div>
+        <div class="tier mid">
+          <h4>خطر متوسط</h4>
+          <div class="pct">1–5% خلال 30 يوماً</div>
+          <ul>
+            <li>داخل الصفاق: طحال، فتق حجابي، مرارة</li>
+            <li>سباتية عرضية (CEA/CAS)</li>
+            <li>رأب شرايين محيطية / إصلاح أم دم أبهرية داخل وعائي</li>
+            <li>رأس ورقبة</li>
+            <li>عصبية أو عظمية كبرى (ورك، عمود فقري)</li>
+            <li>بولية/نسائية كبرى، زرع كلية</li>
+          </ul>
+        </div>
+        <div class="tier high">
+          <h4>خطر مرتفع</h4>
+          <div class="pct">&gt; 5% خلال 30 يوماً</div>
+          <ul>
+            <li>جراحة الأبهر والأوعية الكبرى المفتوحة</li>
+            <li>إعادة تروية طرف سفلي مفتوحة / بتر</li>
+            <li>جراحة اثنا عشري–بنكرياسية، استئصال كبد</li>
+            <li>استئصال مريء، استئصال رئة</li>
+            <li>إصلاح انثقاب معوي، استئصال مثانة كامل</li>
+            <li>زرع رئة أو كبد</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ إلحاح الجراحة يتجاوز التصنيف</strong>
+        في الجراحة الطارئة المهدِّدة للحياة (نزيف نشط، انثقاب، إنتان) لا تُؤخَّر العملية لأي فحص قلبي؛ يكون التقييم سريرياً سريعاً فقط.
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <h2>التقييم حسب فئة المريض</h2>
+      </div>
+
+      <p>يُحدَّد الخطر المرتبط بالمريض بالعمر، ووجود عوامل خطر قلبية (تدخين، ارتفاع ضغط، سكري، شحوم)، ووجود مرض قلبي وعائي ثابت. يقسّم الغايدلاين المرضى إلى ثلاث فئات تُوجّه شدّة التقييم.</p>
+
+      <h3>الفئة الأولى: عمر &lt; 65 سنة بلا علامات/أعراض/قصة CVD (Table 3)</h3>
+      <div class="rec rec-i">
+        <div class="rec-text">في المرضى ذوي قصة عائلية لاعتلال عضلة قلبية وراثي، يُوصى بإجراء ECG وإيكو عبر الصدر (TTE) قبل الجراحة بغض النظر عن العمر والأعراض.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">في المرضى 45–65 سنة بلا علامات أو أعراض أو قصة CVD، يُنصح بإجراء ECG وواسمات حيوية قبل الجراحة عالية الخطورة.</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <h3>الفئة الثانية: عمر ≥ 65 سنة أو عوامل خطر قلبية</h3>
+      <p>هؤلاء أكثر عرضة لـ CVD غير مُشخَّص ولمضاعفات حول الجراحة. يمكن استخدام أداة SCORE2 لتقدير خطر 10 سنوات خارج سياق الجراحة، ويحتاجون تقييماً إضافياً قبل الجراحة متوسطة وعالية الخطورة (ECG وواسمات حيوية — انظر القسمين ٧ و٨).</p>
+
+      <h3>الفئة الثالثة: مرض قلبي وعائي ثابت معروف</h3>
+      <p>قد تُفاقم الجراحة المرض وترفع المراضة والوفيات. يُوصى بتقييم دقيق وتحسين العلاج المعتمد قبل الجراحة إن سمح الوقت (تفاصيل كل حالة في الجزء الثالث).</p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <h2>النفخة / ألم الصدر / الزلة / الوذمة (Table 4)</h2>
+      </div>
+
+      <p>قد يُحال المريض بلا CVD معروف بسبب علامات قد تدل على مرض قلبي — لكنها قد تكون لأسباب غير قلبية. تُؤخذ القصة والقصة العائلية وعوامل الخطر، وتُقيَّم القدرة الوظيفية، ويُقرَّر التقييم الإضافي حسب خطورة العملية.</p>
+
+      <h4>نفخة حديثة الاكتشاف</h4>
+      <div class="rec rec-i">
+        <div class="rec-text">مع نفخة حديثة + أعراض أو علامات CVD → يُوصى بـ TTE قبل الجراحة.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">مع نفخة توحي بآفة ذات دلالة سريرية → يُوصى بـ TTE قبل الجراحة عالية الخطورة.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">مع نفخة حديثة دون علامات/أعراض أخرى لـ CVD → يُنصح بـ TTE قبل الجراحة متوسطة الخطورة.</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <h4>ذبحة/ألم صدر غير مُشخَّص سابقاً</h4>
+      <div class="rec rec-i">
+        <div class="rec-text">في الجراحة الاختيارية مع ألم صدر أو أعراض توحي بـ CAD غير مكتشف → يُوصى باستكمال تشخيصي قبل الجراحة.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">في الجراحة الحادة مع أعراض توحي بـ CAD → يُوصى بمقاربة تقييم متعددة التخصصات لاختيار العلاج الأقل خطراً إجمالاً.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <h4>الزلة و/أو الوذمة المحيطية</h4>
+      <div class="rec rec-i">
+        <div class="rec-text">مع زلة و/أو وذمة محيطية → يُستطب ECG واختبار NT-proBNP/BNP قبل الجراحة، ما لم يوجد سبب غير قلبي مؤكَّد.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">مع زلة/وذمة وارتفاع NT-proBNP/BNP → يُوصى بـ TTE قبل الجراحة (وإن تعذّر قياس الببتيد، يُنصح بـ TTE).</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="info-box info-blue">
+        <strong>📌 التسمّع مقابل FOCUS</strong>
+        رغم محدوديّة التسمّع، لا يُنصح باستبداله بالإيكو المُركَّز (FOCUS) كتقييم روتيني قبل الجراحة — قيمة FOCUS كأداة روتينية غير مؤكَّدة.
+      </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">٦</div>
+        <h2>الحالة الوظيفية والهشاشة (Table 6)</h2>
+      </div>
+
+      <p>تقييم الحالة الوظيفية بوحدات METs هو حجر أساس في قرار الحاجة لفحوصات إضافية — وهو أهم من العمر وحده.</p>
 
       <div class="type-grid">
         <div class="type-card">
           <div class="type-name">≥ 4 METs</div>
           <div class="type-def">صعود طابقين دون توقف، مشي سريع، أعمال منزلية شاقة</div>
-          <div class="type-row"><span class="type-label">القرار</span><span class="type-val">تابع للجراحة مباشرة</span></div>
+          <div class="type-row"><span class="type-label">القرار</span><span class="type-val">مؤشر جيد — يدعم التقدم للجراحة</span></div>
         </div>
         <div class="type-card t2">
           <div class="type-name">&lt; 4 METs</div>
-          <div class="type-def">عجز عن صعود طابق واحد أو المشي مسافة قصيرة بسرعة عادية</div>
-          <div class="type-row"><span class="type-label">القرار</span><span class="type-val">فكّر بواسمات حيوية ± فحص إضافي</span></div>
+          <div class="type-def">عجز عن صعود طابق واحد أو مشي مسافة قصيرة بسرعة عادية</div>
+          <div class="type-row"><span class="type-label">القرار</span><span class="type-val">واسمات حيوية ± فحص إضافي</span></div>
         </div>
         <div class="type-card t3">
           <div class="type-name">غير معروفة</div>
-          <div class="type-def">قصور حركي، بتر، أمراض مفاصل تمنع التقييم الذاتي</div>
+          <div class="type-def">قصور حركي، بتر، أمراض مفاصل تمنع التقييم</div>
           <div class="type-row"><span class="type-label">القرار</span><span class="type-val">اعتمد على الواسمات الحيوية</span></div>
         </div>
       </div>
 
-      <h3 id="s6">مقياس DASI (Duke Activity Status Index)</h3>
-      <p>استبيان مبني على 12 نشاطاً يومياً يُترجم إلى تقدير METs تقريبي — أظهرت دراسة METS أن التقدير الذاتي البسيط للمريض ("هل يمكنك صعود طابقين؟") أقل دقة من DASI أو من الواسمات الحيوية الموضوعية في التنبؤ بالمضاعفات.</p>
-
+      <h3>DASI و CPET</h3>
+      <p>مقياس DASI (Duke Activity Status Index) استبيان من 12 نشاطاً يومياً يُترجَم إلى تقدير METs. أما CPET (اختبار الجهد القلبي الرئوي) فيقيس بموضوعية VO₂ peak وعتبة اللاهوائية (AT) ويُستخدم قبل الجراحات الكبرى جداً عند توفره.</p>
       <div class="rec rec-iia">
-        <div class="rec-text">يُنصح باستخدام استبيان DASI أو أدوات موضوعية مشابهة لتقدير الحالة الوظيفية بدلاً من الاعتماد فقط على السؤال الذاتي العام</div>
+        <div class="rec-text">تُنصح مراعاة القدرة الذاتية على صعود طابقين من الدرج لتقدير الحالة الوظيفية في المرضى المُحالين لجراحة متوسطة/عالية الخطورة.</div>
         <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
       </div>
 
-      <div class="info-box success">
-        <strong>✅ CPET — الطريقة الأدق</strong>
-        اختبار القدرة على التحمل القلبي الرئوي (Cardiopulmonary Exercise Testing) يقيس VO2 peak وعتبة اللاهوائية (Anaerobic Threshold) بشكل موضوعي — يُستخدم قبل الجراحات الكبرى جداً عند توفره.
+      <h3>الهشاشة (Frailty)</h3>
+      <div class="rec rec-iia">
+        <div class="rec-text">في المرضى ≥ 70 سنة المُحالين لجراحة متوسطة/عالية الخطورة، يُنصح بتحرّي الهشاشة باستخدام أداة تحرٍّ مُصدَّقة.</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="info-box info-purple">
+        <strong>🧓 لماذا الهشاشة مهمة؟</strong>
+        الهشاشة تنبئ بالهذيان، والتدهور الوظيفي، والحاجة لوسيلة تنقّل جديدة، وقرحات الضغط، وإطالة الإقامة — وتُثري قرار المريض والفريق الجراحي حول جدوى الجراحة عالية الخطورة.
       </div>
     </div>
 
-    <!-- Section 4 -->
+    <!-- Section 7 -->
     <div class="section" id="s7">
       <div class="section-header">
-        <div class="section-num">٤</div>
-        <h2>مؤشر الخطر القلبي المعدّل (RCRI — Revised Cardiac Risk Index)</h2>
+        <div class="section-num">٧</div>
+        <h2>أدوات تقييم الخطر — RCRI والحاسبات</h2>
       </div>
 
-      <p>يبقى مؤشر Lee (RCRI) الأداة الأكثر استخداماً واختباراً في التنبؤ بالمضاعفات القلبية الكبرى بعد الجراحة غير القلبية، رغم بساطته.</p>
+      <p>يبقى مؤشر Lee المُعدَّل (RCRI) الأكثر استخداماً واختباراً للتنبؤ بالمضاعفات القلبية الكبرى، رغم بساطته. لم تُوصِ فرقة العمل بمؤشر واحد بعينه، وأكّدت أنّ معايير طلب الفحوصات الإضافية يجب أن تكون <em>سريرية</em> لا مبنية على درجة رقمية بحتة.</p>
 
+      <h3>عوامل RCRI الستة</h3>
       <div class="table-wrap">
         <table class="data-table">
           <thead><tr><th>#</th><th>العامل</th><th>التفاصيل</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td><strong>جراحة عالية الخطورة</strong></td><td>داخل الصدر، داخل البطن، فوق الإربية الوعائية</td></tr>
-            <tr><td>2</td><td><strong>مرض شريان تاجي إقفاري</strong></td><td>احتشاء سابق، ذبحة، اختبار جهد إيجابي، Q waves</td></tr>
-            <tr><td>3</td><td><strong>قصور قلب احتقاني</strong></td><td>تاريخ قصور قلب، وذمة رئوية، S3، خُماري رئوي</td></tr>
+            <tr><td>1</td><td><strong>جراحة عالية الخطورة</strong></td><td>داخل الصدر، داخل البطن، أو وعائية فوق الإربية</td></tr>
+            <tr><td>2</td><td><strong>مرض شريان تاجي إقفاري</strong></td><td>احتشاء سابق، ذبحة، اختبار جهد إيجابي، موجات Q</td></tr>
+            <tr><td>3</td><td><strong>قصور قلب احتقاني</strong></td><td>قصة قصور قلب، وذمة رئوية، صوت ثالث S3، خُراخِر</td></tr>
             <tr><td>4</td><td><strong>مرض وعائي دماغي</strong></td><td>سكتة سابقة أو نوبة إقفارية عابرة (TIA)</td></tr>
-            <tr><td>5</td><td><strong>سكري على إنسولين</strong></td><td>يحتاج علاج إنسولين قبل الجراحة</td></tr>
+            <tr><td>5</td><td><strong>سكري على إنسولين</strong></td><td>يحتاج علاجاً إنسولينياً قبل الجراحة</td></tr>
             <tr><td>6</td><td><strong>قصور كلوي</strong></td><td>كرياتينين مصل &gt; 2 mg/dL (177 µmol/L)</td></tr>
           </tbody>
         </table>
@@ -311,135 +478,165 @@
 
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>عدد العوامل</th><th>خطر المضاعفات القلبية الكبرى</th></tr></thead>
+          <thead><tr><th>عدد العوامل</th><th>خطر الوفاة/الاحتشاء/السكتة خلال 30 يوماً</th></tr></thead>
           <tbody>
-            <tr><td><strong style="color:var(--green)">0</strong></td><td>~ 0.4%</td></tr>
-            <tr><td><strong style="color:var(--green)">1</strong></td><td>~ 1%</td></tr>
-            <tr><td><strong style="color:var(--gold)">2</strong></td><td>~ 2.4%</td></tr>
-            <tr><td><strong style="color:var(--red)">≥ 3</strong></td><td>~ 5.4% أو أكثر</td></tr>
+            <tr><td><strong style="color:var(--green)">0</strong></td><td>~ 4%</td></tr>
+            <tr><td><strong style="color:var(--gold)">1</strong></td><td>~ 6%</td></tr>
+            <tr><td><strong style="color:var(--gold)">2</strong></td><td>~ 10%</td></tr>
+            <tr><td><strong style="color:var(--red)">≥ 3</strong></td><td>مرتفع (يزداد مع كل عامل إضافي)</td></tr>
           </tbody>
         </table>
       </div>
 
-      <div class="rec rec-i">
-        <div class="rec-text">يُوصى باستخدام RCRI كأداة أولية لتقدير خطر المضاعفات القلبية حول الجراحة في جميع المرضى الذين سيخضعون لجراحة ذات خطورة مرتفعة</div>
-        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      <h3>حاسبات أخرى مذكورة في الغايدلاين (Table 6)</h3>
+      <ul>
+        <li><strong>NSQIP (ACS 2013):</strong> حاسبة تفاعلية تدمج متغيرات كثيرة للمريض والجراحة.</li>
+        <li><strong>SORT (2014):</strong> Surgical Outcome Risk Tool.</li>
+        <li><strong>AUB-HAS2 (2019):</strong> مؤشر خطر قلبي وعائي مبني على قصة أمراض القلب.</li>
+      </ul>
+      <div class="info-box warning">
+        <strong>ملاحظة</strong> لا تتضمّن أيٌّ من هذه الحاسبات الواسمات الحيوية ضمن متغيراتها؛ لذا تُستخدم كأداة أولى تُكمَّل بالـ ECG والواسمات، لا كبديل عنها.
       </div>
     </div>
 
-    <!-- Section 5 -->
+    <!-- Section 8 -->
     <div class="section" id="s8">
       <div class="section-header">
-        <div class="section-num">٥</div>
-        <h2>الواسمات الحيوية (Biomarkers)</h2>
+        <div class="section-num">٨</div>
+        <h2>الواسمات الحيوية (Table 7)</h2>
       </div>
 
-      <p>أحد أهم التغييرات في نسخة 2022 هو التركيز المتزايد على NT-proBNP/BNP كأداة تنبؤية موضوعية، بالإضافة إلى Troponin كأداة كشف ما بعد الجراحة.</p>
-
-      <h3>NT-proBNP / BNP قبل الجراحة</h3>
-      <ul>
-        <li>يُقاس في المرضى ≥ 65 سنة، أو RCRI ≥ 1، أو مرض قلبي وعائي معروف، قبل جراحة ذات خطورة مرتفعة</li>
-        <li>NT-proBNP طبيعي: &lt; 300 pg/mL — BNP طبيعي: &lt; 92 pg/mL</li>
-        <li>ارتفاع القيمة يوجّه نحو مراقبة Troponin بعد الجراحة ومتابعة أوثق</li>
-      </ul>
+      <p>من أهم تغييرات 2022 التركيز على الواسمات الحيوية الموضوعية: التروبونين عالي الحساسية (hs-cTn T/I) يُكمِّي الأذية العضلية، وBNP/NT-proBNP يُكمِّيان الشدّ الجداري القلبي الدموي. كلاهما يُكمِّل التقييم السريري وECG بقيمة تنبؤية تراكمية عالية.</p>
 
       <div class="rec rec-i">
-        <div class="rec-text">يُوصى بقياس NT-proBNP أو BNP قبل الجراحة في المرضى ≥65 سنة أو من لديهم عوامل خطر قلبية معروفة، الخاضعين لجراحة ذات خطورة مرتفعة</div>
+        <div class="rec-text">في مرضى CVD المعروف أو عوامل الخطر (بما فيها العمر ≥65) أو أعراض/علامات توحي بـ CVD → يُوصى بـ ECG بـ 12 مسرى قبل الجراحة متوسطة وعالية الخطورة.</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">في نفس الفئة → يُوصى بقياس hs-cTn T أو I قبل الجراحة متوسطة/عالية الخطورة، وبعدها بـ 24 و48 ساعة.</div>
         <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
       </div>
-
-      <h3>Troponin عالي الحساسية بعد الجراحة</h3>
-      <p>قياس Troponin في اليوم الأول والثاني بعد الجراحة عالية الخطورة يكشف عن "الإصابة القلبية بعد الجراحة غير القلبية" (MINS) — وهي غالباً بدون أعراض إقفارية واضحة لكنها مرتبطة بشكل قوي بالوفيات خلال 30 يوماً (راجع الجزء السادس بالتفصيل).</p>
-
       <div class="rec rec-iia">
-        <div class="rec-text">يُنصح بقياس Troponin عالي الحساسية بشكل روتيني في اليوم 1 و2 بعد الجراحة في المرضى عاليي الخطر القلبي الخاضعين لجراحة ذات خطورة مرتفعة</div>
+        <div class="rec-text">في نفس الفئة → يُنصح بقياس BNP أو NT-proBNP قبل الجراحة متوسطة/عالية الخطورة.</div>
         <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
       </div>
+      <div class="rec rec-iii">
+        <div class="rec-text">في المرضى منخفضي الخطر الخاضعين لجراحة منخفضة/متوسطة الخطورة → لا يُنصح روتينياً بطلب ECG أو hs-cTn أو BNP/NT-proBNP قبل الجراحة.</div>
+        <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+
+      <h3>القيم المرجعية</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الواسم</th><th>القيمة غير الطبيعية</th></tr></thead>
+          <tbody>
+            <tr><td>BNP</td><td>≥ 35 pg/mL</td></tr>
+            <tr><td>NT-proBNP</td><td>≥ 125 pg/mL</td></tr>
+            <tr><td>hs-cTn T/I (قبل الجراحة)</td><td>أعلى من الحد الأعلى للطبيعي (ULN)</td></tr>
+            <tr><td>ECG غير طبيعي</td><td>موجة Q مرضية، تغيرات ST-T، إيقاع غير جيبي، حصار غصن أيسر</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box success">
+        <strong>✅ الأذية القلبية حول الجراحة (PMI/MINS)</strong>
+        ارتفاع مطلق في hs-cTn فوق الـ ULN في اليوم 1 أو 2 مقارنةً بالقيمة قبل الجراحة = أذية قلبية حول الجراحة، وغالباً بلا أعراض إقفارية لكنها مرتبطة بقوة بالوفيات خلال 30 يوماً (تفصيل في الجزء السادس).
+      </div>
     </div>
 
-    <!-- Section 6 -->
+    <!-- Section 9 -->
     <div class="section" id="s9">
       <div class="section-header">
-        <div class="section-num">٦</div>
-        <h2>خوارزمية التقييم الشامل خطوة بخطوة</h2>
+        <div class="section-num">٩</div>
+        <h2>خوارزمية التقييم قبل الجراحة (Figure 2)</h2>
       </div>
+
+      <p>هذه إعادة بناء للخوارزمية المحورية في الغايدلاين، تُوجّه شدّة التقييم حسب الإلحاح ثم فئة المريض ثم خطورة الجراحة.</p>
 
       <div class="algo-box">
-        <div class="algo-step">
-          <div class="algo-num">1</div>
-          <div class="algo-content">
-            <h4>هل الجراحة طارئة ومهدِّدة للحياة؟</h4>
-            <p>نعم → لا وقت لأي تقييم إضافي، توجّه للجراحة فوراً مع تحسين قدر الإمكان أثناء التحضير</p>
+        <div class="flow">
+          <div class="flow-node start"><span class="n-title">مريض مُقرَّر له جراحة غير قلبية</span></div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision"><span class="n-title">هل الجراحة فورية / عاجلة؟</span></div>
+          <div class="flow-branch">
+            <div class="yes"><div class="lbl">نعم</div><div class="flow-node stop"><span class="n-title">للجراحة فوراً</span><span class="n-sub">الفحص القلبي غير ممكن؛ قرار متعدد التخصصات لأي فحص فردي إن أمكن</span></div></div>
+            <div class="no"><div class="lbl">لا (اختيارية/حساسة للوقت)</div><div class="flow-node action"><span class="n-title">قصة وفحص + فحوص مخبرية أساسية (Class I)</span><span class="n-sub">نصح بإيقاف التدخين وتحسين العلاج المعتمد</span></div></div>
           </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">2</div>
-          <div class="algo-content">
-            <h4>هل لدى المريض حالة قلبية غير مستقرة؟</h4>
-            <p>ذبحة غير مستقرة، قصور قلب لا معاوض، اضطراب نظم خطير، مرض صمامي شديد عرضي → عالج الحالة القلبية أولاً قبل الجراحة الاختيارية</p>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision"><span class="n-title">صنّف المريض</span></div>
+          <div class="three-tier" style="margin-top:.5rem">
+            <div class="tier low">
+              <h4>&lt;65 بلا CVD/عوامل خطر</h4>
+              <ul><li>منخفضة: لا شيء</li><li>متوسطة: لا شيء</li><li>عالية (&gt;45 سنة): فكّر بـ ECG + واسمات (IIa)</li></ul>
+            </div>
+            <div class="tier mid">
+              <h4>≥65 أو عوامل خطر</h4>
+              <ul><li>منخفضة: لا شيء</li><li>متوسطة: ECG + واسمات (I)</li><li>عالية: ECG + واسمات (I) + قدرة وظيفية (IIa)</li></ul>
+            </div>
+            <div class="tier high">
+              <h4>CVD ثابت معروف</h4>
+              <ul><li>منخفضة: انظر القسم 6 (الجزء 3)</li><li>متوسطة: ECG + واسمات (I) + قدرة وظيفية</li><li>عالية: + استشارة قلبية + قرار متعدد التخصصات</li></ul>
+            </div>
           </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">3</div>
-          <div class="algo-content">
-            <h4>ما تصنيف خطورة الجراحة؟</h4>
-            <p>Low Risk → تابع للجراحة دون فحوصات إضافية · Elevated Risk → انتقل للخطوة التالية</p>
-          </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">4</div>
-          <div class="algo-content">
-            <h4>احسب RCRI وقيّم الحالة الوظيفية</h4>
-            <p>RCRI منخفض + ≥4 METs → تابع للجراحة · RCRI ≥2 أو &lt;4 METs → فكّر بالواسمات الحيوية</p>
-          </div>
-        </div>
-        <div class="algo-step">
-          <div class="algo-num">5</div>
-          <div class="algo-content">
-            <h4>قِس NT-proBNP/BNP</h4>
-            <p>طبيعي → تابع للجراحة مع مراقبة Troponin بعد العملية · مرتفع → فكّر بفحص وظيفي/تصويري إضافي (الجزء الثاني)</p>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision"><span class="n-title">هل الواسمات/ECG مرضية أو القدرة الوظيفية ضعيفة؟</span></div>
+          <div class="flow-branch">
+            <div class="no"><div class="lbl">طبيعية + قدرة جيدة</div><div class="flow-node go"><span class="n-title">تابع للجراحة</span><span class="n-sub">مع مراقبة hs-cTn بعد العملية في عاليي الخطر</span></div></div>
+            <div class="yes"><div class="lbl">مرضية / قدرة ضعيفة</div><div class="flow-node stop"><span class="n-title">استشارة قلبية</span><span class="n-sub">فحوص تصويرية/وظيفية إضافية — الجزء الثاني</span></div></div>
           </div>
         </div>
       </div>
+      <p style="font-size:.8rem;color:var(--text2)">عوامل الخطر القلبية الوعائية هنا: ارتفاع الضغط، التدخين، اضطراب الشحوم، السكري، قصة عائلية لـ CVD. الواسمات: hs-cTn T/I (Class I) و/أو BNP/NT-proBNP (Class IIa). القدرة الوظيفية عبر DASI أو صعود طابقين.</p>
     </div>
 
-    <!-- Section 7 -->
+    <!-- Section 10 -->
     <div class="section" id="s10">
       <div class="section-header">
-        <div class="section-num">٧</div>
-        <h2>متى نؤجل أو نلغي الجراحة</h2>
+        <div class="section-num">١٠</div>
+        <h2>التأجيل، إتاحة الجراحة، ومعلومات المريض</h2>
       </div>
 
+      <h3>متى نؤجل أو نتجنّب الجراحة الاختيارية؟</h3>
+      <p>عموماً يجب أن يكون خطر عدم إجراء الجراحة أعلى بوضوح من خطر إجرائها. لا توجد قائمة قاطعة، لكن في قصور القلب الشديد (NYHA IV)، الصدمة القلبية، ارتفاع الضغط الرئوي الشديد، أو الهشاشة الشديدة — يُفضَّل تجنّب الجراحة عالية الخطورة. تُؤخذ الحالات التالية كأسباب لتثبيت الحالة أولاً:</p>
       <ul>
-        <li>متلازمة شريان تاجي حادة غير مستقرة أو ذبحة صدرية غير مستقرة</li>
-        <li>قصور قلب حاد لا معاوض (Decompensated Heart Failure)</li>
+        <li>متلازمة إكليلية حادة / ذبحة غير مستقرة</li>
+        <li>قصور قلب حاد لا معاوَض</li>
         <li>اضطراب نظم بطيني أو فوق بطيني خطير غير مضبوط</li>
-        <li>تضيق أبهري شديد عرضي غير معالج</li>
-        <li>PCI حديث مع DAPT إلزامي غير مكتمل المدة (راجع الجزء الرابع)</li>
+        <li>تضيّق أبهري شديد عرضي غير معالَج</li>
+        <li>PCI حديث مع مدة DAPT إلزامية غير مكتملة (الجزء الرابع)</li>
       </ul>
 
       <div class="info-box danger">
-        <strong>🚨 تأجيل الجراحة الاختيارية له كلفته أيضاً</strong>
-        القرار يجب أن يوازن بين خطر المضاعفات القلبية وخطر تفاقم الحالة الجراحية الأصلية (مثل ورم خبيث) نتيجة التأخير — القرار يُتخذ ضمن فريق متعدد التخصصات.
+        <strong>🚨 التأجيل له كلفته أيضاً</strong>
+        يجب موازنة خطر المضاعفات القلبية مع خطر تفاقم المرض الجراحي الأصلي (مثل ورم خبيث) بسبب التأخير — والقرار ضمن فريق متعدد التخصصات مع المريض.
       </div>
 
+      <h3>معلومات المريض (Table 5)</h3>
       <div class="rec rec-i">
-        <div class="rec-text">يُوصى بتأجيل الجراحة الاختيارية غير القلبية في المرضى الذين يعانون من حالة قلبية غير مستقرة إلى حين تحقيق الاستقرار السريري</div>
+        <div class="rec-text">يُوصى بإعطاء المريض تعليمات فردية حول تغييرات الأدوية قبل وبعد الجراحة، شفهياً وكتابياً، بتوجيهات واضحة ومختصرة.</div>
         <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنصح بإعداد قائمة معلومات منظَّمة (مثل قائمة تحقّق) لمرضى CVD أو عاليي خطر المضاعفات القلبية المُقرَّر لهم جراحة.</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="info-box info-blue">
+        <strong>🗣️ منظور المريض</strong>
+        القلق قبل الجراحة شائع (27–80%) ويرتبط بنتائج أسوأ وتعافٍ أطول؛ لذا التواصل بلغة بسيطة والقرار المشترك جزء من التحضير الجيد.
       </div>
     </div>
 
     <!-- Key Points -->
     <div class="key-points" id="keys">
-      <h4>🔑 نقاط المفتاح — الجزء الأول</h4>
+      <h4>🔑 النقاط المفتاحية — الجزء الأول</h4>
       <ul>
-        <li>هدف التقييم هو تقليل الخطر، وليس منع المريض من الجراحة الضرورية</li>
-        <li>غايدلاين 2022 يعتمد تصنيفاً ثنائياً لخطورة الجراحة: منخفضة &lt;1% ومرتفعة ≥1%</li>
-        <li>الحالة الوظيفية ≥4 METs بدون أعراض تسمح بالتقدم مباشرة للجراحة غالباً</li>
-        <li>RCRI يبقى الأداة الأساسية الأولى لتقدير الخطر القلبي حول الجراحة</li>
-        <li>NT-proBNP/BNP أصبح توصية Class I في المرضى عاليي الخطر قبل الجراحات الكبرى</li>
-        <li>الجراحة الطارئة الحقيقية لا تُؤخَّر لأي فحص قلبي غير ضروري</li>
-        <li>عدم الاستقرار القلبي الحاد سبب مطلق لتأجيل الجراحة الاختيارية</li>
+        <li>هدف التقييم تقليل الخطر لا منع الجراحة الضرورية؛ الخطر الكلي = خطر المريض × خطر الجراحة.</li>
+        <li>غايدلاين 2022 يعتمد تصنيفاً <strong>ثلاثياً</strong>: منخفض &lt;1% · متوسط 1–5% · مرتفع &gt;5% خلال 30 يوماً.</li>
+        <li>الإلحاح (فورية/عاجلة/حساسة للوقت/اختيارية) يحدّد كم من التقييم يمكن إجراؤه فعلياً.</li>
+        <li>القدرة الوظيفية ≥4 METs بلا أعراض تدعم التقدّم للجراحة؛ والهشاشة تُحرّى بأداة مصدَّقة (IIa B).</li>
+        <li>RCRI أداة أولى، لكن قرار الفحوصات الإضافية يبقى سريرياً.</li>
+        <li>ECG وhs-cTn توصية Class I، وBNP/NT-proBNP توصية Class IIa قبل الجراحة متوسطة/عالية الخطورة في الفئات المؤهَّلة.</li>
+        <li>لا فحوص روتينية في منخفضي الخطر مع جراحة منخفضة/متوسطة (Class III).</li>
+        <li>عدم الاستقرار القلبي الحاد سبب لتأجيل الجراحة الاختيارية حتى التثبيت.</li>
       </ul>
     </div>
 
