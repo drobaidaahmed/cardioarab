@@ -133,6 +133,26 @@
   header.shrink .header-title h1{font-size:.85rem}
   header.shrink .header-title p{opacity:0;max-height:0;margin:0}
   header.shrink .back-btn{padding:.2rem .5rem;font-size:.7rem;gap:.2rem}
+  .flow{display:flex;flex-direction:column;gap:.6rem;margin:1.25rem 0}
+  .flow-label{font-size:.72rem;font-weight:700;color:var(--brand2);text-transform:uppercase;letter-spacing:.06em;margin:.9rem 0 .4rem}
+  .flow-row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:stretch}
+  .flow-node{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;flex:1;min-width:170px;font-size:.82rem;line-height:1.55}
+  .flow-node b{display:block;color:var(--text);font-size:.85rem;margin-bottom:.15rem}
+  .flow-node.start{border-color:var(--brand);background:rgba(8,145,178,.14)}
+  .flow-node.decision{border-style:dashed;border-color:var(--gold);background:rgba(234,88,12,.08)}
+  .flow-node.action{border-color:var(--green);background:rgba(16,185,129,.08)}
+  .flow-node.danger{border-color:var(--red);background:rgba(239,68,68,.08)}
+  .flow-node.neutral{border-color:var(--purple);background:rgba(139,92,246,.08)}
+  .flow-arrow-row{display:flex;justify-content:center;color:var(--text2);font-size:1.1rem;margin:-.15rem 0}
+  .flow-branch-lbl{font-size:.68rem;font-weight:700;color:var(--text2);text-align:center;margin-bottom:.25rem}
+  .wifi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:.72rem;text-align:center}
+  .wifi-grid div{background:var(--bg2);padding:.4rem .2rem;color:var(--text)}
+  .wifi-grid .hd{background:rgba(8,145,178,.15);color:var(--brand2);font-weight:700}
+  .wifi-VL{background:rgba(16,185,129,.25) !important;color:#10b981 !important;font-weight:700}
+  .wifi-L{background:rgba(234,179,8,.22) !important;color:#eab308 !important;font-weight:700}
+  .wifi-M{background:rgba(249,115,22,.25) !important;color:#f97316 !important;font-weight:700}
+  .wifi-H{background:rgba(239,68,68,.28) !important;color:#ef4444 !important;font-weight:700}
+  .consensus-tag{display:inline-block;background:rgba(139,92,246,.18);color:var(--purple);border:1px solid rgba(139,92,246,.4);border-radius:6px;padding:.15rem .5rem;font-size:.7rem;font-weight:700;font-family:var(--mono)}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#8b5cf6">
@@ -165,132 +185,398 @@
 </div>
 
 <div class="layout">
-
   <nav class="toc">
     <h3>محتويات الجزء الثالث</h3>
-    <a href="#s1">١ · تصنيف PAD السريري</a>
-    <a href="#s2">٢ · إعادة التوعية حسب الموقع</a>
-    <a href="#s3" class="toc-sub">· الحرقفي/الفخذي المأبضي/تحت الركبة</a>
-    <a href="#s4">٣ · نقص التروية الحرج المزمن CLTI</a>
-    <a href="#s5" class="toc-sub">· تصنيف WIfI</a>
-    <a href="#s6">٤ · العلاج التداخلي في CLTI</a>
-    <a href="#s7">٥ · تحفيز النخاع الشوكي والبتر</a>
-    <a href="#s8">٦ · نقص التروية الحاد ALI</a>
-    <a href="#s9" class="toc-sub">· تصنيف Rutherford</a>
-    <a href="#s10">٧ · المتابعة</a>
-    <a href="#keys">نقاط المفتاحية</a>
+    <a href="#s1">١ · الوبائيات والتصنيف السريري</a>
+    <a href="#s1b" class="toc-sub">· Rutherford وFontaine مقابل نظام ESC</a>
+    <a href="#s2">٢ · خوارزميات القرار العلاجي</a>
+    <a href="#s2b" class="toc-sub">· بلا جروح / مع جروح</a>
+    <a href="#s3">٣ · إعادة التوعية حسب الموقع التشريحي</a>
+    <a href="#s3b" class="toc-sub">· حرقفي / فخذي-مأبضي / تحت الركبة</a>
+    <a href="#s3c" class="toc-sub">· الأدوية النوعية لمسافة المشي</a>
+    <a href="#s4">٤ · جودة الحياة والمتابعة العامة لـ PAD</a>
+    <a href="#s5">٥ · نقص التروية الحرج المزمن CLTI</a>
+    <a href="#s5b" class="toc-sub">· تصنيف WIfI الكامل</a>
+    <a href="#s6">٦ · العلاج التداخلي في CLTI</a>
+    <a href="#s7">٧ · تحفيز النخاع الشوكي والبتر</a>
+    <a href="#s8">٨ · نقص التروية الحاد ALI</a>
+    <a href="#s8b" class="toc-sub">· تصنيف Rutherford لـ ALI</a>
+    <a href="#s9">٩ · المتابعة الدورية</a>
+    <a href="#refs">جدول مرجعي شامل للتوصيات</a>
+    <a href="#keys">النقاط المفتاحية</a>
   </nav>
 
   <div class="content">
-
-    <!-- Section 1 -->
+    <!-- Section 1: Epidemiology & Classification -->
     <div class="section" id="s1">
       <div class="section-header">
         <div class="section-num">١</div>
-        <h2>التصنيف السريري لداء الشرايين المحيطية</h2>
+        <h2>الوبائيات والتصنيف السريري لداء الشرايين المحيطية للطرف السفلي</h2>
       </div>
 
-      <p>يعتمد غايدلاين 2024 تصنيفاً سريرياً مبسّطاً لـ PAD إلى ثلاث فئات رئيسية، بديلاً عن أنظمة Fontaine وRutherford التقليدية المعقّدة.</p>
+      <p>داء الشرايين المحيطية للطرف السفلي هو المظهر الأشيع لأمراض الشرايين المحيطية عموماً، وينتج عن تضيّق أو انسداد عصيدي تدريجي في الشرايين المغذّية للأطراف السفلية. تتدرّج شدّته من حالة لا عرضية تُكتشف صدفة بالفرز، إلى عرج متقطّع يحدّ من نشاط المريض، وصولاً إلى نقص التروية الحرج المزمن الذي يهدّد الطرف نفسه. هذا التدرّج ليس أكاديمياً بحتاً — فهو يحدّد مباشرة شدّة المتابعة المطلوبة ونوع التدخل المناسب.</p>
+
+      <div class="info-box highlight">
+        <strong>📊 المسار الطبيعي للمرض</strong>
+        نسبة التطوّر من PAD اللاعرضي إلى العرج المتقطع خلال 5 سنوات تبلغ نحو 7%، بينما تبلغ نسبة التطوّر من العرج إلى نقص التروية الحرج المزمن (CLTI) نحو 21% خلال نفس المدة. بمعنى آخر: أغلب مرضى العرج لا يتجهون نحو فقدان الطرف، لكن نسبة معتبرة منهم (خُمسهم تقريباً) قد يفعلون — وهذا ما يبرر المتابعة الدورية المنتظمة لكل مريض PAD بغضّ النظر عن الشدّة الحالية.
+      </div>
+
+      <h3 id="s1b">الأنظمة التصنيفية: Rutherford وFontaine مقابل نظام ESC 2024 المبسّط</h3>
+      <p>تاريخياً، اعتُمد نظاما Fontaine (أوروبي، 4 مراحل) وRutherford (أمريكي، 7 فئات من 0 إلى 6) لتصنيف شدّة PAD. غايدلاين 2024 لا يُلغي هذين النظامين — بل يُبقيهما كمرجع للتواصل السريري والتوثيق البحثي — لكنه يعتمد عملياً تبسيطاً ثلاثي الفئات (لا عرضي / عرضي / CLTI) لتوجيه القرار العلاجي المباشر، لأن هذا التبسيط يربط التصنيف مباشرة بخوارزمية العلاج.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الفئة السريرية (ESC)</th><th>Rutherford — الفئة</th><th>Rutherford — الوصف</th><th>Fontaine — المرحلة</th><th>Fontaine — الوصف</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="1">PAD لا عرضي</td><td>0</td><td>لا أعراض</td><td>I</td><td>لا أعراض</td></tr>
+            <tr><td rowspan="3">PAD عرضي (جهدي)</td><td>1</td><td>عرج خفيف</td><td>IIa</td><td>عرج غير مُعيق</td></tr>
+            <tr><td>2</td><td>عرج متوسط</td><td rowspan="2">IIb</td><td rowspan="2">عرج مُعيق للنشاط</td></tr>
+            <tr><td>3</td><td>عرج شديد</td></tr>
+            <tr><td rowspan="3">نقص التروية الحرج المزمن (CLTI)</td><td>4</td><td>ألم راحة إقفاري</td><td>III</td><td>ألم راحة إقفاري</td></tr>
+            <tr><td>5</td><td>فقد نسيجي بسيط</td><td rowspan="2">IV</td><td rowspan="2">تقرّح إقفاري أو غرغرينا</td></tr>
+            <tr><td>6</td><td>فقد نسيجي كبير</td></tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="type-grid">
         <div class="type-card">
           <div class="type-name">PAD لا عرضي</div>
-          <div class="type-def">يُكتشف عادة بالفرز</div>
+          <div class="type-def">يُكتشف عادة بالفرز الانتقائي (ABI)؛ قد يكون سببه نقص حسّية محيطية (كما بالسكري) لا غياب الإقفار الحقيقي</div>
           <div class="type-row"><span class="type-label">العلاج</span><span class="type-val">OMT فقط — لا إعادة توعية</span></div>
         </div>
         <div class="type-card t2">
           <div class="type-name">PAD عرضي (العرج)</div>
-          <div class="type-def">ألم مرتبط بالجهد</div>
+          <div class="type-def">ألم عضلي جهدي في إقليم الشريان المصاب، يزول بالراحة؛ قد يكون بعرض غير نمطي أو PAD "مقنّع" خصوصاً عند النساء</div>
           <div class="type-row"><span class="type-label">العلاج</span><span class="type-val">OMT + SET ± توعّي عند الحاجة</span></div>
         </div>
         <div class="type-card t3">
           <div class="type-name">CLTI</div>
-          <div class="type-def">ألم راحة إقفاري ± جروح/غرغرينا</div>
+          <div class="type-def">ألم راحة إقفاري، تقرّح غير شافٍ ≥2 أسبوع، أو غرغرينا؛ ضغط كاحل &lt;50 ملم زئبق أو ضغط إصبع &lt;30 أو TcPO2 &lt;30</div>
           <div class="type-row"><span class="type-label">العلاج</span><span class="type-val">إعادة توعية عاجلة</span></div>
         </div>
       </div>
 
+      <div class="info-box danger">
+        <strong>⚠️ الخطر القلبي الوعائي المرافق — لا يقتصر الخطر على الطرف</strong>
+        كل مرضى PAD — بمن فيهم اللاعرضيون — معرّضون لخطر مضاعف (4 إلى 5 أضعاف) من الحوادث القلبية الوعائية الكبرى (MACE) مقارنة بغير المصابين. البقيا القلبية الوعائية خلال 5 سنوات: وفيات قلبية وعائية 9% في PAD اللاعرضي و13% في العرضي. أما CLTI فيرفع خطر الوفاة الشاملة 2.26 ضعفاً وخطر MACE 1.73 ضعفاً مقارنة بالعرج وحده. معدّل البتر الكبير في بيانات التأمين الصحي: 9% في CLTI مقابل 1% فقط في العرج — وتطوّر حادثة طرف كبرى (MALE) يترافق مع زيادة 3 أضعاف بخطر الوفاة و200 ضعف بخطر البتر اللاحق.
+      </div>
+
+      <h4>التوصيات — إعادة التوعية في PAD اللاعرضي (جزء من جدول التوصيات 15)</h4>
       <div class="rec rec-iii">
         <div class="rec-text">لا يُوصى بإعادة التوعية في مرضى PAD اللاعرضيين</div>
         <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE C</span></div>
       </div>
-
       <div class="rec rec-iii">
         <div class="rec-text">لا يُوصى بإعادة التوعية بهدف منع التطور نحو CLTI فقط، دون استطباب سريري آخر</div>
         <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE B</span></div>
       </div>
     </div>
 
-    <!-- Section 2 -->
+    <!-- Section 2: Decision Algorithms -->
     <div class="section" id="s2">
       <div class="section-header">
         <div class="section-num">٢</div>
+        <h2>خوارزميات القرار العلاجي الشامل</h2>
+      </div>
+
+      <p>يقترح الغايدلاين مساراً قرارياً موحّداً يبدأ دوماً من العلاج الطبي الأمثل (OMT) ويُقيَّم على أساسه استمرار الأعراض أو تفاقمها، مع مسار منفصل بحسب وجود جروح من عدمه لأن الجروح تُدخل عامل الوقت والعدوى في المعادلة.</p>
+
+      <h3 id="s2b">المسار الأول — PAD بلا جروح (Figure 11)</h3>
+      <div class="flow">
+        <div class="flow-row">
+          <div class="flow-node start"><b>البداية</b>متلازمة PAD مزمنة بلا جروح — متابعة وعائية شاملة (سريرية، وظيفية، فحص وعائي)</div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node"><b>لا عرضي</b>علاج طبي أمثل (OMT) فقط</div>
+          <div class="flow-node"><b>عرضي</b>علاج طبي أمثل (OMT)</div>
+          <div class="flow-node"><b>CLTI</b>علاج طبي أمثل (OMT)</div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node neutral">استمرار المتابعة الدورية فقط</div>
+          <div class="flow-node decision">تمارين مُشرَفة أو منزلية منظّمة (SET/HBET)</div>
+          <div class="flow-node danger">تقييم فوري من الفريق الوعائي</div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node decision"><b>تحسّن الأعراض؟</b>نعم → استمرار SET/HBET والمتابعة<br>لا → تقييم الفريق الوعائي</div>
+          <div class="flow-node decision"><b>إعادة التوعية ممكنة تشريحياً وسريرياً؟</b></div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node action">نعم، ومناسبة ومعقولة سريرياً → إعادة توعية + استمرار SET/HBET</div>
+          <div class="flow-node danger">غير ممكنة → تقييم استراتيجية بديلة (دوائية أو بتر)</div>
+        </div>
+      </div>
+
+      <h3>المسار الثاني — PAD مع جروح (Figure 12)</h3>
+      <p>يتّبع المسار نفس المنطق العام، لكن يُضاف مساراً موازياً لرعاية الجرح (Wound Care) في كل فئة، بحيث يُقيَّم شفاء الجرح بالتوازي مع القرار الوعائي — فشفاء الجرح ذاته قد يتطلّب إعادة توعية مسبقة (خصوصاً في CLTI) حتى لو لم تكن الأعراض الوظيفية شديدة.</p>
+
+      <div class="flow">
+        <div class="flow-row">
+          <div class="flow-node start"><b>البداية</b>متلازمة PAD مزمنة مع جروح</div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node"><b>لا عرضي + جرح</b>OMT + رعاية الجرح</div>
+          <div class="flow-node"><b>عرضي + جرح</b>OMT + رعاية الجرح</div>
+          <div class="flow-node danger"><b>CLTI + جرح</b>OMT + رعاية الجرح العاجلة</div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node decision"><b>هل يلتئم الجرح بالرعاية المحافظة؟</b></div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node action">التئام → تقييم وعائي روتيني ± SET/HBET حسب الفئة</div>
+          <div class="flow-node danger">لا التئام → تقييم فوري من الفريق الوعائي لإمكانية إعادة التوعية</div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node action">ممكنة → إعادة توعية + رعاية جرح مستمرة ± SET/HBET</div>
+          <div class="flow-node danger">غير ممكنة → استراتيجية بديلة (بتر أو تدبير تلطيفي)</div>
+        </div>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ الفارق الجوهري بين المسارين</strong>
+        وجود جرح غير شافٍ يقصّر "نافذة الصبر" العلاجية بشكل كبير — في PAD بلا جروح يُتاح عادة 3 أشهر من OMT وتمارين قبل مناقشة التوعّي، أما مع جرح مترافق مع نقص تروية (خصوصاً في CLTI) فالتأخير نفسه قد يعني فقدان الطرف، لذلك ينتقل القرار من "مسار مجدوَل" إلى "تقييم عاجل".
+      </div>
+    </div>
+
+    <!-- Section 3: Revascularization by anatomy -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">٣</div>
         <h2>إعادة التوعية حسب الموقع التشريحي</h2>
       </div>
 
-      <p>يُوصى بتكييف نوع إعادة التوعية (توعّي داخلي، جراحة مفتوحة، أو مقاربة هجينة) حسب موقع الآفة وشكلها وحالة المريض العامة (Class I, LOE C).</p>
+      <p>يُوصى بتكييف نوع إعادة التوعية (توعّي داخلي، جراحة مفتوحة، أو مقاربة هجينة) حسب موقع الآفة وشكلها وحالة المريض العامة. القاعدة العامة: كلما كانت الآفة أقرب للمركز (حرقفي) كانت نتائج التوعّي الداخلي أفضل وأكثر ديمومة؛ وكلما اتجهنا للمحيط (فخذي مأبضي فتحت الركبة) ازدادت أهمية جودة الوريد الذاتي والخبرة الجراحية.</p>
 
-      <h3 id="s3">توصيات حسب القطاع التشريحي</h3>
+      <h3 id="s3b">جدول التوصيات 15 — التداخل العام في PAD العرضي واللاعرضي</h3>
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>القطاع</th><th>التوصية</th><th>الدرجة</th></tr></thead>
+          <thead><tr><th>التوصية</th><th>الدرجة</th><th>المستوى</th></tr></thead>
           <tbody>
-            <tr><td>حرقفي-أبهري</td><td>توعّي داخلي كخط أول عموماً</td><td style="color:var(--text2)">حسب التشريح</td></tr>
-            <tr><td>فخذي مأبضي — أول خيار</td><td>علاج بإطلاق دواء (Drug-Eluting) كأول خيار</td><td style="color:var(--blue)">IIa A</td></tr>
-            <tr><td>فخذي مأبضي — وريد ذاتي متاح، خطر جراحي منخفض</td><td>جراحة مفتوحة بالوريد الصافن الذاتي (GSV)</td><td style="color:var(--blue)">IIa C</td></tr>
-            <tr><td>عرج شديد + توعّي فخذي مأبضي</td><td>علاج شرايين تحت الركبة بنفس الجلسة يُعتبر</td><td style="color:var(--gold)">IIb C</td></tr>
+            <tr><td>بعد 3 أشهر من OMT وتمارين في PAD العرضي، يُوصى بتقييم جودة الحياة المرتبطة بـ PAD</td><td style="color:var(--green)">I</td><td>B</td></tr>
+            <tr><td>يُوصى بتكييف نمط ونوع إعادة التوعية حسب الموقع التشريحي للآفة وشكلها والحالة العامة للمريض</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>في PAD العرضي مع تأثّر جودة الحياة رغم 3 أشهر OMT وتمارين، تُعتبر إعادة التوعية</td><td style="color:var(--gold)">IIb</td><td>B</td></tr>
+            <tr><td>لا يُوصى بإعادة التوعية إذا كان الهدف الوحيد منع التطوّر نحو CLTI فقط</td><td style="color:var(--red)">III</td><td>B</td></tr>
+            <tr><td>لا يُوصى بإعادة التوعية في PAD اللاعرضي</td><td style="color:var(--red)">III</td><td>C</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>جدول التوصيات 16 — التداخل بحسب الإقليم الشرياني</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الإقليم</th><th>التوصية</th><th>الدرجة</th></tr></thead>
+          <tbody>
+            <tr><td>فخذي-مأبضي</td><td>العلاج بإطلاق دواء (بالونات/دعامات) يُعتبر الخيار الأول</td><td style="color:var(--blue)">IIa A</td></tr>
+            <tr><td>حرقفي</td><td>رأب بالبالون ± دعامة بالحرقفي الظاهر، أو دعامة أولية بالحرقفي المشترك</td><td style="color:var(--blue)">IIa B</td></tr>
+            <tr><td>فخذي-مأبضي</td><td>عند استطباب التوعّي، يُعتبر العلاج التوعّوي الداخلي الخيار الأنسب</td><td style="color:var(--blue)">IIa B</td></tr>
+            <tr><td>فخذي-مأبضي</td><td>الجراحة المفتوحة بوريد ذاتي (GSV) تُعتبر عند توفره وخطر جراحي منخفض</td><td style="color:var(--blue)">IIa C</td></tr>
+            <tr><td>تحت الركبة</td><td>في عرج شديد مع توعّي فخذي-مأبضي داخلي، علاج شرايين تحت الركبة بنفس الجلسة قد يُعتبر عند سوء الجريان الخارج</td><td style="color:var(--gold)">IIb C</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="info-box highlight">
-        <strong>📌 تقييم جودة الحياة قبل التداخل</strong>
-        بعد 3 أشهر من OMT وتمارين، يُوصى بتقييم جودة الحياة المرتبطة بـ PAD (Class I, LOE B) — وفي حال استمرار تأثّرها رغم العلاج المحافظ، تُعتبر إعادة التوعية (Class IIb, LOE B).
+        <strong>📌 قصة الجدل حول البالونات المُطلية بالباكليتاكسيل</strong>
+        تحليل تلوي سابق أثار قلقاً حول زيادة الوفيات مع أجهزة الباكليتاكسيل في الشريان الفخذي-المأبضي، ما دفع إدارة الغذاء والدواء الأمريكية (FDA) لتقييد استخدامها مؤقتاً. لاحقاً، لم تتأكد إشارة الوفيات عند تحليل قواعد بيانات وطنية كبرى، وعادت FDA لاعتبار العلاج المُطلق للدواء آمناً وفعّالاً لآفات هذا الإقليم — وهو ما يعكسه تصنيف IIa A الحالي.
+      </div>
+
+      <h3 id="s3c">العلاج الدوائي النوعي لتحسين مسافة المشي</h3>
+      <p>عدد من الأدوية يُستخدم تقليدياً لتخفيف عرج الشرايين، لكن أدلتها متفاوتة القوة ولا تحمل توصية Class/LOE رسمية في هذا الغايدلاين — بل هي مادة نقاشية توثّق حجم الفائدة المتوقّعة:</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الدواء</th><th>الآلية</th><th>الفائدة الموثّقة على مسافة المشي</th><th>ملاحظة</th></tr></thead>
+          <tbody>
+            <tr><td>Cilostazol</td><td>مثبّط فوسفودايستراز III</td><td>100mg مرتين يومياً → زيادة ~76% (تحليل Cochrane) إلى ~25% (مراجعة أخرى)</td><td>تأثير مضاد صفيحات إضافي — حذر عند دمجه مع مميّعات أخرى؛ يزيد خطر النزف</td></tr>
+            <tr><td>Naftidrofuryl oxalate</td><td>مضاد مستقبلات السيروتونين 5-HT2</td><td>زيادة ~74% بالتجربة المرجعية، ~60% بمراجعة منهجية</td><td>يحسّن أيضاً جودة الحياة المرتبطة بالصحة (HRQoL)</td></tr>
+            <tr><td>Verapamil / Statins / مضادات الصفيحات / البروستانويدات</td><td>متنوّعة</td><td>تخفيف طفيف لضعف المشي</td><td>دعم غير مباشر ضمن العلاج الشامل</td></tr>
+            <tr><td>Pentoxifylline, Buflomedil, Carnitine, Propionyl-L-carnitine</td><td>متنوّعة</td><td>فائدة محدودة ومتغيّرة</td><td>لا تأثير موثّق على الصحة القلبية الوعائية</td></tr>
+            <tr><td>البروستانويدات، L-arginine، Gingko biloba</td><td>متنوّعة</td><td>نتائج غير متّسقة</td><td>لا يمكن التوصية بها حالياً لعلاج العرج</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Section 3 -->
+    <!-- Section 4: General PAD follow-up -->
     <div class="section" id="s4">
       <div class="section-header">
-        <div class="section-num">٣</div>
+        <div class="section-num">٤</div>
+        <h2>جودة الحياة والمتابعة العامة لمرضى PAD</h2>
+      </div>
+
+      <p>PAD اللاعرضي والعرضي كلاهما معرّض لتفاقم الأعراض ولزيادة الاعتلال والوفيات القلبية الوعائية. الهدف من المتابعة الدورية ليس فقط رصد تطوّر أعراض الطرف، بل أيضاً ضبط عوامل الخطر القلبية الوعائية، ومتابعة الالتزام الدوائي، وتقييم الحالة النفسية والوظيفية للمريض — إذ العرج المزمن يُقيّد الحركة وقد يؤثر على الصحة النفسية بشكل غير مباشر.</p>
+
+      <h3>جدول التوصيات 17 — متابعة مرضى PAD</h3>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بمتابعة منتظمة لمرضى PAD مرة سنوياً على الأقل على الأقل، تشمل الحالة السريرية والوظيفية والالتزام الدوائي وأعراض الطرف وعوامل الخطر القلبية الوعائية، مع تصوير دوبلر (DUS) عند الحاجة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ بروتوكولات المتابعة غير موحّدة</strong>
+        رغم وضوح ضرورة المتابعة، يشير الغايدلاين صراحة إلى أن بروتوكولات المتابعة التفصيلية (توقيت، وسيلة تصوير، معايير التصعيد) لم تُحدَّد بدقة بعد بالأدلة، ويُفضَّل أن يُجريها أطباء وعائيون ذوو خبرة. بيانات متابعة PAD اللاعرضي محدودة بشكل خاص.
+      </div>
+    </div>
+
+    <!-- Section 5: CLTI -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">٥</div>
         <h2>نقص التروية الحرج المزمن (CLTI)</h2>
       </div>
 
-      <p>CLTI هو الشكل الأشد من PAD، ويشمل الألم الإقفاري عند الراحة والجروح غير الشافية أو الغرغرينا — يتطلب تقييماً وتدبيراً عاجلاً من فريق وعائي متعدد الاختصاصات.</p>
+      <p>CLTI هو الشكل الأشد من PAD المزمن، ويصف نقص تروية مزمناً في الطرف السفلي مسؤولاً عن ألم راحة إقفاري أو تقرّح غير شافٍ أو غرغرينا (نموذجياً في القطاعات البعيدة). ألم الراحة الإقفاري يصيب مقدّمة القدم بشكل رئيسي ويشتدّ بالاستلقاء ويخفّ بخفض الطرف المصاب — وهذا العرض السريري وحده كافٍ لإثارة الشك قبل أي فحص مخبري.</p>
 
-      <h3 id="s5">تصنيف WIfI لخطر البتر</h3>
+      <div class="info-box danger">
+        <strong>🚨 معايير التشخيص</strong>
+        يُشتبه بـ CLTI عند وجود أحد ما يلي: ألم راحة إقفاري، جرح غير شافٍ في الطرف السفلي لمدة ≥2 أسبوع، أو غرغرينا. أما المعايير الديناميكية الدموية الداعمة فهي: ضغط الكاحل &lt;50 ملم زئبق، ضغط الإصبع (TP) &lt;30 ملم زئبق، أو TcPO2 &lt;30 ملم زئبق.
+      </div>
+
+      <p>نقطة تشخيصية مهمة: قد يكون الـ ABI طبيعياً أو مرتفعاً كاذباً في CLTI بسبب تصلّب الوسطى (شائع بالسكري والقصور الكلوي المزمن) — لذلك لا يُعتمد على ضغط الكاحل وحده لتقدير خطر فقدان الطرف، ويُستكمل التقييم بضغط الإصبع أو TBI أو TcPO2. كذلك، نسبة كبيرة من مرضى التقرّحات لديهم آفات تحت مستوى الكاحل، وقد تحتاج لتصوير DSA موجّه لمنطقة القدم عندما يُعيق التكلّس الشديد دقّة DUS/CTA/MRA في الشرايين تحت الركبة.</p>
+
+      <h3 id="s5b">تصنيف WIfI الكامل لتقدير خطر البتر</h3>
+      <p>يجمع تصنيف WIfI (Wound, Ischaemia, foot Infection) ثلاثة محاور مستقلة في تقييم واحد يُترجم مباشرة إلى فئة خطر بتر (منخفض جداً VL، منخفض L، متوسط M، مرتفع H). كل محور يُقيَّم من 0 إلى 3:</p>
+
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>المكوّن</th><th>ما يُقيّمه</th></tr></thead>
+          <thead><tr><th>المكوّن</th><th>الدرجة</th><th>الوصف</th></tr></thead>
           <tbody>
-            <tr><td><strong>W — Wound</strong></td><td>حجم وعمق الجرح أو الغرغرينا</td></tr>
-            <tr><td><strong>I — Ischaemia</strong></td><td>شدة نقص التروية (ABI/TBI/TcPO2)</td></tr>
-            <tr><td><strong>fI — foot Infection</strong></td><td>وجود وشدة العدوى الموضعية</td></tr>
+            <tr><td rowspan="4"><strong>W — الجرح (Wound)</strong></td><td>0</td><td>لا تقرّح (ألم راحة إقفاري فقط)</td></tr>
+            <tr><td>1</td><td>تقرّح صغير وسطحي بالساق البعيدة أو القدم، بلا غرغرينا</td></tr>
+            <tr><td>2</td><td>تقرّح أعمق مع عظم/مفصل/وتر مكشوف ± غرغرينا محصورة بالأصابع</td></tr>
+            <tr><td>3</td><td>تقرّح عميق واسع، تقرّح كعبي كامل السماكة ± إصابة عظم الكعب ± غرغرينا واسعة</td></tr>
+            <tr><td rowspan="4"><strong>I — الإقفار (Ischaemia)</strong></td><td>0</td><td>ABI ≥0.80 · ضغط كاحل &gt;100 · ضغط إصبع/TcPO2 ≥60</td></tr>
+            <tr><td>1</td><td>ABI 0.60–0.79 · ضغط كاحل 70–100 · ضغط إصبع/TcPO2 40–59</td></tr>
+            <tr><td>2</td><td>ABI 0.40–0.59 · ضغط كاحل 50–70 · ضغط إصبع/TcPO2 30–39</td></tr>
+            <tr><td>3</td><td>ABI &lt;0.40 · ضغط كاحل &lt;50 · ضغط إصبع/TcPO2 &lt;30</td></tr>
+            <tr><td rowspan="4"><strong>fI — عدوى القدم (foot Infection)</strong></td><td>0</td><td>لا أعراض أو علامات عدوى</td></tr>
+            <tr><td>1</td><td>عدوى موضعية تشمل الجلد والنسيج تحت الجلد فقط</td></tr>
+            <tr><td>2</td><td>عدوى موضعية أعمق من الجلد/تحت الجلد</td></tr>
+            <tr><td>3</td><td>متلازمة استجابة التهابية جهازية (SIRS)</td></tr>
           </tbody>
         </table>
       </div>
 
+      <p>مصفوفة الخطر أدناه (لكل درجة إقفار على حدة) تبيّن كيف يتقاطع الجرح (صفوف) مع العدوى (أعمدة) لإنتاج فئة الخطر النهائية:</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1rem 0">
+        <div>
+          <div class="flow-branch-lbl">الإقفار — درجة 0</div>
+          <div class="wifi-grid">
+            <div class="hd">W \ fI</div><div class="hd">0</div><div class="hd">1</div><div class="hd">2</div><div class="hd">3</div>
+            <div class="hd">W0</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div>
+            <div class="hd">W1</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div>
+            <div class="hd">W2</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div>
+            <div class="hd">W3</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div><div class="wifi-VL">VL</div>
+          </div>
+        </div>
+        <div>
+          <div class="flow-branch-lbl">الإقفار — درجة 1</div>
+          <div class="wifi-grid">
+            <div class="hd">W \ fI</div><div class="hd">0</div><div class="hd">1</div><div class="hd">2</div><div class="hd">3</div>
+            <div class="hd">W0</div><div class="wifi-VL">VL</div><div class="wifi-L">L</div><div class="wifi-L">L</div><div class="wifi-M">M</div>
+            <div class="hd">W1</div><div class="wifi-VL">VL</div><div class="wifi-L">L</div><div class="wifi-M">M</div><div class="wifi-M">M</div>
+            <div class="hd">W2</div><div class="wifi-VL">VL</div><div class="wifi-M">M</div><div class="wifi-M">M</div><div class="wifi-H">H</div>
+            <div class="hd">W3</div><div class="wifi-VL">VL</div><div class="wifi-M">M</div><div class="wifi-M">M</div><div class="wifi-H">H</div>
+          </div>
+        </div>
+        <div>
+          <div class="flow-branch-lbl">الإقفار — درجة 2</div>
+          <div class="wifi-grid">
+            <div class="hd">W \ fI</div><div class="hd">0</div><div class="hd">1</div><div class="hd">2</div><div class="hd">3</div>
+            <div class="hd">W0</div><div class="wifi-L">L</div><div class="wifi-L">L</div><div class="wifi-M">M</div><div class="wifi-M">M</div>
+            <div class="hd">W1</div><div class="wifi-M">M</div><div class="wifi-M">M</div><div class="wifi-H">H</div><div class="wifi-H">H</div>
+            <div class="hd">W2</div><div class="wifi-M">M</div><div class="wifi-H">H</div><div class="wifi-H">H</div><div class="wifi-H">H</div>
+            <div class="hd">W3</div><div class="wifi-M">M</div><div class="wifi-H">H</div><div class="wifi-H">H</div><div class="wifi-H">H</div>
+          </div>
+        </div>
+        <div>
+          <div class="flow-branch-lbl">الإقفار — درجة 3</div>
+          <div class="wifi-grid">
+            <div class="hd">W \ fI</div><div class="hd">0</div><div class="hd">1</div><div class="hd">2</div><div class="hd">3</div>
+            <div class="hd">W0</div><div class="wifi-M">M</div><div class="wifi-H">H</div><div class="wifi-H">H</div><div class="wifi-H">H</div>
+            <div class="hd">W1</div><div class="wifi-H">H</div><div class="wifi-H">H</div><div class="wifi-H">H</div><div class="wifi-H">H</div>
+            <div class="hd">W2</div><div class="wifi-H">H</div><div class="wifi-H">H</div><div class="wifi-H">H</div><div class="wifi-H">H</div>
+            <div class="hd">W3</div><div class="wifi-H">H</div><div class="wifi-H">H</div><div class="wifi-H">H</div><div class="wifi-H">H</div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:.8rem;color:var(--text2)">VL = خطر بتر منخفض جداً (المرحلة السريرية 1) · L = منخفض (المرحلة 2) · M = متوسط (المرحلة 3) · H = مرتفع (المرحلة 4). الجدول مُعاد بناؤه استناداً لمحتوى الغايدلاين الأصلي (Mills et al.).</p>
+
+      <h4>جدول التوصيات 11 — التشخيص في PAD مع سكري/قصور كلوي/جروح</h4>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بقياس ضغط الإصبع (TP) أو TBI في مرضى السكري أو القصور الكلوي إذا كان ABI الراحة طبيعياً</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">في مرضى PAD مع جروح مزمنة، يُعتبر تصنيف WIfI لتقدير خطر البتر الفردي</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <h4>جدول التوصيات 18 — تدبير CLTI (نظرة عامة)</h4>
+      <div class="rec rec-i">
+        <div class="rec-text">لإنقاذ الطرف في مرضى CLTI، يُوصى بإعادة التوعية</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
       <div class="rec rec-i">
         <div class="rec-text">التعرّف المبكر على CLTI والإحالة الفورية للفريق الوعائي موصى به لإنقاذ الطرف</div>
         <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
       </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">في مرضى CLTI، يُعتبر تصوير الطرف المصاب بالكامل</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
 
+      <h4>جدول التوصيات 19 — العلاج الطبي في CLTI</h4>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بأن يُدار مرضى CLTI من قِبل فريق وعائي متعدد الاختصاصات</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
       <div class="rec rec-i">
         <div class="rec-text">في مرضى CLTI مع جروح، يُوصى بتخفيف الضغط الميكانيكي (Offloading) عن الجرح للسماح بالشفاء</div>
         <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
       </div>
-
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بمعالجة العدوى بالمضادات الحيوية</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
       <div class="rec rec-iii">
         <div class="rec-text">لا يُوصى بتمارين الطرف السفلي في مرضى CLTI الذين لديهم جروح مفتوحة</div>
         <div class="rec-badges"><span class="badge badge-iii">Class III</span><span class="badge badge-loe">LOE C</span></div>
       </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ العناية بالجرح — لا يوجد نمط ضماد "أفضل" مثبت</strong>
+        الأدلة الجيدة حول تفوّق نوع ضماد على آخر غير كافية. في حالات مختارة قد تُسرّع الضمادات المضادة للجراثيم، الفضية، الكولاجينية، العسل/اليود، البلازما الغنية بالصفيحات، أو العلاج بالضغط السلبي الشفاء وتقلّل مدة الاستشفاء وتمنع البتر. عند الاشتباه بعدوى عميقة (التهاب عظم ونقي)، يلزم تصوير شعاعي أو رنين مغناطيسي، مع مسار مضادات حيوية أطول موجّه — يُفضَّل بحسب الزرع النسيجي.
+      </div>
     </div>
 
-    <!-- Section 4 -->
+    <!-- Section 6: CLTI interventional -->
     <div class="section" id="s6">
       <div class="section-header">
-        <div class="section-num">٤</div>
+        <div class="section-num">٦</div>
         <h2>العلاج التداخلي في CLTI</h2>
+      </div>
+
+      <p>الهدف الأساسي من إعادة التوعية في CLTI هو استعادة جريان دم مباشر (In-line) وسريع نحو القدم. ثلاث تجارب عشوائية كبرى قارنت التوعّي الداخلي بالجراحة المفتوحة في الشرايين تحت الإربية، وكل واحدة أضافت طبقة فهم مختلفة:</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الدراسة</th><th>التصميم</th><th>النتيجة الأساسية</th></tr></thead>
+          <tbody>
+            <tr><td><strong>BASIL</strong></td><td>توعّي داخلي مقابل جراحة، إقفار شديد بالساق</td><td>لا فرق دال بالوفيات أو البقيا الخالية من البتر خلال سنتين؛ الجراحة قلّلت خطر البتر/الوفاة معاً بعد سنتين</td></tr>
+            <tr><td><strong>BEST-CLI</strong></td><td>متابعة وسطية 2.7 سنة</td><td>حدوث MALE أو الوفاة كان أقل مع الجراحة عند توفّر قطعة وريد صافن ذاتي صالحة؛ تعادلت النتائج مع التوعّي الداخلي عند الحاجة لموصل بديل</td></tr>
+            <tr><td><strong>BASIL-2</strong></td><td>آفات تحت-مأبضية ± إضافية أقرب</td><td>التوعّي الداخلي ارتبط ببقيا خالية من البتر أفضل، أساساً بسبب وفيات أقل بهذه المجموعة</td></tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="algo-box">
@@ -308,78 +594,278 @@
         </div>
         <div class="algo-step">
           <div class="algo-num">4</div>
-          <div class="algo-content"><h4>خطر جراحي منخفض + وريد جيد</h4><p>مجازة تحت إربية تُعتبر خياراً (Class IIb, LOE B) — استناداً لدراسة BEST-CLI</p></div>
+          <div class="algo-content"><h4>تقييم الخطر الفردي</h4><p>تقييم فردي (يوازن خطر التداخل الوعائي مقابل الجراحي) من فريق وعائي متعدد الاختصاصات موصى به — Class I, LOE C</p></div>
         </div>
         <div class="algo-step">
           <div class="algo-num">5</div>
-          <div class="algo-content"><h4>خطر جراحي عالٍ أو وريد غير كافٍ</h4><p>العلاج التوعّوي الداخلي يُعتبر كخط أول (Class IIb, LOE B)</p></div>
+          <div class="algo-content"><h4>خطر جراحي منخفض + وريد جيد</h4><p>مجازة تحت إربية تُعتبر خياراً في مرضى CLTI بوريد ذاتي جيد وخطر جراحي منخفض (وفيات محيط العملية &lt;5%، بقيا سنتين &gt;50%) — Class IIb, LOE B</p></div>
+        </div>
+        <div class="algo-step">
+          <div class="algo-num">6</div>
+          <div class="algo-content"><h4>خطر جراحي عالٍ أو وريد غير كافٍ</h4><p>العلاج التوعّوي الداخلي قد يُعتبر كخط أول، خصوصاً مع ارتفاع الخطر الجراحي أو عدم كفاية الوريد الذاتي — Class IIb, LOE B</p></div>
         </div>
       </div>
 
       <div class="info-box success">
-        <strong>✅ نتائج BEST-CLI</strong>
-        دراسة BEST-CLI الكبرى دعمت تفوّق المجازة الجراحية بالوريد الذاتي الجيد عند توفره وانخفاض الخطر الجراحي — لكن القرار يبقى فردياً حسب تشريح الآفة، جودة الوريد، والحالة العامة للمريض.
+        <strong>✅ خلاصة عملية</strong>
+        لا يوجد "فائز" مطلق بين الجراحة والتوعّي الداخلي في CLTI — القرار فردي يوازن جودة الوريد الذاتي المتاح، الخطر الجراحي المحسوب، وتوزّع الآفة التشريحي (قريبة/بعيدة، وحيدة/متعددة المستويات)، ضمن نقاش صريح داخل الفريق الوعائي متعدد الاختصاصات.
       </div>
     </div>
 
-    <!-- Section 5 -->
+    <!-- Section 7: SCS & amputation -->
     <div class="section" id="s7">
       <div class="section-header">
-        <div class="section-num">٥</div>
+        <div class="section-num">٧</div>
         <h2>تحفيز النخاع الشوكي والبتر</h2>
       </div>
 
-      <p>في مرضى CLTI غير القابلين لإعادة التوعية (No-Option CLTI)، قد يُعتبر تحفيز النخاع الشوكي (Spinal Cord Stimulation) كخيار مساعد لتخفيف الألم وتحسين إنقاذ الطرف في حالات مختارة.</p>
+      <div class="info-box info-purple">
+        <strong><span class="consensus-tag">توافق خبراء — بلا Class/LOE رسمي</span></strong>
+        تحفيز النخاع الشوكي (Spinal Cord Stimulation) قد يُعتبر في مرضى CLTI الذين لا تتوفّر لديهم خيارات إعادة توعية قابلة للتطبيق (No-Option CLTI). يوفّر تخفيفاً متواضعاً للألم وانخفاضاً بنسبة 11% بمعدّل البتر مقارنة بالتدبير المحافظ خلال سنة، لكن دون أثر يُذكر على شفاء التقرّحات — والفائدة يجب أن تُوازَن مقابل التكلفة العالية والمضاعفات المحتملة. هذه التوصية لم تُصنَّف رسمياً بـ Class/LOE في الغايدلاين — فهي مبنية على أدلة محدودة وخبرة سريرية تراكمية فقط.
+      </div>
 
-      <div class="info-box warning">
-        <strong>⚠️ البتر — قرار الملاذ الأخير</strong>
-        يُلجأ للبتر الأولي عند تعذّر إعادة التوعية، أو وجود عدوى مهدّدة للحياة، أو طرف غير قابل للوظيفة أصلاً — القرار يجب أن يشمل تقييماً شاملاً لتوقعات إعادة التأهيل والحالة العامة للمريض ضمن الفريق متعدد الاختصاصات.
+      <h3>قرار البتر</h3>
+      <p>البتر الصغير (عادة حتى مقدّمة القدم) يُلجأ إليه غالباً لإزالة نسيج نخِر بأثر محدود على حركة المريض، وإعادة التوعية قبل البتر تُحسّن شفاء الجرح. أما في حالات النخر الواسع أو الغرغرينا المُعدية، فقد يكون البتر الكبير الأولي دون إعادة توعية الخيار الأفضل لتجنّب المضاعفات. يُستطبّ البتر الثانوي عند فشل إعادة التوعية، تعذّر إعادة التداخل، أو استمرار تدهور الطرف رغم مجازة سالكة وتدبير أمثل.</p>
+
+      <div class="info-box info-purple">
+        <strong><span class="consensus-tag">توافق خبراء</span> — اختيار مستوى البتر</strong>
+        البتر تحت الركبة يسمح بحركة أفضل مع الطرف الصنعي. للمرضى طريحي الفراش، قد يكون البتر فوق الركبة الخيار المفضّل. هذه إرشادات عملية توافقية وليست توصيات مُصنَّفة رسمياً.
       </div>
     </div>
 
-    <!-- Section 6 -->
+    <!-- Section 8: ALI -->
     <div class="section" id="s8">
       <div class="section-header">
-        <div class="section-num">٦</div>
+        <div class="section-num">٨</div>
         <h2>نقص التروية الحاد للطرف (ALI)</h2>
       </div>
 
-      <p>ALI هو انخفاض مفاجئ في تروية الطرف يهدد بقاءه — يتطلب تشخيصاً وتدخلاً طارئين خلال ساعات لتفادي فقدان الطرف.</p>
+      <p>ALI هو انخفاض مفاجئ حادّ في تروية الطرف يهدّد بقاءه — يتطلب تشخيصاً وتدخلاً طارئين خلال ساعات، لا أيام، لتفادي فقدان الطرف أو الحياة. المستوى الإسعافي واختيار الاستراتيجية العلاجية يعتمدان بشكل أساسي على العجز العصبي: الفقد الحسي أو الحركي علامة تهديد للطرف وتستوجب تصويراً وإعادة توعية طارئين، بينما الفقد الحسي الشديد والشلل التام يوحيان بطرف قد لا يكون قابلاً للإنقاذ.</p>
 
-      <h3 id="s9">الفئات السريرية لـ ALI</h3>
+      <h3 id="s8b">جدول 9 — الفئات السريرية لنقص التروية الحاد</h3>
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>الفئة</th><th>الوصف</th><th>الإنذار</th></tr></thead>
+          <thead><tr><th>الدرجة</th><th>الفئة</th><th>الفقد الحسي</th><th>العجز الحركي</th><th>دوبلر شرياني</th><th>دوبلر وريدي</th><th>الإنذار</th></tr></thead>
           <tbody>
-            <tr><td><strong style="color:var(--green)">Viable (قابل للحياة)</strong></td><td>لا فقد حسي أو حركي، نبض دوبلر مسموع</td><td>لا تهديد فوري</td></tr>
-            <tr><td><strong style="color:var(--gold)">Threatened Marginally</strong></td><td>فقد حسي بسيط، لا ضعف حركي</td><td>قابل للإنقاذ بالعلاج السريع</td></tr>
-            <tr><td><strong style="color:var(--red)">Threatened Immediately</strong></td><td>فقد حسي وضعف حركي، ألم راحة</td><td>يتطلب تداخل فوري</td></tr>
-            <tr><td><strong style="color:#7f1d1d">Irreversible</strong></td><td>فقد حسي وحركي عميق، تصلب عضلي</td><td>بتر غالباً حتمي</td></tr>
+            <tr><td><strong style="color:var(--green)">I</strong></td><td>قابل للحياة (Viable)</td><td>لا يوجد</td><td>لا يوجد</td><td>مسموع</td><td>مسموع</td><td>لا تهديد فوري</td></tr>
+            <tr><td><strong style="color:var(--gold)">IIA</strong></td><td>مهدَّد هامشياً</td><td>لا يوجد أو محدود بالأصابع</td><td>لا يوجد</td><td>غير مسموع غالباً</td><td>مسموع</td><td>قابل للإنقاذ بعلاج سريع</td></tr>
+            <tr><td><strong style="color:var(--red)">IIB</strong></td><td>مهدَّد فوراً</td><td>أكثر من الأصابع</td><td>خفيف-متوسط</td><td>غير مسموع</td><td>مسموع</td><td>قابل للإنقاذ بإعادة توعية فورية</td></tr>
+            <tr><td><strong style="color:#7f1d1d">III</strong></td><td>لا رجعة فيه</td><td>عميق (تخدّر)</td><td>شلل تام (تيبّس)</td><td>غير مسموع</td><td>غير مسموع</td><td>فقد نسيجي كبير، أذية عصبية دائمة حتمية</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.8rem;color:var(--text2)">تُضاف علامات إضافية داعمة: ملء الشعيرات (سليم/بطيء/غائب) وواسمات الأذية العضلية (CK, myoglobin) — ارتفاعها الشديد ينذر بانحلال عضلي مخطّط وخطر بتر وقصور كلوي ووفاة.</p>
+
+      <h4>خوارزمية التقييم والتدبير الفوري (Figure 16)</h4>
+      <div class="flow">
+        <div class="flow-row">
+          <div class="flow-node danger start"><b>اشتباه ALI</b>طرف بارد ومؤلم بشكل حاد</div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node">تسكين الألم فوراً + تقييم سريري من طبيب خبير (وظيفة عصبية، ملء شعيرات، دوبلر شرياني/وريدي، واسمات عضلية)</div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node action"><b>الفئة I / IIA</b>حسّ وحركة سليمان أو فقد بسيط، دوبلر شرياني مسموع أو ضعيف، دوبلر وريدي مسموع</div>
+          <div class="flow-node danger"><b>الفئة IIB</b>فقد حسي أوسع + ضعف حركي، دوبلر شرياني غير مسموع، وريدي مسموع</div>
+          <div class="flow-node" style="border-color:#7f1d1d;background:rgba(127,29,29,.15)"><b>الفئة III</b>فقد حسي وحركي تام، دوبلر شرياني ووريدي غائبان، واسمات مرتفعة جداً</div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node">تصوير (DUS/CTA/DSA/MRA) — لا يجب أن يؤخّر العلاج</div>
+          <div class="flow-node danger">تصوير عاجل (لا يؤخّر العلاج) → إعادة توعية عاجلة + تمييع ما لم يكن مضاداً</div>
+          <div class="flow-node" style="border-color:#7f1d1d;background:rgba(127,29,29,.15)">بتر أوّلي أو رعاية تلطيفية</div>
+        </div>
+        <div class="flow-arrow-row">↓</div>
+        <div class="flow-row">
+          <div class="flow-node action">إعادة توعية عاجلة + مميّعات ما لم توجد مضاد استطباب</div>
+          <div class="flow-node danger">إعادة توعية طارئة + مميّعات ما لم توجد مضاد استطباب</div>
+        </div>
+      </div>
+
+      <h3>جدول التوصيات 22 — تدبير نقص التروية الحاد</h3>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتقييم عاجل من طبيب وعائي ذي خبرة كافية لتقدير حيوية الطرف وتطبيق العلاج المناسب</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">في حال وجود عجز عصبي، يُوصى بإعادة توعية عاجلة؛ التصوير التشخيصي موصى به لتوجيه العلاج شرط ألا يؤخّره، أو إذا كانت الحاجة للبتر الأولي واضحة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">بغياب العجز العصبي الشديد، يُوصى بإعادة التوعية خلال ساعات من التصوير الأولي بقرار فردي</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بالمسكّنات بأسرع وقت ممكن للسيطرة على الألم</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بمراقبة متلازمة الحيّز بعد إعادة التوعية وعلاجها (بضع اللفافة) عند الحاجة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتقييم النجاح السريري والديناميكي الدموي بعد إعادة التوعية</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بأخذ قصة مرضية شاملة وتحديد سبب التخثّر و/أو الانصمام</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">بعد إعادة التوعية، إذا لم يكن المريض على مميّعات لسبب آخر، يُعتبر DAPT أو مزيج Rivaroxaban 2.5mg مرتين + Aspirin 100mg</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iib">
+        <div class="rec-text">عند تأكيد تشخيص ALI، يُعتبر العلاج بالهيبارين</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="info-box info-blue">
+        <strong>💉 المعالجة الأولية العملية</strong>
+        عند التشخيص السريري: تسكين، تمييع، سوائل وريدية، وتصحيح الحماض/فرط بوتاسيوم الدم عند الحاجة. الهيبارين غير المجزّأ وريدياً (جرعة تحميل 5000 وحدة أو 70–100 وحدة/كغ، يليها تسريب مستمر مع ضبط الجرعة حسب زمن التخثر المُنشَّط) أو الهيبارين منخفض الوزن الجزيئي تحت الجلد (مثلاً إينوكسابارين 1 ملغ/كغ مرتين يومياً) يُستخدمان لمنع مزيد من الانصمام وامتداد الخثرة.
+      </div>
+
+      <div class="info-box highlight">
+        <strong>🔧 خيارات إعادة التوعية في ALI</strong>
+        تشمل: الحل الخثري الموجَّه بالقثطرة (CDT)، الاستخراج الميكانيكي للخثرة أو الشفط عبر الجلد (± حل خثري)، أو الاستئصال الجراحي للخثرة/المجازة/الترميم الشرياني — وقد تُدمَج هذه الطرق حسب العجز العصبي، مدة الإقفار، الموقع، الحجم، السبب، الأمراض المرافقة، نوع الموصل، ومخاطر كل استراتيجية. المقاربة التوعّوية الأولى تُفضَّل غالباً لتقليل الاعتلال والوفيات خصوصاً بوجود أمراض مرافقة شديدة؛ استخراج/شفط الخثرة والاستئصال الجراحي يُفضَّلان مع العجز العصبي، بينما الحل الخثري بالقثطرة أنسب للحالات الأقل شدّة بلا عجز عصبي. الاستخراج الحديث بالقثطرة (CDT) يترافق مع معدّل بتر عند 12 شهراً أقل من 10% في فئة Rutherford IIB.
+      </div>
+
+      <h4>المتابعة بعد ALI</h4>
+      <p>بعد إعادة التوعية أو البتر، يجب التأكد من النجاح الديناميكي الدموي، والبحث عن سبب التخثّر (نظراً لكون الانصمام الخثاري السبب الأشيع، فتخطيط القلب بجهاز Holter، ومخطط صدى القلب، وتصوير الأبهر مفيدة لتوجيه العلاج، خصوصاً التمييع)، مع الأخذ بالاعتبار متلازمات فرط تخثّر أخرى كمتلازمة أضداد الشحوم الفوسفورية والتهاب الأوعية عند الاشتباه السريري. الستاتينات تُحسّن النتائج بعد إعادة التوعية.</p>
+    </div>
+
+    <!-- Section 9: Consolidated follow-up -->
+    <div class="section" id="s9">
+      <div class="section-header">
+        <div class="section-num">٩</div>
+        <h2>المتابعة الدورية — CLTI بعد إعادة التوعية</h2>
+      </div>
+
+      <p>خطر الحوادث القلبية الوعائية يبقى مرتفعاً في مرضى CLTI حتى بعد نجاح التداخل. تركّز المتابعة على الحالة القلبية الوعائية العامة، الوقاية من فشل إعادة التوعية، شفاء الجرح، وحالة الطرف المقابل. بعد إعادة التوعية، يُوصى بموعد سنوي على الأقل مع طبيب وعائي خبير بتدبير CLTI. بسبب نقص الأدلة، فإن أغلب توصيات المتابعة التفصيلية مبنية على توافق وخبرة الخبراء لا على تجارب عشوائية.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>المسار</th><th>الجدول الزمني الموصى به</th></tr></thead>
+          <tbody>
+            <tr><td>بعد مجازة وريدية جراحية</td><td>فحص سريري + ABI/TBI + DUS خلال 4–6 أسابيع، ثم عند 3، 6، 12، 24 شهراً</td></tr>
+            <tr><td>بعد علاج توعّوي داخلي</td><td>تقييم سريري + ABI + DUS حسب أول فحص: طبيعي → DUS عند عودة الأعراض؛ غير طبيعي → DUS مبكر أو إعادة تداخل أو متابعة أقرب حسب الحالة</td></tr>
           </tbody>
         </table>
       </div>
 
-      <div class="info-box danger">
-        <strong>🚨 مبدأ التدبير</strong>
-        شدة الفئة السريرية تحدد إلحاح التداخل — في الفئة القابلة للحياة يُتاح وقت للتصوير والتخطيط، بينما الفئة المهددة فوراً تستوجب استئصال الخثرة أو المجازة الطارئة دون تأخير للتصوير الكامل.
+      <div class="info-box info-purple">
+        <strong><span class="consensus-tag">توافق خبراء</span></strong>
+        السنة الأولى بعد المجازة الوريدية تحمل معدّل تضيّق ~20%؛ إذا مرّت 12 شهراً دون مشاكل، تصبح المشاكل المتأخرة نادرة. أما بعد العلاج التوعّوي، فمعدّل إعادة التضيّق/الانسداد يتراوح من 5% بالمنطقة الحرقفية إلى &gt;50% بالشرايين تحت المأبضية، دون "مرحلة استقرار" — فمعدّل الفشل يبقى ثابتاً لسنوات على الأقل 5 سنوات. ABI المقدَّر بالدوبلر الكاحلي بعد الإجراء &lt;0.90 ينذر بشفاء جرح دون المستوى الأمثل، وحاجة لإعادة توعية موجَّهة سريرياً (cdTLR)، وخطر MALE.
+      </div>
+
+      <h3>جدول التوصيات 21 — متابعة CLTI</h3>
+      <div class="rec rec-i">
+        <div class="rec-text">في مرضى CLTI بعد إعادة التوعية، يُوصى بمتابعة منتظمة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">عند المتابعة، يُوصى بتقييم الحالة السريرية والديناميكية الدموية والوظيفية، وعوامل الخطر القلبية الوعائية</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
       </div>
     </div>
 
-    <!-- Section 7 -->
-    <div class="section" id="s10">
+    <!-- Master reference table -->
+    <div class="section" id="refs">
       <div class="section-header">
-        <div class="section-num">٧</div>
-        <h2>المتابعة الدورية</h2>
+        <div class="section-num">📋</div>
+        <h2>جدول مرجعي شامل — كل توصيات الجزء الثالث (جداول 13–22)</h2>
       </div>
+      <p style="font-size:.85rem;color:var(--text2)">تجميع سريع لكل التوصيات الرسمية ذات Class/LOE الخاصة بـ PAD للطرف السفلي، بما فيها التمارين والعلاج المضاد للتخثر (المُفصَّلة سردياً في الجزء الثاني) — للمراجعة السريعة قبل الامتحان أو المداولة السريرية.</p>
 
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>الفئة</th><th>التوصية</th><th>الدرجة</th></tr></thead>
+          <thead><tr><th>#</th><th>التوصية (مختصرة)</th><th>Class</th><th>LOE</th></tr></thead>
           <tbody>
-            <tr><td>كل مرضى PAD</td><td>متابعة سنوية على الأقل — سريرياً ووظيفياً وDUS عند الحاجة</td><td style="color:var(--green)">I C</td></tr>
-            <tr><td>بعد إعادة توعية لـ CLTI</td><td>متابعة منتظمة تشمل الحالة السريرية والديناميكية الدموية والوظيفية</td><td style="color:var(--green)">I C</td></tr>
+            <tr><td colspan="4" style="background:rgba(8,145,178,.1);font-weight:700;color:var(--brand2)">جدول 13 — التمارين الرياضية</td></tr>
+            <tr><td>13.1</td><td>SET موصى بها في PAD العرضي</td><td style="color:var(--green)">I</td><td>A</td></tr>
+            <tr><td>13.2</td><td>SET كعلاج مساعد بعد توعّي داخلي</td><td style="color:var(--green)">I</td><td>A</td></tr>
+            <tr><td>13.3</td><td>HBET منظّمة ومُراقَبة عند تعذّر SET</td><td style="color:var(--blue)">IIa</td><td>A</td></tr>
+            <tr><td>13.4</td><td>المشي كنمط أول؛ بدائل عند تعذّره</td><td style="color:var(--blue)">IIa</td><td>A</td></tr>
+            <tr><td>13.5</td><td>شدّة عالية (77–95% HRmax) لتحسين المشي واللياقة</td><td style="color:var(--blue)">IIa</td><td>A</td></tr>
+            <tr><td>13.6</td><td>≥3 مرات/أسبوع، ≥30 دقيقة، ≥12 أسبوعاً</td><td style="color:var(--blue)">IIa</td><td>B</td></tr>
+            <tr><td>13.7</td><td>تمرين حتى ألم متوسط-شديد قد يُعتبر</td><td style="color:var(--gold)">IIb</td><td>B</td></tr>
+            <tr><td>13.8</td><td>زيادة تدريجية بحمل التمرين قد تُعتبر</td><td style="color:var(--gold)">IIb</td><td>C</td></tr>
+
+            <tr><td colspan="4" style="background:rgba(8,145,178,.1);font-weight:700;color:var(--brand2)">جدول 14 — العلاج المضاد للتخثر</td></tr>
+            <tr><td>14.1</td><td>Aspirin أو Clopidogrel مفرد لتقليل MACE في PAD العرضي</td><td style="color:var(--green)">I</td><td>A</td></tr>
+            <tr><td>14.2</td><td>Rivaroxaban 2.5×2 + Aspirin 100 — خطر إقفاري عالٍ وخطر نزف غير مرتفع</td><td style="color:var(--blue)">IIa</td><td>A</td></tr>
+            <tr><td>14.3</td><td>Rivaroxaban 2.5×2 + Aspirin 100 — بعد إعادة توعية، خطر نزف غير مرتفع</td><td style="color:var(--blue)">IIa</td><td>B</td></tr>
+            <tr><td>14.4</td><td>Clopidogrel مفرد قد يُفضَّل على Aspirin</td><td style="color:var(--gold)">IIb</td><td>B</td></tr>
+            <tr><td>14.5</td><td>Aspirin 75–100 للوقاية الأولية في PAD لا عرضي + سكري</td><td style="color:var(--gold)">IIb</td><td>A</td></tr>
+            <tr><td>14.6</td><td>DAPT لمدة ≥شهر بعد إعادة التوعية قد يُعتبر</td><td style="color:var(--gold)">IIb</td><td>B</td></tr>
+            <tr><td>14.7</td><td>DAPT طويل الأمد — غير موصى به</td><td style="color:var(--red)">III</td><td>A</td></tr>
+            <tr><td>14.8</td><td>مميّع فموي مفرد (بلا استطباب آخر) — غير موصى به</td><td style="color:var(--red)">III</td><td>A</td></tr>
+            <tr><td>14.9</td><td>Ticagrelor روتينياً — غير موصى به</td><td style="color:var(--red)">III</td><td>A</td></tr>
+            <tr><td>14.10</td><td>مضاد صفيحات روتيني في PAD لا عرضي بلا ASCVD — غير موصى به</td><td style="color:var(--red)">III</td><td>B</td></tr>
+
+            <tr><td colspan="4" style="background:rgba(8,145,178,.1);font-weight:700;color:var(--brand2)">جدول 15 — التداخل العام</td></tr>
+            <tr><td>15.1</td><td>تقييم جودة الحياة بعد 3 أشهر OMT + تمارين</td><td style="color:var(--green)">I</td><td>B</td></tr>
+            <tr><td>15.2</td><td>تكييف نمط التوعية حسب التشريح والحالة العامة</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>15.3</td><td>توعية عند تأثّر جودة الحياة رغم OMT 3 أشهر</td><td style="color:var(--gold)">IIb</td><td>B</td></tr>
+            <tr><td>15.4</td><td>توعية لمنع CLTI فقط — غير موصى بها</td><td style="color:var(--red)">III</td><td>B</td></tr>
+            <tr><td>15.5</td><td>توعية في PAD لا عرضي — غير موصى بها</td><td style="color:var(--red)">III</td><td>C</td></tr>
+
+            <tr><td colspan="4" style="background:rgba(8,145,178,.1);font-weight:700;color:var(--brand2)">جدول 16 — بحسب الإقليم الشرياني</td></tr>
+            <tr><td>16.1</td><td>فخذي-مأبضي: علاج مُطلق بدواء كخيار أول</td><td style="color:var(--blue)">IIa</td><td>A</td></tr>
+            <tr><td>16.2</td><td>حرقفي: رأب بالون ± دعامة</td><td style="color:var(--blue)">IIa</td><td>B</td></tr>
+            <tr><td>16.3</td><td>فخذي-مأبضي: توعّي داخلي عند الاستطباب</td><td style="color:var(--blue)">IIa</td><td>B</td></tr>
+            <tr><td>16.4</td><td>فخذي-مأبضي: جراحة مفتوحة بوريد ذاتي + خطر منخفض</td><td style="color:var(--blue)">IIa</td><td>C</td></tr>
+            <tr><td>16.5</td><td>علاج تحت الركبة بنفس الجلسة قد يُعتبر</td><td style="color:var(--gold)">IIb</td><td>C</td></tr>
+
+            <tr><td colspan="4" style="background:rgba(8,145,178,.1);font-weight:700;color:var(--brand2)">جدول 17 — متابعة PAD</td></tr>
+            <tr><td>17.1</td><td>متابعة سنوية على الأقل، شاملة</td><td style="color:var(--green)">I</td><td>C</td></tr>
+
+            <tr><td colspan="4" style="background:rgba(8,145,178,.1);font-weight:700;color:var(--brand2)">جدول 18 — تدبير CLTI العام</td></tr>
+            <tr><td>18.1</td><td>إعادة التوعية لإنقاذ الطرف</td><td style="color:var(--green)">I</td><td>B</td></tr>
+            <tr><td>18.2</td><td>تعرّف مبكر وإحالة فورية</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>18.3</td><td>تصوير الطرف بالكامل قد يُعتبر</td><td style="color:var(--blue)">IIa</td><td>C</td></tr>
+
+            <tr><td colspan="4" style="background:rgba(8,145,178,.1);font-weight:700;color:var(--brand2)">جدول 19 — العلاج الطبي في CLTI</td></tr>
+            <tr><td>19.1</td><td>إدارة عبر فريق وعائي</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>19.2</td><td>تخفيف الضغط الميكانيكي عن الجرح</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>19.3</td><td>علاج العدوى بالمضادات الحيوية</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>19.4</td><td>تمارين الطرف مع جروح — غير موصى بها</td><td style="color:var(--red)">III</td><td>C</td></tr>
+
+            <tr><td colspan="4" style="background:rgba(8,145,178,.1);font-weight:700;color:var(--brand2)">جدول 20 — التداخل في CLTI</td></tr>
+            <tr><td>20.1</td><td>إعادة توعية بأسرع وقت ممكن</td><td style="color:var(--green)">I</td><td>B</td></tr>
+            <tr><td>20.2</td><td>الوريد الذاتي — الموصل المفضّل</td><td style="color:var(--green)">I</td><td>B</td></tr>
+            <tr><td>20.3</td><td>إزالة انسدادات المدخل أولاً</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>20.4</td><td>تقييم فردي بفريق متعدد الاختصاصات</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>20.5</td><td>مجازة تحت إربية — وريد جيد وخطر منخفض</td><td style="color:var(--gold)">IIb</td><td>B</td></tr>
+            <tr><td>20.6</td><td>توعّي داخلي كخط أول — خطر عالٍ/وريد غير كافٍ</td><td style="color:var(--gold)">IIb</td><td>B</td></tr>
+
+            <tr><td colspan="4" style="background:rgba(8,145,178,.1);font-weight:700;color:var(--brand2)">جدول 21 — متابعة CLTI</td></tr>
+            <tr><td>21.1</td><td>متابعة منتظمة بعد إعادة التوعية</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>21.2</td><td>تقييم شامل: سريري، ديناميكي، وظيفي، عوامل خطر</td><td style="color:var(--green)">I</td><td>C</td></tr>
+
+            <tr><td colspan="4" style="background:rgba(8,145,178,.1);font-weight:700;color:var(--brand2)">جدول 22 — تدبير ALI</td></tr>
+            <tr><td>22.1</td><td>تقييم عاجل من طبيب وعائي خبير</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>22.2</td><td>عجز عصبي → توعية عاجلة، تصوير دون تأخير</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>22.3</td><td>بلا عجز شديد → توعية خلال ساعات، قرار فردي</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>22.4</td><td>تسكين فوري</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>22.5</td><td>مراقبة متلازمة الحيّز وعلاجها</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>22.6</td><td>تقييم النجاح بعد إعادة التوعية</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>22.7</td><td>تحديد سبب التخثّر/الانصمام</td><td style="color:var(--green)">I</td><td>C</td></tr>
+            <tr><td>22.8</td><td>DAPT أو Rivaroxaban+Aspirin بعد التوعية</td><td style="color:var(--blue)">IIa</td><td>C</td></tr>
+            <tr><td>22.9</td><td>هيبارين عند تأكيد التشخيص قد يُعتبر</td><td style="color:var(--gold)">IIb</td><td>C</td></tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="info-box info-purple">
+        <strong><span class="consensus-tag">توصيات توافقية إضافية بلا Class/LOE رسمي (مذكورة في هذا الجزء)</span></strong>
+        <ul style="margin-top:.5rem">
+          <li>تحفيز النخاع الشوكي (SCS) خيار مساعد في CLTI بلا خيارات توعية ("No-Option CLTI")</li>
+          <li>اختيار مستوى البتر (تحت/فوق الركبة) حسب الوظيفة المتوقّعة وحالة المريض العامة</li>
+          <li>تفاصيل جدولة المتابعة الدورية بعد المجازة/التوعّي (4–6 أسابيع ثم 3/6/12/24 شهراً) — الغايدلاين ينصّ صراحة أنها "مبنية على توافق وخبرة الخبراء" لغياب أدلة كافية</li>
+        </ul>
       </div>
     </div>
 
@@ -387,14 +873,16 @@
     <div class="key-points" id="keys">
       <h4>🔑 نقاط المفتاح — الجزء الثالث</h4>
       <ul>
-        <li>PAD يُصنّف الآن إلى 3 فئات: لا عرضي، عرضي، CLTI — بديلاً عن Fontaine/Rutherford</li>
-        <li>لا إعادة توعية أبداً في PAD اللاعرضي (Class III)</li>
-        <li>SET + OMT لمدة 3 أشهر قبل أي قرار توعّي في العرج</li>
-        <li>CLTI يتطلب إحالة عاجلة لفريق وعائي متعدد الاختصاصات</li>
-        <li>الوريد الذاتي هو الموصل المفضّل لمجازة CLTI تحت الإربية</li>
-        <li>يجب علاج انسدادات المدخل (Inflow) قبل الآفات السفلية دوماً</li>
-        <li>تمارين الطرف السفلي ممنوعة مع جروح مفتوحة (Class III)</li>
-        <li>ALI الفئة المهددة فوراً تستوجب تداخل طارئ دون تأخير التصوير</li>
+        <li>PAD يُصنَّف عملياً إلى 3 فئات (لا عرضي/عرضي/CLTI)، مع بقاء Rutherford وFontaine كمرجع تواصل وتوثيق</li>
+        <li>خطر التطوّر: 7% من لا عرضي إلى عرج، 21% من عرج إلى CLTI خلال 5 سنوات — والخطر القلبي الوعائي مرتفع في كل الفئات</li>
+        <li>لا إعادة توعية أبداً في PAD اللاعرضي أو لمجرّد منع تطوّر CLTI (Class III)</li>
+        <li>SET + OMT لمدة 3 أشهر قبل أي قرار توعّي في العرج، مع تقييم جودة حياة موضوعي (Class I)</li>
+        <li>فخذي-مأبضي: علاج مُطلق بدواء أولاً (IIa A)؛ حرقفي: رأب/دعامة (IIa B)؛ جراحة مفتوحة بوريد ذاتي إن توفّر وخطر منخفض</li>
+        <li>Rivaroxaban 2.5×2 + Aspirin 100 له مكانة راسخة (IIa) في الخطر الإقفاري العالي وبعد التوعية — لكن DAPT الطويل والمميّع الفموي المفرد وTicagrelor الروتيني كلها غير موصى بها (Class III)</li>
+        <li>CLTI يتطلب إحالة عاجلة لفريق وعائي متعدد الاختصاصات؛ WIfI يجمع الجرح والإقفار والعدوى لتقدير خطر البتر</li>
+        <li>الوريد الذاتي هو الموصل المفضّل لمجازة CLTI تحت الإربية؛ يجب علاج انسدادات المدخل أولاً دوماً</li>
+        <li>ALI: العجز العصبي هو المحدّد الأهم للإسعاف — فقد حسي وحركي تام مع غياب الدوبلر الشرياني والوريدي يوحي بطرف غير قابل للإنقاذ</li>
+        <li>تحفيز النخاع الشوكي وتفاصيل جدولة المتابعة توصيات توافقية بلا Class/LOE رسمي — يجب تمييزها عن التوصيات المصنَّفة بالأدلة</li>
       </ul>
     </div>
 
@@ -412,6 +900,7 @@
 
   </div>
 </div>
+
 
 <footer>
   <p>مبني على غايدلاين ESC 2024 لـ PAAD — للأغراض التعليمية | <a href="paad-index.html">← PAAD Overview</a> | <a href="guidelines.html">جميع الغايدات</a></p>
