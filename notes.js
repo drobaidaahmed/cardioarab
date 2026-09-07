@@ -120,6 +120,38 @@
   window.CAProgress = Progress;
   window.CAUtils = { escapeHtml, fmtDate, pageKey, pageTitle };
 
+  // ───────────────────────── إرسال كل الملاحظات عبر واتساب ────────────────
+  const CA_WHATSAPP_NUMBER = '963930290427';
+
+  function buildNotesWhatsAppMessage() {
+    const notes = Notes.all();
+    if (!notes.length) return 'لا توجد ملاحظات محفوظة بعد.';
+
+    const byPage = {};
+    notes.forEach(n => {
+      if (!byPage[n.pageTitle]) byPage[n.pageTitle] = [];
+      byPage[n.pageTitle].push(n);
+    });
+
+    let msg = '📝 ملاحظاتي من CardioArab:\n\n';
+    Object.keys(byPage).forEach(title => {
+      msg += '📄 ' + title + '\n';
+      byPage[title].forEach(n => {
+        msg += '- ' + (n.section ? '[' + n.section + '] ' : '') + n.text + '\n';
+      });
+      msg += '\n';
+    });
+    return msg;
+  }
+
+  function sendAllNotesToWhatsApp() {
+    const msg = buildNotesWhatsAppMessage();
+    const url = 'https://wa.me/' + CA_WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank');
+  }
+
+  window.CASendNotesWhatsApp = sendAllNotesToWhatsApp;
+
   // إن كانت هذه صفحة "بروفايل" أو إدارة، لا نعرض الودجت العائم
   if (window.CA_NOTES_NO_WIDGET) return;
 
