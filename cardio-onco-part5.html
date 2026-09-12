@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--accent);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardio-Oncology — الجزء الخامس: أصناف العلاج الموجّه الأخرى وزرع الخلايا الجذعية | ESC 2022</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b1220;--bg2:#111827;--bg3:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text2:#94a3b8;--green:#10b981;--orange:#fbbf24;--blue:#3b82f6;--gold:#ea580c;--red:#10b981;--pink:#ec4899;--teal:#14b8a6;--purple:#8b5cf6;--font:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Mono',monospace}
+:root[data-theme="light"]{--bg:#f4f6fb;--bg2:#ffffff;--bg3:#eef1f8;--border:#e1e6f0;--text:#1b2434;--text2:#5b6577;--accent:#059669;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.8;min-height:100vh}
+  #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));z-index:9999;transition:width .2s;width:0}
+  header{background:linear-gradient(135deg,#0a2e2a,#0b1220);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+  .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .back-btn{background:rgba(20,184,166,.15);border:1px solid rgba(20,184,166,.4);color:var(--red);padding:.5rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap}
+  .back-btn:hover{background:rgba(20,184,166,.3)}
+  .header-title h1{font-size:1.4rem;font-weight:700;color:var(--text)}
+  .header-title p{font-size:.85rem;color:var(--text2);margin-top:.2rem}
+  .part-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2rem;overflow-x:auto}
+  .part-nav-inner{max-width:1400px;margin:0 auto;display:flex;gap:.5rem}
+  .part-btn{padding:.4rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text2);background:transparent;white-space:nowrap;transition:all .2s}
+  .part-btn:hover{border-color:var(--red);color:var(--red)}
+  .part-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+  .layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:2rem;padding:2rem;align-items:start}
+  .toc{position:sticky;top:140px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;max-height:calc(100vh - 160px);overflow-y:auto}
+  .toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+  .toc a{display:block;padding:.35rem .5rem;border-radius:6px;text-decoration:none;font-size:.83rem;color:var(--text2);transition:all .2s;border-right:2px solid transparent;margin-bottom:.1rem}
+  .toc a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+  .toc a.active{color:var(--red);border-right-color:var(--red);background:rgba(20,184,166,.1)}
+  .toc .toc-sub{padding-right:1rem;font-size:.78rem}
+  .content{min-width:0}
+  .section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;scroll-margin-top:160px}
+  .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .section-num{background:var(--red);color:#fff;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;flex-shrink:0}
+  .section h2{font-size:1.25rem;font-weight:700;color:var(--text)}
+  .section h3{font-size:1.05rem;font-weight:600;color:var(--red);margin:1.5rem 0 .75rem}
+  .section h4{font-size:.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 .5rem}
+  .section p{color:var(--text);margin-bottom:.75rem}
+  .section ul,.section ol{padding-right:1.5rem;margin-bottom:.75rem}
+  .section li{margin-bottom:.4rem;color:var(--text)}
+  .rec{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;border-right:4px solid;display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start}
+  .rec-text{font-size:.92rem;line-height:1.7}
+  .rec-badges{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end;flex-shrink:0}
+  .badge{padding:.2rem .55rem;border-radius:5px;font-size:.72rem;font-weight:700;font-family:var(--mono);white-space:nowrap}
+  .rec-i{background:rgba(16,185,129,.12);border-color:var(--green)}
+  .badge-i{background:var(--green);color:#fff}
+  .badge-loe{background:rgba(255,255,255,.1);color:var(--text2)}
+  .rec-iia{background:rgba(251,191,36,.15);border-color:var(--orange)}
+  .badge-iia{background:var(--orange);color:#000}
+  .rec-iib{background:rgba(234,88,12,.12);border-color:var(--gold)}
+  .badge-iib{background:var(--gold);color:#fff}
+  .rec-iii{background:rgba(239,68,68,.12);border-color:var(--red)}
+  .badge-iii{background:var(--red);color:#fff}
+  .info-box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;border-right:4px solid;font-size:.9rem}
+  .info-box strong{display:block;margin-bottom:.4rem}
+  .highlight{background:rgba(20,184,166,.1);border-color:var(--red)}
+  .highlight strong{color:var(--red)}
+  .warning{background:rgba(245,158,11,.1);border-color:var(--gold)}
+  .warning strong{color:var(--gold)}
+  .danger{background:rgba(239,68,68,.1);border-color:var(--text)}
+  .danger strong{color:var(--text)}
+  .success{background:rgba(16,185,129,.1);border-color:var(--green)}
+  .success strong{color:var(--green)}
+  .info-blue{background:rgba(59,130,246,.1);border-color:var(--blue)}
+  .info-blue strong{color:var(--blue)}
+  .info-purple{background:rgba(139,92,246,.1);border-color:var(--purple)}
+  .info-purple strong{color:var(--purple)}
+  .table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+  .data-table{width:100%;border-collapse:collapse;font-size:.87rem}
+  .data-table th{background:rgba(20,184,166,.15);color:var(--red);padding:.75rem 1rem;text-align:right;font-weight:600;white-space:nowrap}
+  .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:rgba(255,255,255,.03)}
+  .algo-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1rem 0}
+  .algo-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  .algo-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .algo-num{background:var(--red);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:.2rem}
+  .algo-content h4{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+  .algo-content p{font-size:.83rem;color:var(--text2);margin:0}
+  .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0}
+  .type-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;border-top:3px solid var(--red)}
+  .type-card.t2{border-top-color:var(--gold)}
+  .type-card.t3{border-top-color:var(--purple)}
+  .type-name{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+  .type-def{font-size:.82rem;color:var(--text2);margin-bottom:.75rem}
+  .type-row{display:flex;justify-content:space-between;font-size:.8rem;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .type-row:last-child{border-bottom:none}
+  .type-label{color:var(--text2)}
+  .type-val{color:var(--text);font-weight:500}
+  .key-points{background:linear-gradient(135deg,rgba(20,184,166,.1),rgba(139,92,246,.06));border:1px solid rgba(20,184,166,.3);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+  .key-points h4{color:var(--red);margin-bottom:1rem;font-size:1rem}
+  .key-points ul{list-style:none;padding:0}
+  .key-points li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem;display:flex;gap:.75rem}
+  .key-points li::before{content:'🔑';flex-shrink:0}
+  .next-prev{display:flex;justify-content:space-between;margin-top:2rem;gap:1rem}
+  .nav-btn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.5rem;text-decoration:none;transition:all .25s;flex:1;max-width:260px}
+  .nav-btn:hover{border-color:var(--red);background:rgba(20,184,166,.08)}
+  .nav-btn .dir{font-size:.75rem;color:var(--text2);margin-bottom:.25rem}
+  .nav-btn .title{font-size:.9rem;font-weight:700;color:var(--text)}
+  .nav-btn.next{text-align:left}
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:.82rem;color:var(--text2);margin-top:2rem}
+  footer a{color:var(--red);text-decoration:none}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none}}
+
+  header{transition:padding .3s ease}
+  .header-inner{transition:gap .3s ease}
+  .header-title h1{transition:font-size .3s ease}
+  .header-title p{transition:opacity .2s ease,max-height .3s ease,margin .3s ease;overflow:hidden}
+  .back-btn{transition:all .2s ease,padding .3s ease,font-size .3s ease,gap .3s ease}
+  header.shrink{padding:.3rem 1.25rem}
+  header.shrink .header-inner{gap:.6rem}
+  header.shrink .header-title h1{font-size:.85rem}
+  header.shrink .header-title p{opacity:0;max-height:0;margin:0}
+  header.shrink .back-btn{padding:.2rem .5rem;font-size:.7rem;gap:.2rem}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="cardio-onco-index.html" class="back-btn">← Cardio-Oncology Overview</a>
+    <div class="header-title">
+      <h1>الجزء الخامس — أصناف العلاج الموجّه الأخرى وزرع الخلايا الجذعية</h1>
+      <p>ESC Guidelines 2022 · Cardio-Oncology</p>
+    </div>
+  </div>
+</header>
+
+<div class="part-nav">
+  <div class="part-nav-inner">
+    <a href="cardio-onco-part1.html" class="part-btn">١ · الأساسيات</a>
+    <a href="cardio-onco-part2.html" class="part-btn">٢ · تقييم الخطر</a>
+    <a href="cardio-onco-part3.html" class="part-btn">٣ · أنثراسيكلين/HER2</a>
+    <a href="cardio-onco-part4.html" class="part-btn">٤ · ICI والمراقبة والحالات الخاصة</a>
+    <a href="cardio-onco-part5.html" class="part-btn active">٥ · أصناف علاجية أخرى</a>
+    <a href="cardio-onco-part6.html" class="part-btn">٦ · مضاعفات أخرى وحالات خاصة</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h3>محتويات الجزء الخامس</h3>
+    <a href="#s1">١ · الفلوروبيريميدينات</a>
+    <a href="#s2">٢ · مثبطات VEGF</a>
+    <a href="#s3">٣ · مثبطات BCR-ABL</a>
+    <a href="#s4">٤ · مثبطات BTK</a>
+    <a href="#s5">٥ · مثبطات البروتيازوم والمَيَلوما</a>
+    <a href="#s6">٦ · مثبطات RAF وMEK</a>
+    <a href="#s7">٧ · حرمان الأندروجين (ADT)</a>
+    <a href="#s8">٨ · العلاج الهرموني لسرطان الثدي</a>
+    <a href="#s9">٩ · مثبطات CDK4/6</a>
+    <a href="#s10">١٠ · مثبطات ALK وEGFR</a>
+    <a href="#s11">١١ · زرع الخلايا الجذعية (HSCT)</a>
+    <a href="#keys">نقاط المفتاحية</a>
+  </nav>
+
+  <div class="content">
+
+    <!-- Section 1 -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">١</div>
+        <h2>الفلوروبيريميدينات (5-FU وCapecitabine)</h2>
+      </div>
+
+      <p>الفلوروبيريميدينات (5-Fluorouracil وCapecitabine) من أكثر العلاجات الكيميائية استخداماً في أورام الجهاز الهضمي والثدي، لكنها ثاني أكثر سبب دوائي شيوعاً للسمية القلبية بعد الأنثراسيكلين — سمية وعائية بآلية تشنّج شرياني تاجي (Vasospasm) وليست سمية عضلية مباشرة.</p>
+
+      <div class="info-box warning">
+        <strong>⚠️ نمط سمية مختلف تماماً</strong>
+        نسبة الحدوث تتراوح 1–19% حسب طريقة الإعطاء — التسريب المستمر أعلى خطورة من الجرعة الوريدية السريعة (Bolus). المظهر الأشيع ألم صدري تشنّجي يشبه الذبحة الصدرية المتغيّرة (Variant Angina)، وقد يترافق بتغيّرات ECG إقفارية أو حتى تاكوتسوبو، غالباً مع شرايين تاجية سليمة تصويرياً.</div>
+
+      <h3>عوامل الخطر</h3>
+      <ul>
+        <li>مرض شرياني تاجي سابق أو عوامل خطر قلبية وعائية تقليدية</li>
+        <li>التسريب المستمر أكثر من الجرعة الوريدية السريعة</li>
+        <li>الجرعات العالية والجمع مع Cisplatin</li>
+      </ul>
+
+      <div class="info-box success">
+        <strong>✅ الإدارة</strong>
+        إيقاف فوري للتسريب عند ظهور الأعراض، نترات و/أو مضادات قنوات الكالسيوم للتشنّج الحاد، واستبعاد ACS الحقيقي بالتصوير التاجي عند الشك. في حال احتياج علاجي لا بديل عنه، تُنظر إعادة المحاولة (Rechallenge) بجرعة أقل أو معدّل تسريب أبطأ مع وقاية دوائية مسبقة بالنترات/مضادات الكالسيوم ومراقبة تخطيطية لصيقة (Telemetry).
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتقييم الخطر القلبي الوعائي الأساسي شاملاً قياس الضغط وECG وبروفايل الشحوم وHbA1c وSCORE2/SCORE2-OP أو ما يعادله قبل بدء الفلوروبيريميدينات</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإجراء Echo أساسي في مرضى لديهم تاريخ مرض قلبي وعائي عرضي قبل بدء الفلوروبيريميدينات</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iib">
+        <div class="rec-text">يُنظر في فحص مرض الشريان التاجي في مرضى الخطر العالي والعالي جداً لهذا المرض قبل الفلوروبيريميدينات</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">٢</div>
+        <h2>مثبطات VEGF (Bevacizumab، Sunitinib، Sorafenib، Pazopanib، Ramucirumab)</h2>
+      </div>
+
+      <p>مثبطات مسار VEGF (الأجسام وحيدة النسيلة والـTKIs متعددة الأهداف) تُحدث طيفاً واسعاً من السمية القلبية الوعائية بحكم دور VEGF الفسيولوجي في الحفاظ على البطانة الوعائية وضبط ضغط الدم.</p>
+
+      <div class="type-grid">
+        <div class="type-card">
+          <div class="type-name">ارتفاع ضغط الدم</div>
+          <div class="type-def">الأشيع — يصيب حتى 80% من المرضى</div>
+          <div class="type-row"><span class="type-label">الآلية</span><span class="type-val">تراجع كثافة الشعيرات + خلل بطاني</span></div>
+          <div class="type-row"><span class="type-label">العلاقة بالجرعة</span><span class="type-val">مرتبط بالجرعة، يظهر مبكراً</span></div>
+        </div>
+        <div class="type-card t2">
+          <div class="type-name">خلل وظيفة القلب / قصور القلب</div>
+          <div class="type-def">أقل شيوعاً من الأنثراسيكلين لكن موثّق</div>
+          <div class="type-row"><span class="type-label">عامل خطر رئيسي</span><span class="type-val">أنثراسيكلين سابق</span></div>
+        </div>
+        <div class="type-card t3">
+          <div class="type-name">أخرى</div>
+          <div class="type-def">بروتينوريا، انصمام وريدي/شرياني، نزف، تأخر التئام الجروح</div>
+        </div>
+      </div>
+
+      <h3>عوامل الخطر الأساسية (حسب أداة HFA-ICOS)</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>العامل</th><th>مستوى الخطر</th></tr></thead>
+          <tbody>
+            <tr><td>مرض وعائي شرياني سابق / MI / PCI / CABG / ذبحة مستقرة</td><td style="color:#ef4444"><strong>عالٍ جداً</strong></td></tr>
+            <tr><td>خلل وظيفي قلبي أو قصور قلب سابق</td><td style="color:#ef4444"><strong>عالٍ جداً</strong></td></tr>
+            <tr><td>LVEF &lt; 50%</td><td style="color:var(--gold)"><strong>عالٍ</strong></td></tr>
+            <tr><td>ارتفاع ضغط أساسي، عمر ≥ 75، ارتفاع توتر رئوي سابق</td><td>عالٍ / متوسط حسب العامل</td></tr>
+            <tr><td>تدخين، سمنة، سكري، خلل شحوم</td><td>متوسط (تراكمي)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box highlight">
+        <strong>🎗️ مراقبة الضغط الدموي إلزامية</strong>
+        يُنصح بقياس ضغط الدم أسبوعياً خلال الدورة الأولى من العلاج، ثم كل 2–3 أسابيع لاحقاً، مع تثقيف المريض على القياس المنزلي. عتبة العلاج ≥130/80 mmHg في مرضى الخطر القلبي الوعائي العالي، و≥140/90 mmHg في غيرهم — وعتبة إيقاف العلاج السرطاني مؤقتاً ≥180/110 mmHg.
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بقياس ضغط الدم في كل زيارة سريرية لمرضى VEGFi أو Bevacizumab أو Ramucirumab</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بمراقبة منزلية يومية للضغط أثناء الدورة الأولى، بعد كل زيادة جرعة، وكل 2-3 أسابيع لاحقاً</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بمراقبة QTc شهرياً خلال أول 3 أشهر ثم كل 3-6 أشهر لاحقاً في مرضى الخطر المتوسط والعالي لإطالة QTc</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإجراء Echo أساسي في مرضى الخطر العالي والعالي جداً المُعالَجين بـVEGFi أو Bevacizumab</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في إجراء Echo أساسي في مرضى الخطر المنخفض والمتوسط المُعالَجين بـVEGFi أو Bevacizumab</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iib">
+        <div class="rec-text">يُنظر في إجراء Echo كل 4 أشهر خلال السنة الأولى في مرضى الخطر المتوسط</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في إجراء Echo كل 3 أشهر خلال السنة الأولى في مرضى الخطر العالي والعالي جداً</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في إجراء Echo كل 6-12 شهراً في مرضى الخطر المتوسط والعالي المحتاجين علاجاً طويل المدى بـVEGFi</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iib">
+        <div class="rec-text">يُنظر في قياس الببتيدات المدرة للصوديوم أساسياً ثم كل 4 أشهر خلال السنة الأولى في مرضى الخطر المتوسط</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في قياس الببتيدات أساسياً و4 أسابيع بعد البدء ثم كل 3 أشهر خلال السنة الأولى في مرضى الخطر العالي والعالي جداً</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ تداخل دوائي مهم</strong>
+        يُتجنَّب استخدام مضادات قنوات الكالسيوم غير ثنائية الهيدروبيريدين (Verapamil، Diltiazem) مع Sunitinib أو Pazopanib بسبب تثبيطها لإنزيم CYP3A4 ورفعها لمستوى الدواء الأورامي — تُفضَّل ثنائيات الهيدروبيريدين (Amlodipine) كخط أول لعلاج ارتفاع الضغط.
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">٣</div>
+        <h2>مثبطات BCR-ABL (TKI للجيل الثاني والثالث)</h2>
+      </div>
+
+      <p>مثبطات BCR-ABL المستخدمة في ابيضاض الدم النقوي المزمن تختلف بشكل ملحوظ في نمط سميتها القلبية الوعائية — Imatinib (الجيل الأول) منخفض السمية نسبياً، بينما الأجيال الأحدث تحمل مخاطر نوعية مميزة لكل دواء.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>الدواء</th><th>السمية القلبية الوعائية المميزة</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Dasatinib</strong></td><td>ارتفاع التوتر الرئوي الشرياني (قابل للعكس عادة بعد الإيقاف)، انصباب جنبي</td></tr>
+            <tr><td><strong>Nilotinib</strong></td><td>تسارع تصلب الشرايين ومرض الشرايين الطرفية، إطالة QT</td></tr>
+            <tr><td><strong>Ponatinib</strong></td><td>أعلى خطر انصمام شرياني (MI، سكتة، PAD) — مرتبط بالجرعة</td></tr>
+            <tr><td><strong>Bosutinib</strong></td><td>سمية قلبية أقل توثيقاً نسبياً</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإجراء Echocardiography أساسي قبل بدء العلاج بـDasatinib</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإجراء ECG أساسي وقياس QTc قبل بدء Nilotinib، مع تصحيح اضطرابات الشوارد المرافقة</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في تقييم مؤشر الضغط الكاحلي-العضدي (ABI) وعوامل خطر تصلب الشرايين قبل بدء Ponatinib أو Nilotinib في المرضى ذوي عوامل الخطر الوعائية</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإيقاف Dasatinib عند تشخيص ارتفاع التوتر الرئوي المرتبط به، مع إعادة تقييم الحالة الدموية الرئوية بعد الإيقاف</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">٤</div>
+        <h2>مثبطات BTK (Ibrutinib، Acalabrutinib، Zanubrutinib)</h2>
+      </div>
+
+      <p>مثبطات Bruton Tyrosine Kinase أساسية في علاج ابيضاض الدم اللمفاوي المزمن ولمفوما الخلايا الطلائية، لكن Ibrutinib (الجيل الأول) يترافق بخطر ملحوظ من الرجفان الأذيني وارتفاع ضغط الدم والنزف؛ الأجيال الأحدث (Acalabrutinib، Zanubrutinib) أكثر انتقائية وأقل سمية قلبية.</p>
+
+      <div class="info-box info-blue">
+        <strong>📌 تضخّم الأذين الأيسر ينذر بالرجفان الأذيني</strong>
+        وجود تضخّم أذين أيسر على ECG الأساسي قبل بدء Ibrutinib يُعتبر مؤشراً تنبؤياً لتطوّر الرجفان الأذيني أثناء العلاج — ما يبرر تقييماً قلبياً أدق في هذه الفئة.
+      </div>
+
+      <ul>
+        <li><strong>الرجفان الأذيني:</strong> حوالي 10–15% مع Ibrutinib، أقل بوضوح مع الأجيال الأحدث</li>
+        <li><strong>ارتفاع ضغط الدم:</strong> جديد أو تفاقم لضغط موجود مسبقاً، شائع نسبياً</li>
+        <li><strong>خطر النزف:</strong> يعقّد قرار مضادات التخثر عند حدوث رجفان أذيني يستدعيها</li>
+        <li><strong>اضطراب نظم بطيني نادر:</strong> موثّق بحالات قليلة، غالباً مع عوامل خطر مرافقة</li>
+      </ul>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بقياس ضغط الدم في كل زيارة سريرية لمرضى مثبطات BTK</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في مراقبة منزلية أسبوعية للضغط خلال أول 3 أشهر ثم شهرياً لاحقاً</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإجراء Echo أساسي في مرضى الخطر العالي* المُقرَّر تلقّيهم مثبطات BTK</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإجراء Echo في جميع من يطوّر رجفاناً أذينياً أثناء العلاج بمثبطات BTK</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتحرٍ فرصي عن الرجفان الأذيني (جس النبض أو شريط ECG) في كل زيارة سريرية أثناء العلاج بمثبطات BTK</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="info-box info-blue">
+        <strong>📌 * تعريف الخطر العالي هنا</strong>
+        ذكر، عمر ≥65 سنة، تاريخ سابق لارتفاع الضغط أو السكري أو QTc ≥ 480ms أو رجفان أذيني أو قصور قلب أو اعتلال عضلة قلب أو مرض صمامي شديد.
+      </div>
+
+      <div class="info-box warning">
+        <strong>⚠️ عند حدوث رجفان أذيني مع Ibrutinib</strong>
+        قرار مضاد التخثر يتطلّب موازنة دقيقة بين خطر السكتة (CHA₂DS₂-VASc) وخطر النزف المرتفع أصلاً مع BTK inhibitors — بالتنسيق الوثيق بين طبيب القلب وطبيب الدم، مع مراعاة التداخلات الدوائية المحتملة.
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">٥</div>
+        <h2>مثبطات البروتيازوم وعلاجات المَيَلوما المتعددة</h2>
+      </div>
+
+      <p>مثبطات البروتيازوم (Bortezomib، Carfilzomib) والأدوية المُعدِّلة للمناعة (IMiDs: Thalidomide، Lenalidomide، Pomalidomide) حجر الأساس في علاج المَيَلوما المتعددة، بأنماط سمية قلبية وعائية مختلفة جوهرياً بين الفئتين.</p>
+
+      <div class="type-grid">
+        <div class="type-card">
+          <div class="type-name">Carfilzomib</div>
+          <div class="type-def">أعلى سمية قلبية بين مثبطات البروتيازوم</div>
+          <div class="type-row"><span class="type-label">يشمل</span><span class="type-val">قصور قلب، ارتفاع ضغط، ارتفاع توتر رئوي</span></div>
+        </div>
+        <div class="type-card t2">
+          <div class="type-name">Bortezomib</div>
+          <div class="type-def">سمية قلبية أقل توثيقاً نسبياً</div>
+        </div>
+        <div class="type-card t3">
+          <div class="type-name">IMiDs (خاصة مع Dexamethasone)</div>
+          <div class="type-def">خطر انصمام وريدي مرتفع بشكل ملحوظ</div>
+          <div class="type-row"><span class="type-label">يزداد مع</span><span class="type-val">جرعة Dexamethasone &gt; 160mg/شهر</span></div>
+        </div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بقياس ضغط الدم في كل زيارة سريرية لمرضى مثبطات البروتيازوم</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في مراقبة منزلية أسبوعية للضغط خلال أول 3 أشهر ثم شهرياً لاحقاً</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بالقياس الأساسي للببتيدات المدرة للصوديوم في مرضى الخطر العالي والعالي جداً قبل بدء العلاج بمثبطات البروتيازوم</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في القياس الأساسي للببتيدات المدرة للصوديوم في مرضى الخطر المنخفض والمتوسط قبل بدء مثبطات البروتيازوم</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في قياس الببتيدات أساسياً وقبل كل دورة خلال أول 6 دورات في مرضى Carfilzomib أو Bortezomib</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بقياس الببتيدات والتروبونين أساسياً وكل 3-6 أشهر في مرضى الداء النشواني القلبي (AL-CA)</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإجراء Echo أساسي شامل (يتضمن تقييم AL-CA) في جميع مرضى المَيَلوما المُقرَّر تلقّيهم مثبطات البروتيازوم</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في مراقبة Echo كل 3 دورات في مرضى الخطر العالي والعالي جداً المُعالَجين بـCarfilzomib</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iib">
+        <div class="rec-text">يُنظر في مراقبة Echo كل 3 دورات في مرضى الخطر المنخفض والمتوسط المُعالَجين بـCarfilzomib</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في مراقبة Echo كل 3-6 أشهر في مرضى AL-CA المُعالَجين بمثبطات البروتيازوم</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <h3>الوقاية من الخثار الوريدي مع علاجات المَيَلوما</h3>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بجرعات علاجية من LMWH في مرضى المَيَلوما ذوي تاريخ VTE سابق</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بجرعات وقائية من LMWH في مرضى المَيَلوما ذوي عوامل خطر VTE (باستثناء تاريخ VTE سابق) خلال أول 6 أشهر من العلاج على الأقل</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في الأسبرين كبديل لـLMWH في مرضى المَيَلوما بلا عوامل خطر أو بعامل خطر واحد لـVTE (باستثناء تاريخ VTE سابق) خلال أول 6 أشهر</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iib">
+        <div class="rec-text">يُنظر في جرعات منخفضة من Apixaban أو Rivaroxaban كبديل لـLMWH أو الأسبرين في مرضى المَيَلوما ذوي عوامل خطر VTE (باستثناء تاريخ VTE سابق) خلال أول 6 أشهر على الأقل</div>
+        <div class="rec-badges"><span class="badge badge-iib">Class IIb</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+
+      <div class="info-box info-blue">
+        <strong>📌 المراقبة أثناء Carfilzomib</strong>
+        يُنصح بقياس ضغط الدم قبل كل دورة على الأقل، مع مراقبة الأعراض التنفسية والوزن للكشف المبكر عن احتباس السوائل أو قصور القلب الناشئ — خاصة في الدورات الأولى من العلاج.
+      </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">٦</div>
+        <h2>مثبطات RAF وMEK (علاج ميلانوما BRAF-مطفّرة)</h2>
+      </div>
+
+      <p>مزيج مثبطات RAF (Vemurafenib، Dabrafenib) وMEK (Trametinib، Cobimetinib) معيار العلاج في ميلانوما BRAF V600-مطفّرة، مع سمية قلبية تشمل خلل وظيفة البطين الأيسر وإطالة QT وارتفاع ضغط الدم — وسمية غير قلبية مهمة (انسداد وريد الشبكية) تستدعي تقييماً عينياً موازياً.</p>
+
+      <ul>
+        <li><strong>خلل وظيفة البطين الأيسر:</strong> غالباً قابل للعكس بعد تعديل الجرعة أو الإيقاف المؤقت</li>
+        <li><strong>إطالة QT:</strong> خاصة مع Vemurafenib</li>
+        <li><strong>ارتفاع ضغط الدم:</strong> موثّق مع مزيج RAF/MEK</li>
+      </ul>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتقييم LVEF أساسي وECG قبل بدء العلاج المشترك بمثبطات RAF وMEK</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في إعادة تقييم LVEF دورياً (كل 2–3 أشهر تقريباً) أثناء العلاج المشترك بمثبطات RAF وMEK</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">٧</div>
+        <h2>العلاج بحرمان الأندروجين (ADT) لسرطان البروستات</h2>
+      </div>
+
+      <p>يشمل ناهضات ومضادات هرمون GnRH ومضادات مستقبل الأندروجين، ويترافق باضطرابات استقلابية (زيادة الوزن، مقاومة الأنسولين، خلل شحوم) ترفع الخطر القلبي الوعائي طويل المدى لدى مرضى غالباً ما يكونون بعمر متقدم أصلاً.</p>
+
+      <div class="info-box info-blue">
+        <strong>📌 لا فرق قلبي وعائي واضح مثبت بين الأشكال</strong>
+        قارنت دراسة PRONOUNCE المحورية بين Degarelix (مضاد GnRH) وLeuprolide (ناهض GnRH) من ناحية السلامة القلبية الوعائية لدى مرضى لديهم مرض قلبي وعائي مثبت مسبقاً، وتوقفت الدراسة مبكراً دون إظهار فرق ذي دلالة إحصائية واضحة بين الشكلين — لذا لا يوصي الغايدلاين حالياً بتفضيل قاطع لأحد الشكلين لأسباب قلبية وعائية بحتة.
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتقييم الخطر القلبي الوعائي الأساسي وتقدير خطر CVD لـ10 سنوات (SCORE2/SCORE2-OP) في مرضى ADT بلا مرض قلبي وعائي سابق</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بـECG أساسي ومتسلسل في مرضى معرّضين لخطر إطالة QTc أثناء ADT</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في استخدام مضاد GnRH (بدل الناهض) في مرضى مرض الشريان التاجي العرضي السابق المحتاجين ADT</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتقييم خطر قلبي وعائي سنوي أثناء ADT</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+    </div>
+
+    <!-- Section 8 -->
+    <div class="section" id="s8">
+      <div class="section-header">
+        <div class="section-num">٨</div>
+        <h2>العلاج الهرموني لسرطان الثدي (Tamoxifen ومثبطات الأروماتاز)</h2>
+      </div>
+
+      <div class="type-grid">
+        <div class="type-card">
+          <div class="type-name">Tamoxifen</div>
+          <div class="type-def">خطر انصمام وريدي مرتفع نسبياً</div>
+          <div class="type-row"><span class="type-label">يزداد مع</span><span class="type-val">الجمع مع العلاج الكيميائي المتزامن</span></div>
+        </div>
+        <div class="type-card t2">
+          <div class="type-name">مثبطات الأروماتاز (Anastrozole، Letrozole، Exemestane)</div>
+          <div class="type-def">تأثير سلبي على شحوم الدم، وخطر شرياني وعائي أعلى نسبياً من Tamoxifen طويل المدى (بيانات دراسة ATAC)</div>
+        </div>
+      </div>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتقييم الخطر القلبي الوعائي الأساسي وتقدير خطر CVD لـ10 سنوات (SCORE2/SCORE2-OP) في مريضات سرطان الثدي بلا مرض قلبي وعائي سابق قبل العلاج الهرموني</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتقييم خطر قلبي وعائي سنوي أثناء العلاج الهرموني في مريضات ذوات خطر عالٍ لـ10 سنوات</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في إعادة تقييم الخطر القلبي الوعائي كل 5 سنوات في مريضات ذوات خطر منخفض أو متوسط لـ10 سنوات</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <!-- Section 9 -->
+    <div class="section" id="s9">
+      <div class="section-header">
+        <div class="section-num">٩</div>
+        <h2>مثبطات CDK4/6 (Palbociclib، Ribociclib، Abemaciclib)</h2>
+      </div>
+
+      <p>مثبطات Cyclin-Dependent Kinase 4/6 معيار العلاج في سرطان الثدي الهرموني الإيجابي المتقدم. Ribociclib تحديداً يترافق بإطالة QT مرتبطة بالجرعة تستدعي مراقبة تخطيطية محدَّدة زمنياً.</p>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بمراقبة QTc أساسياً وفي اليومين 14 و28 في جميع مرضى Ribociclib</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE A</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بمراقبة QTc عند أي زيادة جرعة من Ribociclib</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في مراقبة QTc في مرضى Palbociclib أو Abemaciclib ذوي QTc أساسي فوق الطبيعي أو حالات أخرى قد تُطيل QTc</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <!-- Section 10 -->
+    <div class="section" id="s10">
+      <div class="section-header">
+        <div class="section-num">١٠</div>
+        <h2>مثبطات ALK وEGFR (Crizotinib، Osimertinib وغيرها)</h2>
+      </div>
+
+      <p>مستخدمة في سرطان الرئة غير صغير الخلايا ذي الطفرات النوعية. Crizotinib يسبب بطء قلب جيبي وإطالة QT خفيفة، بينما Osimertinib موثّق بحالات نادرة من خلل وظيفة البطين الأيسر وإطالة QT.</p>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتقييم خطر قلبي وعائي أساسي قبل مثبطات ALK وEGFR</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإجراء Echo أساسي في جميع المرضى قبل بدء Osimertinib</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في مراقبة منزلية للضغط في مرضى Brigatinib أو Crizotinib أو Lorlatinib</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في فحص بروفايل الكوليسترول كل 3-6 أشهر في مرضى Crizotinib وLorlatinib</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في إجراء Echo كل 3 أشهر أثناء العلاج بـOsimertinib</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE B</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في إجراء ECG بعد 4 أسابيع من البدء ثم كل 3-6 أشهر أثناء العلاج بمثبطات ALK</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <!-- Section 11 -->
+    <div class="section" id="s11">
+      <div class="section-header">
+        <div class="section-num">١١</div>
+        <h2>زرع الخلايا الجذعية المكوّنة للدم (HSCT)</h2>
+      </div>
+
+      <p>مرضى زرع النخاع (الذاتي والغيري) معرّضون لطيف من المضاعفات القلبية الوعائية الحادة أثناء فترة الزرع نفسها (اضطراب نظم، انصباب تاموري، احتباس سوائل) إضافة إلى الخطر التراكمي من العلاجات الكيميائية السابقة (أنثراسيكلين غالباً) وأنظمة التهيئة (Conditioning) عالية الجرعة.</p>
+
+      <div class="info-box info-blue">
+        <strong>📌 مؤشر تنبؤي من ECG الأساسي</strong>
+        وجود تأخّر في التوصيل الأذيني البطيني أو انقباضات أذينية مبكّرة على ECG الأساسي يترافق بزيادة خطر تطوّر اضطرابات النظم الأذينية أثناء زرع النخاع الذاتي.
+      </div>
+
+      <ul>
+        <li><strong>الرجفان الأذيني:</strong> شائع نسبياً حول فترة الزرع (Peri-transplant)، غالباً عابر</li>
+        <li><strong>الانصباب التاموري واحتباس السوائل:</strong> خاصة مع أنظمة التهيئة عالية الجرعة</li>
+        <li><strong>اعتلال عضلة القلب:</strong> يتفاقم بالتعرّض التراكمي السابق للأنثراسيكلين والإشعاع</li>
+      </ul>
+
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بتقييم خطر قلبي أساسي ودوري (عند 3 و12 شهراً ثم سنوياً) يشمل الضغط وECG والشحوم وHbA1c في جميع مرضى HSCT</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-i">
+        <div class="rec-text">يُوصى بإجراء Echo في جميع المرضى قبل HSCT</div>
+        <div class="rec-badges"><span class="badge badge-i">Class I</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+      <div class="rec rec-iia">
+        <div class="rec-text">يُنظر في القياس الأساسي للببتيدات المدرة للصوديوم قبل HSCT</div>
+        <div class="rec-badges"><span class="badge badge-iia">Class IIa</span><span class="badge badge-loe">LOE C</span></div>
+      </div>
+    </div>
+
+    <!-- Key Points -->
+    <div class="key-points" id="keys">
+      <h4>🔑 نقاط المفتاح — الجزء الخامس</h4>
+      <ul>
+        <li>الفلوروبيريميدينات تسبب سمية تشنّجية شريانية تاجية (وليست عضلية مباشرة) — الإدارة نترات/مضادات كالسيوم وليست بالضرورة إيقافاً نهائياً</li>
+        <li>مثبطات VEGF: ارتفاع الضغط أشيع سمية — مراقبة أسبوعية أولاً ثم كل 2-3 أسابيع، وتجنّب مضادات الكالسيوم غير ثنائية الهيدروبيريدين</li>
+        <li>مثبطات BCR-ABL تتفاوت جذرياً: Dasatinib↔ارتفاع توتر رئوي، Nilotinib↔تصلب شرايين/QT، Ponatinib↔أعلى خطر انصمام شرياني</li>
+        <li>Ibrutinib يرفع خطر الرجفان الأذيني بشكل ملحوظ — تضخّم الأذين الأيسر الأساسي مؤشر تنبؤي؛ الأجيال الأحدث أكثر أماناً قلبياً</li>
+        <li>مثبطات البروتيازوم (خاصة Carfilzomib) وIMiDs: القياس الأساسي للـNP موصى به في الخطر العالي، والوقاية من الخثار الوريدي ضرورية مع IMiDs</li>
+        <li>Ribociclib يستدعي جدول ECG محدَّداً زمنياً (أساس، يوم 14، بداية الدورة 2) لمراقبة QT</li>
+        <li>PRONOUNCE لم تُظهر تفوقاً قلبياً وعائياً واضحاً لمضادات GnRH على ناهضاتها في ADT</li>
+        <li>HSCT: خطر اضطرابات نظم واحتباس سوائل حول فترة الزرع، يتفاقم بالتعرّض التراكمي السابق للأنثراسيكلين</li>
+      </ul>
+    </div>
+
+    <!-- Navigation -->
+    <div class="next-prev">
+      <a href="cardio-onco-part4.html" class="nav-btn">
+        <div class="dir">← الجزء السابق</div>
+        <div class="title">ICI و CAR-T والمراقبة والحالات الخاصة</div>
+      </a>
+      <a href="cardio-onco-part6.html" class="nav-btn next">
+        <div class="dir">الجزء التالي ←</div>
+        <div class="title">مضاعفات قلبية أخرى وحالات خاصة</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>مبني على غايدلاين ESC 2022 لأمراض القلب والأورام — للأغراض التعليمية | <a href="cardio-onco-index.html">← Cardio-Oncology Overview</a> | <a href="guidelines.html">جميع الغايدات</a></p>
+</footer>
+</footer>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const __headerEl = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = p + '%';
+  if (window.scrollY > 80) { __headerEl && __headerEl.classList.add('shrink'); } else { __headerEl && __headerEl.classList.remove('shrink'); }
+});
+
+const toc = document.querySelectorAll('.toc a');
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      toc.forEach(a => a.classList.remove('active'));
+      const id = e.target.id;
+      const active = document.querySelector(`.toc a[href="#${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+<script src="notes.js"></script>
+<script src="presence-tracker.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+
+</body>
+</html>
