@@ -48,6 +48,56 @@ figcaption{font-size:13px;color:var(--text-dim);margin-top:8px;text-align:right;
 #backTop{position:fixed;bottom:18px;right:18px;background:var(--panel);border:1px solid var(--border);color:var(--text);width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,.3);z-index:400;}
 .pagefoot{text-align:center;color:var(--text-dim);font-size:12.5px;padding:20px 0;}
 .pagefoot .brand{color:var(--gold);font-weight:700;}
+
+/* ===== Interactive quiz (added) ===== */
+:root{--ok:#22c55e;--ok-bg:rgba(34,197,94,.12);--bad:#ef4444;--bad-bg:rgba(239,68,68,.12);}
+:root[data-theme="light"]{--ok:#15803d;--ok-bg:rgba(21,128,61,.10);--bad:#b91c1c;--bad-bg:rgba(185,28,28,.09);}
+#qbBar{position:sticky;top:62px;z-index:480;background:var(--panel);border-bottom:1px solid var(--border);padding:6px 22px 6px;box-shadow:0 4px 12px rgba(0,0,0,.18);}
+#qbBar .qb-row{max-width:880px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;}
+#qbBar .qb-stats{display:flex;gap:14px;align-items:center;white-space:nowrap;}
+#qbBar b{font-weight:800;}
+#qbBar .qb-ok{color:var(--ok);} #qbBar .qb-bad{color:var(--bad);} #qbBar .qb-pct{color:var(--gold);}
+#qbBar .qb-prog{max-width:880px;margin:5px auto 0;height:5px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;overflow:hidden;display:flex;}
+#qbBar .qb-prog i{display:block;height:100%;width:0;transition:width .25s;}
+#qbBar .qb-prog .f-ok{background:var(--ok);} #qbBar .qb-prog .f-bad{background:var(--bad);} #qbBar .qb-prog .f-neu{background:var(--gold-dim);}
+#qbReset{background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:3px 12px;white-space:nowrap;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;}
+#qbReset:hover{border-color:var(--gold);color:var(--gold);}
+.qpre{background:var(--panel2);border:1px dashed var(--gold-dim);border-radius:12px;padding:12px 16px;margin-bottom:12px;font-size:14.6px;}
+.qgroup{margin-bottom:6px;}
+.qblock{scroll-margin-top:130px;}
+.qblock .qhead{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.qblock .qnum{background:var(--gold);color:#111;font-weight:800;font-size:12.5px;border-radius:8px;padding:2px 10px;}
+.qblock .qhint{font-size:12px;color:var(--text-dim);}
+.qblock .qstatus{margin-inline-start:auto;font-size:12.5px;font-weight:700;}
+.qblock.is-ok .qstatus{color:var(--ok);} .qblock.is-bad .qstatus{color:var(--bad);}
+.qblock .qstem{line-height:1.95;}
+.qblock figure{margin:12px 0;}
+.qopts{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.qopt{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:right;background:var(--panel2);border:1.5px solid var(--border);color:var(--text);border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit;font-size:14.6px;line-height:1.8;transition:border-color .15s,background .15s;}
+.qopt:hover:not(:disabled){border-color:var(--gold-dim);}
+.qopt .qol{flex:none;width:26px;height:26px;border-radius:50%;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12.5px;color:var(--gold);margin-top:2px;}
+.qopt .qot{flex:1;}
+.qopt.sel{border-color:var(--gold);background:rgba(212,175,55,.10);}
+.qopt:disabled{cursor:default;}
+.qopt.is-right{border-color:var(--ok);background:var(--ok-bg);}
+.qopt.is-right .qol{background:var(--ok);border-color:var(--ok);color:#fff;}
+.qopt.is-right .qot::after{content:" ✓";color:var(--ok);font-weight:800;}
+.qopt.is-wrong{border-color:var(--bad);background:var(--bad-bg);}
+.qopt.is-wrong .qol{background:var(--bad);border-color:var(--bad);color:#fff;}
+.qopt.is-wrong .qot::after{content:" ✗";color:var(--bad);font-weight:800;}
+.qopt.is-missed{border:1.5px dashed var(--ok);background:transparent;}
+.qopt.is-missed .qol{border-color:var(--ok);color:var(--ok);}
+.qopt.is-missed .qot::after{content:" ← الصحيحة";color:var(--ok);font-weight:700;font-size:12.5px;}
+.qact{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.qbtn{background:var(--teal);color:#00201c;border:0;border-radius:9px;padding:8px 18px;cursor:pointer;font:inherit;font-weight:700;font-size:14px;}
+.qbtn:disabled{opacity:.45;cursor:not-allowed;}
+.qbtn.sec{background:var(--panel2);color:var(--text);border:1px solid var(--border);}
+.qbtn.okb{background:var(--ok);color:#fff;} .qbtn.badb{background:var(--bad);color:#fff;}
+.qans[hidden]{display:none;}
+.qans{margin-top:12px;border-top:1px dashed var(--border);padding-top:10px;}
+.qans p{margin:6px 0 0;}
+.qrate{margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--text-dim);}
+@media (max-width:600px){#qbBar{padding:5px 12px 5px;} #qbBar .qb-row{font-size:12.5px;} #qbBar .qb-stats{gap:10px;} #qbReset .rs-t{display:none;} #qbReset{padding:2px 10px;font-size:15px;} .qopt{padding:9px 10px;font-size:14.2px;}}
 </style>
 </head>
 <body>
@@ -75,6 +125,19 @@ figcaption{font-size:13px;color:var(--text-dim);margin-top:8px;text-align:right;
   <span class="chapno">12</span>
   <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
 </header>
+<div id="qbBar">
+  <div class="qb-row">
+    <div class="qb-stats">
+      <span title="الأسئلة المُجابة">المُجاب <b id="qbDone">0</b>/<b id="qbTot">0</b></span>
+      <span class="qb-ok" title="إجابات صحيحة">✔ <b id="qbOk">0</b></span>
+      <span class="qb-bad" title="إجابات خاطئة">✖ <b id="qbBad">0</b></span>
+      <span class="qb-pct" title="الدقة"><b id="qbPct">—</b></span>
+    </div>
+    <button id="qbReset" type="button" title="تصفير العداد وكل الإجابات" aria-label="تصفير">↺<span class="rs-t"> تصفير</span></button>
+  </div>
+  <div class="qb-prog"><i id="qbFOk" class="f-ok"></i><i id="qbFBad" class="f-bad"></i><i id="qbFNeu" class="f-neu"></i></div>
+</div>
+
 
 <main>
 
@@ -86,70 +149,166 @@ figcaption{font-size:13px;color:var(--text-dim);margin-top:8px;text-align:right;
   <section class="roman" id="qbIV2">
     <div class="roman-head"><div class="roman-badge">IV</div><h2>اضطرابات الصمامات (ختام)</h2></div>
 
-    <div class="card point-num">
-      <strong>س21:</strong> رجل70عامًا، MVR قبل10سنوات لـMR شديد. الآن: ضيق نفس، تعب، استسقاء، وذمة، تدهور كلوي(1.2←2.4خلال6أشهر)، مدرات عالية. إيكو: الصمام التاجي الصناعي سليم وظيفيًا، TR شديد، RV متوسع وضعيف. أفضل خيار؟ (A)تصحيح TR بالقسطرة(يحسّن الأعراض والبقاء). (B)تصحيح بالقسطرة(يحسّن الأعراض فقط). (C)استشفاء ومدرات وريدية+بزل استسقاء. (D)تصحيح TR جراحيًا.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة B.</strong> يُرجَّح TR وظيفي ثانوي لمرض تاجي سابق(توسع حلقي مستمر رغم إصلاح الصمام التاجي — يحدث بـ25% ممن لديهم TR خفيف وقت جراحة الصمام الأيسر). أصبح TR المعزول الآن السبب الرئيسي لفشل القلب الأيمن. الوفيات الجراحية التقليدية لـTR المعزول&gt;10%. بمرضى الخطورة الجراحية العالية(كهذا المريض)، أظهرت العلاجات عبر القسطرة(مشابك ثلاثية الشرف كـMitraClip/PASCAL، أو رأب الحلقة بـCardioband) أمانًا وفعالية وتحسّنًا كبيرًا بالأعراض ونوعية الحياة — <strong>لكن دون إثبات تحسن بالبقاء</strong> بـTR المعزول، وتقل الفائدة مع تقدم القصور الكبدي/الكلوي.</p>
-    </div>
+<div class="card qblock" data-qid="p7-q21" data-mode="single" data-correct="B">
+  <div class="qhead"><span class="qnum">س21</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل70عامًا، MVR قبل10سنوات لـMR شديد. الآن: ضيق نفس، تعب، استسقاء، وذمة، تدهور كلوي(1.2←2.4خلال6أشهر)، مدرات عالية. إيكو: الصمام التاجي الصناعي سليم وظيفيًا، TR شديد، RV متوسع وضعيف. أفضل خيار؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">تصحيح TR بالقسطرة(يحسّن الأعراض والبقاء).</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">تصحيح بالقسطرة(يحسّن الأعراض فقط).</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">استشفاء ومدرات وريدية+بزل استسقاء.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">تصحيح TR جراحيًا.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة B.</strong> يُرجَّح TR وظيفي ثانوي لمرض تاجي سابق(توسع حلقي مستمر رغم إصلاح الصمام التاجي — يحدث بـ25% ممن لديهم TR خفيف وقت جراحة الصمام الأيسر). أصبح TR المعزول الآن السبب الرئيسي لفشل القلب الأيمن. الوفيات الجراحية التقليدية لـTR المعزول>10%. بمرضى الخطورة الجراحية العالية(كهذا المريض)، أظهرت العلاجات عبر القسطرة(مشابك ثلاثية الشرف كـMitraClip/PASCAL، أو رأب الحلقة بـCardioband) أمانًا وفعالية وتحسّنًا كبيرًا بالأعراض ونوعية الحياة — <strong>لكن دون إثبات تحسن بالبقاء</strong> بـTR المعزول، وتقل الفائدة مع تقدم القصور الكبدي/الكلوي.</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س22:</strong> رجل65عامًا، فشل قلب. إيكو: MR شديد، EF=55%، AS خفيف(سرعة2.5، AVA1.8)، TR خفيف. سيُجرى ترميم تاجي بعد التحسن. كيف يُدار؟ (A)ترميم تاجي فقط. (B)+استبدال أبهري. (C)+ترميم ثلاثي الشرف. (D)+ترميم ثلاثي فقط إن PH شديد. (E)+استبدال أبهري+ترميم ثلاثي.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة C.</strong> أثناء جراحة الصمام التاجي، يجب إصلاح الصمام ثلاثي الشرف <strong>حتى مع TR خفيف</strong> إن وُجد توسع حلقي(&gt;40مم) أو تاريخ فشل قلب أيمن سريري سابق(هنا JVP مرتفع سابقًا يدعم ذلك) — لأن التوسع الحلقي غير المُصلَح يستمر بالتفاقم ذاتيًا("Dilatation begets dilatation") مع تفاقم القلس وتوسع RV تدريجيًا(توصية فئةIIa). لا مؤشر لتدخل على AS الخفيف حاليًا.</p>
-    </div>
+<div class="card qblock" data-qid="p7-q22" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س22</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل65عامًا، فشل قلب. إيكو: MR شديد، EF=55%، AS خفيف(سرعة2.5، AVA1.8)، TR خفيف. سيُجرى ترميم تاجي بعد التحسن. كيف يُدار؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">ترميم تاجي فقط.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">+استبدال أبهري.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">+ترميم ثلاثي الشرف.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">+ترميم ثلاثي فقط إن PH شديد.</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">+استبدال أبهري+ترميم ثلاثي.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة C.</strong> أثناء جراحة الصمام التاجي، يجب إصلاح الصمام ثلاثي الشرف <strong>حتى مع TR خفيف</strong> إن وُجد توسع حلقي(>40مم) أو تاريخ فشل قلب أيمن سريري سابق(هنا JVP مرتفع سابقًا يدعم ذلك) — لأن التوسع الحلقي غير المُصلَح يستمر بالتفاقم ذاتيًا("Dilatation begets dilatation") مع تفاقم القلس وتوسع RV تدريجيًا(توصية فئةIIa). لا مؤشر لتدخل على AS الخفيف حاليًا.</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س23:</strong> رجل70عامًا EF=30% مع MR وظيفي شديد، خضع لـMitraClip. أيٌّ صحيح؟ (A)يُستخدم فقط بالوظيفي لا التنكسي. (B)غالبًا يحسّن EF. (C)يزيد CO~20-25% ويقلل الحمل القبلي دون تغيّر بالحمل البعدي بالمتوسط. (D)يزيد CO دون أي تأثير. (E)يزيد CO ويزيد الحمل البعدي.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة C.</strong> MitraClip معتمد للتنكسي(EVEREST) وللوظيفي(COAPT) معًا. ديناميكيًا: يزيد CO الأمامي وحجم الضربة~20-25%(EVEREST)؛ ينقص LVEDV وLVEDP(تحميل قبلي أقل)؛ ينخفض SVR بفعل زيادة CO. <strong>بالمتوسط لا يتغير الحمل البعدي</strong>(نصف قطر انقباضي×ضغط انقباضي) لأن انخفاض حجم LV يعادل ميل ارتفاع الضغط/نصف القطر. EF ينخفض طفيفًا لكن بدلالة إحصائية(EVEREST، Melisurgo، COAPT)؛ ~26% من المرضى يصابون بـ"عدم توافق الحمل البعدي"(EF يهبط بشدة، خصوصًا بتوسع LV شديد أساسًا). يبقى EF والتحميلان مستقرين بمرور الوقت بعد الإجراء، بخلاف تدهورهما المستمر بمجموعة الضبط الدوائي(COAPT).</p>
-    </div>
+<div class="card qblock" data-qid="p7-q23" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س23</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل70عامًا EF=30% مع MR وظيفي شديد، خضع لـMitraClip. أيٌّ صحيح؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">يُستخدم فقط بالوظيفي لا التنكسي.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">غالبًا يحسّن EF.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">يزيد CO~20-25% ويقلل الحمل القبلي دون تغيّر بالحمل البعدي بالمتوسط.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">يزيد CO دون أي تأثير.</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">يزيد CO ويزيد الحمل البعدي.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة C.</strong> MitraClip معتمد للتنكسي(EVEREST) وللوظيفي(COAPT) معًا. ديناميكيًا: يزيد CO الأمامي وحجم الضربة~20-25%(EVEREST)؛ ينقص LVEDV وLVEDP(تحميل قبلي أقل)؛ ينخفض SVR بفعل زيادة CO. <strong>بالمتوسط لا يتغير الحمل البعدي</strong>(نصف قطر انقباضي×ضغط انقباضي) لأن انخفاض حجم LV يعادل ميل ارتفاع الضغط/نصف القطر. EF ينخفض طفيفًا لكن بدلالة إحصائية(EVEREST، Melisurgo، COAPT)؛ ~26% من المرضى يصابون بـ"عدم توافق الحمل البعدي"(EF يهبط بشدة، خصوصًا بتوسع LV شديد أساسًا). يبقى EF والتحميلان مستقرين بمرور الوقت بعد الإجراء، بخلاف تدهورهما المستمر بمجموعة الضبط الدوائي(COAPT).</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س24:</strong> امرأة56عامًا AS ثنائي شديد سابقًا، AVR ميكانيكي(St.Jude21مم) قبل10سنوات. العام الماضي: ضيق نفس ووذمة، صعوبة ضبط INR. تدرج متوسط36. فلوروسكوبي: زوايا فتح10° فقط. قسطرة: LV=155/30(LVEDP30)، أبهر155/80(<strong>لا تدرج على الإطلاق!</strong>). التشخيص؟ (A)عدم تطابق مريض-صمام. (B)Pannus. (C)ظاهرة استعادة الضغط. (D)تضيق ميكانيكي شديد بانخفاض جريان. (E)خطأ قياس إيكو.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة C(ظاهرة استعادة الضغط).</strong> إيكو يُظهر تدرجًا مرتفعًا ظاهريًا، لكن القسطرة تُظهر <strong>عدم وجود تدرج إطلاقًا</strong> بين LV والأبهر(155/30 مقابل155/80 — الانقباضيان متساويان!) — أمر غير اعتيادي لأن الإيكو عادةً يُقلِّل لا يُبالغ. الظاهرة الوحيدة المفسِّرة لهذا التناقض: <strong>استعادة الضغط</strong>، تحدث بالصمام الميكانيكي مزدوج الوريقات(الفوهة المركزية الصغيرة تُحدث انخفاضًا موضعيًا يُستعاد معظمه بامتزاج التدفق المركزي مع الجانبي) أو بجذر أبهري صغير(&lt;3سم). زاوية فتح الوريقات طبيعية(&lt;20° بين الوريقتين) تؤكد أن الصمام سليم وظيفيًا. ضيق النفس هنا سببه <strong>فشل قلب انبساطي</strong>(LVEDP مرتفع=30) لا مشكلة بالصمام.</p>
-    </div>
+<div class="card qblock" data-qid="p7-q24" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س24</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة56عامًا AS ثنائي شديد سابقًا، AVR ميكانيكي(St.Jude21مم) قبل10سنوات. العام الماضي: ضيق نفس ووذمة، صعوبة ضبط INR. تدرج متوسط36. فلوروسكوبي: زوايا فتح10° فقط. قسطرة: LV=155/30(LVEDP30)، أبهر155/80(<strong>لا تدرج على الإطلاق!</strong>). التشخيص؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">عدم تطابق مريض-صمام.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">Pannus.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">ظاهرة استعادة الضغط.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">تضيق ميكانيكي شديد بانخفاض جريان.</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">خطأ قياس إيكو.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة C(ظاهرة استعادة الضغط).</strong> إيكو يُظهر تدرجًا مرتفعًا ظاهريًا، لكن القسطرة تُظهر <strong>عدم وجود تدرج إطلاقًا</strong> بين LV والأبهر(155/30 مقابل155/80 — الانقباضيان متساويان!) — أمر غير اعتيادي لأن الإيكو عادةً يُقلِّل لا يُبالغ. الظاهرة الوحيدة المفسِّرة لهذا التناقض: <strong>استعادة الضغط</strong>، تحدث بالصمام الميكانيكي مزدوج الوريقات(الفوهة المركزية الصغيرة تُحدث انخفاضًا موضعيًا يُستعاد معظمه بامتزاج التدفق المركزي مع الجانبي) أو بجذر أبهري صغير(<3سم). زاوية فتح الوريقات طبيعية(<20° بين الوريقتين) تؤكد أن الصمام سليم وظيفيًا. ضيق النفس هنا سببه <strong>فشل قلب انبساطي</strong>(LVEDP مرتفع=30) لا مشكلة بالصمام.</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س25:</strong> رجل64عامًا HTN، AS شديد. السبب الأرجح؟ (A)تنكسي/كلسي. (B)ثنائي الشرفات. (C)روماتيزمي.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة B.</strong> <strong>الصمام ثنائي الشرفات</strong> هو السبب الأشيع لـAS بمرضى دون سن70، يمثل~50% من الحالات(بخلاف كبار السن حيث التنكسي الكلسي هو الأشيع).</p>
-    </div>
+<div class="card qblock" data-qid="p7-q25" data-mode="single" data-correct="B">
+  <div class="qhead"><span class="qnum">س25</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل64عامًا HTN، AS شديد. السبب الأرجح؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">تنكسي/كلسي.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">ثنائي الشرفات.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">روماتيزمي.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة B.</strong> <strong>الصمام ثنائي الشرفات</strong> هو السبب الأشيع لـAS بمرضى دون سن70، يمثل~50% من الحالات(بخلاف كبار السن حيث التنكسي الكلسي هو الأشيع).</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س26:</strong> رجل45عامًا، حصار AV خلقي، ناظمة منذ20سنة بكسور أقطاب متكررة وإصلاحات متعددة. الآن: استسقاء معمم، تضخم كبد، JVP مرتفع بموجة A كبيرة، لغط انبساطي خفيف بـLLSB، لا رفع RV ولا تغيّر بـS2. التشخيص؟ (A)TR. (B)تضيق ثلاثي الشرف. (C)MS. (D)قلس رئوي.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة B.</strong> TR يرفع JVP بموجة <strong>V</strong> كبيرة لا A؛ الموجة A الكبيرة أدل على <strong>تضيق ثلاثي الشرف</strong> أو فرط حمل ضغطي بـRV. غياب توسع RV وانقسام S2 الواسع وتضخم الكبد النابض ينفي TR فعليًا. السبب: التصاقات ونسيج ندبي فوق الصمام ناتج عن مرور عدة أقطاب متكررة عبره(خصوصًا بحلقات/التواءات بالأسلاك) — مضاعفة نادرة موصوفة جيدًا بعد إصلاحات/استبدالات أقطاب متعددة.</p>
-    </div>
+<div class="card qblock" data-qid="p7-q26" data-mode="single" data-correct="B">
+  <div class="qhead"><span class="qnum">س26</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل45عامًا، حصار AV خلقي، ناظمة منذ20سنة بكسور أقطاب متكررة وإصلاحات متعددة. الآن: استسقاء معمم، تضخم كبد، JVP مرتفع بموجة A كبيرة، لغط انبساطي خفيف بـLLSB، لا رفع RV ولا تغيّر بـS2. التشخيص؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">TR.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">تضيق ثلاثي الشرف.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">MS.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">قلس رئوي.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة B.</strong> TR يرفع JVP بموجة <strong>V</strong> كبيرة لا A؛ الموجة A الكبيرة أدل على <strong>تضيق ثلاثي الشرف</strong> أو فرط حمل ضغطي بـRV. غياب توسع RV وانقسام S2 الواسع وتضخم الكبد النابض ينفي TR فعليًا. السبب: التصاقات ونسيج ندبي فوق الصمام ناتج عن مرور عدة أقطاب متكررة عبره(خصوصًا بحلقات/التواءات بالأسلاك) — مضاعفة نادرة موصوفة جيدًا بعد إصلاحات/استبدالات أقطاب متعددة.</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س27:</strong> رجل72عامًا، MR شديد ثانوي لهبوط الوريقة الخلفية، EF=55%، ترميم تاجي مع حلقة. بعدها: فشل قلب شديد تدريجي، MR شديد جديد أمامي الاتجاه، EF هبط لـ30%، Hb=7 مع Schistocytes. الخطوة التالية؟ (A)MitraClip. (B)استبدال مفتوح. (C)إعادة ترميم جراحي مفتوح.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة A(إن سمح التشريح بذلك عبر TEE).</strong> الانحلال الدموي الشديد مع Schistocytes نموذجي بـ<strong>تسرب حول الصمام الصناعي(Paraprosthetic leak)</strong>، خصوصًا بالميكانيكية، لكن يحدث أيضًا بعدم تطابق مريض-صمام مع سرعة عالية، وتنكس بيولوجي، أو <strong>فشل إصلاح تاجي</strong> عندما يضرب الدم الراجع حلقة القلب الداخلية(Endocardial ring) — وهذا الأرجح هنا(بعد ترميم بحلقة). درجة خفيفة من الانحلال تحت السريري شائعة(25-50%) بالصمامات الميكانيكية بسبب إجهاد القص العادي. إن فشل الإصلاح، يمكن إصلاح عبر القسطرة بـMitraClip <strong>إذا</strong> كان التشريح ملائمًا بـTEE(قلس ناتج عن تدلٍّ لا انفلات مفرط&gt;10مم).</p>
-    </div>
+<div class="card qblock" data-qid="p7-q27" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س27</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل72عامًا، MR شديد ثانوي لهبوط الوريقة الخلفية، EF=55%، ترميم تاجي مع حلقة. بعدها: فشل قلب شديد تدريجي، MR شديد جديد أمامي الاتجاه، EF هبط لـ30%، Hb=7 مع Schistocytes. الخطوة التالية؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">MitraClip.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">استبدال مفتوح.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">إعادة ترميم جراحي مفتوح.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة A(إن سمح التشريح بذلك عبر TEE).</strong> الانحلال الدموي الشديد مع Schistocytes نموذجي بـ<strong>تسرب حول الصمام الصناعي(Paraprosthetic leak)</strong>، خصوصًا بالميكانيكية، لكن يحدث أيضًا بعدم تطابق مريض-صمام مع سرعة عالية، وتنكس بيولوجي، أو <strong>فشل إصلاح تاجي</strong> عندما يضرب الدم الراجع حلقة القلب الداخلية(Endocardial ring) — وهذا الأرجح هنا(بعد ترميم بحلقة). درجة خفيفة من الانحلال تحت السريري شائعة(25-50%) بالصمامات الميكانيكية بسبب إجهاد القص العادي. إن فشل الإصلاح، يمكن إصلاح عبر القسطرة بـMitraClip <strong>إذا</strong> كان التشريح ملائمًا بـTEE(قلس ناتج عن تدلٍّ لا انفلات مفرط>10مم).</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س28:</strong> امرأة60عامًا، AVR ميكانيكي مزدوج الوريقات. لاعرضية، وارفارين+ليسينوبريل، ضغط128/78، INR=2.4. الإجراء الموصى به؟ (A)زيادة الوارفارين لهدف2.5-3.5. (B)استمرار النظام الحالي. (C)+أسبرين81. (D)زيادة الوارفارين+أسبرين.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة B.</strong> صمام أبهري ميكانيكي بلا عوامل خطر خثارية إضافية(لا AF، لا خلل LV، لا سكتة سابقة) ← هدف INR=2-3(لا 2.5-3.5 الذي يُخصَّص للتاجي بغض النظر عن عوامل الخطر). لم تعد التوصيات الحديثة(ACC/ESC) تشجع إضافة الأسبرين الروتينية لكل حاملي الصمامات الميكانيكية(الدراسات الداعمة قديمة ولم تشمل الصمامات الحديثة).</p>
-    </div>
+<div class="card qblock" data-qid="p7-q28" data-mode="single" data-correct="B">
+  <div class="qhead"><span class="qnum">س28</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة60عامًا، AVR ميكانيكي مزدوج الوريقات. لاعرضية، وارفارين+ليسينوبريل، ضغط128/78، INR=2.4. الإجراء الموصى به؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">زيادة الوارفارين لهدف2.5-3.5.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">استمرار النظام الحالي.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">+أسبرين81.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">زيادة الوارفارين+أسبرين.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة B.</strong> صمام أبهري ميكانيكي بلا عوامل خطر خثارية إضافية(لا AF، لا خلل LV، لا سكتة سابقة) ← هدف INR=2-3(لا 2.5-3.5 الذي يُخصَّص للتاجي بغض النظر عن عوامل الخطر). لم تعد التوصيات الحديثة(ACC/ESC) تشجع إضافة الأسبرين الروتينية لكل حاملي الصمامات الميكانيكية(الدراسات الداعمة قديمة ولم تشمل الصمامات الحديثة).</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س29:</strong> رجل56عامًا، AVR ميكانيكي قبل4سنوات، قيم أساسية(ذروة18، متوسط10). التهاب رئوي وحمى، ازدادت شدة اللغط، PMI قوي، نبضات Bounding. إيكو حاليًا: ذروة36، متوسط22. الخطوة التالية؟ (A)TEE. (B)فلوروسكوبي. (C)لا حاجة لمزيد.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة C.</strong> تزداد التدرجات بشكل متوقع بحالات الجريان المرتفع(حمى، إنتان، نبضات قوية) دون أن يعني ذلك انسدادًا صناعيًا؛ التدرج يتناسب مع <strong>مربع</strong> معدل الجريان بمعادلة غورلن(مضاعفة الجريان ترفع التدرج~4أضعاف).</p>
-    </div>
+<div class="card qblock" data-qid="p7-q29" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س29</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل56عامًا، AVR ميكانيكي قبل4سنوات، قيم أساسية(ذروة18، متوسط10). التهاب رئوي وحمى، ازدادت شدة اللغط، PMI قوي، نبضات Bounding. إيكو حاليًا: ذروة36، متوسط22. الخطوة التالية؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">TEE.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">فلوروسكوبي.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">لا حاجة لمزيد.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة C.</strong> تزداد التدرجات بشكل متوقع بحالات الجريان المرتفع(حمى، إنتان، نبضات قوية) دون أن يعني ذلك انسدادًا صناعيًا؛ التدرج يتناسب مع <strong>مربع</strong> معدل الجريان بمعادلة غورلن(مضاعفة الجريان ترفع التدرج~4أضعاف).</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س30:</strong> رجل64عامًا، لغط انقباضي متوسط يوحي بـAS. أي علامة تنفي AS شديدًا؟ (A)انقسام طبيعي لـS2. (B)شدة اللغط2/6. (C)عدم انتقال اللغط للسباتيين.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة A.</strong> بـAS الشديد يضعف/يغيب A2 ويتأخر كثيرًا(انقسام غائب أو معكوس). <strong>انقسام طبيعي وواضح لـS2</strong> ينفي AS الشديد بقوة.</p>
-      <strong>س31:</strong> أي لغط لا يزداد بعد وقفة postextrasystolic؟(قد تتعدد) (A)HOCM. (B)AS. (C)MR. (D)TR. (E)VSD.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابات C، D، E.</strong> نفخات <strong>MR وVSD وTR</strong> لا تزداد شدتها بعد الوقفة: ينخفض DBP بعد الوقفة بينما يزداد الجريان الأمامي نسبيًا، فتبقى النفخة دون تغيّر أو حتى أضعف. (بالمقابل HOCM وAS تعتمدان مباشرة على حجم الضربة المتزايد بعد الوقفة فتشتدان بوضوح.)</p>
-    </div>
+<div class="qgroup">
 
-    <div class="card point-num">
-      <strong>س32:</strong> أي نتيجة طبيعية عبر صمام صناعي؟ (A)لغط انبساطي خفيف عبر تاجي صناعي. (B)سرعة ذروة4م/ث عبر أبهري صناعي. (C)سرعة ذروة3م/ث عبر تاجي صناعي. (D)لغط انقباضي قمي خفيف عبر تاجي صناعي.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة D.</strong> نفخة جريان انقباضية خفيفة(أمامية) طبيعية عبر <strong>تاجي صناعي</strong>؛ نفخة جريان انبساطية خفيفة طبيعية عبر <strong>أبهري صناعي</strong>(عكس ما ذُكر بـA وB). السرعات الطبيعية المقبولة: حتى3م/ث عبر أبهري صناعي، وحتى1.9م/ث عبر تاجي صناعي — فسرعة3م/ث بتاجي صناعي(C) غير طبيعية.</p>
-    </div>
+<div class="card qblock" data-qid="p7-q30" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س30</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل64عامًا، لغط انقباضي متوسط يوحي بـAS. أي علامة تنفي AS شديدًا؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">انقسام طبيعي لـS2.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">شدة اللغط2/6.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">عدم انتقال اللغط للسباتيين.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة A.</strong> بـAS الشديد يضعف/يغيب A2 ويتأخر كثيرًا(انقسام غائب أو معكوس). <strong>انقسام طبيعي وواضح لـS2</strong> ينفي AS الشديد بقوة.</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س33:</strong> تسجيل LV-أبهر(الشكل21). التشخيص؟ (A)AS. (B)HOCM. (C)غشاء تحت أبهري.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة B(HOCM).</strong> خصائص التسجيل: (1)المنحدران الصاعدان لـLV والأبهر متطابقان تقريبًا(الأبهر ليس بطيء الصعود)؛ (2)ضغط LV متأخر الذروة ضيق("Peaky")؛ (3)الأبهر يبلغ ذروته مبكرًا بشكل "Spike-and-dome" مميز؛ (4)<strong>التدرج يتغيّر بوضوح مع التنفس</strong> — يؤكد طبيعته الديناميكية. بالشهيق: يزداد الحمل البعدي فيتحسن الانسداد فينخفض التدرج ويزداد ضغط النبض الأبهري = <strong>"النبض المتناقض العكسي".</strong></p>
-    </div>
+<div class="card qblock" data-qid="p7-q31" data-mode="multi" data-correct="C,D,E">
+  <div class="qhead"><span class="qnum">س31</span><span class="qhint">اختر كل الإجابات الصحيحة ثم اضغط «تحقق»</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">أي لغط لا يزداد بعد وقفة postextrasystolic؟(قد تتعدد)</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">HOCM.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">AS.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">MR.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">TR.</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">VSD.</span></button>
+  </div>
+  <div class="qact"><button type="button" class="qbtn qcheck" disabled>تحقق من الإجابة</button></div>
+  <div class="qans" hidden><p>✅ <strong>الإجابات C، D، E.</strong> نفخات <strong>MR وVSD وTR</strong> لا تزداد شدتها بعد الوقفة: ينخفض DBP بعد الوقفة بينما يزداد الجريان الأمامي نسبيًا، فتبقى النفخة دون تغيّر أو حتى أضعف. (بالمقابل HOCM وAS تعتمدان مباشرة على حجم الضربة المتزايد بعد الوقفة فتشتدان بوضوح.)</p></div>
+</div>
+</div>
+
+<div class="card qblock" data-qid="p7-q32" data-mode="single" data-correct="D">
+  <div class="qhead"><span class="qnum">س32</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">أي نتيجة طبيعية عبر صمام صناعي؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">لغط انبساطي خفيف عبر تاجي صناعي.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">سرعة ذروة4م/ث عبر أبهري صناعي.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">سرعة ذروة3م/ث عبر تاجي صناعي.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">لغط انقباضي قمي خفيف عبر تاجي صناعي.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة D.</strong> نفخة جريان انقباضية خفيفة(أمامية) طبيعية عبر <strong>تاجي صناعي</strong>؛ نفخة جريان انبساطية خفيفة طبيعية عبر <strong>أبهري صناعي</strong>(عكس ما ذُكر بـA وB). السرعات الطبيعية المقبولة: حتى3م/ث عبر أبهري صناعي، وحتى1.9م/ث عبر تاجي صناعي — فسرعة3م/ث بتاجي صناعي(C) غير طبيعية.</p></div>
+</div>
+
+<div class="card qblock" data-qid="p7-q33" data-mode="single" data-correct="B">
+  <div class="qhead"><span class="qnum">س33</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">تسجيل LV-أبهر(الشكل21). التشخيص؟</div>
+  <figure><img alt="Figure 21" src="data:image/jpeg;base64,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"/><figcaption><span class="fig-num">الشكل 21</span> — تسجيل LV-أبهر (السؤال33): HOCM، Spike-and-dome، نبض متناقض عكسي.</figcaption></figure>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">AS.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">HOCM.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">غشاء تحت أبهري.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة B(HOCM).</strong> خصائص التسجيل: (1)المنحدران الصاعدان لـLV والأبهر متطابقان تقريبًا(الأبهر ليس بطيء الصعود)؛ (2)ضغط LV متأخر الذروة ضيق("Peaky")؛ (3)الأبهر يبلغ ذروته مبكرًا بشكل "Spike-and-dome" مميز؛ (4)<strong>التدرج يتغيّر بوضوح مع التنفس</strong> — يؤكد طبيعته الديناميكية. بالشهيق: يزداد الحمل البعدي فيتحسن الانسداد فينخفض التدرج ويزداد ضغط النبض الأبهري = <strong>"النبض المتناقض العكسي".</strong></p></div>
+</div>
   </section>
-
-  <figure><img src="data:image/jpeg;base64,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" alt="Figure 21"><figcaption><span class="fig-num">الشكل 21</span> — تسجيل LV-أبهر (السؤال33): HOCM، Spike-and-dome، نبض متناقض عكسي.</figcaption></figure>
 
   <div style="text-align:center; margin:30px 0 20px; padding:14px 20px; background:linear-gradient(135deg, rgba(45,212,191,.10), rgba(212,175,55,.08)); border:1.5px solid var(--gold); border-radius:14px; color:var(--gold); font-size:14px; font-weight:700;">
     ✅ اكتمل القسم IV (اضطرابات الصمامات) — يبدأ الآن القسم V: اضطرابات النظم القلبي
@@ -227,6 +386,101 @@ function toggleToc(show){
     if(overlay) overlay.classList.remove('show');
   }
 }
+</script>
+<script>
+(function(){
+  var KEY='cardioarab-qb:'+(location.pathname.split('/').pop()||'page');
+  var blocks=[].slice.call(document.querySelectorAll('.qblock'));
+  var state={};
+  try{ state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ state={}; }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+  function sameSet(a,b){ if(a.length!==b.length) return false; return a.every(function(x){return b.indexOf(x)>-1;}); }
+
+  function render(q){
+    var id=q.dataset.qid, mode=q.dataset.mode, st=state[id]||{sel:[],done:false,ok:null};
+    var corr=(q.dataset.correct||'').split(',').filter(Boolean);
+    var opts=[].slice.call(q.querySelectorAll('.qopt'));
+    var ans=q.querySelector('.qans'), status=q.querySelector('.qstatus');
+    var chk=q.querySelector('.qcheck'), show=q.querySelector('.qshow'), rate=q.querySelector('.qrate');
+    q.classList.remove('is-ok','is-bad');
+    opts.forEach(function(o){
+      var l=o.dataset.l, isSel=st.sel.indexOf(l)>-1, isCorr=corr.indexOf(l)>-1;
+      o.classList.remove('sel','is-right','is-wrong','is-missed');
+      o.disabled=!!st.done;
+      o.setAttribute('aria-pressed',isSel?'true':'false');
+      if(st.done){
+        if(isSel&&isCorr) o.classList.add('is-right');
+        else if(isSel&&!isCorr) o.classList.add('is-wrong');
+        else if(!isSel&&isCorr) o.classList.add('is-missed');
+      } else if(isSel){ o.classList.add('sel'); }
+    });
+    if(chk){ chk.hidden=!!st.done; chk.disabled=!st.sel.length; }
+    if(show){ show.hidden=!!st.done; }
+    if(ans){ ans.hidden=!st.done; }
+    if(rate){ rate.hidden=!(mode==='reveal'&&st.done); }
+    if(st.done){
+      if(st.ok===true){ q.classList.add('is-ok'); status.textContent='✔ إجابة صحيحة'; }
+      else if(st.ok===false){ q.classList.add('is-bad'); status.textContent='✖ إجابة خاطئة'; }
+      else { status.textContent='👁 تم عرض الإجابة'; }
+    } else { status.textContent=''; }
+  }
+
+  function updateBar(){
+    var tot=blocks.length, done=0, ok=0, bad=0;
+    blocks.forEach(function(q){
+      var st=state[q.dataset.qid]; if(!st||!st.done) return;
+      done++; if(st.ok===true) ok++; else if(st.ok===false) bad++;
+    });
+    var neu=done-ok-bad;
+    function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+    set('qbDone',done); set('qbTot',tot); set('qbOk',ok); set('qbBad',bad);
+    var graded=ok+bad;
+    set('qbPct', graded? (Math.round(ok*100/graded)+'%') : '—');
+    function w(id,n){ var e=document.getElementById(id); if(e) e.style.width=(tot?(n*100/tot):0)+'%'; }
+    w('qbFOk',ok); w('qbFBad',bad); w('qbFNeu',neu);
+  }
+
+  function finish(q,st,ok){ st.done=true; st.ok=ok; state[q.dataset.qid]=st; save(); render(q); updateBar(); }
+
+  blocks.forEach(function(q){
+    var id=q.dataset.qid, mode=q.dataset.mode;
+    var corr=(q.dataset.correct||'').split(',').filter(Boolean);
+    q.addEventListener('click',function(ev){
+      var st=state[id]||{sel:[],done:false,ok:null};
+      if(st.done && !ev.target.closest('.qrate')) return;
+      var opt=ev.target.closest('.qopt');
+      if(opt && !st.done){
+        var l=opt.dataset.l;
+        if(mode==='single'){ st.sel=[l]; finish(q,st,corr[0]===l); }
+        else if(mode==='multi'){
+          var i=st.sel.indexOf(l); if(i>-1) st.sel.splice(i,1); else st.sel.push(l);
+          state[id]=st; save(); render(q);
+        }
+        return;
+      }
+      if(ev.target.closest('.qcheck') && !st.done){ finish(q,st,sameSet(st.sel,corr)); return; }
+      if(ev.target.closest('.qshow') && !st.done){ finish(q,st,null); return; }
+      var r=ev.target.closest('.qrate [data-rate]');
+      if(r && st.done){ st.ok=(r.dataset.rate==='ok'); state[id]=st; save(); render(q); updateBar(); }
+    });
+    render(q);
+  });
+  updateBar();
+
+  var rs=document.getElementById('qbReset');
+  if(rs) rs.addEventListener('click',function(){
+    if(!confirm('تصفير كل إجابات هذه الصفحة والبدء من جديد؟')) return;
+    state={}; save();
+    blocks.forEach(render); updateBar();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  function fixBar(){
+    var h=document.querySelector('header.top'), b=document.getElementById('qbBar');
+    if(h&&b) b.style.top=h.offsetHeight+'px';
+  }
+  fixBar(); window.addEventListener('resize',fixBar); window.addEventListener('load',fixBar);
+})();
 </script>
 <script src="notes.js"></script>
 </body>

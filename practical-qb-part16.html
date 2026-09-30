@@ -48,6 +48,56 @@ figcaption{font-size:13px;color:var(--text-dim);margin-top:8px;text-align:right;
 #backTop{position:fixed;bottom:18px;right:18px;background:var(--panel);border:1px solid var(--border);color:var(--text);width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,.3);z-index:400;}
 .pagefoot{text-align:center;color:var(--text-dim);font-size:12.5px;padding:20px 0;}
 .pagefoot .brand{color:var(--gold);font-weight:700;}
+
+/* ===== Interactive quiz (added) ===== */
+:root{--ok:#22c55e;--ok-bg:rgba(34,197,94,.12);--bad:#ef4444;--bad-bg:rgba(239,68,68,.12);}
+:root[data-theme="light"]{--ok:#15803d;--ok-bg:rgba(21,128,61,.10);--bad:#b91c1c;--bad-bg:rgba(185,28,28,.09);}
+#qbBar{position:sticky;top:62px;z-index:480;background:var(--panel);border-bottom:1px solid var(--border);padding:6px 22px 6px;box-shadow:0 4px 12px rgba(0,0,0,.18);}
+#qbBar .qb-row{max-width:880px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;}
+#qbBar .qb-stats{display:flex;gap:14px;align-items:center;white-space:nowrap;}
+#qbBar b{font-weight:800;}
+#qbBar .qb-ok{color:var(--ok);} #qbBar .qb-bad{color:var(--bad);} #qbBar .qb-pct{color:var(--gold);}
+#qbBar .qb-prog{max-width:880px;margin:5px auto 0;height:5px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;overflow:hidden;display:flex;}
+#qbBar .qb-prog i{display:block;height:100%;width:0;transition:width .25s;}
+#qbBar .qb-prog .f-ok{background:var(--ok);} #qbBar .qb-prog .f-bad{background:var(--bad);} #qbBar .qb-prog .f-neu{background:var(--gold-dim);}
+#qbReset{background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:3px 12px;white-space:nowrap;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;}
+#qbReset:hover{border-color:var(--gold);color:var(--gold);}
+.qpre{background:var(--panel2);border:1px dashed var(--gold-dim);border-radius:12px;padding:12px 16px;margin-bottom:12px;font-size:14.6px;}
+.qgroup{margin-bottom:6px;}
+.qblock{scroll-margin-top:130px;}
+.qblock .qhead{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.qblock .qnum{background:var(--gold);color:#111;font-weight:800;font-size:12.5px;border-radius:8px;padding:2px 10px;}
+.qblock .qhint{font-size:12px;color:var(--text-dim);}
+.qblock .qstatus{margin-inline-start:auto;font-size:12.5px;font-weight:700;}
+.qblock.is-ok .qstatus{color:var(--ok);} .qblock.is-bad .qstatus{color:var(--bad);}
+.qblock .qstem{line-height:1.95;}
+.qblock figure{margin:12px 0;}
+.qopts{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.qopt{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:right;background:var(--panel2);border:1.5px solid var(--border);color:var(--text);border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit;font-size:14.6px;line-height:1.8;transition:border-color .15s,background .15s;}
+.qopt:hover:not(:disabled){border-color:var(--gold-dim);}
+.qopt .qol{flex:none;width:26px;height:26px;border-radius:50%;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12.5px;color:var(--gold);margin-top:2px;}
+.qopt .qot{flex:1;}
+.qopt.sel{border-color:var(--gold);background:rgba(212,175,55,.10);}
+.qopt:disabled{cursor:default;}
+.qopt.is-right{border-color:var(--ok);background:var(--ok-bg);}
+.qopt.is-right .qol{background:var(--ok);border-color:var(--ok);color:#fff;}
+.qopt.is-right .qot::after{content:" ✓";color:var(--ok);font-weight:800;}
+.qopt.is-wrong{border-color:var(--bad);background:var(--bad-bg);}
+.qopt.is-wrong .qol{background:var(--bad);border-color:var(--bad);color:#fff;}
+.qopt.is-wrong .qot::after{content:" ✗";color:var(--bad);font-weight:800;}
+.qopt.is-missed{border:1.5px dashed var(--ok);background:transparent;}
+.qopt.is-missed .qol{border-color:var(--ok);color:var(--ok);}
+.qopt.is-missed .qot::after{content:" ← الصحيحة";color:var(--ok);font-weight:700;font-size:12.5px;}
+.qact{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.qbtn{background:var(--teal);color:#00201c;border:0;border-radius:9px;padding:8px 18px;cursor:pointer;font:inherit;font-weight:700;font-size:14px;}
+.qbtn:disabled{opacity:.45;cursor:not-allowed;}
+.qbtn.sec{background:var(--panel2);color:var(--text);border:1px solid var(--border);}
+.qbtn.okb{background:var(--ok);color:#fff;} .qbtn.badb{background:var(--bad);color:#fff;}
+.qans[hidden]{display:none;}
+.qans{margin-top:12px;border-top:1px dashed var(--border);padding-top:10px;}
+.qans p{margin:6px 0 0;}
+.qrate{margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--text-dim);}
+@media (max-width:600px){#qbBar{padding:5px 12px 5px;} #qbBar .qb-row{font-size:12.5px;} #qbBar .qb-stats{gap:10px;} #qbReset .rs-t{display:none;} #qbReset{padding:2px 10px;font-size:15px;} .qopt{padding:9px 10px;font-size:14.2px;}}
 </style>
 </head>
 <body>
@@ -75,6 +125,19 @@ figcaption{font-size:13px;color:var(--text-dim);margin-top:8px;text-align:right;
   <span class="chapno">12</span>
   <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
 </header>
+<div id="qbBar">
+  <div class="qb-row">
+    <div class="qb-stats">
+      <span title="الأسئلة المُجابة">المُجاب <b id="qbDone">0</b>/<b id="qbTot">0</b></span>
+      <span class="qb-ok" title="إجابات صحيحة">✔ <b id="qbOk">0</b></span>
+      <span class="qb-bad" title="إجابات خاطئة">✖ <b id="qbBad">0</b></span>
+      <span class="qb-pct" title="الدقة"><b id="qbPct">—</b></span>
+    </div>
+    <button id="qbReset" type="button" title="تصفير العداد وكل الإجابات" aria-label="تصفير">↺<span class="rs-t"> تصفير</span></button>
+  </div>
+  <div class="qb-prog"><i id="qbFOk" class="f-ok"></i><i id="qbFBad" class="f-bad"></i><i id="qbFNeu" class="f-neu"></i></div>
+</div>
+
 
 <main>
 
@@ -86,41 +149,74 @@ figcaption{font-size:13px;color:var(--text-dim);margin-top:8px;text-align:right;
   <section class="roman" id="qbXI2">
     <div class="roman-head"><div class="roman-badge">XI</div><h2>تخطيط صدى القلب (ختام)</h2></div>
 
-    <div class="card point-num">
-      <strong>س9:</strong> امرأة48عامًا، ألم صدري. إيكو: تدلي الوريقة الخلفية مع قطعة وتر ممزق، MR لامركزي، نصف قطر PISA~0.7سم، ERO=0.25سم². حجم القلس=ERO×MR VTI=40مل. دوبلر CW: منحنى مثلثي بذروة مبكرة. EF=60%، LVEDV=130مل. ما شدة MR؟
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>MR شديد.</strong> رغم أن ERO(&lt;0.4سم²) وحجم القلس(&lt;60مل) يقعان بالنطاق المتوسط ظاهريًا، هذه القيم <strong>قد تُقلِّل من تقدير الشدة الحقيقية إن كانت النفثة لامركزية</strong>(كما هنا). وجود <strong>وريقة منقلبة(Flail)</strong> — خصوصًا مع ميلانها عكسيًا نحو LA أو وتر ممزق ظاهر بالصورة — يشير <strong>بحد ذاته</strong> لقلس شديد بغض النظر عن الحسابات الكمية. <strong>التأكيد الحسابي:</strong> الحجم الكلي للضربة=LVEDV×EF=130×0.6=<strong>78مل.</strong> نسبة قلس MR=حجم القلس÷الحجم الكلي=40÷78=<strong>51%</strong> — تتجاوز عتبة50%، فيُصنَّف القلس ضمن النطاق <strong>الشديد.</strong></p>
-    </div>
+<div class="card qblock" data-qid="p16-q9" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س9</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة48عامًا، ألم صدري. إيكو: تدلي الوريقة الخلفية مع قطعة وتر ممزق، MR لامركزي، نصف قطر PISA~0.7سم، ERO=0.25سم². حجم القلس=ERO×MR VTI=40مل. دوبلر CW: منحنى مثلثي بذروة مبكرة. EF=60%، LVEDV=130مل. ما شدة MR؟</div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p>✅ <strong>MR شديد.</strong> رغم أن ERO(<0.4سم²) وحجم القلس(<60مل) يقعان بالنطاق المتوسط ظاهريًا، هذه القيم <strong>قد تُقلِّل من تقدير الشدة الحقيقية إن كانت النفثة لامركزية</strong>(كما هنا). وجود <strong>وريقة منقلبة(Flail)</strong> — خصوصًا مع ميلانها عكسيًا نحو LA أو وتر ممزق ظاهر بالصورة — يشير <strong>بحد ذاته</strong> لقلس شديد بغض النظر عن الحسابات الكمية. <strong>التأكيد الحسابي:</strong> الحجم الكلي للضربة=LVEDV×EF=130×0.6=<strong>78مل.</strong> نسبة قلس MR=حجم القلس÷الحجم الكلي=40÷78=<strong>51%</strong> — تتجاوز عتبة50%، فيُصنَّف القلس ضمن النطاق <strong>الشديد.</strong></p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س10:</strong> لغط انقباضي متوسط منتصف الانقباض. إيكو: AVA=0.85سم²، تدرج متوسط22، المؤشر اللابعدي=0.4، EF طبيعي، E/A معكوسة. التشخيص؟ (A)AS شديد بتدرج منخفض بسبب ضعف الامتلاء. (B)AS متوسط مع قياس ناقص لقطر LVOT. (C)شدة غير واضحة — يلزم CT calcium scoring. (D)AS شديد مع تقدير ناقص للسرعة الحقيقية.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة B.</strong> التدرج المنخفض مع AVA صغيرة قد ينتج عن: (1)خطأ قياس بالإيكو(يحدث بـ~50% من الحالات)، أو (2)AS شديد حقيقي بتدفق منخفض أو منخفض-طبيعي. <strong>المؤشر اللابعدي&lt;0.25-0.3</strong> يتوافق مع AS شديد حقيقي لكن <strong>لا يثبته قطعًا</strong>(قد يعكس تضيقًا كاذبًا أو تقديرًا ناقصًا لسرعة LVOT بسبب سوء المحاذاة). أما <strong>المؤشر&gt;0.3</strong>(كهنا:0.4) فيستبعد غالبًا AS شديدًا بتدرج منخفض حقيقي، ويشير لـ<strong>تقدير ناقص لقطر LVOT</strong>(AVA=المؤشر×مساحة LVOT). الخطوة التالية: <strong>إعادة قياس قطر LVOT عند مستوى الحلقة</strong> نفسها لا أسفلها.</p>
-    </div>
+<div class="card qblock" data-qid="p16-q10" data-mode="single" data-correct="B">
+  <div class="qhead"><span class="qnum">س10</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">لغط انقباضي متوسط منتصف الانقباض. إيكو: AVA=0.85سم²، تدرج متوسط22، المؤشر اللابعدي=0.4، EF طبيعي، E/A معكوسة. التشخيص؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">AS شديد بتدرج منخفض بسبب ضعف الامتلاء.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">AS متوسط مع قياس ناقص لقطر LVOT.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">شدة غير واضحة — يلزم CT calcium scoring.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">AS شديد مع تقدير ناقص للسرعة الحقيقية.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة B.</strong> التدرج المنخفض مع AVA صغيرة قد ينتج عن: (1)خطأ قياس بالإيكو(يحدث بـ~50% من الحالات)، أو (2)AS شديد حقيقي بتدفق منخفض أو منخفض-طبيعي. <strong>المؤشر اللابعدي&lt;0.25-0.3</strong> يتوافق مع AS شديد حقيقي لكن <strong>لا يثبته قطعًا</strong>(قد يعكس تضيقًا كاذبًا أو تقديرًا ناقصًا لسرعة LVOT بسبب سوء المحاذاة). أما <strong>المؤشر&gt;0.3</strong>(كهنا:0.4) فيستبعد غالبًا AS شديدًا بتدرج منخفض حقيقي، ويشير لـ<strong>تقدير ناقص لقطر LVOT</strong>(AVA=المؤشر×مساحة LVOT). الخطوة التالية: <strong>إعادة قياس قطر LVOT عند مستوى الحلقة</strong> نفسها لا أسفلها.</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س11:</strong> رجل70عامًا HTN، ضيق نفس شديد. إيكو: LVH، توسع LA، EF طبيعي، تدفق بين LA وRA. CW عبر النفث: ذروة2.5م/ث، RA المقدَّر=10. أيٌّ صحيح؟ (A)LA الأقصى=35. (B)LA المتوسط=25. (C)يجب حساب Qp/Qs والنظر بإغلاق التحويلة. (D)جميع ما سبق.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة A.</strong> فرق الضغط اللحظي الأقصى بين LA وRA=4×السرعة²=4×2.5²=<strong>25ملم زئبق.</strong> الضغط الأقصى بـLA=25+10=<strong>35ملم زئبق</strong>(يمثل موجة V بمريض فشل قلب أيسر غير معوَّض؛ <strong>لا يمكن</strong> بهذه الطريقة قياس الضغط <strong>المتوسط</strong> بـLA). بكبار السن المصابين بفشل أيسر، التحويلة عادة عبر PFO(تعويضية غير مرضية تخفف ضغط LA). حتى ASD حقيقي كبير <strong>لا يسبب</strong> فشلاً أيسر بل يخففه(قد يسبب فشلاً أيمن بدلاً)؛ لذا <strong>لا حاجة</strong> لتقييم التحويلة هنا إضافيًا.</p>
-    </div>
+<div class="card qblock" data-qid="p16-q11" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س11</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل70عامًا HTN، ضيق نفس شديد. إيكو: LVH، توسع LA، EF طبيعي، تدفق بين LA وRA. CW عبر النفث: ذروة2.5م/ث، RA المقدَّر=10. أيٌّ صحيح؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">LA الأقصى=35.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">LA المتوسط=25.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">يجب حساب Qp/Qs والنظر بإغلاق التحويلة.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">جميع ما سبق.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة A.</strong> فرق الضغط اللحظي الأقصى بين LA وRA=4×السرعة²=4×2.5²=<strong>25ملم زئبق.</strong> الضغط الأقصى بـLA=25+10=<strong>35ملم زئبق</strong>(يمثل موجة V بمريض فشل قلب أيسر غير معوَّض؛ <strong>لا يمكن</strong> بهذه الطريقة قياس الضغط <strong>المتوسط</strong> بـLA). بكبار السن المصابين بفشل أيسر، التحويلة عادة عبر PFO(تعويضية غير مرضية تخفف ضغط LA). حتى ASD حقيقي كبير <strong>لا يسبب</strong> فشلاً أيسر بل يخففه(قد يسبب فشلاً أيمن بدلاً)؛ لذا <strong>لا حاجة</strong> لتقييم التحويلة هنا إضافيًا.</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س12:</strong> رجل20عامًا، لغط مستمر. إيكو: PDA. LVOT=2.1سم، LVOT VTI=27، RVOT=2.5سم، RVOT VTI=12، نبض85. أيٌّ صحيح؟ (A)Qp/Qs=0.64، تحويلة يمين-يسار، زرقة نصف سفلي متوقَّعة. (B)النتاج الجهازي=8.8لتر/د. (C)Qp/Qs=1.55.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة C.</strong> بـPDA، التحويلة عند مستوى PA؛ بخلاف ASD/VSD: <strong>LVOT قريب(Proximal) من التحويلة ويمثل الدفق الجهازي(Qs)</strong>، و<strong>RVOT بعيد(Distal) ويمثل الدفق الرئوي(Qp).</strong> <strong>Qs</strong>=حجم الضربة الجهازي×معدل=(0.785×2.1²×27)×85=59.8مل×85≈<strong>5لتر/د.</strong> <strong>Qp</strong>=(0.785×2.5²×12)×85=93.4مل×85≈<strong>7.9لتر/د(القيمة الأدق للحجم=93.4مل).</strong> <strong>Qp/Qs=93.4÷59.8=1.55.</strong></p>
-    </div>
+<div class="card qblock" data-qid="p16-q12" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س12</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل20عامًا، لغط مستمر. إيكو: PDA. LVOT=2.1سم، LVOT VTI=27، RVOT=2.5سم، RVOT VTI=12، نبض85. أيٌّ صحيح؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">Qp/Qs=0.64، تحويلة يمين-يسار، زرقة نصف سفلي متوقَّعة.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">النتاج الجهازي=8.8لتر/د.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">Qp/Qs=1.55.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة C.</strong> بـPDA، التحويلة عند مستوى PA؛ بخلاف ASD/VSD: <strong>LVOT قريب(Proximal) من التحويلة ويمثل الدفق الجهازي(Qs)</strong>، و<strong>RVOT بعيد(Distal) ويمثل الدفق الرئوي(Qp).</strong> <strong>Qs</strong>=حجم الضربة الجهازي×معدل=(0.785×2.1²×27)×85=59.8مل×85≈<strong>5لتر/د.</strong> <strong>Qp</strong>=(0.785×2.5²×12)×85=93.4مل×85≈<strong>7.9لتر/د(القيمة الأدق للحجم=93.4مل).</strong> <strong>Qp/Qs=93.4÷59.8=1.55.</strong></p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س13:</strong> هل TEE أفضل من TTE لتقييم شدة AS؟ وأي منظر بـTEE الأفضل لقياس التدرج عبر الأبهري؟
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>TEE أصعب</strong> من TTE لتحقيق محاذاة صحيحة مع تدفق الأبهر، فيصعب الحصول على تدرج ضغط دقيق بـAS. <strong>أفضل منظر بـTEE:</strong> <strong>المنظر المعدي العميق ذو الأربع حجرات(Deep Transgastric 5-Chamber)</strong>، حيث يتجه المسبار للقلب عبر قمة LV — يمنح أفضل محاذاة ممكنة مع اتجاه الجريان الأبهري بهذا المنظر البديل.</p>
-    </div>
+<div class="card qblock" data-qid="p16-q13" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س13</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">هل TEE أفضل من TTE لتقييم شدة AS؟ وأي منظر بـTEE الأفضل لقياس التدرج عبر الأبهري؟</div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p>✅ <strong>TEE أصعب</strong> من TTE لتحقيق محاذاة صحيحة مع تدفق الأبهر، فيصعب الحصول على تدرج ضغط دقيق بـAS. <strong>أفضل منظر بـTEE:</strong> <strong>المنظر المعدي العميق ذو الأربع حجرات(Deep Transgastric 5-Chamber)</strong>، حيث يتجه المسبار للقلب عبر قمة LV — يمنح أفضل محاذاة ممكنة مع اتجاه الجريان الأبهري بهذا المنظر البديل.</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س14:</strong> أيٌّ خاطئ بخصوص تقييم LVAD بالإيكو؟ (A)سرعة&gt;1.5-2م/ث بأنبوب الدخول/الخروج تشير لانسداد. (B)انخفاض سرعة الدخول مع غياب الإشارة الانبساطية يشير لخثرة بالمضخة. (C)من السهل فحص أنبوب الخروج. (D)تُزاد سرعة المضخة تدريجيًا لتصغير LVEDD حتى يصبح الحاجز محايدًا.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>الإجابة C(الخاطئة).</strong> يُظهر الإيكو <strong>أنبوب الدخول</strong> بسهولة عادة(عند قمة LV)؛ أما <strong>أنبوب الخروج فأصعب تصويرًا بكثير</strong>(يُشاهَد من يمين القص أو أعلى يسار القص، وغالبًا يتطلب CT للتقييم الدقيق بحال الانسداد الجزئي المشتبه). سرعة مرتفعة بأي من الأنبوبين تشير لانسداد؛ سرعة منخفضة جدًا أو غياب إشارة انبساطية بالدخول يشير لخثرة مضخة أو انسداد دخول كامل. الفحص الديناميكي(زيادة السرعة تدريجيًا حتى يستقيم الحاجز) وسيلة قياسية لتقييم كفاية الدعم ووظيفة LV المتبقية.</p>
-    </div>
+<div class="card qblock" data-qid="p16-q14" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س14</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">أيٌّ خاطئ بخصوص تقييم LVAD بالإيكو؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">سرعة>1.5-2م/ث بأنبوب الدخول/الخروج تشير لانسداد.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">انخفاض سرعة الدخول مع غياب الإشارة الانبساطية يشير لخثرة بالمضخة.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">من السهل فحص أنبوب الخروج.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">تُزاد سرعة المضخة تدريجيًا لتصغير LVEDD حتى يصبح الحاجز محايدًا.</span></button>
+  </div>
+  <div class="qans" hidden><p>✅ <strong>الإجابة C(الخاطئة).</strong> يُظهر الإيكو <strong>أنبوب الدخول</strong> بسهولة عادة(عند قمة LV)؛ أما <strong>أنبوب الخروج فأصعب تصويرًا بكثير</strong>(يُشاهَد من يمين القص أو أعلى يسار القص، وغالبًا يتطلب CT للتقييم الدقيق بحال الانسداد الجزئي المشتبه). سرعة مرتفعة بأي من الأنبوبين تشير لانسداد؛ سرعة منخفضة جدًا أو غياب إشارة انبساطية بالدخول يشير لخثرة مضخة أو انسداد دخول كامل. الفحص الديناميكي(زيادة السرعة تدريجيًا حتى يستقيم الحاجز) وسيلة قياسية لتقييم كفاية الدعم ووظيفة LV المتبقية.</p></div>
+</div>
 
-    <div class="card point-num">
-      <strong>س15:</strong> مريض AI مشكوك بشدته، ضغط140/55. دوبلر طيفي: ذروة انبساطية4م/ث، نهاية انبساطية2م/ث، ذروة انقباضية2م/ث. دوبلر لوني: PISA نصف قطر0.8سم عند حد طور40سم/ث. احسب: (1)ERO القلس الأبهري. (2)LVEDP.
-      <p style="margin-top:6px; color:var(--teal)">✅ <strong>(1)ERO بطريقة PISA:</strong> تدفق القلس=ERO×الذروة=مساحة نصف الكرة×سرعة الطمس؛ <strong>ERO=(2π×PISA²×سرعة الطمس)÷الذروة</strong>(ملاحظة: نصف كرة لا دائرة، فمساحتها=2π×نق²). بالتعويض: ERO=(2×3.14×0.8²×0.4)÷4=(6.28×0.64×0.4)÷4=1.608÷4=<strong>0.4سم².</strong>
-      <br><strong>(2)LVEDP:</strong> العلاقة: (الضغط الانبساطي النهائي الأبهري−LVEDP)=4×(السرعة الانبساطية النهائية للقلس)². إذن LVEDP=الضغط الانبساطي النهائي الأبهري−4×(السرعة النهائية)². بالتعويض: الضغط الانبساطي الأبهري النهائي=55(≈الضغط الانبساطي المُعطى)، السرعة النهائية=2م/ث. LVEDP=55−(4×2²)=55−16=<strong>39ملم زئبق.</strong></p>
-    </div>
+<div class="card qblock" data-qid="p16-q15" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س15</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">مريض AI مشكوك بشدته، ضغط140/55. دوبلر طيفي: ذروة انبساطية4م/ث، نهاية انبساطية2م/ث، ذروة انقباضية2م/ث. دوبلر لوني: PISA نصف قطر0.8سم عند حد طور40سم/ث. احسب: (1)ERO القلس الأبهري. (2)LVEDP.</div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p>✅ <strong>(1)ERO بطريقة PISA:</strong> تدفق القلس=ERO×الذروة=مساحة نصف الكرة×سرعة الطمس؛ <strong>ERO=(2π×PISA²×سرعة الطمس)÷الذروة</strong>(ملاحظة: نصف كرة لا دائرة، فمساحتها=2π×نق²). بالتعويض: ERO=(2×3.14×0.8²×0.4)÷4=(6.28×0.64×0.4)÷4=1.608÷4=<strong>0.4سم².</strong>
+<br/><strong>(2)LVEDP:</strong> العلاقة: (الضغط الانبساطي النهائي الأبهري−LVEDP)=4×(السرعة الانبساطية النهائية للقلس)². إذن LVEDP=الضغط الانبساطي النهائي الأبهري−4×(السرعة النهائية)². بالتعويض: الضغط الانبساطي الأبهري النهائي=55(≈الضغط الانبساطي المُعطى)، السرعة النهائية=2م/ث. LVEDP=55−(4×2²)=55−16=<strong>39ملم زئبق.</strong></p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
   </section>
 
   <div style="text-align:center; margin:30px 0 20px; padding:14px 20px; background:linear-gradient(135deg, rgba(45,212,191,.10), rgba(212,175,55,.08)); border:1.5px solid var(--gold); border-radius:14px; color:var(--gold); font-size:14px; font-weight:700;">
@@ -199,6 +295,101 @@ function toggleToc(show){
     if(overlay) overlay.classList.remove('show');
   }
 }
+</script>
+<script>
+(function(){
+  var KEY='cardioarab-qb:'+(location.pathname.split('/').pop()||'page');
+  var blocks=[].slice.call(document.querySelectorAll('.qblock'));
+  var state={};
+  try{ state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ state={}; }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+  function sameSet(a,b){ if(a.length!==b.length) return false; return a.every(function(x){return b.indexOf(x)>-1;}); }
+
+  function render(q){
+    var id=q.dataset.qid, mode=q.dataset.mode, st=state[id]||{sel:[],done:false,ok:null};
+    var corr=(q.dataset.correct||'').split(',').filter(Boolean);
+    var opts=[].slice.call(q.querySelectorAll('.qopt'));
+    var ans=q.querySelector('.qans'), status=q.querySelector('.qstatus');
+    var chk=q.querySelector('.qcheck'), show=q.querySelector('.qshow'), rate=q.querySelector('.qrate');
+    q.classList.remove('is-ok','is-bad');
+    opts.forEach(function(o){
+      var l=o.dataset.l, isSel=st.sel.indexOf(l)>-1, isCorr=corr.indexOf(l)>-1;
+      o.classList.remove('sel','is-right','is-wrong','is-missed');
+      o.disabled=!!st.done;
+      o.setAttribute('aria-pressed',isSel?'true':'false');
+      if(st.done){
+        if(isSel&&isCorr) o.classList.add('is-right');
+        else if(isSel&&!isCorr) o.classList.add('is-wrong');
+        else if(!isSel&&isCorr) o.classList.add('is-missed');
+      } else if(isSel){ o.classList.add('sel'); }
+    });
+    if(chk){ chk.hidden=!!st.done; chk.disabled=!st.sel.length; }
+    if(show){ show.hidden=!!st.done; }
+    if(ans){ ans.hidden=!st.done; }
+    if(rate){ rate.hidden=!(mode==='reveal'&&st.done); }
+    if(st.done){
+      if(st.ok===true){ q.classList.add('is-ok'); status.textContent='✔ إجابة صحيحة'; }
+      else if(st.ok===false){ q.classList.add('is-bad'); status.textContent='✖ إجابة خاطئة'; }
+      else { status.textContent='👁 تم عرض الإجابة'; }
+    } else { status.textContent=''; }
+  }
+
+  function updateBar(){
+    var tot=blocks.length, done=0, ok=0, bad=0;
+    blocks.forEach(function(q){
+      var st=state[q.dataset.qid]; if(!st||!st.done) return;
+      done++; if(st.ok===true) ok++; else if(st.ok===false) bad++;
+    });
+    var neu=done-ok-bad;
+    function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+    set('qbDone',done); set('qbTot',tot); set('qbOk',ok); set('qbBad',bad);
+    var graded=ok+bad;
+    set('qbPct', graded? (Math.round(ok*100/graded)+'%') : '—');
+    function w(id,n){ var e=document.getElementById(id); if(e) e.style.width=(tot?(n*100/tot):0)+'%'; }
+    w('qbFOk',ok); w('qbFBad',bad); w('qbFNeu',neu);
+  }
+
+  function finish(q,st,ok){ st.done=true; st.ok=ok; state[q.dataset.qid]=st; save(); render(q); updateBar(); }
+
+  blocks.forEach(function(q){
+    var id=q.dataset.qid, mode=q.dataset.mode;
+    var corr=(q.dataset.correct||'').split(',').filter(Boolean);
+    q.addEventListener('click',function(ev){
+      var st=state[id]||{sel:[],done:false,ok:null};
+      if(st.done && !ev.target.closest('.qrate')) return;
+      var opt=ev.target.closest('.qopt');
+      if(opt && !st.done){
+        var l=opt.dataset.l;
+        if(mode==='single'){ st.sel=[l]; finish(q,st,corr[0]===l); }
+        else if(mode==='multi'){
+          var i=st.sel.indexOf(l); if(i>-1) st.sel.splice(i,1); else st.sel.push(l);
+          state[id]=st; save(); render(q);
+        }
+        return;
+      }
+      if(ev.target.closest('.qcheck') && !st.done){ finish(q,st,sameSet(st.sel,corr)); return; }
+      if(ev.target.closest('.qshow') && !st.done){ finish(q,st,null); return; }
+      var r=ev.target.closest('.qrate [data-rate]');
+      if(r && st.done){ st.ok=(r.dataset.rate==='ok'); state[id]=st; save(); render(q); updateBar(); }
+    });
+    render(q);
+  });
+  updateBar();
+
+  var rs=document.getElementById('qbReset');
+  if(rs) rs.addEventListener('click',function(){
+    if(!confirm('تصفير كل إجابات هذه الصفحة والبدء من جديد؟')) return;
+    state={}; save();
+    blocks.forEach(render); updateBar();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  function fixBar(){
+    var h=document.querySelector('header.top'), b=document.getElementById('qbBar');
+    if(h&&b) b.style.top=h.offsetHeight+'px';
+  }
+  fixBar(); window.addEventListener('resize',fixBar); window.addEventListener('load',fixBar);
+})();
 </script>
 <script src="notes.js"></script>
 </body>
