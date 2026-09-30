@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل 11: الإجراءات التاجية والقلبية الغازية — الفهرس | Practical Cardiovascular Medicine | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.8; font-size:16px; padding-bottom:60px;
+  }
+  .theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+    border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+    font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+  .theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:16px 20px; text-align:center;
+  }
+  header.top .eyebrow{color:var(--teal); font-size:12.5px; letter-spacing:.5px; font-weight:600; display:block; margin-bottom:4px;}
+  header.top h1{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  main{max-width:900px; margin:0 auto; padding:28px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(251,191,36,.1), rgba(45,212,191,.04));
+    border:1px solid var(--border); border-radius:16px; padding:24px 26px; margin-bottom:30px;
+  }
+  .hero .num{
+    width:48px; height:48px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center; margin-bottom:12px;
+  }
+  .hero h2{margin:4px 0 8px; font-size:22px; color:var(--text);}
+  .hero p{color:var(--text-dim); font-size:14px; margin:0; line-height:1.8;}
+
+  .group-title{
+    color:var(--gold); font-size:14px; font-weight:700; margin:30px 0 14px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .group-title::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  .grid{display:grid; grid-template-columns:1fr; gap:12px;}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    padding:16px 18px; display:flex; align-items:flex-start; gap:14px;
+    text-decoration:none; color:var(--text); transition:.2s;
+  }
+  a.card:hover{border-color:var(--teal); transform:translateY(-2px); box-shadow:0 8px 20px -8px rgba(0,0,0,.4);}
+  .card.disabled{opacity:.55; cursor:default;}
+
+  .num{
+    flex:0 0 auto; width:40px; height:40px; border-radius:11px;
+    background:linear-gradient(135deg, rgba(45,212,191,.16), rgba(45,212,191,.04));
+    border:1px solid var(--teal-dim); color:var(--teal); font-weight:700; font-size:15px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card.disabled .num{
+    background:var(--panel2); border-color:var(--border); color:var(--text-dimmer);
+  }
+
+  .ctext{flex:1;}
+  .ctext .ctitle{font-weight:700; font-size:15px; margin-bottom:3px;}
+  .ctext .csub{color:var(--text-dim); font-size:12.5px; line-height:1.6;}
+  .badge{
+    flex:0 0 auto; font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px;
+    white-space:nowrap; align-self:center;
+  }
+  .badge.ready{background:rgba(45,212,191,.15); color:var(--teal);}
+  .badge.soon{background:rgba(148,163,184,.12); color:var(--text-dimmer);}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:50px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+</style>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
+<header class="top">
+  <span class="eyebrow">Practical Cardiovascular Medicine</span>
+  <h1>الفصل 11: الإجراءات التاجية والقلبية الغازية</h1>
+</header>
+
+<main>
+
+  <div class="hero">
+    <div class="num">11</div>
+    <h2>الإجراءات التاجية والقلبية الغازية: التصوير الوعائي، تقنيات القسطرة، ديناميكا الدم، IVUS/OCT، وPCI</h2>
+    <p>النص الكامل بحسب الكتاب المصدر، بحروفه وصوره، دون حذف أو تلخيص — تشريح الشرايين التاجية وزوايا التصوير، تقنيات إدخال القثاطير، ديناميكا الدم الغازية الكاملة، التصوير داخل الشريان التاجي (IVUS وOCT)، تدخلات PCI ومضاعفاتها، ودعم الدورة الدموية الميكانيكي (IABP وImpella وTandemHeart وECMO) واحتياطي التدفق الجزئي (FFR). فصل ضخم (239 صفحة مصدرية، 170 صورة/شكل).</p>
+  </div>
+
+  <div class="group-title">أجزاء الفصل</div>
+  <div class="grid">
+
+    <a class="card" href="practical-ch11-part1.html">
+      <div class="num">1</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 1 — تشريح الشرايين التاجية: RCA وLCA، السيطرة التاجية، الآفات غير المستقرة، أساسيات زوايا التصوير (34.1-34.8)</div>
+        <div class="csub">Crux، PDA، Conus، تضيقات مستقرة/غير مستقرة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part2.html">
+      <div class="num">2</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 2 — عروض الشريان التاجي الأيسر الكاملة: RAO caudal، LAO caudal، AP/LAO/RAO cranial (34.8-34.28)</div>
+        <div class="csub">تمييز LAD عن القطري، أفضل عروض LM</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part3.html">
+      <div class="num">3</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 3 — عروض الشريان التاجي الأيمن (LAO cranial، AP cranial، RAO straight) (34.29-34.35)</div>
+        <div class="csub">RCA الحقيقي مقابل Streaker branch</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part4.html">
+      <div class="num">4</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 4 — تحسين العروض، عروض الطعوم الوريدية (SVG)، LIMA، وتصوير البطين الأيسر (34.36-34.47)</div>
+        <div class="csub">طعوم متسلسلة/متشعبة، LAO cranial لـLV</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part5.html">
+      <div class="num">5</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 5 — تقييم MR بالبطين، تصوير الأبهر لـAI، والشذوذات التاجية (34.48-34.52)</div>
+        <div class="csub">علامة النقطة والعين، LM/RCA الشاذ</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part6.html">
+      <div class="num">6</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 6 — الشذوذ الناشئ من PA، وتصوير أوعية الطرف السفلي (SFA وProfunda) (34.53-34.61)</div>
+        <div class="csub">التشريح الفخذي المأبضي، فرق الضغط</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part7.html">
+      <div class="num">7</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 7 — تصوير الشرايين السباتية: أنماط القوس، القسطرة الانتقائية، ونصائح التصوير (34.62-34.64)</div>
+        <div class="csub">قوس بقري، Simmons catheter</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part8.html">
+      <div class="num">8</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 8 — الأسئلة والأجوبة الختامية للقسم 34 (23 سؤالاً)</div>
+        <div class="csub">التمييز بين LAD/القطري، LCx المسيطر</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part9.html">
+      <div class="num">9</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 9 — تقنيات القسطرة: تصميم Judkins/Amplatz، إدخال RCA والتاجي الأيسر (35.1-35.21)</div>
+        <div class="csub">القثاطير التوجيهية، EBU/AL/JL</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part10.html">
+      <div class="num">10</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 10 — إدخال طعوم SVG وLIMA، قسطرة LV وAS، والشرايين الشاذة (35.22-35.29)</div>
+        <div class="csub">SVG-to-RCA مقابل SVG-to-OM</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part11.html">
+      <div class="num">11</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 11 — Ikari left، التخميد والتبطين البطيني، تقنية قسطرة القلب الأيمن، بداية ديناميكا الدم (35.30-36.4)</div>
+        <div class="csub">Swan-Ganz، منحنيات الضغط الأساسية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part12.html">
+      <div class="num">12</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 12 — اضطرابات ضغط RA وPCWP الكاملة، LVEDP، ومعادلة فيك (36.5-36.11 + الجدولان)</div>
+        <div class="csub">FYT، الموجة V الكبيرة، LVEDP</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part13.html">
+      <div class="num">13</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 13 — محاذير فيك المفترضة، التخفيف الحراري، SVR/PVR/CPO، وتقييم التحويلات (Qp/Qs)</div>
+        <div class="csub">SvO₂، معادلة الشنت</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part14.html">
+      <div class="num">14</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 14 — منهجية تدرج الضغط عبر الصمامين الأبهري والتاجي</div>
+        <div class="csub">قثطار مزدوج التجويف، طريقة السحب</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part15.html">
+      <div class="num">15</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 15 — مثال MS التطبيقي، MAC-MS، تأثير AF، ومعادلتا غورلين وهاكي</div>
+        <div class="csub">Diastasis، Hakki المبسطة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part16.html">
+      <div class="num">16</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 16 — خمس علامات AI الشديد، والانسداد الديناميكي لـLVOT (HOCM) (36.16-36.22)</div>
+        <div class="csub">بروكنبرو، Spike-and-dome</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part17.html">
+      <div class="num">17</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 17 — ديناميكا التامور: الاندحاس والالتهاب العاصر (36.23-36.24)</div>
+        <div class="csub">FYT، الاعتماد البطيني المتبادل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part18.html">
+      <div class="num">18</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 18 — ديناميكا الجهد، اعتبارات AF، وملحق حسابات آيزنمنغر المتقدم (36.25-36.26)</div>
+        <div class="csub">∆PCWP/∆CO، Qp وQs المطلقتان</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part19.html">
+      <div class="num">19</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 19 — الأسئلة الختامية الإحدى عشر لقسم ديناميكا الدم بأجوبتها الكاملة</div>
+        <div class="csub">MS شديد، Stiff LA syndrome</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part20.html">
+      <div class="num">20</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 20 — IVUS: أساسيات الصورة وأنواع اللويحات وعلامات عدم الاستقرار (37.1-37.12)</div>
+        <div class="csub">الطبقات الثلاث، اللويحة الممزقة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part21.html">
+      <div class="num">21</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 21 — القياسات الأساسية بـIVUS، الضبابية، نقاط نهاية الدعامة، وأهمية الآفة (37.13-37.17)</div>
+        <div class="csub">MLA، عبء اللويحة، حدود FFR</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part22.html">
+      <div class="num">22</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 22 — إحالة تقييم LM، وقسم OCT الكامل (37.18-37.20)</div>
+        <div class="csub">دقة أعلى، الغطاء الليفي الرقيق</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part23.html">
+      <div class="num">23</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 23 — رأب الوعاء بالبالون، BMS، DES، والاستئصال الدوراني/المداري (38.1)</div>
+        <div class="csub">الارتداد المرن، فرط تنسج البطانة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part24.html">
+      <div class="num">24</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 24 — الشفط الخثري، تخثر الدعامة، وآليات عودة التضيق</div>
+        <div class="csub">الجدول 38.1، أنماط عودة التضيق</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part25.html">
+      <div class="num">25</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 25 — علاج عودة التضيق، تصلب الشريان الجديد، والجدول الكامل لمضادات التخثر المحيطة بـPCI</div>
+        <div class="csub">الجدول 38.3، DAPT بحسب السياق</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part26.html">
+      <div class="num">26</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 26 — الآفات المعقدة: تعدد الأوعية، الآفات الطويلة، التفرعات، وCTO</div>
+        <div class="csub">J-CTO score، الخوارزمية الهجينة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part27.html">
+      <div class="num">27</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 27 — إدارة الغمد الشرياني (الفخذي والكعبري)، ومقدمة الوفيات بعد PCI</div>
+        <div class="csub">أجهزة الإغلاق، الإرقاء النفاذ</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part28.html">
+      <div class="num">28</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 28 — عوامل الخطورة، تمزق الشريان التاجي (الأنواع A-F)، والاحتشاء المحيط بالإجراء</div>
+        <div class="csub">تعريف ACC 2018، الورم الدموي الجداري</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part29.html">
+      <div class="num">29</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 29 — ألم الصدر بعد PCI، DDx لانخفاض الضغط، وانثقاب الشريان التاجي الكامل</div>
+        <div class="csub">الأنواع 1-3، تقنية القسطرتين</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part30.html">
+      <div class="num">30</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 30 — مضاعفات الوصول الفخذي: الورم الدموي، النزف خلف الصفاق، التمدد الكاذب، الناسور (38.2)</div>
+        <div class="csub">عنق التمدد الكاذب، To-and-fro</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part31.html">
+      <div class="num">31</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 31 — اعتلال الكلية بالصبغة، السكتة الدماغية، والانصمام الكوليسترولي</div>
+        <div class="csub">POSEIDON، REMEDIAL، Livedo reticularis</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part32.html">
+      <div class="num">32</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 32 — مضخة البالون داخل الأبهر IABP: الآلية والتأثير على الضغط والجريان الإكليلي (38.3-38.6)</div>
+        <div class="csub">التعزيز الانبساطي، دراسة Kern</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part33.html">
+      <div class="num">33</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 33 — ختام IABP (التوقيت، الدواعي، الموانع، الفطام)، وجهاز إمبيال (38.7-38.8)</div>
+        <div class="csub">الجدول 38.4، Impella CP/5.0</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part34.html">
+      <div class="num">34</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 34 — إمبيال الكامل، TandemHeart، وبداية ECMO</div>
+        <div class="csub">PROTECT II، Harlequin syndrome</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part35.html">
+      <div class="num">35</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 35 — ختام ECMO، ومفهوم FFR الأساسي (38.11-38.12)</div>
+        <div class="csub">VAV-ECMO، BiVAD، معادلة FFR</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part36.html">
+      <div class="num">36</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 36 — تفسير FFR (العتبات، التبطين البطيني)، iFR، والتضيق المتسلسل (38.13-38.14)</div>
+        <div class="csub">FFR&lt;0.75/&gt;0.80، iFR&lt;0.89</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part37.html">
+      <div class="num">37</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 37 — حالات FFR الخاصة: المرض المنتشر، الفوهة، الاحتشاء القديم، مقارنة بالنووي</div>
+        <div class="csub">دراسة FAME الفرعية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part38.html">
+      <div class="num">38</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 38 — تقييم الجذع الأيسر بـFFR وIVUS، وختام القسم 38</div>
+        <div class="csub">MLA&lt;7.5مم²، القيمة المجمَّعة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part39.html">
+      <div class="num">39</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 39 — الأسئلة الختامية 1-9: تخثر الدعامة، التفرعات، التسلخ، الوصول الفخذي</div>
+        <div class="csub"></div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch11-part40.html">
+      <div class="num">40</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 40 (الأخير) — ✅ الأسئلة 10-17: FFR المتسلسل، IABP، منحنى الضغط-الحجم لكل جهاز دعم — اكتمل الفصل الحادي عشر</div>
+        <div class="csub">الشكل 38.15، PVA لكل جهاز</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — فهرس الفصل 11
+  </footer>
+
+</main>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script src="notes.js"></script>
+</body>
+</html>
