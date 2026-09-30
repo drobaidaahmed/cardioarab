@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 9: أمراض قلبية وعائية أخرى | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch9-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 9</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 9 — الجزء 27</h3>
+  <div class="chgroup">
+    <span class="chtitle">أسئلة ختامية لاضطراب الشحوم</span>
+    <a href="#c9lipidq1to3">الأسئلة 1-3</a>
+    <a href="#c9lipidq4to5">الأسئلة 4-5</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch9-part26.html">→ الجزء 26</a>
+    <a href="practical-ch9-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل التاسع (الجزء 27)</span>
+    <h1>أمراض قلبية وعائية أخرى</h1>
+  </div>
+  <span class="chapno">9</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 9: أمراض قلبية وعائية أخرى — الجزء 27</h2>
+  </div>
+
+  <div class="topic-divider" id="c9qafinallipid">
+    <span class="tnum">؟</span>
+    <h2>أسئلة وأجوبة ختامية (5 أسئلة) — تُغلق قسم "24: اضطراب شحوم الدم" بأكمله</h2>
+  </div>
+
+  <section class="roman" id="c9lipidq1to3">
+    <div class="roman-head"><div class="roman-badge">؟</div><h2>الأسئلة 1-3</h2></div>
+
+    <div class="card point-num">
+      <strong>س1:</strong> رجل60، سكري، NSTEMI+دعامة mid-LAD، سكتة قبل سنتين. LDL=190، HDL=35، TG=300. أوقف الستاتين سابقًا بسبب ألم ورك. <strong>أفضل استراتيجية؟A.إيزيتيميب+نياسين B.إيزيتيميب+PCSK9 C.نياسين+PCSK9 D.إعادة الستاتين+إيزيتيميب</strong>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ D.</strong> الأعراض العضلية غالبًا ليست مرتبطة بالستاتين وحده — قد تتعلق بنقص فيتامينD، اضطراب درقي، أو تداخلات دوائية. <strong>قد يتحمل المريض عند إعادة الوصف، خاصة نوعًا مختلفًا</strong>(روسوفاستاتين منخفض يومًا بعد يوم، أو بيتافاستاتين). <strong>يُعاد فحص الدهون بعد6أسابيع؛ إن بقي LDL&gt;70 أو عدم تحمُّل → يُضاف PCSK9.</strong> <strong>الهدف: (1)إعطاء ستاتين، (2)LDL&lt;60-70.</strong></p>
+    </div>
+    <div class="card point-num">
+      <strong>س2:</strong> امرأة45، بدينة، مدخنة، مقدمات سكري، HTN مضبوط، قصة عائلية CAD مبكر(قريب درجة أولى بعمر50). LDL=118، HDL=45. خطر10سنوات=5%. <strong>ما يُرجِّح وصف الستاتين حسب ACC؟</strong>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ E(أي مما سبق).</strong> خطورة5-7.5%=توصية ضعيفة(IIb). <strong>عوامل تعزيز الخطورة</strong>(القصة العائلية، المتلازمة الأيضية، CT كالسيوم، HIV) تُرجِّح بقوة نحو الستاتين(كخطورة7.5-20%=Class I). <strong>ملاحظة:</strong> سكور كالسيوم=25 يبدو منخفضًا لكنه <strong>أعلى من المئوية75</strong> لهذا العمر(بل&gt;90) — يستوجب العلاج(الطبيعي=0 بعمر45).</p>
+    </div>
+    <div class="card point-num">
+      <strong>س3:</strong> ACS حديث+AF، أتورفاستاتين80، ديلتيازيم+أميودارون+أسبرين+كلوبيدوغريل. ألم عضلي قريب شديد. <strong>الخطأ؟</strong>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ B خاطئة</strong> — <strong>سيمفاستاتين ولوفاستاتين يُستقلَبان بشدة عبر CYP3A4</strong>(المُثبَّط بديلتيازيم/أميودارون/ماكروليدات/غريب فروت/مثبطات بروتياز) — <strong>خطأ القول أنهما ليسا ركيزة له.</strong> أتورفاستاتين جزئيًا عبره. <strong>روسوفاستاتين</strong>(وفلوفاستاتين، عبر2C9) <strong>لا يملك هذا التداخل</strong>. <strong>مثبطات PCSK9 بلا تداخلات دوائية معروفة.</strong></p>
+    </div>
+  </section>
+
+  <section class="roman" id="c9lipidq4to5">
+    <div class="roman-head"><div class="roman-badge">؟</div><h2>الأسئلتان 4-5</h2></div>
+
+    <div class="card point-num">
+      <strong>س4:</strong> PAD+سكري+MI حديث، أتورفاستاتين40. LDL=60، TG=300، كولسترول كلي=155، HDL=35. <strong>الخطوة التالية؟A.+PCSK9 B.+إيزيتيميب C.+إيكوسابنت إيثيل(أوميغا3) D.+فينوفيبرات E.استمرار</strong>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ A.</strong> رغم LDL=60(الهدف مُحقَّق ظاهريًا)، <strong>Non-HDL=120</strong>(كلي155−HDL35)، أعلى بكثير من الهدف(&lt;100) — الجسيمات المصلِّبة(VLDL) لا تزال مرتفعة، تُفسِّر الخطورة المستمرة. <strong>حتى مع LDL محقَّق، يُضاف إيزيتيميب أو PCSK9 عند عدم تحقيق هدف Non-HDL</strong>(ACC). <strong>نظرًا لخطورته العالية+تفوُّق بيانات PCSK9: الخيار المفضَّل</strong>(قد يُستهدَف LDL&lt;50-55 حتى — تجارب PCSK9/ESC). <strong>إيكوسابنت إيثيل يُنظَر فيه فقط بعد تحقيق أهداف LDL وNon-HDL.</strong></p>
+    </div>
+    <div class="card point-num">
+      <strong>س5:</strong> رجل55، بدانة+سكري+HTN+HFpEF، يتلقى ميتفورمين. <strong>الخطأ حول الأدوية المضادة للسكري الحديثة؟</strong>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ D خاطئة</strong> — <strong>ناهضات GLP-1 تُقلل الأحداث القلبية الوعائية أساسًا عبر تقليل MI، لا HF</strong>(هذا دور SGLT-2). <strong>E صحيحة:</strong> الجمع مع DPP-4 غير مفيد(تأثير GLP-1 يبلغ الحد الأقصى بالناهضات وحدها، رغم أن DPP-4 قد يرفع مستويات GLP-1 الذاتية). <strong>B صحيحة(DAPA-HF)؛ C صحيحة(EMPA-REG).</strong></p>
+    </div>
+  </section>
+
+  <div style="text-align:center; margin:50px 0 30px; padding:28px 24px; background:linear-gradient(135deg, rgba(45,212,191,.12), rgba(212,175,55,.08)); border:1.5px solid var(--gold); border-radius:16px;">
+    <div style="font-size:20px; font-weight:800; color:var(--gold); margin-bottom:10px;">✅✅ انتهى قسم "24: اضطراب شحوم الدم" بأكمله (6 أجزاء: 22-27)</div>
+    <div style="color:var(--text-dim); font-size:15px; line-height:1.9;">
+      من مبررات العلاج بالستاتين وحتى أضداد PCSK9 والأدوية الحديثة المضادة للسكري ذات الفائدة القلبية الوقائية.<br>
+      يليه قسم جديد كليًا: <strong>"25: ارتفاع ضغط الدم الرئوي" (Pulmonary Hypertension)</strong>.
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:20px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch9-part26.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 26</a>
+    <a href="practical-ch9-index.html" style="color:var(--gold); text-decoration:none; font-weight:700; font-size:14.5px;">↩ فهرس الفصل الكامل</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 9، الجزء 27
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

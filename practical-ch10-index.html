@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل 10: اختبارات القلب غير الغازية — الفهرس | Practical Cardiovascular Medicine | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.8; font-size:16px; padding-bottom:60px;
+  }
+  .theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+    border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+    font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+  .theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:16px 20px; text-align:center;
+  }
+  header.top .eyebrow{color:var(--teal); font-size:12.5px; letter-spacing:.5px; font-weight:600; display:block; margin-bottom:4px;}
+  header.top h1{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  main{max-width:900px; margin:0 auto; padding:28px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(251,191,36,.1), rgba(45,212,191,.04));
+    border:1px solid var(--border); border-radius:16px; padding:24px 26px; margin-bottom:30px;
+  }
+  .hero .num{
+    width:48px; height:48px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center; margin-bottom:12px;
+  }
+  .hero h2{margin:4px 0 8px; font-size:22px; color:var(--text);}
+  .hero p{color:var(--text-dim); font-size:14px; margin:0; line-height:1.8;}
+
+  .group-title{
+    color:var(--gold); font-size:14px; font-weight:700; margin:30px 0 14px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .group-title::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  .grid{display:grid; grid-template-columns:1fr; gap:12px;}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    padding:16px 18px; display:flex; align-items:flex-start; gap:14px;
+    text-decoration:none; color:var(--text); transition:.2s;
+  }
+  a.card:hover{border-color:var(--teal); transform:translateY(-2px); box-shadow:0 8px 20px -8px rgba(0,0,0,.4);}
+  .card.disabled{opacity:.55; cursor:default;}
+
+  .num{
+    flex:0 0 auto; width:40px; height:40px; border-radius:11px;
+    background:linear-gradient(135deg, rgba(45,212,191,.16), rgba(45,212,191,.04));
+    border:1px solid var(--teal-dim); color:var(--teal); font-weight:700; font-size:15px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card.disabled .num{
+    background:var(--panel2); border-color:var(--border); color:var(--text-dimmer);
+  }
+
+  .ctext{flex:1;}
+  .ctext .ctitle{font-weight:700; font-size:15px; margin-bottom:3px;}
+  .ctext .csub{color:var(--text-dim); font-size:12.5px; line-height:1.6;}
+  .badge{
+    flex:0 0 auto; font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px;
+    white-space:nowrap; align-self:center;
+  }
+  .badge.ready{background:rgba(45,212,191,.15); color:var(--teal);}
+  .badge.soon{background:rgba(148,163,184,.12); color:var(--text-dimmer);}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:50px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
+<header class="top">
+  <span class="eyebrow">Practical Cardiovascular Medicine</span>
+  <h1>الفصل 10: اختبارات القلب غير الغازية</h1>
+</header>
+
+<main>
+
+  <div class="hero">
+    <div class="num">10</div>
+    <h2>اختبارات القلب: تخطيط القلب الكهربائي، تخطيط صدى القلب، واختبار الجهد</h2>
+    <p>النص الكامل بحسب الكتاب المصدر، بحروفه وصوره، دون حذف أو تلخيص — أسس ECG الكهرفيزيولوجية، تخطيط صدى القلب، واختبارات الجهد. فصل ضخم جدًا (231 صفحة مصدرية، 198 صورة/شكل).</p>
+  </div>
+
+  <div class="group-title">أجزاء الفصل</div>
+  <div class="grid">
+
+    <a class="card" href="practical-ch10-part1.html">
+      <div class="num">1</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 1 — نظرة عامة على أقطاب ECG وفيزيولوجيا مركّب QRS (6 أشكال: 31.1-31.6)</div>
+        <div class="csub">الأقطاب ثنائية/أحادية القطب، مثلث آينتهوفن، تناسق/تباين إعادة الاستقطاب</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part2.html">
+      <div class="num">2</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 2 — أمثلة الإيقاعات الكاملة، وتحديد محور QRS (10 أشكال: 31.7-31.16)</div>
+        <div class="csub">PVC مقابل PAC، Wenckebach، حساب المعدل، انحراف المحور الأيمن/الأيسر</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part3.html">
+      <div class="num">3</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 3 — تقدُّم R الصدري، ومعايير تضخُّم الأذينين الكاملة (31.17-31.19)</div>
+        <div class="csub">الانتقال الباكر، ضعف تقدُّم R، RAE/LAE، الفترة الطبيعية لـPR</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part4.html">
+      <div class="num">4</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 4 — معايير LVH وRVH الكاملة، وتضخُّم البطينين معًا (31.20-31.21)</div>
+        <div class="csub">معيار Cornell، التمييز عن COPD/احتشاء خلفي، علامة Katz-Wachtel</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part5.html">
+      <div class="num">5</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 5 — حصار الفرعين RBBB وLBBB الكامل، وWPW (6 أشكال: 31.22-31.27)</div>
+        <div class="csub">التمييز عن الاحتشاء الخلفي/RVH، فرط البوتاسيوم مقابل WPW</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part6.html">
+      <div class="num">6</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 6 — الحصار الحزمي الكامل: LAFB وLPFB وثنائي/ثلاثي الحزم (31.28-31.29)</div>
+        <div class="csub">التمييز عن الاحتشاء السفلي، حالة سريرية كاملة لحصار ثنائي الحزمة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part7.html">
+      <div class="num">7</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 7 — انخفاض جهد QRS، والتناوب الكهربائي الكامل بأنواعه الأربعة (31.31)</div>
+        <div class="csub">التمييز بين التناوب الحقيقي والتناقض الكهربائي التنفسي</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part8.html">
+      <div class="num">8</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 8 — موجات Q المرضية الكاملة (5 أشكال: 31.32-31.36)</div>
+        <div class="csub">✅ إغلاق قسم أساسيات ECG الكبير — التشخيص التفريقي الكامل، تأثير التنفس</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part9.html">
+      <div class="num">9</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 9 — بداية تحليل ST-T: معايير STEMI الدقيقة، والشذوذات الثانوية (31.37-31.38)</div>
+        <div class="csub">HCM، الدلتا السالبة، الداء النشواني، منهجية القياس عند نقطة J</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part10.html">
+      <div class="num">10</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 10 — المعايير الإقفارية الكاملة، ومتلازمة ويلينز الكاملة (31.39-31.40)</div>
+        <div class="csub">علامة الجذع الأيسر/الأوعية الثلاثة، التغيُّرات المقابلة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part11.html">
+      <div class="num">11</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 11 — الاحتشاء الخلفي الكامل، PE، وكشف STEMI المغفل (31.41-31.43)</div>
+        <div class="csub">أهمية الانخفاض المتبادل لكشف الارتفاع الخفيف المُهمَل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part12.html">
+      <div class="num">12</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 12 — ✅ إغلاق قسم ST-T الضخم: نقص K، تاكوتسوبو، الجدول 31.1 (31.44-31.47)</div>
+        <div class="csub">انقلاب T المنتشر، التطبيع الكاذب، الملخص الشامل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part13.html">
+      <div class="num">13</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 13 — بداية قسم ارتفاع ST: معايير STEMI الكاملة (Tombstoning)</div>
+        <div class="csub">احتشاء قديم مقابل حاد، العمليات الأربع الرئيسية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part14.html">
+      <div class="num">14</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 14 — إعادة الاستقطاب المبكرة الكاملة، والجدول 31.2 الشامل (31.48)</div>
+        <div class="csub">النمطان، الوبائيات الدقيقة، خطر الموت المفاجئ</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part15.html">
+      <div class="num">15</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 15 — 4 حالات تعليمية: تامور يُحاكي STEMI، Tombstoning، أمثلة استقطاب مبكرة (31.49-31.52)</div>
+        <div class="csub">تطبيق عملي مباشر للمعايير المُتعلَّمة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part16.html">
+      <div class="num">16</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 16 — التهاب التامور الكامل: 3 معايير تفريقية، وحالة تعليمية (31.53)</div>
+        <div class="csub">فيزيولوجيا PR، توقيت انقلاب T المميِّز</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part17.html">
+      <div class="num">17</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 17 — LVH/LBBB الكامل: معيار Sgarbossa وعلامة Cabrera، 3 حالات تعليمية (31.54-31.56)</div>
+        <div class="csub">القاعدة الأفضل: ارتفاع متخالف ≥25% من QRS</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part18.html">
+      <div class="num">18</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 18 — ✅ إغلاق قسم ارتفاع ST بأكمله: استثارة مبكرة، فرط K، بروغادا (31.57-31.61)</div>
+        <div class="csub">تاكوتسوبو، التهاب عضلة، رفرفة أذينية تُحاكي ST</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part19.html">
+      <div class="num">19</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 19 — ✅ قسم T الكبيرة/الطويلة الكامل: deWinter، زعنفة القرش، الخوذة الشوكية (31.62)</div>
+        <div class="csub">مكافئ STEMI حاد يستدعي قسطرة إسعافية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part20.html">
+      <div class="num">20</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 20 — ✅ فترة QT وموجة U الكاملة: Bazett مقابل Hodges (31.63-31.65)</div>
+        <div class="csub">موجة TU المشؤومة، 5 أسباب لإطالة QTc</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part21.html">
+      <div class="num">21</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 21 — نقص وفرط البوتاسيوم الكاملان بمراحلهما (31.66-31.69)</div>
+        <div class="csub">من T المسطَّحة حتى موجة الجيب المُنذرة بـVF</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part22.html">
+      <div class="num">22</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 22 — الكالسيوم، والديجيتاليس الكامل (تأثير وتسمم) (31.70-31.71)</div>
+        <div class="csub">VT ثنائي الاتجاه = علامة مميِّزة جدًا للتسمم</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part23.html">
+      <div class="num">23</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 23 — انخفاض الحرارة (موجات أوزبورن)، وفيزيولوجيا PE الشعاعية (31.72-31.73)</div>
+        <div class="csub">تفسير كامل لمحور PE الأمامي/المحوري</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part24.html">
+      <div class="num">24</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 24 — ✅ إغلاق قسمXV: COPDمقابل MI، وASD/إبشتاين الكاملان (31.74)</div>
+        <div class="csub">موجات P هيمالايا، شق Crochetage المميِّز لـASD</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part25.html">
+      <div class="num">25</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 25 — بداية قسم ضخم: النهج بتسرعات النظم — خوارزمية QRS الضيق (31.76-31.77)</div>
+        <div class="csub">حالة AVNRT بعلامتي Pseudo-r' وPseudo-S</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part26.html">
+      <div class="num">26</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 26 — التسرع الضيق غير المنتظم، وظاهرة أشمان الكاملة (31.78-31.79)</div>
+        <div class="csub">آلية فترة الجموح التفصيلية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part27.html">
+      <div class="num">27</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 27 — خوارزمية QRS العريض، وحالة VT مقابل SVT الكلاسيكية (31.80)</div>
+        <div class="csub">تقنية اصطياد موجة P المخفية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part28.html">
+      <div class="num">28</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 28 — ✅ إغلاق قسم نهج التسرعات: حالة VT عريضة غير منتظمة (31.81)</div>
+        <div class="csub">80% من تسرعات QRS العريضة=VT، PVC مقابل PAC+انحراف</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part29.html">
+      <div class="num">29</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 29 — بداية قسم ضخم جديد: حصار AV — التصنيف الكامل (31.82)</div>
+        <div class="csub">موبتز I العقدي مقابل موبتز II تحت العقدي</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part30.html">
+      <div class="num">30</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 30 — ✅ إغلاق قسمXVII: 5 حالات تعليمية كاملة لحصار AV (31.83-31.87)</div>
+        <div class="csub">مفتاح Wenckebach، حصار2:1 يُحاكي بطء الجيب</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part31.html">
+      <div class="num">31</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 31 — ✅ قسمXVIII الكامل: النظم الأوتوماتيكية، الانفصال متساوي النظم (31.88-31.91)</div>
+        <div class="csub">AIVR بمركّبات اندماج، نظم وصلي هروبي بلا P</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part32.html">
+      <div class="num">32</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 32 — ✅ قسمXIX الكامل: تبديل الأقطاب (31.92-31.94)</div>
+        <div class="csub">Lead II أو III مسطَّح=علامة تبديل الذراع بالساق</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part33.html">
+      <div class="num">33</div>
+      <div class="ctext">
+        <div class="ctitle">🎉 الجزء 33 — ✅✅ اكتمل الجسم الرئيسي(I-XIX)! بداية ملحق1: مراحل STEMI (31.95-31.96)</div>
+        <div class="csub">الفيزيولوجيا الكهربائية الكاملة لـST، التوقيت الدقيق للمراحل الثلاث</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part34.html">
+      <div class="num">34</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 34 — حالة STEMI مغفل عبر OM (31.97)، وقواعد انقلاب T الخمس</div>
+        <div class="csub">توقيت موجات Q، وتراجعها الكامل ببيانات EF المقارنة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part35.html">
+      <div class="num">35</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 35 — توضُّع STEMI الكامل: مناطق الاحتشاء والشريان المسؤول</div>
+        <div class="csub">✅ إغلاق القسمين C-1وC-2 — التغيُّرات الانعكاسية الكاملة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part36.html">
+      <div class="num">36</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 36 — الجدولان31.3و31.4: توضُّع الأمامي/السفلي الدقيق (31.98-31.99)</div>
+        <div class="csub">تحديد مستوى انسداد LAD بدقة، حالة تعليمية RCAمقابل LCx</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part37.html">
+      <div class="num">37</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 37 — ✅ إغلاق ملحق1! بداية ملحق2: LVH بالمتجهات (31.100-31.101)</div>
+        <div class="csub">المستويان الأمامي والأفقي</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part38.html">
+      <div class="num">38</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 38 — ✅ إغلاق ملحق2: RVHوCOPD بالمتجهات (31.102-31.103)</div>
+        <div class="csub">آخر محتوى تفسيري قبل الأسئلة الختامية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part39.html">
+      <div class="num">39</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 39 — أسئلة ختامية شاملة1-14: VTمقابلSVT، حصارAV، RVH/RBBB/LBBB</div>
+        <div class="csub">35سؤالًا إجماليًا تُغلق تفسير ECG بأكمله</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part40.html">
+      <div class="num">40</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 40 — أسئلة15-24: LAFB، ويلينز، LVH، معايير STEMI/Sgarbossa</div>
+        <div class="csub">تمييز دقيق بين حالات متشابهة سريريًا</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part41.html">
+      <div class="num">41</div>
+      <div class="ctext">
+        <div class="ctitle">🎉 الجزء 41 — أسئلة25-35: حالات ختامية شاملة. ✅✅✅ اكتمل قسم ECG بأكمله(41جزءًا)!</div>
+        <div class="csub">QTc، T2، تسلخ خلفي، ديجيتاليس — يليه مباشرة قسم32: الإيكو</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part42.html">
+      <div class="num">42</div>
+      <div class="ctext">
+        <div class="ctitle">🆕 الجزء 42 — بداية القسم32: الإيكو العام — المناظر الخمسة، التوزيع الشرياني (32.1-32.2)</div>
+        <div class="csub">تصنيفات EF، تقييم حركة الجدار</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part43.html">
+      <div class="num">43</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 43 — وريقات الصمام التاجي، وتشخيص الأبهري الثنائي الشرف (32.3-32.5)</div>
+        <div class="csub">A1-A3/P1-P3، RC/LC/NC، فتحة بيضوية بدل مثلثة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part44.html">
+      <div class="num">44</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 44 — علامة تشخيصية مهمة: تمييز الانصباب التاموري عن الجنبي، وقياسات الأبهر (32.6-32.7)</div>
+        <div class="csub">الجيب التاجي كمرجع تشريحي حاسم</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part45.html">
+      <div class="num">45</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 45 — منظر دخول RV، والتشريح التفصيلي للقمي رباعي الحجرات (32.8-32.9)</div>
+        <div class="csub">الشريط المُعدِّل، الوتر الكاذب، تشوُّه وسادة شغافية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part46.html">
+      <div class="num">46</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 46 — ✅ إغلاق المناظر الخمسة: القمي ثنائي/ثلاثي الحجرات، تحت الضلعي (32.10-32.12)</div>
+        <div class="csub">تحضير كامل لفهم بنية القلب بالإيكو</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part47.html">
+      <div class="num">47</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 47 — IVC، والتوسُّع الكامل لـLV/RV مع TAPSE (32.13-32.14)</div>
+        <div class="csub">نمط D الحاجزي: تحميل ضغطي مقابل حجمي</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part48.html">
+      <div class="num">48</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 48 — LVH الكامل (متراكز/لامتراكز)، وحجم LA: "HbA1c القلب الأيسر"</div>
+        <div class="csub">Planimetry بتقنية جمع الأقراص</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part49.html">
+      <div class="num">49</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 49 — الحركة الحاجزية المتناقضة: LBBB/تحفيز RVوتوسُّع RV حجمي (32.15-32.16)</div>
+        <div class="csub">تأخُّر M-mode الحاجزي-الوحشي&gt;130مللي ثانية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part50.html">
+      <div class="num">50</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 50 — ✅ التهاب التامور التضييقي الكامل: الارتداد الحاجزي والانزياح التنفسي (32.17-32.18)</div>
+        <div class="csub">أحد أصعب مواضيع الإيكو التشخيصية — شُرِح بالكامل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part51.html">
+      <div class="num">51</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 51 — الصمام التنكسي والروماتيزمي: عصا الهوكي وفم السمكة، MAC (32.19-32.21)</div>
+        <div class="csub">التمييز بين تكلُّس الحلقة والعملية الروماتيزمية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part52.html">
+      <div class="num">52</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 52 — ✅ إغلاق الإيكو العام: الأبهري الثنائي الشرف عبر M-mode. بداية الدوبلر (32.22)</div>
+        <div class="csub">الأنماط الثلاثة الكاملة: Color/CW/PW</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part53.html">
+      <div class="num">53</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 53 — منهجية الدوبلر الكاملة: الملوَّن، CW/PW، دوبلر النسيج، الحسابات (ضغط RA وPA، AVA)</div>
+        <div class="csub">معادلة الاستمرارية، برنولي، RVSP=4V²+RA</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part54.html">
+      <div class="num">54</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 54 — القلس التاجي MR: التقييم الكمِّي الكامل (32.23-32.27)</div>
+        <div class="csub">PISA وERO، تأثير كواندا، انعكاس S بالأوردة الرئوية، علامة قطع موجة V</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part55.html">
+      <div class="num">55</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 55 — القلس ثلاثي الشرفات TR (32.28-32.29)</div>
+        <div class="csub">سرعة TR لا تعكس شدة القلس</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part56.html">
+      <div class="num">56</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 56 — القصور الأبهري AI: عرض التضيق، النفثة، PHT (32.30-32.33)</div>
+        <div class="csub">انعكاس التدفق الانبساطي الكامل بالأبهر</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part57.html">
+      <div class="num">57</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 57 — التضيق الأبهري AS، انسداد LVOT، والتضيق التاجي MS (32.34-32.36)</div>
+        <div class="csub">الخنجر المتأخر، المؤشر اللابعدي، PHT/220</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part58.html">
+      <div class="num">58</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 58 — PW عبر التاجي والأوردة، دوبلر النسيج، مؤشر Tei، الإجهاد (32.37-32.40)</div>
+        <div class="csub">E/E'، S'، Strain الطبيعي −20 إلى −12</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part59.html">
+      <div class="num">59</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 59 — الجدول 32.1: القلس الشديد (MR، AI، TR، PR) بإيجابيات كل معيار وسلبياته</div>
+        <div class="csub">7 معايير لـMR، PHT&lt;250 و&gt;500 بـAI، طول نفثة PR</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part60.html">
+      <div class="num">60</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 60 — الجدول 32.2: التضيق الشديد (AS منخفض التدرج، MS) ومحاذير AVA</div>
+        <div class="csub">المؤشر عديم الأبعاد DI≤0.25، أربع طرق لـMVA</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part61.html">
+      <div class="num">61</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 61 — M-mode، والانصباب التاموري وعلامات ما قبل الانصباب الضاغط (32.41-32.46)</div>
+        <div class="csub">SAM، انغلاق RVOT الانبساطي، تمييز التاموري عن الجنبي</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part62.html">
+      <div class="num">62</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 62 — الوظيفة الانبساطية وضغط الامتلاء الأيسر: E/E'، الجدول 32.3، خوارزميتا EF الطبيعي والمنخفض (32.47-32.48)</div>
+        <div class="csub">اختبار الجهد الانبساطي، تقييم المرضى الحرجين</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part63.html">
+      <div class="num">63</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 63 — الديناميكا الدموية: PISA وERO والحجم القلسي، عوائق PHT بـMS وAI، الأوردة الرئوية، ضغط PA (32.49-32.53)</div>
+        <div class="csub">الطريقة الحجمية، شق W، زمن التسارع&lt;90ms</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part64.html">
+      <div class="num">64</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 64 — LVEDP وضغط LA من الدوبلر، Qp/Qs، والصمامات الاصطناعية (الجداول 32.4-32.6) (32.54-32.56)</div>
+        <div class="csub">استعادة الضغط، عدم التناسب، القلس حول الصمام</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part65.html">
+      <div class="num">65</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 65 — فيزياء الدوبلر والآثار المصطنعة (32.57-32.59)</div>
+        <div class="csub">حد نايكويست، أثر عرض الحزمة، الصورة المرآوية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part66.html">
+      <div class="num">66</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 66 — الإيكو عبر المريء TEE: التحكم بالمسبار، التاجي والأبهري (32.60-32.69)</div>
+        <div class="csub">0°/60-90°/120°، الثني الأمامي، الشرفة NC</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part67.html">
+      <div class="num">67</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 67 — TEE (تتمة): LAA، البنى اليمنى، الحاجز بين الأذينين، PFO مقابل ASD (32.70-32.76)</div>
+        <div class="csub">حافة الكومادين، عرض ثنائي الأجوف "ميكي ماوس"</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part68.html">
+      <div class="num">68</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 68 — TEE (تتمة): قاعدة القلب، عبر المعدة، الأبهر، دواعي TEE، SEC، الثلاثي الأبعاد للتاجي (32.77-32.83)</div>
+        <div class="csub">RUPV والعود الوريدي الشاذ، تقييم PFO بالمحلول المهتز</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part69.html">
+      <div class="num">69</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 69 — ✅ إغلاق القسم 32 (ميكانيكا LV والإجهاد 32.84) + بداية القسم 33: اختبار الجهد — الدواعي، الموانع، الأنماط، Bruce (33.1-33.2)</div>
+        <div class="csub">GLS، الجدول 33.1، الشذوذات التي تمنع stress ECG</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part70.html">
+      <div class="num">70</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 70 — تفسير stress ECG: الجدول 33.3 ودرجة Duke، استجابة الضغط، محدودياتها، الجدول 33.4، النساء</div>
+        <div class="csub">قواعد DTS، "فترة الضمان" سنتان</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part71.html">
+      <div class="num">71</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 71 — إيكو الجهد وSPECT: الإقفار المتوازن، TID، العيب الثابت، ECG أثناء الجهد الدوائي</div>
+        <div class="csub">FAME، COURAGE، امتصاص الثدي والحجاب</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part72.html">
+      <div class="num">72</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 72 — الأدوية المضادة للذبحة، الجداول 33.5-33.7، وآليات أنواع اختبارات الجهد</div>
+        <div class="csub">Summed stress score، سرقة الأدينوزين التاجية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part73.html">
+      <div class="num">73</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 73 — التصوير النووي الإجهادي: الريجادينوسون، التكنيشيوم والثاليوم، الآثار المصطنعة، الأدينوزين (33.3-33.5)</div>
+        <div class="csub">تسلسل الإقفار، TID&gt;1.15/1.35</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part74.html">
+      <div class="num">74</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 74 — PET، التصوير المقطعي التاجي بالصبغة CTA وتقدير التكلس (Agatston)، وتقنية CTA وتشوهاتها (33.6-33.9)</div>
+        <div class="csub">SCOT-Heart وISCHEMIA وPROMISE، NPV=99%</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch10-part75.html">
+      <div class="num">75</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 75 (الأخير) — ✅ الرنين القلبي CMR (LGE، أنماط الإقفاري/غير الإقفاري 33.10-33.12) واختبار CPET — اكتمل الفصل العاشر</div>
+        <div class="csub">Peak VO₂، VE/VCO₂، العتبة اللاهوائية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — فهرس الفصل 10
+  </footer>
+
+</main>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

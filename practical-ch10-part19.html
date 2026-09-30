@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 10: اختبارات القلب غير الغازية | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch10-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 10</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 10 — الجزء 19</h3>
+  <div class="chgroup">
+    <span class="chtitle">XIII: T الكبيرة/الطويلة</span>
+    <a href="#c10talltintro">التعريف، التشخيص التفريقي</a>
+    <a href="#c10dewinter">مركّب deWinter، زعنفة القرش، الخوذة الشوكية (31.62)</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch10-part18.html">→ الجزء 18</a>
+    <a href="practical-ch10-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch10-part20.html">الجزء 20 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل العاشر (الجزء 19)</span>
+    <h1>اختبارات القلب غير الغازية</h1>
+  </div>
+  <span class="chapno">10</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 10: اختبارات القلب غير الغازية — الجزء 19</h2>
+  </div>
+
+  <section class="roman" id="c10talltintro">
+    <div class="roman-head"><div class="roman-badge">XIII</div><h2>تقييم الإقفار: الموجة T الكبيرة أو الطويلة</h2></div>
+
+    <div class="card point-num">
+      <strong>تُعتبَر طويلة مستقيمة إن:</strong> &gt;10مم بقطب صدري، أو&gt;6مم بأقطاب الأطراف. <strong>لكن قد&gt;10مم طبيعيًا بـV2-V3 برجال شباب طبيعيين</strong> — <strong>يُهم أيضًا النظر لارتفاعها نسبة لـQRS.</strong> <strong>T أطول من الموجة السائدة بـQRS(R أو S) غير طبيعية</strong>(استثناء: أقطاب QRS شبه متساوي الكهرباء). <strong>T&gt;75% من ارتفاع QRS غالبًا غير طبيعية.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>4أسباب رئيسية:</strong>
+      <ol style="margin-top:8px">
+        <li><strong>T فوق الحادة بـSTEMI الحاد:</strong> ممتلئة وكبيرة، <strong>والأهم: عريضة.</strong> غالبًا تتجاوز QRS بقطب واحد على الأقل. تسبق أو تتزامن مع ارتفاع ST.</li>
+        <li><strong>فرط بوتاسيوم:</strong> T مدبَّبة وضيقة.</li>
+        <li><strong>T ممتلئة بـV1-V3 ثانوية لـLVH/LBBB:</strong> موجَّهة بعكس QRS السالب الكبير.</li>
+        <li><strong>متغيِّر طبيعي:</strong> خاصة+إعادة استقطاب مبكرة+↑جهد QRS. شائعة بالرجال الشباب بـV2-V4(قد&gt;10مم).</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="roman" id="c10dewinter">
+    <div class="roman-head"><div class="roman-badge">B</div><h2>مركّب deWinter، نمط زعنفة القرش، وعلامة الخوذة الشوكية</h2></div>
+
+    <div class="card point-num">
+      <strong>مركّب deWinter:</strong> انخفاض ST صاعد الميل بـV1-V6 يليه T مستقيمة طويلة(ضيقة أو عريضة). <strong>يُشابه T فوق الحادة؛ لكن الأخيرة تتطوَّر بسرعة لارتفاع ST نموذجي خلال دقائق، بينما deWinter لا يتطوَّر لارتفاع ST، يبقى ثابتًا.</strong> <strong>شكله يُحاكي فرط البوتاسيوم.</strong>
+    </div>
+    <div class="callout warn">
+      <b>مركّب deWinter يرتبط بانسداد حاد بـLAD</strong> — <strong>يُعادِل STEMI أمامي حاد، يستدعي قسطرة إسعافية.</strong> <strong>السبب غير واضح(طفرة بقناة IK-ATP؟) — هؤلاء المرضى غير قادرين على توليد ارتفاع ST.</strong>
+    </div>
+
+    <figure>
+      <img src="data:image/jpeg;base64,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1HHn896kvxWaK3YuaO4CcOD0H9Nw/dXf3JDKOIKdNG0XzSdMvjrBo96AkEuJr59jMim4rOZA/B1cXsuN30oMoBAGngCIkbI1g85+G5oNNzj5x5wlTkyHzE/fhhoyH9GD6B8NG3jAzGgEiUZVcittXlc+4280gVjcLeLDNTxXs0LYQ/0hk4EHt4jWnloUsQplD7jlx5fgNL4BI0NsqXIaFIL3pnzowTny9ynnOVaE9jPDELIbSVjMJPQWPQ+fwgu/rqPwHRhyQmgdxvTgkExINA/Zo+dCShefs/rwC+MlAG9YVqudI+x77ej/AIz/AHn4PJS+58XnFQSsFd4psI+Cydb1HR8oTCOjU26Q2YZJiHAYmna/fTsggyBIX3GoPg8piygBkoFZtUIUV7MTEgCBQztSMnTGfE1HU82adHuWgXxkoA3qBghIWYLsNctAACx58iz14FHFTCRDXnAL6ePIrTcD+FPrc4n9o4TZosAbjXjYPaDR1A1L4eAqoA1a7Uuol6yHHp+YV1adTsGrwK1otdj/ALat6C+MFAG3iEeAQQWKstuX8hq9taEgOV9c/Md4h+Su0mj3EEcAi7yUAALHoLDz3UmGfqtySJihoxoJHWe9f0/1UYYNssNzOfxAIkjo1xEam6xQJAJzf3Q2VeZJd6ZlXc/1XDCAj8uJ1k4UxpQTSo44GAd+Pk73UXNr4e9AxYlIm/gDIBdXSgNwjK4XZ1ab+RgMkn3h91feRTw/0HJQRfU1DXeaZKdayK5oQy8qGlyl5LDB/wB7UDY0AQB5GSw90X3XEfVoe0f6OkegW3IYF1jPlCAnkUt+KSRk3s/b/bgTx9Ea0l7Gf7a3HECUnX/2f//aAAwDAQACAAMAAAAQ888888888888888888888888888888888887c8888888888888888n88888888888S08888888K88w88888F00888888888i98888884zts888888U88888888/8p/E088888vty8888888wRc88888/m8R8vF88888+3e8888888C8yc888887n88888889ioc8OPw88758sMj9z888798888888888888888888888sDc888s288888888888888888888888888889c88888888888888888888888888/8QAJxEAAQMCBQQCAwAAAAAAAAAAAQARITAxECBBUbFAYXGRUKGB0eH/2gAIAQMBAT8Q+DALomAjoSAIG9SCNpWl5oPSNqPJqTJS8O9ABgHv6Qmh9bc0RmAdcJhNARM6xzmyt+FIdtAuvwtkppN8xtCPBGzchWQk6wtgQ8FMWzExlAMGUHdFCT6DgJB1kAHGbmHKv7c0C7QgLEhFLHT4wADFNYLp9g9/xCc4ldiGytiZMtr+0JRAgMl9Wz1Fhbwgy1yfQQMjrSAQx6z/xAApEQABAgIJBAMBAAAAAAAAAAABESEAMSAwQVFhkaHR8BBAcbGBweFQ/9oACAECAQE/EP4Z0oIYrOxBErlY4N7fZ+otsB6qHYnz1UmBfE0NYxgLn+JCFMPs1BKhWgZgczghGNQGZdAKkgELAvRCELUAZTD88b0w5gg1eYaF6fkcFRm7UAQLTVC9nBlSE3gZUSKDoD0kszPDDfoCQVEE00PwKQoMRBKlYcWg+/MKgUWgD59BEWXo8nBDVSJPgfRhUKJtP315qEKLEIau8NpAigLPbZ8dCGiCZwI15nCX2Q3gtZeoeMTN+29BkHMS22iTGCgSJChLgEIGxsu4n5sLeXwZsgLKD17x7jGA96RIBMd5/8QAKxABAAICAQIFBAICAwAAAAAAAREhADFBUWEQMEBxgSBQkaGx8GBwwdHx/9oACAEBAAE/EP8AX6uPCUkloUJkgcUYJcYKCGZwTg6J9iax7csKDo21AjtHp9ZBy2V0yh6KddsMhAAOjX5fQCBvRE7TrHSzD0Lpw5VHaQkLLEIWyBWMOrfbsWwLIqMltDRWRX4QMFRaWQcKjPzKXOIBMMgCT0YeSheY1F3YHziao1GUn5TXzjnkQ/qj/acnoJdGGLEY5hQT3GD5CxWSMAglrjgZrkYioWSzNlZewE54XkNglYNpgCTGBlUoAVWgMPuxiACQUUK6nXJidVtUTjknUY8VpCKCiQkL6nXy7AsjYhNY+HOuERXCiaAESsnpQS14ksAogAlVjWIugmhwvQJMQzMugsZhBlQKxHpBKxCPpK3s50rLmxuG+bun959AqMtIsGL1/S/fFRcmSA1HOssAUEMTnyPNGs0gkhkLpbsTvGVi9EMPkg+FEFYGGiMJF/gJ2c+UukMtMCXDi/PNqoIrEk5yRtO5NSYlKGGteXbFjaoWu+Ppgp4SO/8A19PBUlclBIe5+UyMsYS46J+HP7cx57gN9Elj4T34ymkElkB0AdjnFA5DTSj3H0G4F8iWKe3LtiySp21j2Br39NrEAABKvsGIF7LifAEsvtCoWHKxXM5etOYNKOyJ5zpyDylAkQxmvZiARJHjBTkxwpB9iOiegDYtYMTQvbl2nC4cxEISCBKC+QbyBDGgTPkA+XEpJrWWIgELO4FMph+REpA6R88rWl0LI1ZHevobfL0HwpmI7mMNGQKAFAHgKIyBIjwmSDKbg2O6knRAUR35r5AgLFBLeN5LO9C/34As4Qp/RMYs8/2eYtITPwvicDIx19iCRCI7E4xAI3igsroxDhOTzV1G0gxyEJljgXA6Rz6fhGArTpD9GlY+PZ4rqPqw/l4DlQzaWu9JXoy90H0Iuysn7jjYP0G8FBHTERDC1M/BYEkDC0IF8uPWLSikRPvGU5CIuoTm+PCKAmbkoPwo/GLQxltZncD8efBnQXaD/Tx9C2oohGjxQAPUMjC+pnsF4nRcppPNjHQgVxBUd9X48E4FFDEqWgDnB/FeQGeiIFd7mmR6LmfCJulrrXDR470K3SoD7wQOOzznAAJVoDGOZ1OO4SIOiY0Ymg6QjNCCCJYmCu4i5YwEJ6Fw5prBy8PhCkELADJ+fkO3YjofAtAGN3EniG0RgCpxGpmxGEy5JAUg9vNUNF5dikf2/OJQKKGJUtAHOHvAudSlYElemiDDAAIAoDz+y9GSVjq1rBrmLY5QViMTUAZvw62IUmTD8PeGjxWO7moBLOEvITtiSUkgTw4CQyBMQxOXRODb7Kck6mWFWUgMMkeJmp1y4SjbiKwLJi/reDpKttCtOAV4MYjzc++Rt5FrkFYHAooYgAUAceIAAAODEkh1gEABAGjFbFvwFK/lvUlVSD8+7OFHAREbETjzAqmirUFT5owbR/Le0qycgaGSAAIAIA9BOcCQEATCMSJNOmRTE0AKpP4eRLGEvKALAO4BrsAG7u4JJ+wQ1KcgRG2ePpBkSEJExK+Ms/8AexwUEEACBhOwsnr3ZTrWcjhkP6wVBAIYrVH1f8S6HdW3F4N5ECj5H8olcryY2xhleBES0UWhCxkIpGlyQJsTwP2KlADauFWw/aSAG0hXWgb8gngAXYP7ONlSDQ6cXwK+3oIiSPGBmkBflPtWxtyCKBtENxtGS3BJwK/TlNKKaGC3uxgOEDABAAaDyOTrjUQrPwsJEQm1/wCY+4IrJM6M6RrRpEgMLnyl2CQQammDSz+VrgL9/exMkA16ifxlLaZdQnPt97AauYIiA1JvCv8AMv/Z" alt="Figure 31.62">
+      <figcaption><span class="fig-num">الشكل 31.62</span> — متغيرات ECG بـSTEMI: <strong>(يمين)مركّب deWinter بـV1-V6.</strong> <strong>(وسط)نمط زعنفة القرش:</strong> QRS يندمج مع ST-T بموجة مثلثية واحدة — قد STEMI خطير، لكن يُشاهَد أيضًا بأمراض حرجة غير قلبية. <strong>(يسار)علامة الخوذة الشوكية:</strong> QRS-ST-T بشكل قبة+نتوء بالقمة بلا خط متساوي الكهرباء — غالبًا بأمراض حرجة غير قلبية، يُعزى لتأثيرات إعادة الاستقطاب من النغمة الأدرينالية.</figcaption>
+    </figure>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch10-part18.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 18</a>
+    <a href="practical-ch10-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch10-part20.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 20 ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 10، الجزء 19
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

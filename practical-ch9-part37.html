@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 9: أمراض قلبية وعائية أخرى | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch9-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 9</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 9 — الجزء 37</h3>
+  <div class="chgroup">
+    <span class="chtitle">الناظمة القلبية</span>
+    <a href="#c9issue3">تجربتا ISSUE-3 وSPAIN، استطبابات التنبيه</a>
+    <a href="#c9adenosinecsh">الإغماء الحساس للأدينوزين، CSH</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">VIII-IX</span>
+    <a href="#c9tilttable264">اختبار الطاولة المائلة الكامل (26.4)</a>
+    <a href="#c9hospitalization">استطبابات الاستشفاء</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">X: العلاج والقيادة</span>
+    <a href="#c9potstxcomplete">علاج POTS/الانتصابي الكامل</a>
+    <a href="#c9drivingguidance">الإغماء والقيادة</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch9-part36.html">→ الجزء 36</a>
+    <a href="practical-ch9-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch9-part38.html">الجزء 38: أسئلة ختامية ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل التاسع (الجزء 37)</span>
+    <h1>أمراض قلبية وعائية أخرى</h1>
+  </div>
+  <span class="chapno">9</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 9: أمراض قلبية وعائية أخرى — الجزء 37</h2>
+  </div>
+
+  <section class="roman" id="c9issue3">
+    <div class="roman-head"><div class="roman-badge">تجارب</div><h2>تجربتا ISSUE-3 وSPAIN: دور الناظمة القلبية بالمبهمي</h2></div>
+
+    <div class="callout gold">
+      <b>ISSUE-3:</b> ≥40عامًا، إغماء مبهمي+≥3نكسات، زُرع مسجِّل حلقي. <strong>ثلثهم تقريبًا سجَّل نوبة+انقطاع≥3ثوانٍ بنصف الحالات(آلية مثبِّطة للقلب).</strong> <strong>الناظمة قلَّلت تكرار الإغماء خلال سنتين من57%→25%</strong> مقابل تنبيه وهمي.
+    </div>
+    <div class="card point-num">
+      <strong>يدعم مبدأ العلاج حسب الآلية لا التشخيص المُسبِّب</strong>(انقطاع مبهمي المنشأ يُعالَج كانقطاع عقدة AV). <strong>SPAIN trial:</strong> فائدة مماثلة — <strong>الناظمة فعّالة جدًا عندما يُوثَّق الانقطاع بوقت الإغماء بصرف النظر عن السبب.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>يُنظَر بالتنبيه عند:</strong> إغماء مبهمي متكرر+توقفات انقطاعية: 3ثوانٍ إن+أعراض متزامنة؛ 6ثوانٍ إن لاعرضي؛ 3ثوانٍ إن حدث أثناء Tilt. <strong>مع عمر≥40.</strong> <strong>ESC:Class I؛ ACC:Class IIb.</strong>
+    </div>
+  </section>
+
+  <section class="roman" id="c9adenosinecsh">
+    <div class="roman-head"><div class="roman-badge">أنماط</div><h2>الإغماء الحساس للأدينوزين، وCSH: استطبابات الناظمة</h2></div>
+
+    <div class="card point-num">
+      <strong>الإغماء الحساس للأدينوزين:</strong> حصار AV مفاجئ/توقف جيبي بقلب سليم(بلا مرض توصيلي على ECG/EP)، غالبًا+Tilt سلبي. <strong>مستويات أدينوزين بلازمية منخفضة جدًا+نسبة عالية من حدوث توقف&gt;6ثوانٍ بعد حقن أدينوزين/ATP.</strong>
+      <p style="margin-top:8px"><strong>آلية:</strong> تأثيرات الأدينوزين/أسيتيل كولين متشابهة → المبهمي يتسهَّل بزيادة التحسس. <strong>قد يستطب التنبيه(ESC:IIb)</strong>، يُفضَّل توثيق التوقفات بمسجِّل حلقي أولاً(تحدث~50% نهائيًا).</p>
+    </div>
+    <div class="card point-num">
+      <strong>متلازمة الجيب السباتي:</strong> إغماء واضح+محفز سباتي+استجابة مثبِّطة بالتدليك → <strong>مؤشر لناظمة ثنائية الحجرات.</strong> <strong>إغماء غير مفسَّر+CSH مثبِّط: Class IIa.</strong>
+    </div>
+  </section>
+
+  <section class="roman" id="c9tilttable264">
+    <div class="roman-head"><div class="roman-badge">VIII</div><h2>اختبار الطاولة المائلة: البيانات الكاملة (الجدول 26.4)</h2></div>
+
+    <div class="card point-num">
+      <strong>التقنية:</strong> إمالة60-80°لـ30-45دقيقة — <strong>أكثر إجهادًا من الوقوف العادي</strong>(يُحرَم المريض من مضخة العضلات الهيكلية). <strong>التسهيل الدوائي</strong>(إيزوبروترينول/نيتروغليسرين تحت اللسان) <strong>لم يعد يُوصى به</strong>(استجابة غير نوعية).
+    </div>
+    <div class="card point-num">
+      <strong>النوعية حتى90%</strong>(إيجابية كاذبة~10%، تنخفض مع التسهيل الدوائي). <strong>الحساسية~80%</strong>، إيجابي بـ66% من إغماء غير مفسَّر.
+      <p style="margin-top:8px"><strong>إيجابية كاذبة أعلى</strong> بمرضى مرض قلبي بنيوي/RBBB/LBBB — <strong>يُحرِّض إغماء بـ25%</strong> من مرضى إغماء نظمي+EP شاذة!</p>
+    </div>
+    <div class="card point-num">
+      <strong>أعلى فائدة: احتمال متوسط قبل الاختبار</strong> — بلا مرض بنيوي+إغماء خبيث/متكرر غير مفسَّر؛ مسنون بإغماء/سقوط غير مفسَّر؛ مرض بنيوي(CAD معالَج/LVH)+EF طبيعي/منخفض طفيفًا+EP طبيعية. <strong>احتمال عالٍ/منخفض جدًا مسبقًا=فائدة أقل.</strong>
+    </div>
+  </section>
+
+  <section class="roman" id="c9hospitalization">
+    <div class="roman-head"><div class="roman-badge">IX</div><h2>استطبابات الاستشفاء</h2></div>
+
+    <div class="card point-num">
+      يُستشفى إن نقص حجم/نزف شديد، أو شبهة مرض قلبي(HF/↓EF/CAD؛ ECG موحٍ باضطراب نظم؛ قصة عائلية موت مفاجئ؛ غياب بوادر، أذية جسدية، إغماء جهدي، أو+ضيق نفس/ألم صدري).
+    </div>
+    <div class="card point-num">
+      <strong>يُدخَل للتليمتري+إيكو±جهد.</strong> <strong>يُخرَج خلال24ساعة</strong> إن لا مرض بنيوي بالفحوص الأولية. <strong>إن وُجد:</strong> EP study أو زرع جهاز. <strong>إن بقي غير مفسَّر+مرض/سمات مقلقة:</strong> مراقبة مطوَّلة أو Tilt.
+    </div>
+  </section>
+
+  <!-- ============ X. العلاج والقيادة ============ -->
+  <section class="roman" id="c9potstxcomplete">
+    <div class="roman-head"><div class="roman-badge">X-C</div><h2>علاج هبوط الضغط الانتصابي وPOTS: التدابير الكاملة</h2></div>
+
+    <div class="card point-num">
+      معالجة نقص حجم/بوتاسيوم؛ سوائل&gt;3لتر/يوم؛ ملح&gt;3غ(5-10غ بـPOTS الشباب)؛ تجنُّب وجبات دهنية/كربوهيدراتية كبيرة، جهد بعد الطعام. <strong>إيقاف مدرات/خافضات أخرى قد ضروري.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>مسنون+HTN مستلقٍ صعب المزيج:</strong> تجنُّب الاستلقاء حتى بالنوم؛ خافضات ليلية منخفضة الجرعة؛ تجنُّب مدرات؛ قبول هبوط انتصابي جزئي(حتى160-180 بالحالات الشديدة). <strong>ACE-I/ARB الأقل احتمالاً لهبوط انتصابي.</strong> <strong>تجنُّب قصير المفعول نهارًا(خاصة كلونيدين)</strong> — يُعزِّز دورة هبوط-ارتداد.
+    </div>
+    <div class="card point-num">
+      <strong>5نقاط إضافية:</strong>
+      <ol style="margin-top:8px">
+        <li>نوم شبه جالس(رفع رأس السرير5-6إنشات).</li>
+        <li>جوارب ضاغطة للخصر+أحزمة بطنية.</li>
+        <li>500مل ماء صباحًا قبل النهوض.</li>
+        <li>مناورات ضغط عكسي(قبضة يد، شد ذراعين، تقاطع ساقين)+جرعة ماء سريعة8-16أونصة أو استلقاء.</li>
+        <li><strong>التدرب الرياضي المنتظم3أشهر يُحسِّن/يُزيل POTS بأغلب المرضى</strong>(البدء بغير قائمة: سباحة، دراجة جالسة، تجديف).</li>
+      </ol>
+    </div>
+    <div class="card point-num">
+      <strong>4أدوية مؤقتة(فشل التدابير):</strong>
+      <ul style="margin-top:8px">
+        <li><strong>فلودروكورتيزون:</strong> قد يزيد HTN انتصابي.</li>
+        <li><strong>ميدودرين:</strong> قد يزيد HTN انتصابي؛ يُتجنَّب بعد6مساءً.</li>
+        <li><strong>دروكسيدوبا:</strong> يتحوَّل لنورأدرينالين بالعقد الودية، يظهر أساسًا أثناء التنشيط الودي(الوقوف) — <strong>أقل ميلاً لـHTN انتصابي من ميدودرين.</strong> <strong>معتمد فقط لهبوط انتصابي عصبي المنشأ(Class IIa)</strong>، قد يزيد التنشيط الودي بـPOTS.</li>
+        <li><strong>بيريدوستيغمين:</strong> مثبِّط كولين إستراز، تأثير محدود، دواء مساعد.</li>
+      </ul>
+      <p style="margin-top:8px"><strong>Class IIa بالانتصابي، IIb بـPOTS(HRS).</strong></p>
+    </div>
+    <div class="card point-num">
+      <strong>POTS مفرط الأدرينالية:</strong> بروبرانولول صغير الجرعة(10-20ملغ×3/يوم، HRS:IIb) أو إيفابرادين. <strong>بروبرانولول طويل المفعول/جرعات عالية قد تُسوِّئ أعراض POTS.</strong>
+    </div>
+  </section>
+
+  <section class="roman" id="c9drivingguidance">
+    <div class="roman-head"><div class="roman-badge">X-D</div><h2>الإغماء والقيادة</h2></div>
+
+    <div class="card point-num">
+      <strong>ناجون من VT/VF:</strong> خطر اضطراب نظم/تكرار الإغماء الأعلى خلال6-12شهرًا الأولى. <strong>يُنصَح بالامتناع عن القيادة≥6أشهر</strong>، حتى مع زرع ICD.
+    </div>
+    <div class="card point-num">
+      <strong>تكرار الإغماء المبهمي~10-30%</strong>(أعلى+نوبات سابقة متعددة). <strong>الأشيع بالقيادة=المبهمي.</strong> <strong>خطر التكرار أعلى بأول6أشهر(~12%)</strong>؛ ~50%من التكرار بعد&gt;6أشهر(12% بين6أشهر-4-5سنوات).
+    </div>
+    <div class="card point-num">
+      <strong>لكن</strong> تكرار الإغماء أثناء القيادة نادر بمرضى مُشخَّصين/مُعالَجين جيدًا(حتى7% خلال8سنوات). <strong>بلا مرض بنيوي: بقاء طويل الأمد طبيعي</strong> حتى بإغماء أثناء القيادة.
+    </div>
+    <div class="card point-num">
+      <strong>القيادة لمسافات طويلة تزيد الخطر</strong>(↑تجميع وريدي محيطي). <strong>السائقون التجاريون: خطر أعلى+أخطر.</strong>
+    </div>
+    <div class="callout gold">
+      <b>الخلاصة:</b> منع القيادة≥6أشهر(فترة الخطر الأعلى+ظهور المرض الكامن). <strong>بعد6أشهر:</strong> استئناف آمن نسبيًا(خاصة رحلات قصيرة+ترطيب جيد+تقييم قلبي). <strong>القيادة التجارية:</strong> قد يلزم منعها دائمًا.
+    </div>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch9-part36.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 36</a>
+    <a href="practical-ch9-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch9-part38.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 38: أسئلة ختامية ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 9، الجزء 37
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>
