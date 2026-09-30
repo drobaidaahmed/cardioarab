@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 6: اضطرابات التامور | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch6-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 6</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 6 — الجزء 1</h3>
+  <div class="chgroup">
+    <span class="chtitle">1: التهاب التامور الحاد</span>
+    <a href="#c6causes">الأسباب</a>
+    <a href="#c6history">السيرة المرضية والفحص</a>
+    <a href="#c6ecg">تخطيط القلب الكهربائي</a>
+    <a href="#c6echo">الإيكو والتشخيص</a>
+    <a href="#c6myopericarditis">التهاب التأمور-العضلة القلبية</a>
+    <a href="#c6treatment">العلاج الكامل</a>
+    <a href="#c6recurrent">النكس والتأمور العاصر</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch6-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch6-part2.html">الجزء 2 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل السادس (الجزء 1)</span>
+    <h1>اضطرابات التامور</h1>
+  </div>
+  <span class="chapno">6</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 6: اضطرابات التامور — الجزء 1</h2>
+  </div>
+
+  <div class="topic-divider" id="c6section1">
+    <span class="tnum">1</span>
+    <h2>التهاب التامور الحاد (Acute Pericarditis)</h2>
+  </div>
+
+  <section class="roman" id="c6causes">
+    <div class="roman-head"><div class="roman-badge">I</div><h2>أسباب التهاب التامور الحاد</h2></div>
+
+    <p>أكثر أربعة أسباب شيوعًا لالتهاب التأمور الحاد(80-90%):</p>
+    <div class="card point-num">
+      <ol>
+        <li><strong>فيروسي أو مجهول السبب:</strong> الأشيع.</li>
+        <li><strong>السرطان النقيلي:</strong> عادة انصباب متوسط أو كبير.</li>
+        <li><strong>أمراض النسيج الضام:</strong> الذئبة، التهاب المفاصل الروماتويدي، تصلب الجلد.</li>
+        <li><strong>العدوى:</strong> HIV، السل، بكتيريا، فطريات، لايم.</li>
+      </ol>
+      <p style="margin-top:8px"><strong>بمرضى HIV:</strong> قد يكون التهاب التامور ثانويًا للفيروس نفسه أو لعدوى مترافقة، خاصة السل.</p>
+    </div>
+    <div class="card point-num">
+      <strong>أسباب أخرى شائعة، بسياقات محددة:</strong>
+      <ol style="margin-top:8px">
+        <li><strong>اليوريميا:</strong> انصباب بـ&gt;50% من المرضى.</li>
+        <li><strong>الإشعاع:</strong> قد يتطور بعد فترة قصيرة من العلاج، مع/بلا انصباب.</li>
+        <li><strong>ما بعد MI:</strong> مبكرًا أو متأخرًا(أسبوعين-شهرين، متلازمة Dressler).</li>
+        <li><strong>ما بعد جراحة القلب:</strong> مبكرًا أو متأخرًا، شبيه بمتلازمة Dressler، يُسمى متلازمة ما بعد بضع التامور.</li>
+        <li><strong>الرضوض:</strong> راضة أو نافذة.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="roman" id="c6history">
+    <div class="roman-head"><div class="roman-badge">II</div><h2>السيرة المرضية والمعطيات السريرية</h2></div>
+
+    <h3 class="subhead">A. ألم الصدر</h3>
+    <div class="card point-num">
+      <strong>حاد، جنبي، عادة غير ضاغط.</strong> يبدأ بشكل سريع، أحيانًا فجائي. يُشِّع نحو الحافة الكتفية العضدية(Trapezius ridge — انتشار نموذجي) و/أو للذراع اليسرى.
+      <p style="margin-top:8px"><strong>الطابع الوضعي:</strong> يخف بالانحناء للأمام، يزداد بالاستلقاء/البلع/الحركة(بما فيها الجهد). <strong>موجودات جهازية مترافقة</strong> قد تُشير لمرض ورمي/سلّي/مناعي ذاتي.</p>
+    </div>
+
+    <h3 class="subhead">B. الاحتكاك التأموري (Friction Rub)</h3>
+    <div class="card point-num">
+      ينتج عن احتكاك الوريقتين الحشوية والجدارية الملتهبتين. يُسمع أثناء: الانقباض، الامتلاء الانبساطي المبكر، والانقباض الأذيني (<strong>3 مكونات</strong>). أفضل سماعًا بالحد السفلي الأيسر لعظم القص مع انحناء المريض للأمام.
+      <p style="margin-top:8px">الصوت أحادي المكون أقل نوعية (قد يمثل نفخة). <strong>ديناميكي</strong> (يتغير، يظهر ويختفي) — الفحوص المتكررة مهمة. قد يُسمع حتى مع انصباب إن التهاب التامور الالتهابي مرافق.</p>
+    </div>
+  </section>
+
+  <section class="roman" id="c6ecg">
+    <div class="roman-head"><div class="roman-badge">III</div><h2>موجودات تخطيط القلب الكهربائي</h2></div>
+
+    <h3 class="subhead">A. ارتفاع مقطع ST منتشر (تقعري) بكل الاشتقاقات عدا aVR وV1</h3>
+    <div class="card point-num">
+      <strong>الآلية:</strong> محور الأذية تحت الشغافية=محور القلب(~+45°) → يظهر أوضح بـII والأمامية الجانبية، بينما انخفاض ST بـaVR (وأحيانًا V1، نادرًا V2/III/aVL — قريبة من العمودي على+45°).
+    </div>
+    <div class="card point-num">
+      يُشاهَد لدى&gt;90% بوقت ما، يعود للطبيعي خلال1-5أيام (غالبًا خلال أسبوع) — <strong>قد يكون ECG طبيعيًا عند القدوم.</strong> عودة ST قد تتبعها انعكاس T (لأسابيع-أشهر)، قد تُصبح T ثنائية الطور قبل التطبيع — <strong>تُحاكي الإقفار.</strong>
+    </div>
+
+    <h3 class="subhead">B. انخفاض مقطع PR</h3>
+    <div class="card point-num">
+      لدى82% من المرضى، <strong>قد يكون التغير الأسبق ظهورًا.</strong> بكل الاشتقاقات عدا aVR (ارتفاع انعكاسي دائم). <strong>معزول لدى~25%.</strong>
+      <p style="margin-top:8px"><strong>ST↑+PR↓ رئيسيًا بـ:</strong> مجهول السبب، ما بعد جراحة القلب، الرضي/النزفي. <strong>نادرًا باليوريمي/الخبيث/السلّي</strong> (عمليات مرافقة تحجب النمط).</p>
+    </div>
+
+    <h3 class="subhead">C. انخفاض فولطية QRS وتناوب QRS</h3>
+    <div class="card point-num">
+      <strong>بوجود انصباب:</strong> قد يُظهر انخفاض فولطية+أحيانًا تناوب كهربائي(شكلان مختلفان متعاقبان لكل ضربة). قد يحدث تناوب P/T أيضًا — يزيد احتمال الانصباب.
+    </div>
+    <div class="callout warn">
+      <b>تنبيه:</b> تسرع جيبي+انخفاض فولطية أو تناوب QRS يوحي بـ<strong>سطام تأموري.</strong>
+    </div>
+  </section>
+
+  <section class="roman" id="c6echo">
+    <div class="roman-head"><div class="roman-badge">IV</div><h2>الإيكوكارديوغرافي، والتشخيص</h2></div>
+
+    <div class="card point-num">
+      <strong>غالبًا طبيعي</strong> (معظم الحالات بلا انصباب — التهاب تامور جاف). <strong>انصباب صغير~40%.</strong> <strong>متوسط/كبير غير شائع(~5%).</strong>
+    </div>
+    <div class="card point-num">
+      <strong>مجهول السبب أقل احتمالاً بانصباب متوسط/كبير، لكن يبقى الأكثر احتمالاً</strong ({25-50% من الانصبابات المتوسطة/الكبيرة مجهولة السبب}؛ 80-90% بلا انصباب/صغير مجهولة السبب). <strong>وجود الانصباب يزيد احتمال سبب نوعي</strong> (خباثة، عدوى، نسيج ضام). <strong>خلل LV (قد يكون قطعيًا)</strong> يوحي بالتهاب عضلة قلب شديد مرافق.
+    </div>
+
+    <div class="callout gold">
+      <b>معايير التشخيص:</b> وجود2 من4: (1) ألم صدر؛ (2) احتكاك تأموري؛ (3) موجودات ECG نموذجية(ST↑منتشر و/أو PR↓)؛ (4) انصباب تأموري. <strong>الانصباب غير ضروري للتشخيص، لكن يؤكِّده عند وجوده.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>CRP:</strong> مؤشر مفيد للمتابعة (يشترطه بعض المؤلفين للتشخيص). <strong>ESR:</strong> أقل نوعية، يرتفع/ينخفض لاحقًا مقارنة بـCRP — <strong>ارتفاعه الشديد له قيمة تشخيصية</strong> (يوحي بسل/مرض مناعي ذاتي).
+    </div>
+    <div class="card point-num">
+      <strong>ANA بعيار منخفض:</strong> شائع بمجهول السبب(~40%)، غالبًا بلا أهمية سريرية. <strong>مفيد بحالات الخطورة العالية.</strong>
+    </div>
+  </section>
+
+  <section class="roman" id="c6myopericarditis">
+    <div class="roman-head"><div class="roman-badge">V</div><h2>التهاب التأمور-العضلة القلبية (Myopericarditis)، والمترجح (Perimyocarditis)</h2></div>
+
+    <p>ارتفاع ST يوحي بإصابة تحت شغافية خارجية للعضلة (لا التأمور بحد ذاته — صامت كهربائيًا) — <strong>لذا ارتفاع التروبونين أمر شائع.</strong></p>
+    <div class="card point-num">
+      <strong>Myopericarditis:</strong> تأثر خفيف، تروبونين مرتفع، <strong>EF طبيعي</strong>، لا اضطراب حركة جدار. إنذار جيد — ECG يعود للطبيعي خلال12شهرًا. <strong>ترتفع التروبونين قد يكون ملحوظًا</strong>(وسيط7نانوغرام/مل بدراسة)، <strong>لا يدل على مضاعفات بعيدة المدى</strong> (بخلاف ACS).
+      <p style="margin-top:8px"><strong>العلاج:</strong> تقليل جرعة NSAID(مثلاً أسبرين500ملغ×3). تقييد رياضي4-6أسابيع، عودة تنافسية فقط بعد6أشهر+تطبيع ECG/LV+غياب اضطراب نظم بهولتر/جهد.</p>
+    </div>
+    <div class="card point-num">
+      <strong>Perimyocarditis (أو التهاب عضلة قلب صرف):</strong> التهاب مركَّز بالعضلة، يتظاهر بـHF سريري أو خلل LV مهم(قد يكون قطعيًا). قد يُظهر تغيرات ST بؤرية أو Q تُشابه STEMI — <strong>يُجرى تصوير إكليلي لاستبعاد ACS.</strong>
+      <p style="margin-top:8px"><strong>خلل خفيف(EF40-50%):</strong> إنذار جيد بعيد المدى، خلل مستمر بـ~15% فقط. <strong>خلل شديد:</strong> إنذار سيئ، خلل مستمر بحتى60%.</p>
+    </div>
+  </section>
+
+  <section class="roman" id="c6treatment">
+    <div class="roman-head"><div class="roman-badge">VI</div><h2>العلاج</h2></div>
+
+    <p>محدود ذاتيًا — لا مضاعفات/نكس بـ&gt;70% من المرضى.</p>
+
+    <h3 class="subhead">A. العلاج المبدئي</h3>
+    <div class="card point-num">
+      <strong>1. NSAID أو أسبرين بجرعة كاملة1-2أسبوع.</strong> جرعة واحدة غالبًا بتأثير عرضي دراماتيكي.
+      <p style="margin-top:8px"><strong>نظام:</strong> NSAID جرعة كاملة أسبوعًا(أو حتى تطبيع CRP) — مثال: إيبوبروفين600ملغ×3، أو أسبرين750-1000ملغ×3 — ثم تخفيض تدريجي3أسابيع(لا إيقاف مفاجئ؛ مثال: تقليل الإيبوبروفين200-400ملغ كل أسبوع).</p>
+    </div>
+    <div class="card point-num">
+      <strong>2. الكولشيسين المنهجي(3أشهر) كمساعد</strong> بالنوبة الأولى يُقلل النكس بشكل ملحوظ(70%، دراسة COPE) — <strong>Class I بإرشادات ESC.</strong>
+      <p style="margin-top:8px"><strong>الجرعة:</strong> 1ملغ×2 أول يوم، ثم0.5ملغ×2. <strong>وزن&lt;70كغ:</strong> 0.5ملغ×2 أول يوم، ثم0.5ملغ×1.</p>
+    </div>
+    <div class="card point-num">
+      <strong>3. غياب استجابة NSAID بعد أسبوع:</strong> إعادة النظر بمسبب نوعي؛ قد تحتاج جرعة NSAID زيادة؛ <strong>يجب إضافة الكولشيسين.</strong>
+      <p style="margin-top:8px"><strong>الستيرويدات:</strong> تُتجنَّب عمومًا (تزيد خطر النكس، تُفاقم تكاثر الفيروس). <strong>تُستخدَم بالحالات المقاومة/المناعية الذاتية</strong> (بريدنيزون25-30ملغ/يوم، تخفيض بطيء كل1-2أسبوع، أبطأ تحت15ملغ/يوم).</p>
+    </div>
+    <div class="card point-num">
+      <strong>4. تقييد النشاط:</strong> حتى زوال الأعراض+تطبيع ECG/CRP. أكثر تشديدًا بالرياضيين(3أشهر).
+    </div>
+    <div class="card point-num">
+      <strong>5. خصائص عالية الخطورة</strong> (تزيد احتمال سبب نوعي/مضاعفات → استشفاء+تحرٍّ سببي):
+      <ol style="margin-top:8px">
+        <li>عدم استجابة NSAID بعد أسبوع.</li>
+        <li>انصباب متوسط/كبير.</li>
+        <li>بداية تحت حادة(أيام-أسابيع).</li>
+        <li>حرارة&gt;38°.</li>
+        <li>اشتباه سريري بمسبب نوعي.</li>
+      </ol>
+      <p style="margin-top:8px"><strong>التحري السببي:</strong> HIV، PPD(سل)/ANA/عامل روماتويدي، تحرٍّ أورام نوعية. <strong>التهاب عضلة قلب يستوجب الاستشفاء أيضًا.</strong></p>
+    </div>
+
+    <h3 class="subhead" id="c6recurrent">B. التهاب التأمور الناكس (Recurrent)</h3>
+    <div class="card point-num">
+      15-30% (مجهول السبب/مناعي ذاتي) يُطوِّرون نكسًا خلال18شهرًا، قد يستمر لسنوات. <strong>السبب:</strong> عملية مناعية ذاتية بعد عدوى فيروسية أولية (عدوى مستمرة/متكررة تبقى ممكنة).
+      <p style="margin-top:8px"><strong>نكس خلال6أسابيع</strong> = عادة استمرار الأولي، يُسمى "التهاب تأمور مستمر (Incessant)" لا ناكسًا حقيقيًا.</p>
+    </div>
+    <div class="card point-num">
+      <strong>بغياب خطورة عالية:</strong> عادة مجهول السبب، لا يستدعي تحريًا خاصًا. <strong>أخف من النوبة الأولى</strong>، لا يترافق مع تضيُّق تأموري (خطره أقل بعد النكس من بعد النوبة الأولى). <strong>~ثلث</strong> لديهم إصابة جنب-تأمورية بالنكسات.
+    </div>
+    <div class="card point-num">
+      <strong>علاج كل نوبة نكس:</strong> NSAID أطول(2-4أسابيع)+تخفيض بطيء(شهر-عدة أشهر، معتمدًا على CRP). <strong>كولشيسين≥6أشهر.</strong> <strong>تُتجنَّب الستيرويدات</strong> إلا بالحالات المقاومة.
+    </div>
+
+    <h3 class="subhead">C. بوجود انصباب</h3>
+    <p>البحث عن سبب نوعي (القسم3). إيكو متسلسل: أثناء الاستشفاء(استقرار الانصباب)، وبعد الخروج(زوال الانصباب خلال أشهر).</p>
+
+    <h3 class="subhead">D. التأمور العاصر المزمن</h3>
+    <div class="card point-num">
+      بعد مجهول السبب حاد: <strong>غير شائع(&lt;1%)</strong>، أقل شيوعًا حتى بعد الناكس. <strong>~9%</strong> يُظهرون فسيولوجيا عاصرة عابرة (قشرة التهاب حاد لا نسيج ندبي) — تزول خلال أشهر(وسيط2.1شهر).
+    </div>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <span style="color:var(--text-dimmer); font-size:13px;">بداية الفصل</span>
+    <a href="practical-ch6-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch6-part2.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 2: السطام القلبي ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 6، الجزء 1
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

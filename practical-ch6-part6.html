@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 6: اضطرابات التامور | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch6-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 6</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 6 — الجزء 6</h3>
+  <div class="chgroup">
+    <span class="chtitle">تحليل القسطرة</span>
+    <a href="#c6beatselection">اختيار الضربات، تأثير الحجم</a>
+    <a href="#c6copd">COPD الكامل مقابل العاصر</a>
+    <a href="#c6table172">الجدول 17.2 الشامل</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">V: الإيكو</span>
+    <a href="#c6echorcm">الإيكو: العاصر مقابل RCM</a>
+    <a href="#c6annulusreversus">Annulus Reversus، حركة الحاجز</a>
+    <a href="#c6table173">الجدول 17.3 الشامل (17.10)</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch6-part5.html">→ الجزء 5</a>
+    <a href="practical-ch6-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch6-part7.html">الجزء 7 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل السادس (الجزء 6)</span>
+    <h1>اضطرابات التامور</h1>
+  </div>
+  <span class="chapno">6</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 6: اضطرابات التامور — الجزء 6</h2>
+  </div>
+
+  <section class="roman" id="c6beatselection">
+    <div class="roman-head"><div class="roman-badge">تحليل</div><h2>اختيار الضربات بالقسطرة، وتأثير حجم الدم</h2></div>
+
+    <div class="card point-num">
+      <strong>ضربتان أساسيتان:</strong> <strong>ضربة الشهيق القصوى</strong>(تسبقها أقل نقطة انغماس انبساطي)؛ <strong>ضربة الزفير القصوى</strong>(تسبقها أعلى نقطة انغماس). تحليل الانبساط يُحدِّد أي الضربات للتحليل الانقباضي.
+    </div>
+    <div class="card point-num">
+      <strong>عدم التوافق(Discordance)</strong> بين الضغوط الانقباضية RV/LV=<strong>الأكثر حساسية ونوعية(&gt;90%).</strong> <strong>ثانيًا:</strong> التغير التنفسي بتدرج PCWP-LV الانبساطي الباكر. <strong>الباقي:</strong> حساسية/نوعية متوسطة(50-70%). <strong>يُفضَّل تقييمها بتنفس عميق</strong> (بخلاف التقييم السريري/الدوبلري للنبض المتناقض الذي يتم بتنفس طبيعي).
+    </div>
+    <div class="card point-num">
+      <strong>تأثير حجم الدم:</strong>
+      <ul style="margin-top:8px">
+        <li><strong>تبرز مع تحميل حجمي</strong>(500مل/10دقائق): نمط الغوص-الهضبة+انحدارات X/Y عميقة (علامات ضعف مطاوعة شديد) — <strong>تُخفى بنقص الحجم!</strong> قد يكون RA طبيعيًا بشكله ("<strong>العاصر التاموري الكامن</strong> — Occult"). <strong>تساوي الضغوط أوضح بتحميل الحجم أيضًا.</strong></li>
+        <li><strong>تبرز مع نقص الحجم:</strong> التغيرات التنفسية غير المتوافقة بالضغوط الانقباضية (يُشابه تفاقم النبض المتناقض بنقص الحجم).</li>
+      </ul>
+      <p style="margin-top:8px"><strong>بينما تحميل الحجم يزيد الاعتماد المتبادل ذاته، تصبح التغيرات التنفسية له مخفَّفة.</strong></p>
+    </div>
+  </section>
+
+  <section class="roman" id="c6copd">
+    <div class="roman-head"><div class="roman-badge">III-C</div><h2>COPD الكامل مقابل العاصر التأموري</h2></div>
+
+    <p>بينما فشل RV قد يُحاكي جانبًا من العاصر (تساوي الضغوط)، <strong>COPD قد يُحاكي جانبًا آخر</strong> (عدم توافق امتلاء RV/LV+نبض متناقض) — بسبب التبدلات الكبيرة بالضغط داخل الصدر. <strong>يُشاهَد أيضًا بـ:</strong> التهوية الآلية؛ المرضى المهدَّئون المتنفسون بعمق(كإجراءات القسطرة الروتينية).</p>
+    <div class="card point-num">
+      <strong>الآلية:</strong> بالضغط السلبي العميق، يزداد الامتلاء الأيمن (انتقال حجم كبير من خارج الصدر) — <strong>لا يحدث هذا يسارًا.</strong> → تغيرات متعاكسة طوريًا بحجم RV/LV → ضغوط انقباضية غير متناغمة.
+    </div>
+    <div class="card point-num">
+      <strong>يُشاهَد أيضًا بـ:</strong> الأصحاء ناقصي الحجم(الجزء الحاد من فرانك-ستارلينغ)+تنفس عميق — <strong>غالبًا غائب بفرط الحجم.</strong> <strong>لذا عدم توافق الامتلاء غير شائع بـRCM/قصور القلب الشديد.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>الأصحاء بتنفس هادئ:</strong> تغيرات طورية طفيفة(↑يمينًا،↓يسارًا بالشهيق)، لكن الضغوط الانقباضية تنخفض <strong>بتناغم وخفة</strong>(تأثير مباشر للضغط السلبي). <strong>التوافق الانقباضي</strong> نفسه يُشاهَد بـRCM وفشل RV. <strong>بالعاصر/COPD/نقص الحجم الشديد: عدم التوافق يتغلَّب على التأثير المباشر.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>بـCOPD (بخلاف العاصر):</strong>
+      <ol style="margin-top:8px">
+        <li>لا تساوي بالضغوط الانبساطية الأربع (RA/RVEDP&lt;PCWP/LVEDP).</li>
+        <li>ينتقل الضغط التنفسي للحجرات — <strong>لا Kussmaul</strong> (SVC/RA تنخفض بالشهيق).</li>
+        <li>لا نمط الغوص-الهضبة — RA بلا X/Y عميقين، غالبًا طبيعي.</li>
+      </ol>
+    </div>
+    <div class="card point-num">
+      <strong>الإيكو/الدوبلر للتمييز:</strong> <strong>جريان SVC:</strong> لا يزداد بالشهيق بالعاصر(Kussmaul)؛ يزداد بوضوح بـCOPD. <strong>لذا</strong> S/D بـSVC تتغيَّر طفيفًا بالعاصر، بوضوح بـCOPD(خاصة S). <strong>IVC/الكبد:</strong> يزداد بالشهيق، ينقص/ينعكس بالزفير — <strong>بكليهما.</strong>
+    </div>
+  </section>
+
+  <section class="roman" id="c6table172">
+    <div class="roman-head"><div class="roman-badge">جدول</div><h2>الجدول 17.2: الأداء العملي، الملاحظة العملية</h2></div>
+
+    <div class="card">
+      <strong>أهم3 تسجيلات بتقييم ديناميكا العاصر:</strong>
+      <ol style="margin-top:8px">
+        <li><strong>ضغط RA:</strong> X عميق، Y عميق، غياب الانخفاض التنفسي.</li>
+        <li><strong>تسجيل RV/LV متزامن:</strong> نمط الغوص-الهضبة؛ تساوي LVEDP≈RVEDP(عكس RVEDP&gt;LVEDP=فشل RV)؛ عدم توافق/توافق الذروات الانقباضية بتنفس عميق.</li>
+        <li><strong>تسجيل LV/PCWP متزامن:</strong> تدرج بين PCWP وLV الانبساطي الباكر، مع تغيرات بغمس LV الباكر أثناء التنفس.</li>
+      </ol>
+    </div>
+    <div class="callout gold">
+      <b>ملاحظة عملية مهمة:</b> بالاشتباه السريري+RA≤8 أو مرتفع طفيفًا(8-15) <strong>بلا</strong> ملامح مورفولوجية نموذجية → <strong>تحميل حجمي</strong> لكشف: X/Y عميقين، النمط الانغماسي-الهضبي، تساوي الضغوط — <strong>يكشف العاصر الكامن.</strong>
+    </div>
+  </section>
+
+  <section class="roman" id="c6echorcm">
+    <div class="roman-head"><div class="roman-badge">V</div><h2>ميزات الإيكو: العاصر مقابل RCM</h2></div>
+
+    <p><strong>مشتركة بكليهما:</strong> E عبر التاجي/ثلاثي الشرف مرتفعة(E/A&gt;1.5، ضغوط امتلاء مرتفعة). الوظيفة الانقباضية محفوظة، حجم البطينين طبيعي، الأذينان متوسعان.</p>
+    <div class="card point-num">
+      <strong>بـRCM:</strong> لا اعتماد متبادل بطيني، ينتقل الضغط الصدري للحجرات. <strong>لذا:</strong> لا تبدلات تنفسية واضحة بالجريان التاجي/ثلاثي الشرف، ولا بالكبدي/الرئوي.
+      <p style="margin-top:8px"><strong>بالعاصر:</strong> E يتغيَّر&gt;25% بالتنفس الطبيعي (الشكلان17.10-17.11).</p>
+    </div>
+    <div class="card point-num">
+      <strong>بـRCM/فشل RV:</strong> الضغط السلبي "يحاول" سحب من IVC/SVC، لكن لضعف مطاوعة RA/RV وعدم اعتمادها على الحمل المسبق، <strong>لا يتغيَّر الجريان كثيرًا</strong> (IVC لا ينهار).
+    </div>
+    <div class="card point-num">
+      <strong>بالعاصر:</strong> تبدلات بكل من التاجي/الرئوي/الكبدي، بصرف النظر عن النظم(IVC متوسع لكن ينهار جزئيًا). <strong>قد تغيب حتى12%</strong>(خاصة فرط حجم شديد) — تُكشَف بخفض الحمل المسبق(إمالة/جلوس).
+    </div>
+    <div class="card point-num">
+      <strong>بـAF:</strong> التبدلات أكثر خفاءً — <strong>زيادة متناقضة</strong> بـE بعد RR قصير؛ <strong>انخفاض متناقض</strong> بعد RR طويل(حسب طور التنفس). <strong>انعكاس الجريان الكبدي الزفيري يبقى بارزًا</strong> بصرف النظر عن RR — أكثر فائدة من التاجي بـAF.
+    </div>
+  </section>
+
+  <section class="roman" id="c6annulusreversus">
+    <div class="roman-head"><div class="roman-badge">Tissue Doppler</div><h2>Annulus Reversus، وشذوذات حركة الحاجز</h2></div>
+
+    <div class="card point-num">
+      <strong>بـRCM(كأي فشل LV):</strong> E' التاجي منخفضة(ضعف ارتخاء).
+      <br><strong>بالعاصر:</strong> السرعة الحلقية الإنسية محفوظة/مرتفعة. <strong>العاصر يحد التوسع الوحشي</strong> → ↓E'الوحشية؛ <strong>E'الإنسية تحاول التعويض</strong>، تُصبح مبالغًا فيها رغم ↑ضغوط الامتلاء = <strong>Annulus Reversus</strong>(E'إنسية&gt;وحشية أو≥9سم/ث).
+    </div>
+    <div class="card point-num">
+      <strong>شذوذات حركة الحاجز</strong> (تُشاهَد أيضًا بالسطام، أقل وضوحًا لفراغ الحجرات):
+      <ol style="margin-top:8px">
+        <li><strong>التحرك المتناقض:</strong> شهيقًا→نحو LV؛ زفيرًا→نحو RV = <strong>الانزياح التنفسي المرحلي للحاجز</strong>(أفضل كشفًا بـM-mode).</li>
+        <li><strong>ارتداد الحاجز(Septal Bounce):</strong> حتى ضمن نفس الانبساط/الدورة التنفسية، تبدل لحظي بالدفع RV↔LV — الحجرات تتنافس باستمرار على المساحة ضمن التأمور الصلب.</li>
+      </ol>
+    </div>
+    <div class="callout gold">
+      <b>خلاصة Mayo Clinic:</b> أفضل حساسية(87%)+نوعية(91%) عند اجتماع3 معايير: (1)الانزياح المرحلي للحاجز بM-mode؛ (2)E'إنسية≥9سم/ث أو≥0.91×E'وحشية؛ (3)نسبة انعكاس الجريان الكبدي/الأمامي D≥0.79 بالزفير(نفس الضربة). <strong>المعيار(1) حساس جدًا لكن غير نوعي كفاية</strong> (يُشاهَد بأي ضيق تنفسي شديد+ضغط شهيقي سلبي عميق).
+    </div>
+  </section>
+
+  <section class="roman" id="c6table173">
+    <div class="roman-head"><div class="roman-badge">جدول</div><h2>الجدول 17.3: التفريق الكامل بالإيكو — العاصر مقابل RCM</h2></div>
+
+    <div class="card">
+      <strong>التشابهات:</strong> E/A&gt;1.5 بكليهما(شائع لكن ليس دائمًا بالعاصر)؛ زمن تباطؤ E&lt;160ملي بكليهما؛ حجم/وظيفة البطينين طبيعية؛ IVC متوسع بكليهما.
+    </div>
+    <div class="card">
+      <table style="margin-top:10px; font-size:13px;">
+        <thead><tr><th>المعيار</th><th>العاصر</th><th>RCM</th></tr></thead>
+        <tbody>
+          <tr><td>تغير E التنفسي(طبيعي)</td><td>≥25%</td><td>&lt;25%</td></tr>
+          <tr><td>E'إنسية</td><td>≥9سم/ث أو&gt;وحشية</td><td>&lt;9سم/ث</td></tr>
+          <tr><td>تغير الجريان الكبدي</td><td>S/D↑شهيقًا+انعكاس زفيرًا</td><td>طفيف جدًا</td></tr>
+          <tr><td>تغير الجريان الرئوي</td><td>S/D↑زفيرًا</td><td>طفيف جدًا</td></tr>
+          <tr><td>Vp(انتشار M-mode)</td><td>طبيعية(&gt;55سم/ث)</td><td>منخفضة</td></tr>
+          <tr><td>حركة الحاجز</td><td>شاذة(ارتداد)</td><td>طبيعية</td></tr>
+          <tr><td>الجدار الخلفي انبساطيًا</td><td>Dip-plateau(مسطح)</td><td>طبيعي</td></tr>
+          <tr><td>الضغط الرئوي</td><td>عادة&lt;55</td><td>قد يتجاوز55</td></tr>
+          <tr><td>TR/MR</td><td>نادر</td><td>شائع، قد شديد</td></tr>
+        </tbody>
+      </table>
+      <p class="tbl-caption"><strong>الأكثر تمييزًا للعاصر:</strong> تغير تنفسي≥25%، E'إنسية≥9(Annulus reversus)، تبدلات الكبدي/الرئوي، حركة حاجز شاذة، Dip-plateau للجدار الخلفي. <strong>الأكثر تمييزًا لـRCM:</strong> E' منخفضة، غياب التبدلات التنفسية، ضغط رئوي مرتفع، أذينان متوسعان بوضوح+قصور صمامي متكرر.</p>
+    </div>
+
+    <figure>
+      <img src="data:image/jpeg;base64,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" alt="Figure 17.10">
+      <figcaption><span class="fig-num">الشكل 17.10</span> — التبدلات التنفسية بسرعات الجريان الوريدي الكبدي: S=X بالضغط، D=Y، Ar=موجة A. <strong>بالعاصر:</strong> S وD يزدادان شهيقًا، ينخفضان زفيرًا مع انعكاس نهائي(SR،DR). <strong>بالأصحاء:</strong> تبدلات طفيفة. <strong>بـRCM:</strong> تبدلات أقل وضوحًا حتى من الطبيعي.</figcaption>
+    </figure>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch6-part5.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 5</a>
+    <a href="practical-ch6-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch6-part7.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 7 ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 6، الجزء 6
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

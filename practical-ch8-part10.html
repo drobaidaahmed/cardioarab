@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 8: مرض الشرايين المحيطية | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch8-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 8</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 8 — الجزء 10 (الأخير)</h3>
+  <div class="chgroup">
+    <span class="chtitle">أسئلة ختامية (12 سؤالًا)</span>
+    <a href="#c8q1to4">الأسئلة 1-4</a>
+    <a href="#c8q5to8">الأسئلة 5-8</a>
+    <a href="#c8q9to12">الأسئلة 9-12</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch8-part9.html">→ الجزء 9</a>
+    <a href="practical-ch8-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الثامن (الجزء 10 — الأخير)</span>
+    <h1>مرض الشرايين المحيطية</h1>
+  </div>
+  <span class="chapno">8</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 8: مرض الشرايين المحيطية — الجزء 10 (الأخير)</h2>
+  </div>
+
+  <div class="topic-divider" id="c8qafinal">
+    <span class="tnum">؟</span>
+    <h2>أسئلة وأجوبة ختامية (12 سؤالًا) — تُغلق الفصل بأكمله</h2>
+  </div>
+
+  <section class="roman" id="c8q1to4">
+    <div class="roman-head"><div class="roman-badge">؟</div><h2>الأسئلة 1-4</h2></div>
+
+    <div class="card point-num">
+      <strong>س1:</strong> رجل55، ألم شديد متزايد بربلة الساق+القدم اليمنى3أسابيع، بالراحة معظم اليوم، أسوأ ليلاً. إصبع القدم الكبير مبرقش/أرجواني، لا نبضات بالدوبلر، حركة سليمة لكن إحساس ضعيف بالطرف.
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ C.</strong> غياب النبض بالدوبلر+الزرقة الشديدة يشيران لـALI لا CLI — <strong>إعادة توعية طارئة.</strong> (تحته الحسي=إلحاح، لكن الحركة سليمة فالحالة مرحلة2 لا سبب لوصفها "تحديدًا صمّية" — د خاطئة لأن التطور التدريجي(3أسابيع) يوحي بخثار في موضعه فوق تصلب مزمن لا صمّة حادة مفاجئة).</p>
+    </div>
+    <div class="card point-num">
+      <strong>س2:</strong> رجل70، ألم ربلة يمنى بمسافة بلوك واحد، لا يحدّ نمط حياته، لا فقدان نسيجي. ABI: يمنى0.5، يسرى0.8.
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ E (خطر أحداث قلبية وعائية ووفاة&gt;5%سنويًا).</strong> عرج بسيط لا يحدّ الحياة — لا استطباب لتصوير/إعادة توعية طرفية(A،D خاطئتان). خطر CLI فقط~4% لا&gt;20%(B خاطئة — 20% هو خطر تفاقم العرج لا CLI). العرج عادة يستقر/يتحسن لا يتفاقم حتمًا(C خاطئة). <strong>لكن الخطر القلبي الوعائي مرتفع دائمًا.</strong></p>
+    </div>
+    <div class="card point-num">
+      <strong>س3:</strong> رجل58، عرج ثنائي(يمنى&gt;يسرى) يحدّ الحياة اليومية، ABI:0.6/0.7، برنامج مشي فاشل. تصوير: SFA يمنى مسدود كليًا15-20سم متكلس(إعادة تروية بالمأبضي).
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ C.</strong> TASC C(طول&gt;15سم لكن لا يمتد للمأبضي/الفخذي المشترك) — عبر الجلد مقبول، نفوذية سنة واحدة≤60%(لا&gt;60% كما بD). التدخل مبرَّر(برنامج المشي فشل بالفعل، فA خاطئة).</p>
+    </div>
+    <div class="card point-num">
+      <strong>س4:</strong> قرحتان بالقدم اليسرى، أوعية تيبية غير قابلة للانضغاط، ABI&gt;1.5، نبضات بعيدة غير محسوسة. <strong>الخطأ؟</strong>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ A خاطئة.</strong> ABI مرتفع <strong>لا يستبعد</strong> حتى CLI(حتى37% من العرضيين بABI مرتفع لديهم CLI فعليًا) — لا يستبعد شيئًا، بل يوحي بأوعية غير قابلة للانضغاط تُخفي الشدة الحقيقية. (باقي العبارات صحيحة: نفس الدلالة الإنذارية السلبية؛ TBI/دوبلر للتأكيد؛ تصوير الأبهر+الطرفين مبرَّر).</p>
+    </div>
+  </section>
+
+  <section class="roman" id="c8q5to8">
+    <div class="roman-head"><div class="roman-badge">؟</div><h2>الأسئلة 5-8</h2></div>
+
+    <div class="card point-num">
+      <strong>س5</strong>(نفس مريض س4): مرض شديد بالحرقفي الخارجي الأيسر، SFA يسار مسدود كليًا متكلس، AT سالك لكن مريض(يُغذي القرحة)، PT سالك سليم.
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ C (علاج عبر الجلد للحرقفي+SFA+AT معًا).</strong> بـCLI، يجب تأمين خط جريان كامل حتى الوعاء المُغذي للقرحة(مفهوم Angiosome) — AT هو المُغذي هنا، يجب علاجه أيضًا بنفس الجلسة.</p>
+    </div>
+    <div class="card point-num">
+      <strong>س6:</strong> عرج شديد(رذرفورد3) يسارًا، مرض حرقفي خارجي شديد+SFA مسدود كليًا+مرض تحت مأبضي(AT).
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ A (دعامة حرقفي فقط أولاً؛ إعادة الدخول لاحقًا لـSFA إن استمر العرج).</strong> بالعرج(لا CLI)، الهدف=السيطرة على الأعراض — يُعالَج مرض المدخل(الحرقفي) أولاً، مرض تحت مأبضي لا يُعالَج بالعرج إلا إن كان المقطع الوحيد المصاب.</p>
+    </div>
+    <div class="card point-num">
+      <strong>س7</strong>(العودة لس5/6 نمط): <strong>الخطأ=C</strong> — طعم فخذي-ظنبوبي مُفضَّل على عبر الجلد بمرض تحت مأبضي "لأنه يتيح شفاءً أفضل" — <strong>خطأ</strong>؛ النفوذية الطويلة للطعم الظنبوبي ليست أعلى بكثير من الرأب/DES الحديثة، وعبر الجلد كافٍ للشفاء قصير-متوسط الأمد. <strong>إعادة الانسداد بعد الشفاء عادة لا تُعيد CLI</strong>(الجريان اللازم للحفاظ أقل من اللازم للالتئام).</p>
+    </div>
+    <div class="card point-num">
+      <strong>س8:</strong> عرج يحدّ الحياة بمسافة بلوك واحد(الفخذين)، نبضات بعيدة محسوسة، فخذية طبيعية. <strong>ما الصحيح؟</strong>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ E (B+D).</strong> عرج شرياني ممكن رغم نبضات طبيعية بالراحة — مرض أبهري-حرقفي متوسط قد يسمح بجريان طبيعي بالراحة لكن غير كافٍ بالجهد(الحرقفي يُغذي مساحة أوسع من SFA) → <strong>ABI بالراحة+الجهد ضروري</strong> لكشف الانخفاض المفارق بعد التمرين.</p>
+    </div>
+  </section>
+
+  <section class="roman" id="c8q9to12">
+    <div class="roman-head"><div class="roman-badge">؟</div><h2>الأسئلة 9-12</h2></div>
+
+    <div class="card point-num">
+      <strong>س9:</strong> ألم شديد بالقدم اليمنى مستمر يومان، مبرقشة زرقاء. <strong>الخطوة الفورية الأهم؟</strong>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ B (دوبلر للنبضات+فحص الحس/الحركة).</strong> أولاً: تصنيف مرحلة ALI سريريًا(النبضات غائبة عادة بالدوبلر). بلا فقدان حركي → قسطرة+تحليل خثري مطوَّل مناسب. بفقدان حركي → جراحة إسعافية+بضع لفافة. شلل شديد/غرغرينا → بتر. CTA لاحقًا للبحث عن مصدر(أمهات دم).</p>
+    </div>
+    <div class="card point-num">
+      <strong>س10:</strong> رجل72، مدخن شره، ألم+تبقع+زرقة بإصبع القدم الكبير+بقع أرجوانية بالربلة(أسبوع). فخذي+1، PT/DP غير محسوسين لكن إشارة دوبلر جيدة. ABI=0.75، أحادي الطور. CTA: تضيق80% بالحرقفي الأيمن، الفخذية/المأبضية/تحت المأبضية سالكة.
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ B (التدبير المحافظ).</strong> انصمام عصيدي(Atheroembolization) من الأبهر-الحرقفي — التباين بين إقفار القدم الشديد ونبضات محفوظة نسبيًا(إشارة دوبلر جيدة)+ABI منخفض بسيط يوحي بصمّات عصيدية بعيدة جدًا. <strong>دعامة الحرقفي قد تُفاقم الانصمام</strong> — العناية بالقدم+المحافظة(يتحسن إقفار القدم بمعظم الحالات).</p>
+    </div>
+    <div class="card point-num">
+      <strong>س11:</strong> رجل71، مدخن+CAD، لغط سباتي أيمن، بلا TIA/سكتة سابقة. دوبلر: سرعة260سم/ث بالسباتي الداخلي. <strong>الخطأ؟</strong>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ D خاطئة</strong> — الدعامة <strong>ليست</strong> بنفس مستوى توصية CEA باللاعرضي(CEA=IIa اعتمادًا على ACAS/ACST؛ الدعامة=IIb اعتمادًا على CREST الذي شمل مرضى لاعرضيين). (خطر سنوي~2% صحيح؛ CTA/MRA قد يلزم للتأكيد؛ فائدة CEA هامشية باللاعرضي؛ لا حاجة تصوير غازي قبل CEA لكن يلزم قبل تقرير أهلية الدعامة — كلها صحيحة).</p>
+    </div>
+    <div class="card point-num">
+      <strong>س12:</strong> رجل64، مدخن+سكري، HTN غير مضبوط(160/80 رغم3أدوية مثالية)، كرياتينين1.6(GFR=45). دوبلر: تضيق شديد بالكلوي الأيمن، مؤشر مقاومة كلوية=0.85. تصوير غازي: تضيق80%. <strong>الخطوة التالية؟</strong>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ A (من غير المرجح أن تُحسِّن الدعامة ضبط الضغط/الوظيفة الكلوية).</strong> مؤشر المقاومة الكلوية المرتفع(&gt;0.8) = مرض وعائي دقيق داخل الكلية = <strong>مرض كلوي جوهري</strong>(سكري/HTN)، لا نقص تروية بسيط — لا يُتوقَّع استفادة من الدعامة رغم التضيق التشريحي الشديد.</p>
+    </div>
+  </section>
+
+  <div style="text-align:center; margin:50px 0 30px; padding:28px 24px; background:linear-gradient(135deg, rgba(45,212,191,.12), rgba(212,175,55,.08)); border:1.5px solid var(--gold); border-radius:16px;">
+    <div style="font-size:22px; font-weight:800; color:var(--gold); margin-bottom:10px;">🎉🎉🎉 اكتمل الفصل الثامن بالكامل! 🎉🎉🎉</div>
+    <div style="color:var(--text-dim); font-size:15px; line-height:1.9;">
+      "مرض الشرايين المحيطية" — 10 أجزاء، 6 صور كاملة<br>
+      من PAD بالأطراف السفلية (ABI، نقص التروية الحاد والمزمن، إعادة التروية بأنواعها)،<br>
+      مرورًا بمرض الشريان السباتي (CEA مقابل الدعامات)، وصولاً لتضيّق الشريان الكلوي — بالكامل بحرفية النص المصدري.
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:20px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch8-part9.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 9</a>
+    <a href="practical-ch8-index.html" style="color:var(--gold); text-decoration:none; font-weight:700; font-size:14.5px;">↩ فهرس الفصل الكامل</a>
+    <a href="practical-index.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">فهرس الكتاب الرئيسي ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 8 (مكتمل)، الجزء 10/10
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

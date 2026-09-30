@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 8: مرض الشرايين المحيطية | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch8-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 8</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 8 — الجزء 7</h3>
+  <div class="chgroup">
+    <span class="chtitle">VIII (نهاية): قروح الأطراف</span>
+    <a href="#c8ulcertable">الجدول 19.6، التهاب العظم والنقي</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">2: مرض الشريان السباتي</span>
+    <a href="#c8carotidrisk">مخاطر التضيّق العرضي/اللاعرضي</a>
+    <a href="#c8carotidassess">التقييم: NASCET/ECST (19.5)</a>
+    <a href="#c8carotidmed">العلاج الطبي</a>
+    <a href="#c8carotidasx">إعادة التوعية باللاعرضي</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch8-part6.html">→ الجزء 6</a>
+    <a href="practical-ch8-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch8-part8.html">الجزء 8 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الثامن (الجزء 7)</span>
+    <h1>مرض الشرايين المحيطية</h1>
+  </div>
+  <span class="chapno">8</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 8: مرض الشرايين المحيطية — الجزء 7</h2>
+  </div>
+
+  <section class="roman" id="c8ulcertable">
+    <div class="roman-head"><div class="roman-badge">VIII</div><h2>تدبير قروح الأطراف السفلية: الجدول 19.6</h2></div>
+
+    <div class="card">
+      <table style="margin-top:10px; font-size:13px;">
+        <tbody>
+          <tr><td>1</td><td>البحث عن الإقفار. إعادة توعية سريعة إن قرحة إقفارية(خلال أيام-أسبوع).</td></tr>
+          <tr><td>2</td><td>مضادات حيوية إن علامات إنتان: حواف حمراء/دافئة، قرحة عميقة، قيح، حرارة، ↑CRP/كريات بيض.</td></tr>
+          <tr><td>3</td><td>إزالة النسيج الميت(Debridement).</td></tr>
+          <tr><td>4</td><td>تخفيف الضغط عن الطرف(عصا) ±إطالة وتر العرقوب إن قرحة عصبية.</td></tr>
+          <tr><td>5</td><td>استبعاد التهاب العظم والنقي.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card point-num">
+      <strong>سريريًا:</strong> قرحة عميقة يمكن جسّ العظم بقاعدتها = <strong>توحي بشدة بالتهاب عظم ونقي.</strong> قرحة كبيرة/عميقة(&gt;2سم²أو&gt;3ملم عمق) = توحي به أيضًا.
+      <p style="margin-top:8px"><strong>الاستقصاء:</strong> X-ray بسيطة(تخرُّب العظم — علامة متأخرة بعد أسابيع)؛ ±MRI(حساس/نوعي، مفيد إن لم يُثبَت سريريًا).</p>
+    </div>
+    <div class="card point-num">
+      <strong>العلاج:</strong> إزالة العظم المصاب أو بتر محدود+مضادات حيوية لفترة أطول. <strong>مقاربة غير جراحية</strong> يمكن اعتمادها أيضًا(حسب عدة سلاسل دراسية).
+    </div>
+  </section>
+
+  <!-- ============ القسم 2: السباتي ============ -->
+  <div class="topic-divider" id="c8section2carotid">
+    <span class="tnum">2</span>
+    <h2>مرض الشريان السباتي (Carotid Disease)</h2>
+  </div>
+
+  <section class="roman" id="c8carotidrisk">
+    <div class="roman-head"><div class="roman-badge">مخاطر</div><h2>خطر السكتة حسب شدة/عرضية التضيّق</h2></div>
+
+    <div class="card point-num">
+      <strong>تضيّق سباتي لاعرضي&gt;70%:</strong> خطر سنوي لسكتة بنفس الجانب1.5-2%(أقل بكثير من التصور الشائع). <strong>&gt;90%(خطر~2.5%سنويًا)</strong> أو مرض متقدم: أعلى قليلاً فقط. <strong>حتى الانسداد الكامل</strong> غالبًا لاعرضي، خطر منخفض نسبيًا(&lt;1% ببعض السلاسل، حتى10% بأخرى، يبقى منخفضًا نسبيًا).
+    </div>
+    <div class="card point-num">
+      <strong>تضيّق سباتي عرضي&gt;50%:</strong> خطر يصل~30% خلال سنتين، <strong>معظمه بالأشهر الثلاثة الأولى</strong>(~15% خلال30يومًا، 20-30% خلال3أشهر — دراسات NASCET,ECST). <strong>ينخفض مع الوقت من الحدث. أعلى(35%سنويًا) بتضيّق&gt;90%.</strong>
+    </div>
+  </section>
+
+  <section class="roman" id="c8carotidassess">
+    <div class="roman-head"><div class="roman-badge">I</div><h2>التقييم: طريقتا NASCET وECST</h2></div>
+
+    <div class="card point-num">
+      <strong>التصوير الوعائي التداخلي</strong>(المعيار الذهبي قديمًا) — طريقتان: <strong>NASCET</strong>(الأكثر استخدامًا، تقدير أكثر تحفظًا لشدة التضيّق، معتمدة من ACC لتحديد حدود العلاج) و<strong>ECST.</strong>
+    </div>
+
+    <figure>
+      <img src="data:image/jpeg;base64,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" alt="Figure 19.5">
+      <figcaption><span class="fig-num">الشكل 19.5</span> — <strong>ECST:</strong> يُقاس التضيّق بالرجوع للقطر الأصلي للبصلة السباتية(A). <strong>NASCET:</strong> يُقاس بالرجوع للقطر البعيد للسباتي الداخلي(B). <strong>تضيّق50% بـNASCET≈65% بـECST.</strong></figcaption>
+    </figure>
+
+    <div class="card point-num">
+      <strong>الدوبلر:</strong> يُقدِّر الشدة بقياس السرعة(تضيّق شديد&gt;70% إن سرعة انقباضية&gt;230سم/ث أو انبساطية&gt;100سم/ث). <strong>قد يُبالغ بالتقدير</strong> — نطاق غير واضح(70-80%) يستدعي تأكيدًا بـCTA أو MRA.
+    </div>
+    <div class="card point-num">
+      <strong>CTA أو MRA:</strong> يُجرى بعد إشارة الدوبلر لتضيّق شديد — يؤكد النتيجة، يُحدد الموقع الدقيق، يبحث عن مرض داخل القحف تحضيرًا لـCEA. <strong>MRA لا يتأثر بالتكلسات</strong>(أفضل من CTA بتكلسات سباتية شديدة)، يمكن بلا Gadolinium(يُحسِّن الوضوح).
+    </div>
+    <div class="card point-num">
+      <strong>التصوير الوعائي التداخلي</strong> فقط إن فحوصات غير باضعة متناقضة، أو إن المخطَّط دعامة سباتية. <strong>CEA يمكن إجراؤه بالاعتماد على الفحوصات غير الباضعة فقط.</strong>
+    </div>
+  </section>
+
+  <section class="roman" id="c8carotidmed">
+    <div class="roman-head"><div class="roman-badge">II</div><h2>العلاج الطبي</h2></div>
+
+    <div class="card point-num">
+      <strong>الأساس:</strong> علاج أحادي بالأسبرين أو الكلوبيدوغريل؛ علاج مكثف لـHTN؛ ستاتين.
+    </div>
+    <div class="card point-num">
+      <strong>بسكتة سابقة:</strong> Aggrenox(أسبرين-ديبيريدامول) — لم يثبت تفوقه على الكلوبيدوغريل الأحادي.
+      <p style="margin-top:8px"><strong>دراسة MATCH:</strong> لا فائدة للجمع الطويل الأمد(أسبرين-كلوبيدوغريل) مقارنة بالكلوبيدوغريل الأحادي بسكتة حديثة(&lt;3أشهر)، مع زيادة نزف كبير/دماغي.</p>
+      <div class="callout gold">
+        <b>دراسة CHANCE وتحليل تلوي:</b> البدء المبكر جدًا بالعلاج المزدوج(أسبرين-كلوبيدوغريل) خلال أول24ساعة من TIA/سكتة صغيرة، <strong>لمدة3أسابيع فقط</strong>(لا طويل الأمد)، يُقلل خطر السكتة خلال3أشهر. <strong>الفائدة مثبتة فقط مبكرًا ولفترة قصيرة</strong>(أعلى خطر بالأشهر الأولى10-20%) — <strong>لاحقًا العلاج الطويل أقل فائدة، تُعاكسها خطر النزف.</strong>
+      </div>
+    </div>
+    <div class="card point-num">
+      <strong>الوارفارين ليس أفضل من الأسبرين</strong> بسكتة مرتبطة بالسباتي، مع خطر نزف أعلى.
+    </div>
+  </section>
+
+  <section class="roman" id="c8carotidasx">
+    <div class="roman-head"><div class="roman-badge">III</div><h2>إعادة التوعية بالتضيّق السباتي اللاعرضي</h2></div>
+
+    <div class="callout gold">
+      <b>تجربتا ACAS وACST:</b> CEA يُقلل خطر السكتة خلال5سنوات بتضيّق لاعرضي&gt;60%(خطر سنوي من2%→0.5%)، على حساب خطر سكتة إجرائية مبكرة2%. <strong>لكن الفائدة ليست كبيرة</strong>(خطر أصلاً منخفض نسبيًا). <strong>العلاج الطبي تحسَّن منذ تلك التجارب</strong>(ستاتين، تحكم أفضل بالضغط) — <strong>الفائدة الإضافية لـCEA مقارنة بالعلاج المعاصر غير واضحة.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>CEA=Class IIa</strong> بتضيّق لاعرضي&gt;70% إن خطر الوفاة/السكتة الجراحية&lt;3%. <strong>تأكيد70-80% بوسيلة أخرى ضروري.</strong> <strong>أمراض قلبية-رئوية مرافقة</strong>(خطورة جراحية عالية) أو تشريح عنقي غير ملائم → دعامة سباتية.
+    </div>
+    <div class="card point-num">
+      <strong>تجربة SAPPHIRE:</strong> الدعامات تُعادل CEA بالخطورة الجراحية العالية(معظمهم لاعرضي). <strong>لكن لا مقارنة مباشرة</strong> بين الدعامات والعلاج الطبي — <strong>لذا الدعامة باللاعرضي=Class IIb.</strong>
+    </div>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch8-part6.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 6</a>
+    <a href="practical-ch8-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch8-part8.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 8 ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 8، الجزء 7
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

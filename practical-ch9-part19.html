@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 9: أمراض قلبية وعائية أخرى | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch9-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 9</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 9 — الجزء 19</h3>
+  <div class="chgroup">
+    <span class="chtitle">طوارئ الضغط: التعاريف</span>
+    <a href="#c9malignantdef">فرط الضغط الخبيث الكامل</a>
+    <a href="#c9urgencydef">الإلحاح الارتفاعي، الأسباب</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">II: علاج الطوارئ</span>
+    <a href="#c9emergencygoals">أهداف العلاج، منحنى التنظيم الذاتي (23.2)</a>
+    <a href="#c9ivdrugs">الأدوية الوريدية الكاملة</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">III: علاج الإلحاح</span>
+    <a href="#c9urgencytx">التدبير، تحذير "عند الحاجة"</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch9-part18.html">→ الجزء 18</a>
+    <a href="practical-ch9-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch9-part20.html">الجزء 20 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل التاسع (الجزء 19)</span>
+    <h1>أمراض قلبية وعائية أخرى</h1>
+  </div>
+  <span class="chapno">9</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 9: أمراض قلبية وعائية أخرى — الجزء 19</h2>
+  </div>
+
+  <div class="topic-divider" id="c9hypercrisis">
+    <span class="tnum">2</span>
+    <h2>ارتفاع الضغط الشديد الحاد: الطوارئ والإلحاحات</h2>
+  </div>
+
+  <section class="roman" id="c9malignantdef">
+    <div class="roman-head"><div class="roman-badge">I-A</div><h2>فرط الضغط الخبيث = طوارئ ارتفاع الضغط: التعريف الكامل</h2></div>
+
+    <p>ارتفاع شديد+أذية حادة بالأعضاء المستهدفة. <strong>لا يُحدَّد بمستوى الضغط وحده</strong>، بل بالتأثير السريري(يعتمد على الشدة+سرعة الارتفاع). <strong>عمومًا: DBP&gt;120، SBP&gt;180.</strong> <strong>الآلية: أذية وعائية دقيقة منتشرة</strong>(تُشابه DIC) مع إقفار كلوي/دماغي/قلبي.</p>
+    <div class="card point-num">
+      <strong>1. العين:</strong> وذمة حليمة العصب البصري أو نزف شبكي — <strong>العلامة الأكثر فائدة/تحديدًا لتعريف الخبيث.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>2. الدماغ:</strong> اعتلال دماغي ارتفاعي(إقفار+وذمة) — صداع، غثيان، إقياء ثم تشوش. <strong>يُميَّز عن السكتة:</strong> <strong>غير بؤري</strong>، يتطور بخفاء أكثر، <strong>يزول بضبط الضغط.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>3. القلب والأوعية:</strong> إقفار حاد، وذمة رئة، تسلخ أبهر.
+      <br><strong>4. الكلية:</strong> أذية حادة(تصلب شرايين كلوي خبيث) — كرياتينين↑+بيلة دموية/بروتينية. <strong>غير نوعية</strong>(قد مزمنة)؛ حتى إن حادة، <strong>قد يكون الفشل الكلوي سببًا للضغط لا نتيجة له.</strong>
+    </div>
+  </section>
+
+  <section class="roman" id="c9urgencydef">
+    <div class="roman-head"><div class="roman-badge">I-B,C</div><h2>الإلحاح الارتفاعي، وأسباب HTN الشديد الحاد</h2></div>
+
+    <div class="card point-num">
+      <strong>الإلحاح الارتفاعي:</strong> ارتفاع حاد(&gt;180/110-120) <strong>بلا</strong> أذية أعضاء حادة. أعراض خفيفة ممكنة(صداع، رعاف، ضيق نفس خفيف) — <strong>معظم مرضى الضغط الشديد لاعرضيون.</strong> <strong>خفض الضغط ليس إسعافيًا هنا.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>الأسباب:</strong> HTN أساسي=الأشيع للخبيث. <strong>&gt;75%</strong> من مرضى الإلحاح/الطوارئ لديهم HTN مزمن معروف — <strong>عدم الالتزام العامل المُثير الأكثر شيوعًا.</strong> <strong>نسبة صغيرة</strong>(خاصة البيض) لديها HTN ثانوي — يُبحَث عنه بغياب مُثير واضح أو HTN مقاوم.
+    </div>
+  </section>
+
+  <section class="roman" id="c9emergencygoals">
+    <div class="roman-head"><div class="roman-badge">II-A</div><h2>علاج طوارئ الضغط: الأهداف، ومنحنى التنظيم الذاتي</h2></div>
+
+    <div class="card point-num">
+      <strong>البدء بوريدي، قصير المفعول قابل للمعايرة. الأهداف(ACC):</strong>
+      <ol style="margin-top:8px">
+        <li>↓MAP~25% خلال30-60دقيقة.</li>
+        <li>ثم160-100/110 خلال2-6ساعات.</li>
+        <li>ثم طبيعي تدريجيًا خلال48ساعة.</li>
+      </ol>
+      <p style="margin-top:8px"><strong>السبب:</strong> الأوعية متكيفة ذاتيًا مع HTN مزمن — هبوط سريع قد يُسبب إقفارًا قلبيًا/دماغيًا/كلويًا. <strong>لكن</strong> خفض بسرعة معينة ضروري(الأذية العضوية نشطة ومستمرة).</p>
+    </div>
+
+    <figure>
+      <img src="data:image/jpeg;base64,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tt3Rz1Bhvv7wYbsIgPs1B9LdPTPELhDdL5M5acjab+xo6y8jkmhcvdX0x09M/wAeN4aw+xL11WNfS3HmJ1hCkkOVBEr9MdPRPUi0GIFsN3NH8H565ypJcoyHxdfTXT0T53B3hCJM3fQPMG+uNIS0isEdvprp+sj3WN5405Fj2jP02f6bP9Nn+mz/AE2f6bP9Nn3HgGzR7UGfps4U/dP+OmgQIEBCgG8P9DrIECBAgQOC5W2YNiVxhb93WgQIECBAVjegll9j8elAgQIFIJeXImS6FflJk4/5ivwP859XMfevMwBXhxeZYkgULKSpidVaMkh5cG5CgHAEAcqQZC88CHiSQYULfHVV16XQRbFGyt3gjhMwUUN3iWEnkGSBhShEeHpWq0C5qWmfvkkPLMBCghliYXjPy0ZCBGQGUMnSbaCA7fuXg29uZdlIN8xjCUaTFbmI5KnnpMQCqTQTyYaxloSDgNuGw2VkJNjY+MeChaufkPRAkCGuAPVPfnN8cVZcCQDlkr55xos3MHSpf0WIpkr3x8AaFeM7IVcM3zkPhdCEEmS8R5R1LWEI4ENzLs8YMxMI8E0oAOxxkaVlFCSMiYJYeelwnaafQA9l4tfeJJ0FDyN5sJ90jxLZFkiNuqayYhnJFL4s5p75Z9duzWThU07BBG8ydxONxZvCAV9ngg1GF+U0djTIqO4OC4QQLUNKDSh9mSxwwDxgR+ZVMYLXqEVAikjJsveKhB/PIH7QQOXWRkyYW9tPZMW0xVV46+cF2xpAatGSIJkgwQ1LnHQaaoWIOqxFnqp2iOmon3ySMfHkEUSdQmA1j6PCQrxAJTANT9TNsaEJEwCBAoD+x//aAAwDAQACAAMAAAAQ48888888888888888888888888888p1888888888888888888888888888uX88888888888hktoUEVRc88888889W888888888886N88xF88888888889W88888888888vd86y888888888889W884z99999578wn0888888888888998yMeNoeNc888888888888888888988T88l188888888888888888888898r488K88888888888888888888885iyy2J4wXwww7wwwTwww8888888888MMMMAMNIMNNEkNI1NNL959xZx1c88888888888888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" alt="Figure 23.2">
+      <figcaption><span class="fig-num">الشكل 23.2</span> — منحنى التنظيم الذاتي: التنظيم الشُّرَيني الدقيق يحافظ على الإرواء عبر مجال ضغط متوسط واسع(50-150). <strong>بـHTN مزمن شديد، ينزاح المنحنى يمينًا</strong> — الإرواء الجهازي ينخفض عندما ينخفض MAP&lt;100(مثال: SBP من200→140).</figcaption>
+    </figure>
+
+    <div class="callout gold">
+      <b>4حالات خاصة(ESC): خفض أسرع وأشد:</b>
+      <ol style="margin-top:8px">
+        <li><strong>تسلخ الأبهر:</strong> &lt;120 خلال&lt;20دقيقة.</li>
+        <li><strong>إقفار قلبي حاد مستمر:</strong> &lt;140 خلال&lt;60دقيقة.</li>
+        <li><strong>وذمة رئوية:</strong> &lt;140 خلال&lt;60دقيقة.</li>
+        <li><strong>مقدمة ارتعاج شديدة:</strong> &lt;140 خلال&lt;60دقيقة.</li>
+      </ol>
+      <p style="margin-top:8px">⚠️ بالإقفار/HF: قد ينخفض الضغط فجأة وبشدة عند تحسن الحالة(تراجع اندفاع الكاتيكولامينات).</p>
+    </div>
+    <div class="card point-num">
+      <strong>بعد6-24ساعة:</strong> إضافة دوائين-ثلاثة فمويين(بعد التأكد من عدم هبوط مفرط)، ثم سحب تدريجي للوريدي. <strong>الهدف: طبيعي خلال أيام.</strong> <strong>إعادة الأدوية تدريجيًا</strong>(دواءان بكل مرة) إن عدم التزام سابق هو السبب.
+    </div>
+  </section>
+
+  <section class="roman" id="c9ivdrugs">
+    <div class="roman-head"><div class="roman-badge">II-B</div><h2>الأدوية الوريدية الكاملة</h2></div>
+
+    <div class="card point-num">
+      <strong>1. نيتروبروسيد(0.25-4مكغ/كغ/دقيقة):</strong> مانح NO، موسِّع مباشر. بداية فورية، مدة قصيرة(3-5دقائق بعد الإيقاف)، سهل المعايرة. <strong>يُستخدَم بكل حالات الطوارئ</strong>(HF، إقفار، حوادث دماغية).
+      <p style="margin-top:8px"><strong>مخاطر:</strong> سمية سيانيد نادرة(قصور كبدي)؛ سمية ثيوسيانات نادرة(فشل كلوي أو جرعات عالية&gt;2-3مكغ/كغ/دقيقة مطوَّلة — تُفحَص بعد5أيام، أبكر بالخطورة العالية). <strong>نادرًا يُفاقم الإقفار</strong>(سرقة إكليلية عبر توسع دقيق بمناطق سليمة) — <strong>يُتجنَّب أول9ساعات من MI حاد.</strong> <strong>تسرع تحمُّل ممكن.</strong></p>
+    </div>
+    <div class="card point-num">
+      <strong>2. لابيتالول(حاصر α/β، نسبة1/7):</strong> بلعة وريدية20-80ملغ كل10دقائق(حتى300ملغ)، أو تسريب0.5-2ملغ/دقيقة. بداية سريعة، مدة2-6ساعات. <strong>معظم الطوارئ، عدا HF الحاد.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>3. نيكارديبين(DHP):</strong> تسريب2.5-15ملغ/ساعة. بداية سريعة، مدة1-4ساعة. <strong>احتياطات:</strong> تأثير سلبي بسيط بـHF الحاد؛ تسرع انعكاسي بـACS(يُفضَّل مع حاصر بيتا). <strong>أظهر تفوقًا على لابيتالول</strong>(دراستان).
+      <br><strong>كليفيديبين:</strong> DHP آخر، بداية+انتهاء سريعان جدًا، استقلاب بلازمي(مستقل عن كبد/كلية)، أعلى فعالية قليلاً من نيكارديبين، آمن بـHF.
+    </div>
+    <div class="card point-num">
+      <strong>4. نيتروغليسرين:</strong> يُستطَب بـHF الحاد+إقفار حاد فقط(الضغط مدفوع جزئيًا بفرط كاتيكولامينات ثانوي لهما). <strong>خارج هذين، غير فعّال جدًا كخافض ضغط.</strong> <strong>تحمُّل سريع</strong>(خلال24ساعة).
+    </div>
+    <div class="card point-num">
+      <strong>5. فينولدوبام(منبه D1/α2، 0.1-0.3مكغ/كغ/دقيقة، حتى1.6):</strong> موسِّع قصير. <strong>قد يحافظ/يزيد التروية الكلوية</strong>(بخلاف معظم الأدوية) — <strong>مُفضَّل بأذية كلوية حادة.</strong> بداية دقائق، مدة~30دقيقة. <strong>حذر بالزرق.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>6. هيدرالازين:</strong> بلعة10-20ملغ كل2-4ساعات. بداية10-20دقيقة، مدة3-8ساعات(أطول بفشل كلوي). <strong>أقل فعالية/توقعًا</strong>، قد هبوط شديد غير مضبوط+تسرع انعكاسي/إقفار — <strong>يُفضَّل تجنبه بكل الطوارئ، خاصة MI حاد.</strong> <strong>خط أول بمقدمة الارتعاج/الارتعاج.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>7. إنالابريلات(ACE-I وريدي):</strong> 0.625-1.25ملغ كل6ساعات(حتى5ملغ). بداية~15دقيقة، مدة~6ساعات. <strong>خفض غير متوقَّع/شديد</strong>(خاصة فرط رينين — HTN وعائي كلوي، فشل كلوي). <strong>يُتجنَّب بـMI حاد</strong>(خطر هبوط مفاجئ).
+    </div>
+  </section>
+
+  <section class="roman" id="c9urgencytx">
+    <div class="roman-head"><div class="roman-badge">III</div><h2>علاج الإلحاح الارتفاعي</h2></div>
+
+    <div class="card point-num">
+      <strong>خفض بطيء خلال24-72ساعة.</strong> لا خطر وشيك لأذية أعضاء، لا يتحسن الخطر قصير الأمد بخفض حاد. <strong>الخطر الرئيسي: الإفراط بالعلاج.</strong> <strong>لا يستفيد المريض من إحالة للطوارئ/استشفاء.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>الإجراءات:</strong> بيئة هادئة؛ معالجة ألم/قلق؛ إعادة فحص الضغط؛ بدء/استئناف الأدوية الفموية(غالبًا كافٍ وحده إن عدم التزام). <strong>لا استشفاء/خفض فوري.</strong> <strong>دواءان فمويان طويلا الأثر</strong>+متابعة أسبوع.
+    </div>
+    <div class="callout warn">
+      <b>تحذير ممارسة خاطئة شائعة:</b> بالمنوَّمين، أوامر هيدرالازين/لابيتالول "عند الحاجة" غالبًا غير مناسبة — <strong>تُخفِّض الضغط بشكل متقطع/حاد بمريض لاعرضي</strong> بدل السيطرة المستمرة — <strong>ارتبطت بزيادة مدة الإقامة بالمستشفى.</strong>
+    </div>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch9-part18.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 18</a>
+    <a href="practical-ch9-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch9-part20.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 20 ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 9، الجزء 19
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

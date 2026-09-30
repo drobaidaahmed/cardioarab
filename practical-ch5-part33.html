@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 5: اضطرابات نظم القلب والفيزيولوجيا الكهربائية | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch5-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 5</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 5 — الجزء 33</h3>
+  <div class="chgroup">
+    <span class="chtitle">II-C (نهاية): نصائح SND</span>
+    <a href="#c5sndpearls">نصائح سريرية إضافية</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">III: حصارات الحزم</span>
+    <a href="#c5bbbdefs">التعاريف (13.26)</a>
+    <a href="#c5bbbcauses">الأسباب والإنذار</a>
+    <a href="#c5bbbprevalence">الانتشار حسب العمر</a>
+    <a href="#c5bbbdisease">RBBB مقابل LBBB بسياق المرض</a>
+    <a href="#c5bbbworkup">الاستقصاءات والمحور</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch5-part32.html">→ الجزء 32</a>
+    <a href="practical-ch5-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch5-part34.html">الجزء 34 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الخامس (الجزء 33)</span>
+    <h1>اضطرابات نظم القلب والفيزيولوجيا الكهربائية</h1>
+  </div>
+  <span class="chapno">5</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 5: اضطرابات نظم القلب والفيزيولوجيا الكهربائية — الجزء 33</h2>
+  </div>
+
+  <section class="roman" id="c5sndpearls">
+    <div class="roman-head"><div class="roman-badge">II-C (نهاية)</div><h2>نصائح سريرية إضافية بخلل العقدة الجيبية</h2></div>
+
+    <div class="card point-num">
+      <strong>غموض التأثير العرضي:</strong> يُجرى اختبار جهد — معدل راحة40 قد يكون مناسبًا إن استطاع الارتفاع كافيًا بالجهد(80% من المتوقع).
+    </div>
+    <div class="card point-num">
+      <strong>توقفات لاعرضية</strong> (بما فيها ليلية&gt;3ثوانٍ، أو توقفات AF&gt;3ثوانٍ): غالبًا فيزيولوجية (نغمة مبهمية عالية) — <strong>لا تستدعي PPM</strong>، لكن قد تستدعي خفض جرعة الأدوية المسبِّبة.
+    </div>
+    <div class="callout warn">
+      <b>تحذير تشخيصي حاسم:</b> قبل تشخيص "توقف جيبي"، تأكَّد أنه ليس حصار AV متقدم أو Mobitz II مع P محجوبة — <strong>هنا PPM ضرورية حتى بلا أعراض.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>HF المتفاقم:</strong> عادة تسرع تعويضي. <strong>بطء نسبي(50-60) أثناء التفاقم</strong> = علامة قصور استجابة زمنية، قد يكون السبب الرئيسي للتفاقم — يستدعي خفض الأدوية المثبطة للمعدل أو PPM إن لم تكن هذه الأدوية موجودة أصلاً.
+    </div>
+    <div class="card point-num">
+      <strong>هبوط ضغط عرضي+بطء خفيف(50-70):</strong> حيث يُتوقَّع تسرعًا تعويضيًا — البطء هنا <strong>يُساهم</strong> بالهبوط، تشخيص قصور استجابة زمنية، <strong>إلا</strong> إن كان البطء والهبوط بآلية واحدة (كالإغماء المبهمي).
+    </div>
+  </section>
+
+  <!-- ============ القسم III ============ -->
+  <section class="roman" id="c5bbbdefs">
+    <div class="roman-head"><div class="roman-badge">III-A</div><h2>حصارات الحزم: التعاريف</h2></div>
+
+    <p>تنقسم حزمة His إلى: الحزمة اليمنى؛ الحزمة اليسرى (تنقسم بدورها لأمامية+خلفية).</p>
+    <div class="card point-num">
+      <strong>ثنائي الحزم (Bifascicular):</strong> إصابة فرعين من3: LBBB؛ أو RBBB+LAFB(يُحاكي RBBB بمحور يساري)؛ أو RBBB+LPFB(محور يميني، قد يُحاكي RVH أيضًا).
+      <br><br><strong>ثلاثي الحزم (Trifascicular):</strong> إصابة الفروع الثلاثة، لكن غير كامل بأحدها على الأقل (يُفسِّر غياب حصار AV كامل). <strong>قد يتظاهر بـ:</strong> ثنائي الحزم+PR مطوَّل (غالبًا درجة أولى)؛ RBBB بالتناوب مع LBBB (بنفس التخطيط أو بتخطيطات متتالية عبر سنوات)؛ RBBB مع تناوب LAFB/LPFB.
+    </div>
+
+    <figure>
+      <img src="data:image/jpeg;base64,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2/B2yyBDuBanuJQUEkg3JAYbkx0Lc9HaI/Ae/pJXiHP/ANfkKDvkbNsMP4nalGNhOl0rX0Yx1LQLo46FrINtV/aA1OFpbVb2glCKAQjmonwLiC0zaGkkRuBB5XzW5fIomJaVlhzBk+hVlAeCfFawC8xU3gF9Kl6Qdg+a321Mq4sDoBsURjGD5830c0g5p+2hw70fg0hInSBnAJ/NA0mlAyJHDTEIH+ouPcbdI1Ra8JFfVRMQ/PoBMFElLR7mEyLSl12nuG+oPQLd8GC395NtfzdGuYfSPxHqEi8TM+wcPLWmmI39Tn0mdY9EuWyljhcRXzv2ekn7WCtTnc2e9N/C9tdnDs+5pKy40G2S65/EIi1ZksHLBTxhu6y+Z/DDQQnyIfJikpaQq/4Hhh7VwYwhAnC0cNXbE2Fz/KFolst/LLQ2hR9p1jsar2j9wsqR4oNTsyUCQPBBUOOd9pfKtYhFoSfGtdhQaPdwPdouZ9zOI5zwd9fytVMTkalMS/48RUqLxwT4atCAxAe378VCeAKAZWLFAOTPLidulDuOdN9hvMRQgWzL7dKTIF1ReiZPoEf2v//aAAwDAQACAAMAAAAQ88888n088888888888888888888Accc88888888888888888888qToEks8888888888888888fqskAw08888888888888888jc68408888888888888888tlZ8Rx8888888888888888p+GOfvv8888888888888888gOE408888888888888rX8898DZV38888888888888c4My88Oe888888888888888sE8888888888888//xAAoEQEAAQIEBQQDAQAAAAAAAAABEQAhMUBBYRBRkaHBMIGx8CBx0eH/2gAIAQMBAT8Q/HWL5bsm9ox5ZiajNCAROVQENfuGGzy8mWYGH4qWGDElKI5TQ0k6ST2ohsx3NemNMNJ4ICKKg5EmwGmixln7vSikJqWk0w6VvvV/tbdbdMwnq5G7OSfcs+Ke2C7mp91oQyAI829OYXI+OfFYI0GfdI+Hg6GZxPJvUa6ft6vFFCwR6xEGa8Nb/wC96mbPR/tG2uuLz43gmrwRkRFz1v/EACgRAQACAQIEBQUBAAAAAAAAAAEAESExQBBhsdEwUXGRoSBBgcHh8P/aAAgBAgEBPxD6aavbLcH5+dxWWqXybraimSeoGvfbJBUcFZaQQraft6RK8+nrHfyeDDBAmxRAgLNDmMAuHrPS9icyc6LFPTYuB8v93gZ0GI6dhk8kQKZOJh83pffgA+yzXgNucAqG/GRWM7Qx/PiUDJ7naK+OqKmrr2KXB9vG/8QAKBABAAICAgEEAQUAAwAAAAAAAREhADFBUWEQUHGBQCCRobHwweHx/9oACAEBAAE/EPdV5cIYXRIGBgKRR1IiOdXuKgHA5E4dmNhvWADBWGSVZJ6mSi1ajXn6weyjruBEGIMARSttkvRLIQRMsKSQm+owI23jSboslCeUJiyUjGyWzZJJFB28fbvJYEvSKQCMVJjNFMBgnjJR2vCylj4oGolwqSDFHqXECRdxlZMceyIOycCNe3qG2MGdawyAJUwBgT/FEiREpE5yWTG8DYCt4E4djTkMmEgi8BrDUdH/AMMKKaJDbhkVIBFCeRCGXowAfcrIU+D6OASXSzLJ0mhHQdGoQI2CpgMEsoMAV9gbeBiE2AEEDBcFAUCUCBbU10o4genEP7/EOQm9DI+v1tGiEChWs1k7gjVIY/hJpBjvZxcFpcdY9nKsxXWpOG0okWZSeg9KkRWUjV7fpEnTtoYMNf8AMQgJUgAhIB1ldcChDnfkOIm279hv5srP0EwdTQIWEGmC4OwwszTNRTmCsJIXokbzQpAcXcq8vDkvGzteHONUUMkbIy0kUEmYYFsUWYUEIpAHEZMIGuhloRTQAowAWCcmtLBh7b2dvLLdMEHvtGnUYIL8mmwcLNVr0QBAueU+wSqL12HSPAYR4QeMksEshQFDQQGiaSS5YZkHtEAnx6HKHiLJOdBBHY4Sj4HYUpbYvIaUwUSnRvOcAyMlOBdLVbEqCSC6QiIwW6LggQAVBpQWYw/nl+bHcEwYcKjFPzKnv1vC4Tu/YgdCikYSehS/CseRERjWFwBRwjn7yREROj2ehkEe4SSiRh9n0M0mGQw8rQdpjCOvoCs6A0wmrCmeLwxbgEIVESXFmf8AP6/onJ9idDevUfZyMo6E5wLdU0yJ4RcGBFeYAYrbpyFrm1l3EWAWW3txbkS3QQT5r1dYXxGbFN2R0/vrFwHSAmZlgyqVj7EVR+TaHw/MnzhrEQ1hWAI/EDceViMoG8B55dPySQ4M8z6yYhFeRUmRzRNcbw7mUNEWJkAAEwAAZJ37CsMgTbT/AEEZdlk22rP/AAWLzAFIGkTN/elmidQpJifLIhD4tc7V+8LmCWYyPHGPrAZ4YT/2L4RFqLp8hn8YJk4UC/SAfUZFWUEkPFzJ84lk7BUPFuvnJmjINE9f8mAZu0Z4hXfE3+fFYBKL4SYb/B9AKTmSpGvKh4hwYX4BIkRNic+0MID/AA6QP1YpDhAjIhImM+N02G1donKex9oj/s3tr+8kBRG9T+E+h3UCSet7FGgqZwtiRSrknsXlDGxD0n80O+hBSRJGguOUJeHj9X8LJRyiKdux87PWTR9YbKyy9NZOAUjaBhNh9yJQRFEx1gLspDvYDKRavTd6O0EFBaBd/lJeQWZA0mw4EJw4lJYoHyOAidGnTkl2EnnTio0B/SmAjs0DFq4B3nVL+YpZ4VD13h3ogmVKCTewiSqti5QMX86mankcW9nuwJSUqC8kJvIKHcuRLIEQseU1M4G6A5ieh1ijwXJcBsKqBG0Ap/Lk5WODr/AkYNBtK+TQ/wC3jCKbY8oF48ZjczSOXpTD9sHdHyq4gfTc2pnhaUAqQQArEn9Q+bws3SNOKhiVMJ2BovQYE1avNzYr9mVUm+PIAH56HYOMHhZdZRCiWWDACqg1QtITrvD2hxgBVWgdBkBQuYi8YwgCOz2qf4KkqdqxkhHIEVDCHX5X/9k=" alt="Figure 13.26">
+      <figcaption><span class="fig-num">الشكل 13.26</span> — البنية التشريحية لجهاز التوصيل: SA node→AV node→His bundle→(1)الحزمة اليمنى (2)اليسرى (3)الأمامية اليسرى (4)الخلفية اليسرى.</figcaption>
+    </figure>
+  </section>
+
+  <section class="roman" id="c5bbbcauses">
+    <div class="roman-head"><div class="roman-badge">III-B</div><h2>الأسباب والإنذار</h2></div>
+
+    <div class="card point-num">
+      <strong>1. عمومًا:</strong> RBBB وLAFB غالبًا معزولان بلا مرض كامن؛ <strong>LBBB غالبًا انعكاس لمرض قلبي كامن.</strong>
+      <p style="margin-top:8px"><strong>السبب التشريحي:</strong> الحزمة اليمنى+الأمامية اليسرى طويلتان رفيعتان، تغذية أحادية من LAD → عرضة أكبر للإصابة/التنكس المبكر. <strong>الحزمة اليسرى الرئيسية+الخلفية اليسرى</strong> قصيرتان غليظتان، تغذية مزدوجة(LAD+RCA) → أقل عرضة.</p>
+      <p style="margin-top:8px">بعد رض الصدر/الإنعاش القلبي: RBBB العابر الأشيع.</p>
+    </div>
+    <div class="card point-num">
+      <strong>2. الانتشار والتكهن:</strong> LAFB شائع، عادة بلا مرض كامن. RBBB أيضًا شائع، عادة غير مرتبط بمرض كامن بغياب تاريخ CAD/HF — <strong>لم يرتبط بإنذار سيئ</strong> بمعظم الدراسات طويلة الأمد (استثناء دراسة دنماركية بكبار السن: RBBB كامل+خطر1.3 للوفيات/MI).
+    </div>
+    <div class="card point-num">
+      <strong>3. الحصار المرتبط بمرض كامن:</strong> LPFB وLBBB (أصعب إصابة) عادة يظهران بمرض قلبي كامن (إقفاري/غير إقفاري، توسع/تضخم). <strong>الأشيع غير إقفاري:</strong> اعتلال HTN، صمامي، وراثي.
+    </div>
+  </section>
+
+  <section class="roman" id="c5bbbprevalence">
+    <div class="roman-head"><div class="roman-badge">III-B-2</div><h2>الانتشار حسب العمر</h2></div>
+
+    <div class="card point-num">
+      <strong>عمر40-50 اللاعرضي بلا مرض/HTN شديد:</strong> RBBB اضطراب توصيل معزول حميد. LBBB حميد عمومًا لكن إنذاره البعيد مشكوك — يُعزى لتنكس مجهول السبب بمعظم الحالات(اعتلال/CAD&lt;10-15%). <strong>حتى بهذه الفئة الشابة</strong>، LBBB بذاته قد يُسبب خلال سنوات/عقود: Dyssynchrony، نقص زمن امتلاء، HF، ↓EF (~5-10%) — <strong>قد يكون علامة تحت سريرية لاعتلال مستقبلي.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>شاب(&lt;50)+RBBB:</strong> غالبًا "اختلاف غير ضار" أو قلب الرياضي — <strong>لكن يجب البحث عن:</strong> ASD، ARVD، الساركويد، شاغاس.
+    </div>
+    <div class="card">
+      <strong>الانتشار:</strong> RBBB أشيع ×2 من LBBB، يزداد بالعمر والجنس الذكري. عمر40-60: LBBB~0.4%، RBBB~1%. عمر80: LBBB~6%، RBBB~10%.
+    </div>
+  </section>
+
+  <section class="roman" id="c5bbbdisease">
+    <div class="roman-head"><div class="roman-badge">III-B-3</div><h2>RBBB مقابل LBBB بسياق المرض القلبي</h2></div>
+
+    <div class="card point-num">
+      <strong>RBBB بسياق ضعف LV انقباضي</strong> = خطورة مماثلة على الأقل لـLBBB. يرتبط أكثر بـاعتلال إقفاري+عبء ندبي أكبر (خاصة ندبة أمامية-حاجزية كبيرة).
+    </div>
+    <div class="card point-num">
+      <strong>التروية:</strong> الحزمة اليمنى=الفرع الحاجزي الأول (RBBB قد ينجم عن انسداد LAD قريب). الحزمة اليسرى=مزدوجة (LBBB عادة لا ينجم عن ندبة إقفارية، بل توسع/تضخم LV — إجهاد جداري+تليف منتشر غير منتظم يُسبب إجهاد/تليف/تكلس بالحزمة).
+    </div>
+    <div class="card point-num">
+      <strong>LBBB جديد:</strong> غالبًا غير إقفاري.~30% إقفاري (يرتبط بـCAD واسع). <strong>نادرًا من MI حاد</strong> — إن حدث، عادة احتشاء واسع(LAD+RCA معًا).
+    </div>
+    <div class="card point-num">
+      <strong>IVCD غير النوعي(&gt;120ملي):</strong> بخلاف RBBB/LBBB (قد يكونان مرضًا حزميًا بحتًا)، يُشير غالبًا لمرض عضلي بالقلب مع بطء توصيل داخل العضلة (بما فيه LVH) — قد يكون تحت سريري حتى بإيكو طبيعي. <strong>ارتبط بزيادة وفيات</strong> مقارنة بـLBBB بالشباب نسبيًا(40-55) بلا مرض معروف. <strong>بالرياضيين الشباب:</strong> حتى140ملي حميد (تضخم فيزيولوجي أو نغمة مبهمية عالية).
+    </div>
+  </section>
+
+  <section class="roman" id="c5bbbworkup">
+    <div class="roman-head"><div class="roman-badge">III-C</div><h2>الاستقصاءات، والمحور الكهربائي</h2></div>
+
+    <div class="card point-num">
+      <strong>إيكو دائمًا.</strong> بلا دليل اعتلال/CAD سريريًا → حصار معزول تنكسي، إنذار غير سيئ (خاصة RBBB).
+      <br><br><strong>LBBB يستدعي MRI</strong> إن كان الإيكو/السريريات مثيرة للشك (ARVD، الساركويد، اعتلالات وراثية تحت سريرية). تقييم الإقفار فقط إن أعراض.
+    </div>
+    <div class="card point-num">
+      <strong>المحور:</strong>
+      <ul style="margin-top:8px">
+        <li><strong>RBBB:</strong> لا يرتبط بانحراف يميني عادة — وجوده يوحي بـRVH أو LPFB مرافق.</li>
+        <li><strong>LBBB (توصيلي بحت):</strong> محور طبيعي أو يساري خفيف. <strong>يساري واضح</strong> = توسع LV متكرر. <strong>يميني</strong> = اعتلال توسعي بتوسع ثنائي البطين.</li>
+      </ul>
+    </div>
+    <div class="card point-num">
+      <strong>اتساع QRS:</strong> كلما أعرض (خاصة&gt;150) → زيادة احتمال ضعف LV/اعتلال، وزيادة احتمال كون LBBB نفسه سببًا رئيسيًا للاعتلال.
+    </div>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch5-part32.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 32</a>
+    <a href="practical-ch5-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch5-part34.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 34: علاج حصارات الحزم ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 5، الجزء 33
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

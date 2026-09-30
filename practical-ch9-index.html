@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل 9: أمراض قلبية وعائية أخرى — الفهرس | Practical Cardiovascular Medicine | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.8; font-size:16px; padding-bottom:60px;
+  }
+  .theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+    border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+    font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+  .theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:16px 20px; text-align:center;
+  }
+  header.top .eyebrow{color:var(--teal); font-size:12.5px; letter-spacing:.5px; font-weight:600; display:block; margin-bottom:4px;}
+  header.top h1{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  main{max-width:900px; margin:0 auto; padding:28px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(251,191,36,.1), rgba(45,212,191,.04));
+    border:1px solid var(--border); border-radius:16px; padding:24px 26px; margin-bottom:30px;
+  }
+  .hero .num{
+    width:48px; height:48px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center; margin-bottom:12px;
+  }
+  .hero h2{margin:4px 0 8px; font-size:22px; color:var(--text);}
+  .hero p{color:var(--text-dim); font-size:14px; margin:0; line-height:1.8;}
+
+  .group-title{
+    color:var(--gold); font-size:14px; font-weight:700; margin:30px 0 14px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .group-title::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  .grid{display:grid; grid-template-columns:1fr; gap:12px;}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    padding:16px 18px; display:flex; align-items:flex-start; gap:14px;
+    text-decoration:none; color:var(--text); transition:.2s;
+  }
+  a.card:hover{border-color:var(--teal); transform:translateY(-2px); box-shadow:0 8px 20px -8px rgba(0,0,0,.4);}
+  .card.disabled{opacity:.55; cursor:default;}
+
+  .num{
+    flex:0 0 auto; width:40px; height:40px; border-radius:11px;
+    background:linear-gradient(135deg, rgba(45,212,191,.16), rgba(45,212,191,.04));
+    border:1px solid var(--teal-dim); color:var(--teal); font-weight:700; font-size:15px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card.disabled .num{
+    background:var(--panel2); border-color:var(--border); color:var(--text-dimmer);
+  }
+
+  .ctext{flex:1;}
+  .ctext .ctitle{font-weight:700; font-size:15px; margin-bottom:3px;}
+  .ctext .csub{color:var(--text-dim); font-size:12.5px; line-height:1.6;}
+  .badge{
+    flex:0 0 auto; font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px;
+    white-space:nowrap; align-self:center;
+  }
+  .badge.ready{background:rgba(45,212,191,.15); color:var(--teal);}
+  .badge.soon{background:rgba(148,163,184,.12); color:var(--text-dimmer);}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:50px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
+<header class="top">
+  <span class="eyebrow">Practical Cardiovascular Medicine</span>
+  <h1>الفصل 9: أمراض قلبية وعائية أخرى</h1>
+</header>
+
+<main>
+
+  <div class="hero">
+    <div class="num">9</div>
+    <h2>أمراض قلبية وعائية أخرى (Other Cardiovascular Diseases)</h2>
+    <p>النص الكامل بحسب الكتاب المصدر، بحروفه وصوره، دون حذف أو تلخيص — الانسداد الرئوي وتجلط الأوردة العميقة، وموضوعات قلبية وعائية متنوعة أخرى. أضخم فصل بالكتاب بعد الفصل الخامس (216 صفحة مصدرية).</p>
+  </div>
+
+  <div style="text-align:center; margin:0 0 24px; padding:16px 20px; background:linear-gradient(135deg, rgba(45,212,191,.12), rgba(212,175,55,.10)); border:1.5px solid var(--gold); border-radius:14px; color:var(--gold); font-size:15px; font-weight:700;">
+    ✅✅✅ الفصل مكتمل بأكمله — 62 جزءًا، 10 أقسام كبرى، 23 شكلاً توضيحيًا
+  </div>
+
+  <div class="group-title">أجزاء الفصل</div>
+  <div class="grid">
+
+    <a class="card" href="practical-ch9-part1.html">
+      <div class="num">1</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 1 — الانسداد الرئوي: العرض السريري والتشخيص الكامل (2 صورة)</div>
+        <div class="csub">معايير ويلز، ECG/ABG/CXR/D-dimer، الفحوصات النوعية (CT، V/Q، دوبلر وريدي)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part2.html">
+      <div class="num">2</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 2 — إجهاد البطين الأيمن بالإيكو، وPE تحت الضخم الكامل</div>
+        <div class="csub">علامة ماكونيل، معايير ESC الثلاثية، تجربة PEITHO، الانحلال الخثري الإنقاذي</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part3.html">
+      <div class="num">3</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 3 — العلاج بالقسطرة، CTPH الكامل، ومضادات التخثر بالحقن</div>
+        <div class="csub">خثرة عائمة بالقلب الأيمن، جرعات UFH/إنوكسابارين/فوندا بارينوكس، الوارفارين</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part4.html">
+      <div class="num">4</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 4 — دواعي الانحلال الخثري، فلتر IVC، ومدة العلاج الكاملة</div>
+        <div class="csub">بروتوكولات العلاج، PREPIC-2، الجدول 21.2، مرضى السرطان (CARAVAGGIO)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part5.html">
+      <div class="num">5</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 5 — فرط التخثر الكامل، مآل PE، وبداية DVT</div>
+        <div class="csub">✅ إغلاق قسم PE بالكامل — أضداد الفوسفوليبيد، Phlegmasia، تشخيص DVT</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part6.html">
+      <div class="num">6</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 6 — DVT البعيد والسطحي والطرف العلوي، وHIT الكاملة</div>
+        <div class="csub">متلازمة SVC، انضغاط مخرج الصدر، علاج HIT بمضادات الثرومبين المباشرة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part7.html">
+      <div class="num">7</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 7 — 8 أسئلة ختامية شاملة</div>
+        <div class="csub">✅ إغلاق قسم "الانسداد الرئوي وDVT" بأكمله — حالات سريرية معقدة (ECMO، خثرة عائمة)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part8.html">
+      <div class="num">8</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 8 — بداية قسم الصدمة: التعريف، الآليات، والجدول 22.1</div>
+        <div class="csub">فرق الضغط النبضي الواسع، الصدمة الكظرية، SvO2، التدبير الفوري بالسوائل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part9.html">
+      <div class="num">9</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 9 — خوارزمية EGDT الكاملة (22.1)، والإنتان والصدمة الإنتانية</div>
+        <div class="csub">مقياس SOFA، حزمة الساعة الأولى، مطبّات اللاكتات، مراحل السوائل الأربع</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part10.html">
+      <div class="num">10</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 10 — الصدمة القلبية الكاملة (22.2)، ومنحنى فرانك-ستارلينغ (22.3)</div>
+        <div class="csub">Impella مقابل IABP، قوة القلب CPO، مؤشر نبضان PA، تقييم الاستجابة الحجمية بالإيكو</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part11.html">
+      <div class="num">11</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 11 — الملحق الكامل: المعادلات، السوائل، الستيرويدات، ونقل الدم</div>
+        <div class="csub">✅ إغلاق قسم "22: الصدمة" بأكمله — SvO2/ScvO2، مقارنة رافعات الضغط، الجدول 22.3</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part12.html">
+      <div class="num">12</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 12 — 7 أسئلة ختامية بحالات ECMO متقدمة</div>
+        <div class="csub">✅ إغلاق قسم "22: الصدمة" نهائيًا — Harlequin syndrome، VAV-ECMO، CULPRIT-SHOCK</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part13.html">
+      <div class="num">13</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 13 — بداية ارتفاع ضغط الدم: التعريف، معطف أبيض، وأهداف العلاج</div>
+        <div class="csub">منحنى J، HTN المُقنَّع، طرق المراقبة، أهداف ACC/ESC الكاملة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part14.html">
+      <div class="num">14</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 14 — مبررات الإرشادات: تجارب HOT، ACCORD، SPRINT الكاملة</div>
+        <div class="csub">CKD، HFpEF، PEACE، HYVET، الضغط الأمثل حسب العضو</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part15.html">
+      <div class="num">15</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 15 — HTN المقاوم الكامل، والضغط الأورطي المركزي</div>
+        <div class="csub">الضغط الكاذب لدى المسنين، تجربة PATHWAY-2، فيزيولوجيا الموجات المنعكسة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part16.html">
+      <div class="num">16</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 16 — ACE-I/ARB الكاملة (23.1)، وحاصرات قنوات الكالسيوم</div>
+        <div class="csub">آلية الشريان الصادر/الوارد، تجربة ONTARGET، DHP مقابل Non-DHP</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part17.html">
+      <div class="num">17</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 17 — مدرات العروة، مضادات الألدوستيرون، وحاصرات بيتا الكاملة</div>
+        <div class="csub">تجربتا LIFE وASCOT، مفارقة معدل القلب، كارفيديلول ونيبيفولول</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part18.html">
+      <div class="num">18</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 18 — حاصرات ألفا، كلونيدين، وهبوط الضغط الانتصابي الكامل</div>
+        <div class="csub">HTN شديد التقلب، التدابير الحياتية الخمسة، دروكسيدوبا وميدودرين</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part19.html">
+      <div class="num">19</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 19 — طوارئ ضغط الدم: التعاريف والأدوية الوريدية الكاملة (23.2)</div>
+        <div class="csub">فرط الضغط الخبيث، 7 أدوية وريدية، تحذير "عند الحاجة" الشهير</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part20.html">
+      <div class="num">20</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 20 — الجدول 23.5: حالات خاصة كاملة</div>
+        <div class="csub">السكتة، تسلخ الأبهر، ACS، مفارقة موسِّعات HF، أزمة التصلب الجلدي، الكوكايين</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part21.html">
+      <div class="num">21</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 21 — 15 سؤالًا ختاميًا شاملاً</div>
+        <div class="csub">✅✅ إغلاق قسم "23: ارتفاع ضغط الدم" نهائيًا (9 أجزاء) — حالات هبوط انتصابي معقدة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part22.html">
+      <div class="num">22</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 22 — بداية اضطراب شحوم الدم: المجموعات الأربع، وفيزيولوجيا LDL/HDL/TG</div>
+        <div class="csub">مبررات PCSK9، أهداف LDL، Apo B، كولسترول غير HDL</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part23.html">
+      <div class="num">23</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 23 — الستاتينات، إيزيتيميب (IMPROVE-IT)، وأضداد PCSK9 الكاملة</div>
+        <div class="csub">جرعات دقيقة بحسب الفئة، أمان LDL المنخفض جدًا (ملاحظات تطورية مثيرة)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part24.html">
+      <div class="num">24</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 24 — النياسين والفيبرات وأوميغا3 (REDUCE-IT)، والمتلازمة الأيضية</div>
+        <div class="csub">نمط الحياة والحمية، سيماجلوتايد لإنقاص الوزن</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part25.html">
+      <div class="num">25</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 25 — السكري: SGLT-2 وGLP-1 الكاملة، JUPITER، وCKD كمعادل CAD</div>
+        <div class="csub">EMPA-REG، DAPA-HF، DAPA-CKD، LEADER، الاعتلال العضلي الكامل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part26.html">
+      <div class="num">26</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 26 — تتمة الآثار الجانبية، والأسبرين بالوقاية الأولية الكامل</div>
+        <div class="csub">تداخلات CYP450، تجارب ARRIVE وASCEND وASPREE</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part27.html">
+      <div class="num">27</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 27 — 5 أسئلة ختامية شاملة</div>
+        <div class="csub">✅✅ إغلاق قسم "24: اضطراب شحوم الدم" نهائيًا (6 أجزاء)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part28.html">
+      <div class="num">28</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 28 — بداية ارتفاع ضغط الدم الرئوي: التعريف، والتشخيص بالإيكو (25.1)</div>
+        <div class="csub">مفارقة الضغط المزمن/الحاد، نقص الأكسجة وPFO، موجة قذف RVOT</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part29.html">
+      <div class="num">29</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 29 — القسطرة القلبية الكاملة، واختبار التفاعلية الوعائية</div>
+        <div class="csub">دراسة LVEDP المحورية (4000 قسطرة)، النمط الفسيفسائي بـCT</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part30.html">
+      <div class="num">30</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 30 — علاج PH الكامل: PAH بخوارزمية شاملة (25.2)</div>
+        <div class="csub">دراسة SIOVAC، التصنيف الخطري، تجربة AMBITION، الوارفارين بـPAH</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part31.html">
+      <div class="num">31</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 31 — 10 أسئلة ختامية شديدة التعقيد</div>
+        <div class="csub">✅✅ إغلاق قسم "25: ارتفاع ضغط الدم الرئوي" نهائيًا (4 أجزاء)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part32.html">
+      <div class="num">32</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 32 — بداية الإغماء: الإغماء الوعائي المبهمي، وهبوط الضغط الانتصابي الكامل</div>
+        <div class="csub">فرط حساسية الجيب السباتي، متلازمة POTS بنمطيها الكاملين</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part33.html">
+      <div class="num">33</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 33 — الإغماء القلبي الكامل، وأسباب أخرى</div>
+        <div class="csub">تسرع البطين، بطء النظم، متلازمة سرقة تحت الترقوة، ملاحظة الآلية المهمة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part34.html">
+      <div class="num">34</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 34 — الاختلاجات مقابل الإغماء، والخوارزمية التشخيصية الكاملة (26.1)</div>
+        <div class="csub">الجداول 26.1-26.3، الدلائل السريرية التفصيلية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part35.html">
+      <div class="num">35</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 35 — اختبار الطاولة المائلة، والمراقبة الكاملة (26.2-26.3)</div>
+        <div class="csub">مسجِّل حلقي مزروع، دراسة EP، استطبابات الناظمة القلبية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part36.html">
+      <div class="num">36</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 36 — حالة تعليمية: تمييز الحصار المبهمي، واستطبابات ICD الكاملة</div>
+        <div class="csub">خوارزمية RBBB/LBBB الكاملة بالإغماء غير المفسَّر، تجربة PRESS</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part37.html">
+      <div class="num">37</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 37 — تجارب الناظمة القلبية، والعلاج الكامل لـPOTS/الانتصابي/القيادة</div>
+        <div class="csub">ISSUE-3، SPAIN، الإغماء الحساس للأدينوزين، دروكسيدوبا ومنبهات أخرى</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part38.html">
+      <div class="num">38</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 38 — 12 سؤالًا ختاميًا شاملاً</div>
+        <div class="csub">✅✅ إغلاق قسم "26: الإغماء" نهائيًا (7 أجزاء) — ساركويد قلبي، داء شاغاس</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part39.html">
+      <div class="num">39</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 39 — بداية ألم الصدر: الأسباب، وميزات ACS/تسلخ الأبهر/الانسداد الرئوي</div>
+        <div class="csub">فيزيولوجيا LVEDP والتروية التاجية، معايير ويلز</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part40.html">
+      <div class="num">40</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 40 — معايير التهاب التامور، وتدبير ألم الصدر الحاد الكامل (27.1)</div>
+        <div class="csub">استراتيجية hs-Troponin 0/1 الكاملة، Strain echo</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part41.html">
+      <div class="num">41</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 41 — ✅ إغلاق ألم الصدر، وبداية ضيق النفس الحاد</div>
+        <div class="csub">النوع1 مقابل2 من MI، تسميات Orthopnea/Platypnea/Trepopnea الكاملة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part42.html">
+      <div class="num">42</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 42 — التفريق صدمة/ضيق نفس، الأزيز، A-a gradient، والزرقة</div>
+        <div class="csub">تدبير ضيق النفس الحاد الكامل، أهداف BNP التشخيصية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part43.html">
+      <div class="num">43</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 43 — ✅ إغلاق ضيق النفس (التنبيب وNIV)، وبداية الخفقان</div>
+        <div class="csub">آلية CPAP/BiPAP التفصيلية، أسباب الخفقان الكاملة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part44.html">
+      <div class="num">44</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 44 — تشخيص الخفقان الكامل (الجدولان 27.3-27.4)</div>
+        <div class="csub">✅✅ إغلاق قسم "27" نهائيًا (6 أجزاء) — Kardia Mobile، Apple Watch، دراسة IPED</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part45.html">
+      <div class="num">45</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 45 — بداية قسم جديد: التهاب الشغاف الإنتاني — معايير ديوك، TTE/TEE، الكائنات</div>
+        <div class="csub">حالة تجرثم S.aureus الخاصة، الصمامات الصناعية (باكر/متأخر)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part46.html">
+      <div class="num">46</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 46 — المورفولوجيا، والمضاعفات التشريحية المعقدة (28.1-28.2)</div>
+        <div class="csub">تشريح العقدة AV والليفوصة الأبهرية-الميترالية، بداية دواعي الجراحة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part47.html">
+      <div class="num">47</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 47 — دواعي الجراحة الكاملة: الوقاية من الصمات، وتوقيتها بعد السكتة</div>
+        <div class="csub">تجربة عشوائية حاسمة، جراحة الصمام ثلاثي الشرفات</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part48.html">
+      <div class="num">48</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 48 — تجربة POET، وبداية عدوى أجهزة الناظمة القلبية</div>
+        <div class="csub">تشخيص عدوى الجهاز الكامل، مبدأ الإزالة الكاملة للنظام</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part49.html">
+      <div class="num">49</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 49 — تدبير عدوى الأجهزة الكامل (الشكل 28.3)</div>
+        <div class="csub">✅✅ إغلاق قسم "28" نهائيًا (5 أجزاء) — مدة الصادات، توقيت إعادة الزرع</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part50.html">
+      <div class="num">50</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 50 — بداية تقييم القلب قبل الجراحة: مؤشر Lee، القدرة الوظيفية</div>
+        <div class="csub">تصنيف خطورة الجراحة والمريض، آليتا احتشاء العضلة حول الجراحة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part51.html">
+      <div class="num">51</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 51 — تجربتا CARP وDECREASE-V الحاسمتان، وخطورة الدعامة المبكرة</div>
+        <div class="csub">توقيت إعادة التوعية عبر الجلد قبل الجراحة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part52.html">
+      <div class="num">52</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 52 — الدعامات المتقدمة، حاصرات بيتا (POISE)، الستاتينات، والأسبرين</div>
+        <div class="csub">استراتيجية "الجسر العلاجي" غير المدعومة، ضبط الحجم بـHF</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part53.html">
+      <div class="num">53</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 53 — الأمراض الصمامية الشديدة الكاملة (AS، HOCM)، وHTN حول الجراحة</div>
+        <div class="csub">✅✅ إغلاق كل المحتوى السريري بالفصل التاسع — يليه الأسئلة الختامية فقط</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part54.html">
+      <div class="num">54</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 54 — 7 أسئلة ختامية شاملة</div>
+        <div class="csub">✅✅ إغلاق قسم "29" نهائيًا (5 أجزاء) — حالات معقدة (CEA/CABG متزامن، الدعامات والجراحة الوعائية)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part55.html">
+      <div class="num">55</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 55 — بداية قسم30: الورم المخاطي الأذيني الكامل (30.1)، والحمل: حالات عالية الخطورة</div>
+        <div class="csub">فيزيولوجيا الحمل الدموية الكاملة، آيزنمنغر، AS/MS الشديد، فالوت</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part56.html">
+      <div class="num">56</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 56 — حالات مُتحمَّلة جيدًا بالحمل، والصمامات الميكانيكية الكاملة</div>
+        <div class="csub">تدبير مضادات التخثر الدقيق (وارفارين مقابل هيبارين) — محتوى سريري حرج</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part57.html">
+      <div class="num">57</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 57 — PPCM الكامل، جدول الأدوية بالحمل (30.2)، واحتشاء العضلة والحمل</div>
+        <div class="csub">تسلخ الشريان التاجي كسبب رئيسي لـMI الحملي</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part58.html">
+      <div class="num">58</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 58 — ✅ إغلاق قسم الحمل (HTN والحمل)، وHIV والقلب الكامل</div>
+        <div class="csub">الانصباب التاموري، PAH، تصلب الشرايين المعجَّل بـHIV</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part59.html">
+      <div class="num">59</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 59 — الكوكايين والقلب الكامل</div>
+        <div class="csub">آليات الإقفار، العلاج (تحذير حاصرات بيتا)، ونمط بروغادا</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part60.html">
+      <div class="num">60</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 60 — العلاج الكيماوي والقلب الكامل</div>
+        <div class="csub">الأنثراسيكلينات، تراستوزوماب وGLS، مثبطات نقاط التفتيش المناعية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part61.html">
+      <div class="num">61</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 61 — صورة الصدر الشعاعية الكاملة (5 أشكال: 30.2-30.6)</div>
+        <div class="csub">قصور القلب بمراحله الثلاث، أشكال تضخم القلب، الصورة الجانبية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch9-part62.html">
+      <div class="num">62</div>
+      <div class="ctext">
+        <div class="ctitle">🎉 الجزء 62 (الأخير) — 12 سؤالًا ختاميًا نهائيًا</div>
+        <div class="csub">✅✅✅ اكتمال الفصل التاسع بأكمله — تسلخ الشريان التاجي التلقائي بالحمل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+  </div>
+
+  <footer class="pagefoot">
+    <a href="practical-index.html" style="color:var(--gold); text-decoration:none; font-weight:600;">↩ فهرس Practical Cardiovascular Medicine</a>
+    <br><br>
+    <span class="brand">CardioArab</span>
+  </footer>
+
+</main>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

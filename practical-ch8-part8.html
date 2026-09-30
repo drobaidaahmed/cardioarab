@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 8: مرض الشرايين المحيطية | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch8-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 8</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 8 — الجزء 8</h3>
+  <div class="chgroup">
+    <span class="chtitle">2 (تتمة): السباتي</span>
+    <a href="#c8carotidsx">إعادة التوعية بالعرضي</a>
+    <a href="#c8carotidrisks">مخاطر CEA والدعامات</a>
+    <a href="#c8carotidtrials">CEA مقابل الدعامات: SAPPHIRE، CREST</a>
+    <a href="#c8carotidcabg">السباتي مع CABG</a>
+    <a href="#c8carotidocclusion">الانسداد تحت الكلي والكلي (19.7)</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch8-part7.html">→ الجزء 7</a>
+    <a href="practical-ch8-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الثامن (الجزء 8)</span>
+    <h1>مرض الشرايين المحيطية</h1>
+  </div>
+  <span class="chapno">8</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 8: مرض الشرايين المحيطية — الجزء 8</h2>
+  </div>
+
+  <section class="roman" id="c8carotidsx">
+    <div class="roman-head"><div class="roman-badge">IV</div><h2>إعادة التوعية بالتضيّق السباتي العرضي</h2></div>
+
+    <div class="callout gold">
+      <b>تجربتا NASCET وECST:</b> CEA يُقلل خطر السكتة خلال2-3سنوات بتضيّق عرضي50-99%، خاصة70-99%(خطر خلال سنتين: 9%مقابل26%). <strong>CEA أو دعامة=Class I</strong> بتضيّق عرضي حديث(TIA سابقة أو سكتة غير مُعطِّلة خلال الأشهر الستة السابقة)، إن خطر الوفاة/السكتة المحيطة&lt;6%.
+    </div>
+    <div class="card point-num">
+      <strong>التوقيت حاسم:</strong> خطر النكس أعلى بالأشهر الثلاثة الأولى(20-30%) — <strong>الجراحة أكثر فعالية خلال أسبوعين، تبقى فعّالة جدًا حتى3أشهر.</strong> كلما ابتعدنا زمنيًا(&gt;3أشهر)، قلَّت الفائدة.
+      <p style="margin-top:8px"><strong>رغم قلق سابق حول التحول النزفي</strong> بجراحة خلال أسبوعين من سكتة، الدراسات أظهرت <strong>أمانًا نسبيًا</strong> — تقي من خطر النكس الإقفاري الأكبر بكثير. <strong>يجب إجراؤها بأسرع وقت</strong>: خلال أسبوعين(ACC)، وتحديدًا2-7أيام(إرشادات AHA للسكتة2019).</p>
+    </div>
+    <div class="card point-num">
+      <strong>معايير الأهلية:</strong> تضيّق&gt;70%(فحوصات غير باضعة) أو&gt;50%(تصوير وعائي). <strong>تصوير وعائي تداخلي</strong> قد يلزم بتضيّق50-70% لتأكيد الشدة(غير الباضع يُبالغ بالتقدير بهذا النطاق).
+    </div>
+  </section>
+
+  <section class="roman" id="c8carotidrisks">
+    <div class="roman-head"><div class="roman-badge">V</div><h2>المخاطر الرئيسية لـCEA ووضع الدعامة السباتية</h2></div>
+
+    <div class="card point-num">
+      <strong>خطر السكتة المحيطة بالإجراء:</strong> 1-2%(تضيّق لاعرضي)؛ 3-4%(عرضي). <strong>السكتة البسيطة أعلى قليلاً مع الدعامات مقارنة بـCEA.</strong>
+      <p style="margin-top:8px"><strong>خطر سنوي لاحق:</strong> 0.5-1%(لاعرضي0.5%، عرضي1%). <strong>إعادة التضيّق(5-10%)</strong> — تحدث أساسًا خلال18شهرًا الأولى(فرط تنسج البطانة مبكرًا، تصلب ناكس لاحقًا). <strong>المراقبة:</strong> دوبلر سباتي بعد شهر، ثم6أشهر، ثم سنويًا.</p>
+    </div>
+  </section>
+
+  <section class="roman" id="c8carotidtrials">
+    <div class="roman-head"><div class="roman-badge">VI</div><h2>CEA مقابل الدعامات السباتية: بيانات التجارب</h2></div>
+
+    <div class="card point-num">
+      <strong>SAPPHIRE:</strong> بالخطورة الجراحية العالية(عرضي/لاعرضي)، الدعامة=بديل غير أدنى(Non-inferior) من CEA.
+    </div>
+    <div class="card point-num">
+      <strong>CREST:</strong> خطورة جراحية متوسطة(~50%عرضي). <strong>لا فرق</strong> بالخطر المركَّب(وفاة/MI/سكتة) حتى4سنوات(~7%). <strong>CEA:</strong> خطر أعلى لـMI محيط بالإجراء. <strong>الدعامات:</strong> خطر أعلى لسكتات بسيطة(خاصة&gt;70عامًا). <strong>CEA:</strong> خطر~5% لشلل أعصاب قحفية.
+    </div>
+    <div class="card point-num">
+      <strong>الحماية من الصمّات إلزامية بالدعامات</strong> — يُوقَف الإجراء إن التشريح الصعب يمنع استخدامها.
+    </div>
+    <div class="card point-num">
+      <strong>القرار فردي</strong> حسب: العمر، صعوبة التشريح الوعائي(يُرجِّح CEA)، أمراض قلبية-رئوية/عنقية مرافقة(تُرجِّح الدعامة)، تفضيل المريض — <strong>مع مراعاة: سكتة بسيطة أعلى بالدعامات، MI أعلى بـCEA.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>مضادات الصفيحات بعد الدعامة:</strong> أسبرين+كلوبيدوغريل إلزاميًا شهرًا واحدًا، ثم أحادي بالأسبرين. <strong>أسبوعان</strong> قد يكونان مقبولين إن لزم(تجربة SAPPHIRE).
+    </div>
+  </section>
+
+  <section class="roman" id="c8carotidcabg">
+    <div class="roman-head"><div class="roman-badge">VII</div><h2>مرض الشريان السباتي عند مريض CABG</h2></div>
+
+    <div class="card point-num">
+      <strong>خطر السكتة بـCABG:</strong> ~2%(بلا تضيّق سباتي هام)؛ ~3%(تضيّق شديد لاعرضي)؛ <strong>≥5%</strong>(تضيّق ثنائي الجانب أو قصة سكتة/TIA سابقة).
+    </div>
+    <div class="card point-num">
+      <strong>لا دليل واضح يدعم CEA وقائيًا</strong> بمريض CABG+تضيّق أحادي الجانب لاعرضي(&gt;80%) — معظم السكتات بعد الجراحة تحدث <strong>بلا</strong> مرض سباتي(76%) أو بمرض سباتي خضع لـCEA-CABG متزامن. <strong>المرض السباتي وحده مسؤول عن&lt;40%</strong> من السكتات بعد الجراحة(الباقي: صمّات عصيدية أبهرية، حالة مفرطة خثارية، AF).
+    </div>
+    <div class="card point-num">
+      <strong>لكن التدخل السباتي الوقائي مبرَّر</strong> بمريض CABG+تضيّق&gt;80%+سكتة/TIA بالأشهر الستة الأخيرة(Class IIa)، وربما تضيّق شديد ثنائي الجانب لاعرضي.
+    </div>
+    <div class="callout warn">
+      <b>التوقيت مثير للجدل:</b> وفيات أعلى بـCEA-CABG متزامنين. سكتة أعلى بـCABG ثم CEA. MI أعلى بـCEA ثم CABG. <strong>سجلات:</strong> خطر سكتة أعلى بمتزامن مقارنة بـCEA ثم CABG. <strong>المتزامن=الأقل تفضيلاً.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>خيارات عملية:</strong> CABG فقط بتضيّق لاعرضي+مرض تاجي حرج(رئيسي أيسر، ACS غير مضبوط، CABG إسعافي). <strong>دعامة سباتية ثم CABG بعد3أسابيع</strong>(كلوبيدوغريل أسبوعين بعد الدعامة، يُوقَف5-7أيام قبل CABG) — <strong>ترتبط بانخفاض MI محيط بالإجراء</strong> مقارنة بـCEA قبل CABG(بمرض تاجي متقدم).
+      <p style="margin-top:8px"><strong>CEA إسعافي</strong> يُفكَّر به بـTIA حديث(&lt;أسبوعين)+تضيّق&gt;80% إن يمكن تأجيل CABG بضعة أيام بأمان.</p>
+    </div>
+  </section>
+
+  <section class="roman" id="c8carotidocclusion">
+    <div class="roman-head"><div class="roman-badge">VIII</div><h2>الانسداد تحت الكلي والكلي للسباتي، والجدول 19.7</h2></div>
+
+    <div class="card point-num">
+      <strong>خطر سنوي للسكتة:</strong> ~10%(تضيّق عرضي70-89%)؛ يرتفع لـ35%(90-95%)؛ <strong>لكن ينخفض فعليًا لـ10%(أو2% بـECST)</strong> بانسداد سباتي تحت كلي(Subtotal — جريان أمامي ضعيف، "علامة الخيط"/String sign). <strong>مشابه(2-10%)</strong> بانسداد سباتي كلي عرضي.
+      <p style="margin-top:8px"><strong>التفسير:</strong> الجريان الأمامي الضعيف يُقلل الصمّات الشريانية. <strong>لكن</strong> قد تحدث سكتات ناكسة إقفارية(حسب الدوران الجانبي) — أعلى(~8%) خلال30يومًا من الحدث. <strong>خطر منخفض جدًا بانسداد سباتي كلي لاعرضي.</strong></p>
+    </div>
+    <div class="card point-num">
+      <strong>NASCET:</strong> فائدة CEA بانسداد تحت كلي مشابهة لتضيّق أقل. <strong>الدعامة خطيرة هنا</strong>(علامة الخيط=عبء خثري كبير، مؤشر سلبي قوي لنتائج الدعامة) — <strong>CEA الخيار المفضَّل.</strong>
+      <p style="margin-top:8px"><strong>الانسداد الكلي:</strong> العلاج الطبي=القياسي(انخفاض معدل نكس السكتة+صعوبة تقنية لإعادة الفتح).</p>
+    </div>
+
+    <div class="card">
+      <strong>الجدول19.7 — سمات عالية الخطورة:</strong>
+      <table style="margin-top:10px; font-size:13px;">
+        <thead><tr><th>تُرجِّح الدعامات(خطر أعلى بـCEA)</th><th>تُرجِّح CEA(خطر أعلى بالدعامات)</th></tr></thead>
+        <tbody>
+          <tr><td>خطورة جراحية عالية: مرض قلبي/رئوي رئيسي</td><td>عمر&gt;70(أكثر إن&gt;80)</td></tr>
+          <tr><td>خطورة تشريحية: جراحة عنق سابقة، معالجة شعاعية سابقة</td><td>تكلسات سباتية شديدة محيطية</td></tr>
+          <tr><td>إعادة تضيّق بعد جراحة</td><td>التواء الأوعية</td></tr>
+          <tr><td>انسداد مقابل</td><td>قوس أبهر نمط3، تصلب عصيدي شديد بالقوس</td></tr>
+          <tr><td>آفات مرتفعة فوق C2 أو منخفضة تحت الترقوة</td><td>وجود خثرة مرئية</td></tr>
+        </tbody>
+      </table>
+      <p class="tbl-caption">معايير SAPPHIRE لتفضيل الدعامة السباتية بالعمود الأيسر.</p>
+    </div>
+  </section>
+
+  <div style="text-align:center; margin:50px 0 30px; padding:24px; background:rgba(45,212,191,.08); border:1px solid var(--teal-dim); border-radius:14px;">
+    <p style="color:var(--teal); font-weight:700; margin:0;">✅ انتهى القسم "2: مرض الشريان السباتي" بالكامل</p>
+    <p style="color:var(--text-dim); font-size:14px; margin-top:8px;">القسم القادم بالفصل: "3. تضيّق الشريان الكلوي" (Renal Artery Stenosis) — سيُغطى بالأجزاء القادمة.</p>
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:20px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch8-part7.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 7</a>
+    <a href="practical-ch8-index.html" style="color:var(--gold); text-decoration:none; font-weight:700; font-size:14.5px;">↩ فهرس الفصل الكامل</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 8، الجزء 8
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>
