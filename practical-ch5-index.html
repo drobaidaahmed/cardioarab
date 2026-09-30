@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل 5: اضطرابات نظم القلب والفيزيولوجيا الكهربائية — الفهرس | Practical Cardiovascular Medicine | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.8; font-size:16px; padding-bottom:60px;
+  }
+  .theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+    border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+    font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+  .theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:16px 20px; text-align:center;
+  }
+  header.top .eyebrow{color:var(--teal); font-size:12.5px; letter-spacing:.5px; font-weight:600; display:block; margin-bottom:4px;}
+  header.top h1{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  main{max-width:900px; margin:0 auto; padding:28px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(251,191,36,.1), rgba(45,212,191,.04));
+    border:1px solid var(--border); border-radius:16px; padding:24px 26px; margin-bottom:30px;
+  }
+  .hero .num{
+    width:48px; height:48px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center; margin-bottom:12px;
+  }
+  .hero h2{margin:4px 0 8px; font-size:22px; color:var(--text);}
+  .hero p{color:var(--text-dim); font-size:14px; margin:0; line-height:1.8;}
+
+  .group-title{
+    color:var(--gold); font-size:14px; font-weight:700; margin:30px 0 14px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .group-title::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  .grid{display:grid; grid-template-columns:1fr; gap:12px;}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    padding:16px 18px; display:flex; align-items:flex-start; gap:14px;
+    text-decoration:none; color:var(--text); transition:.2s;
+  }
+  a.card:hover{border-color:var(--teal); transform:translateY(-2px); box-shadow:0 8px 20px -8px rgba(0,0,0,.4);}
+  .card.disabled{opacity:.55; cursor:default;}
+
+  .num{
+    flex:0 0 auto; width:40px; height:40px; border-radius:11px;
+    background:linear-gradient(135deg, rgba(45,212,191,.16), rgba(45,212,191,.04));
+    border:1px solid var(--teal-dim); color:var(--teal); font-weight:700; font-size:15px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card.disabled .num{
+    background:var(--panel2); border-color:var(--border); color:var(--text-dimmer);
+  }
+
+  .ctext{flex:1;}
+  .ctext .ctitle{font-weight:700; font-size:15px; margin-bottom:3px;}
+  .ctext .csub{color:var(--text-dim); font-size:12.5px; line-height:1.6;}
+  .badge{
+    flex:0 0 auto; font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px;
+    white-space:nowrap; align-self:center;
+  }
+  .badge.ready{background:rgba(45,212,191,.15); color:var(--teal);}
+  .badge.soon{background:rgba(148,163,184,.12); color:var(--text-dimmer);}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:50px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
+<header class="top">
+  <span class="eyebrow">Practical Cardiovascular Medicine</span>
+  <h1>الفصل 5: اضطرابات نظم القلب والفيزيولوجيا الكهربائية</h1>
+</header>
+
+<main>
+
+  <div class="hero">
+    <div class="num">5</div>
+    <h2>اضطرابات نظم القلب والفيزيولوجيا الكهربائية للقلب</h2>
+    <p>النص الكامل بحسب الكتاب المصدر، بحروفه وصوره، دون حذف أو تلخيص — مقاربة تسرعات القلب، SVT، VT، الرجفان الأذيني، حصار AV، أجهزة PPM/ICD/CRT، ودراسة EP وآليات اضطراب النظم.</p>
+    <p style="margin-top:10px; color:var(--gold); font-weight:700;">🎉 الفصل مكتمل بالكامل — 51 جزءًا، أكثر من 160 صورة</p>
+  </div>
+
+  <div class="group-title">أجزاء الفصل</div>
+  <div class="grid">
+
+    <a class="card" href="practical-ch5-part1.html">
+      <div class="num">1</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 1 — المريض غير المستقر، والنهج بتسرعات QRS الضيق</div>
+        <div class="csub">تقييم عدم الاستقرار، خصائص التسرع الثلاث، الفاصل RP، الرفرفة الأذينية (الشكلان 8.1-8.2)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part2.html">
+      <div class="num">2</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 2 — تمييز VT عن SVT بالتفصيل الكامل (8 صور)، والإثارة المسبقة</div>
+        <div class="csub">معايير بروغادا، الأشكال 8.5-8.12، ظاهرة أشمان، AF مع WPW</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part3.html">
+      <div class="num">3</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 3 — الجدول 8.1، ملاحظات متنوعة، وتدبير SVT الكامل</div>
+        <div class="csub">الأشكال 8.13-8.15، الفحص السريري (موجات A المدفعية)، الجداول 8.2-8.3</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part4.html">
+      <div class="num">4</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 4 — 10 تخطيطات تدريبية كاملة (8.16-8.25)، وبداية اضطرابات نظم البطين</div>
+        <div class="csub">تطبيقات عملية شاملة على تمييز VT/SVT، ثم قسم 9: PVCs بالتفصيل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part5.html">
+      <div class="num">5</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 5 — تصنيف PVCs الكامل، وVT: التصنيف والأسباب والتدبير الحاد</div>
+        <div class="csub">الشلل الجانبي، تحديد منشأ PVC، 5 اعتلالات عالية الخطر، PROCAMIO، العاصفة الكهربائية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part6.html">
+      <div class="num">6</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 6 — العلاج المزمن لـVT، AIVR، وTorsades de Pointes بالتفصيل الكامل</div>
+        <div class="csub">VANISH trial، استقصاءات VT بلا مرض واضح، آليات TdP الخلقية/المكتسبة (5 صور)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part7.html">
+      <div class="num">7</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 7 — علاج TdP الكامل، ومتلازمة QT الطويل الخلقية بالتفصيل الشامل</div>
+        <div class="csub">LQT1/2/3، قياس QTc بدقة، الجدول 9.1، العلاج الكامل (حاصرات بيتا، ميكسيليتين، استئصال الودي)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part8.html">
+      <div class="num">8</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 8 — مؤشرات ICD الشاملة (وقاية أولية/ثانوية)، وبداية ARVD</div>
+        <div class="csub">MADIT II/SCD-HeFT/COMPANION بالتفصيل، LifeVest، ICD تحت الجلد، ARVD وميزاته التخطيطية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part9.html">
+      <div class="num">9</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 9 — نهاية ARVD/الساركويد/MVP، ومتلازمات بروغادا وCPVT وQT القصير كاملة</div>
+        <div class="csub">الأشكال 9.11-9.12، آلية بروغادا الجزيئية، إعادة الاستقطاب المبكرة الخبيثة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part10.html">
+      <div class="num">10</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 10 — VT مجهول السبب (RVOT/LVOT/Fascicular)، والموت المفاجئ وفحص الرياضيين الشامل</div>
+        <div class="csub">تحذير BBR VT، آليات SCD حسب العمر، تحليل ECG قبل المشاركة الرياضية بالتفصيل الكامل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part11.html">
+      <div class="num">11</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 11 — تقييم الناجين من SCD، الرياضة بحاملي ICD، وأسئلة ختامية (نهاية قسم VT/SCD)</div>
+        <div class="csub">11 حالة سريرية شاملة تُغطي كل موضوعات القسم 9 — ARVD، بروغادا، LQT، Fascicular VT</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part12.html">
+      <div class="num">12</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 12 — الرجفان الأذيني: الوبائيات، الآلية، التصنيف، وضبط المعدل الكامل</div>
+        <div class="csub">الجدول 10.1، RATAF/RATE-AF/RACE II، أهداف ضبط المعدل بـHF مقابل عام</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part13.html">
+      <div class="num">13</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 13 — التحكم بالنظم الكامل (كل الدراسات الكبرى)، وتدبير AF الحاد</div>
+        <div class="csub">CASTLE-AF، EAST-AFNET4، الجدولان 10.2-10.3، HATCH2، الجدول 10.4 (جرعات ضبط المعدل)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part14.html">
+      <div class="num">14</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 14 — مضادات التخثر حول التحويل، تدبير مضادات النظم، ومضادات التخثر طويلة الأمد</div>
+        <div class="csub">قاعدة 48 ساعة، عزل الأوردة الرئوية، CHADS2/CHA2DS2-VASc والجدول 10.5</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part15.html">
+      <div class="num">15</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 15 — HAS-BLED، العلاج الثلاثي بـPCI، ودراسة كاملة لـAF مع قصور القلب</div>
+        <div class="csub">WOEST/PIONEER-AF/AUGUSTUS، ACTIVE W/A، الشكل 10.1، الجدول 10.7، CAMERA-MRI</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part16.html">
+      <div class="num">16</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 16 — نهاية AF+HF، عبء AF، فيزيولوجيا المعدل الأمثل، ومضادات النظم (الأميودارون وغيره)</div>
+        <div class="csub">CASTLE-AF الكاملة، الشكل 10.2، الأميودارون/سوتالول/درونيدارون/دوفيتياليد بالتفصيل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part17.html">
+      <div class="num">17</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 17 — نهاية مضادات النظم، والاستئصال بالقسطرة/الجراحي الكامل لـAF</div>
+        <div class="csub">فئة Ic، سمية الأميودارون، CABANA، Maze، استئصال العقدة AV، مضاعفات الاستئصال، الشكل 10.3</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part18.html">
+      <div class="num">18</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 18 — مقارنة NOACs الشاملة (الجدول 10.8)، وبداية المعالجة الجسرية</div>
+        <div class="csub">الأربعة أدوية بالتفصيل الكامل (RE-LY، ROCKET AF، ARISTOTLE، ENGAGE)، AVERROES</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part19.html">
+      <div class="num">19</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 19 — المعالجة الجسرية الكاملة، عكس INR، إغلاق LAA، ومتلازمة تسرّع-تباطؤ</div>
+        <div class="csub">BRIDGE trial، Watchman/PROTECT AF، الشكل 10.4، AF بعد جراحة القلب</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part20.html">
+      <div class="num">20</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 20 — نهاية قسم AF (14 سؤالًا ختاميًا)، وبداية الرفرفة الأذينية</div>
+        <div class="csub">ESUS، السكتة اللاكونية، آلية CTI والفجوة القابلة للاستثارة، Aflutter مقابل AF</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part21.html">
+      <div class="num">21</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 21 — الرفرفة الأذينية الكاملة (4 صور)، وبداية تسرع الأذين البؤري</div>
+        <div class="csub">الأشكال 11.1-11.4، استئصال CTI، العلاقة مع AF، آليات Entrainment</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part22.html">
+      <div class="num">22</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 22 — تسرع الأذين البؤري الكامل، MAT، والإيقاع الأذيني الشاذ</div>
+        <div class="csub">الأشكال 11.7-11.8، الفرق العملي بين AT وAflutter، نجاح الاستئصال~90%</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part23.html">
+      <div class="num">23</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 23 — أسئلة ختامية القسم 11 (14 سؤالًا، 4 حالات سريرية معقدة)</div>
+        <div class="csub">تسرع أذيني مستمر، رفرفة+ICD مزدوج مع مرض AV node، رفرفة ما بعد CABG، رفرفة LA غير نموذجية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part24.html">
+      <div class="num">24</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 24 — تسرع الجيب غير الملائم/POTS، وAVNRT الكامل (7 صور)</div>
+        <div class="csub">الأشكال 12.1-12.7، آلية AVNRT، مثلث كوخ، الاستئصال، تحذير حاصرات بيتا بـPOTS</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part25.html">
+      <div class="num">25</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 25 — فيزيولوجيا WPW الكاملة، والمسار الخفي/Orthodromic AVRT (4 صور)</div>
+        <div class="csub">مواقع المسار، موجة دلتا، مناورات الكشف، تحديد الموقع، آلية Orthodromic</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part26.html">
+      <div class="num">26</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 26 — Antidromic AVRT، AF مسبق الإثارة، الاستدراج، وPJRT (6 صور)</div>
+        <div class="csub">الجدول 12.1، تأثير حصار الحزمة على المعدل، PJRT الكامل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part27.html">
+      <div class="num">27</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 27 — علاج AVRT/WPW الكامل، خطر WPW اللاعرضي، وSNRT (2 صور)</div>
+        <div class="csub">تحذيرات الأميودارون/الديجوكسين، أقصر RP، دراسة EP، وبائيات PSVT</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part28.html">
+      <div class="num">28</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 28 — نهاية القسم 12 (9 أسئلة)، وبداية القسم 13: حصار AV (2 صور)</div>
+        <div class="csub">النظم الوصلي المُعجَّل، تصنيف حصار AV الكامل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part29.html">
+      <div class="num">29</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 29 — أمثلة Wenckebach الشاملة، الحصار الكامل، وأسباب التوقف (9 صور)</div>
+        <div class="csub">تمييز P المحجوبة عن U، الانفصال التنافسي</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part30.html">
+      <div class="num">30</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 30 — الحصار المبهمي، توطين الحصار (عقدي/تحت عقدي)، وأسبابه الكاملة (5 صور)</div>
+        <div class="csub">الجدول 13.1، أسباب حصار AV بالشباب</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part31.html">
+      <div class="num">31</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 31 — مؤشرات PPM الكاملة، العلاج المؤقت، وأمثلة إضافية (7 صور)</div>
+        <div class="csub">تحذير الأتروبين، حصار SA Wenckebach، بداية خلل العقدة الجيبية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part32.html">
+      <div class="num">32</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 32 — خلل العقدة الجيبية الكامل (SND/SSS) والعلاج (1 صورة)</div>
+        <div class="csub">الآلية المبهمية مقابل الجوهرية، الجدولان 13.2-13.3</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part33.html">
+      <div class="num">33</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 33 — بداية القسم 14: حصارات الحزم (BBB) الكاملة (1 صورة)</div>
+        <div class="csub">الأسباب والإنذار، الانتشار، RBBB مقابل LBBB، الاستقصاءات</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part34.html">
+      <div class="num">34</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 34 — الإغماء وBBB (PRESS)، ظاهرة أشمان، وبداية أسئلة ختامية (1 صورة)</div>
+        <div class="csub">الحصار المعتمد على التسرع/التباطؤ، الحصار المتناوب</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part35.html">
+      <div class="num">35</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 35 — نهاية القسم 13، وبداية القسم 14: PPM وICD (2 صور)</div>
+        <div class="csub">ملخص دواعي PPM، ترميز الأجهزة، أنماط VVI/DDD/BiV-CRT</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part36.html">
+      <div class="num">36</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 36 — أمثلة التحفيز، ICD الكامل، وفواصل توقيت PM (8 صور)</div>
+        <div class="csub">VT/VF zones، ATP، SCD-HeFT، فواصل DDD الأربعة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part37.html">
+      <div class="num">37</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 37 — منع التداخل، السرعة العليا، المغناطيس، والأقطاب (3 صور)</div>
+        <div class="csub">VSP/PVAB، الاستجواب المنهجي، شاشة النظرة السريعة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part38.html">
+      <div class="num">38</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 38 — استكشاف الأخطاء الكامل: Under/Oversensing، فشل الالتقاط (1 صورة)</div>
+        <div class="csub">كسر السلك مقابل عيب العازل، Twiddler، متلازمة الناظمة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part39.html">
+      <div class="num">39</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 39 — PMT الكامل، تأثير المغناطيس PM/ICD، والاندماج/VSP (3 صور)</div>
+        <div class="csub">4 آليات بدء PMT، التشخيص التفريقي لتسرع القلب بـDDD</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part40.html">
+      <div class="num">40</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 40 — التدبير حول الجراحة، صدمات ICD، وأدلة DDD/CRT (1 صورة)</div>
+        <div class="csub">MADIT-RIT، MADIT II/SCD-HeFT، فيزيولوجيا CRT المرضية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part41.html">
+      <div class="num">41</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 41 — أدلة CRT الكاملة (BLOCK HF)، موقع القطب، وتحسين AV (1 صورة)</div>
+        <div class="csub">المستجيبون الفائقون، معايير الإيكو، الموت اللانظمي بـICD</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part42.html">
+      <div class="num">42</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 42 — التحفيز من حزمة هيس، وبداية حالات استكشاف الأعطال (2 صور)</div>
+        <div class="csub">حصار AV كامل بجهاز VVI، ثنائية الضربات الأذينية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part43.html">
+      <div class="num">43</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 43 — تفسير EGM: VT بتوصيل VA، تمييز SVT/VT، وAF كـVT خاطئة (3 صور)</div>
+        <div class="csub">مفاهيم EGM مقابل قناة العلامات</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part44.html">
+      <div class="num">44</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 44 — كسر السلك (Make-Break)، فرط تحسس T، وأسئلة ختامية (نهاية القسم 14) (6 صور)</div>
+        <div class="csub">نمط "خط السكة الحديد"، 3 حالات ختامية شاملة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part45.html">
+      <div class="num">45</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 45 — بداية القسم 15: EP Study — المفاهيم، AH/HV، وSNRT (4 صور)</div>
+        <div class="csub">القساطر، اضطرابات التوصيل AV، المسارات المزدوجة/AH Jump</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part46.html">
+      <div class="num">46</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 46 — AVNRT/AVRT الكهروفيزيولوجي، وبداية تشريح CTI (5 صور)</div>
+        <div class="csub">التمييز عن تسرع الأذين، مثلث كوخ، قسطرة Halo</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part47.html">
+      <div class="num">47</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 47 — رسم خرائط الرفرفة، آلية التحريض ("الباب الدوّار")، وPPI (6 صور)</div>
+        <div class="csub">تمييز AVNRT بتحفيز V، رسم الخرائط بالتنشيط/الاستدراج</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part48.html">
+      <div class="num">48</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 48 — نهاية القسم 15 (Ensite/CARTO)، وبداية القسم 16: الآليات (2 صور)</div>
+        <div class="csub">جهد الفعل، الآليات الثلاث لاضطراب النظم، ظاهرة Warm-up</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part49.html">
+      <div class="num">49</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 49 — آلية إعادة الدخول الكاملة، الفجوة القابلة للاستثارة (6 صور)</div>
+        <div class="csub">تأثيرات PVC الثلاثة، تحذير Proarrhythmia، الجدول 16.1</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part50.html">
+      <div class="num">50</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 50 — آليات فئات مضادات النظم، اعتماد الاستخدام، والتوصيل الكامن (1 صورة)</div>
+        <div class="csub">تجربة CAST، الديجوكسين/الأدينوزين، بداية سمية الأميودارون</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch5-part51.html">
+      <div class="num">51</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 51 (الأخير) — نهاية سمية الأميودارون، وعتبات التنبيه/الرجفان</div>
+        <div class="csub">🎉 اكتمل الفصل الخامس بالكامل — DLCO، المراقبة الروتينية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+  </div>
+
+  <footer class="pagefoot">
+    <a href="practical-index.html" style="color:var(--gold); text-decoration:none; font-weight:600;">↩ فهرس Practical Cardiovascular Medicine</a>
+    <br><br>
+    <span class="brand">CardioArab</span> — مرجع طب القلب باللغة العربية
+  </footer>
+
+</main>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

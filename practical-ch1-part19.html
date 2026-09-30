@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 1 (الجزء 1): المتلازمة الإكليلية الحادة | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch1-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 1</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 1 — الجزء 19 (الأخير)</h3>
+  <div class="chgroup">
+    <span class="chtitle">ملاحق القسم 3</span>
+    <a href="#c1t3app1">١. الطعوم الجراحية</a>
+    <a href="#c1t3app2">٢. التشنج التاجي بالتفصيل</a>
+    <a href="#c1t3app3">٣. خلل الأوعية الدقيقة</a>
+    <a href="#c1t3app4">٤. النساء بألم صدري</a>
+    <a href="#c1t3app5">٥. استراتيجية INOCA</a>
+    <a href="#c1t3app6">٦. الجسر العضلي</a>
+    <a href="#c1t3app7">٧. الدوران الجانبي وCTO</a>
+    <a href="#c1t3app8">٨. التكيّف مع الإقفار</a>
+    <a href="#c1t3qa">أسئلة ختامية (23 سؤال)</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch1-part18.html">→ الجزء 18</a>
+    <a href="practical-ch1-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الأول (الجزء 19 — الأخير)</span>
+    <h1>المتلازمة الإكليلية الحادة</h1>
+  </div>
+  <span class="chapno">1</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 1: المتلازمة الإكليلية الحادة — الجزء 19 (الأخير)</h2>
+  </div>
+
+  <!-- ============ Appendix 1 ============ -->
+  <section class="roman" id="c1t3app1">
+    <div class="roman-head"><div class="roman-badge">ملحق 1</div><h2>ملاحظات حول الطعوم الجراحية المختلفة (CABG Grafts)</h2></div>
+
+    <h3 class="subhead">أ. الطعوم الوريدية الصافنة (SVG)</h3>
+    <p>معدلات الانسداد: ~10% بالشهر الأول؛ 15-25% بالسنة الأولى؛ 2-4%/سنة بعدها (50% مسدودة بعد 10 سنوات). خلال 5-10 سنوات، 20-40% يُظهرون تطورًا بمرض الأوعية غير المطعَّمة أو بعد منطقة المفاغرة. <strong>بأقل من شهر:</strong> السبب تخثر الطعم — مرض بعيد بعد المفاغرة، أو مشاكل تقنية. <strong>بعد &gt;30 يومًا:</strong> يُفضَّل علاج الشريان الأصلي إن أمكن (صلاحية الطعم المُعالَج بالقسطرة منخفضة طويل الأمد)؛ إن تعذَّر (CTO)، يُجرى PCI للطعم نفسه إلا إذا كان مسدودًا مزمنًا (عندها العلاج الطبي أفضل). أفضل نجاح طويل الأمد: تضيق SVG البعيد المعالَج بـPCI مبكرًا (فرط تنسج بطني لا تصلب عصيدي). أسوأ نجاح: مرض الجزء القريب. طعوم متدهورة منتشرة التصلب ترتبط بأحداث سلبية عالية (حتى 45% خلال سنتين) حتى مع تضيق متوسط فقط.</p>
+
+    <h3 class="subhead">ب. طعم LIMA (الشريان الثديي الداخلي الأيسر)</h3>
+    <p>يُستخدم عادة في موضعه (in-situ) لـLAD. نادرًا ما يُصاب بتصلب عصيدي (غشاء مرن داخلي سليم) — صلاحية ~90% عند 10 سنوات؛ إن بقي مفتوحًا بعد الأشهر الأولى، يبقى مفتوحًا مدى الحياة عادةً. <strong>أسباب فشل مبكر:</strong> فرط تنسج بالمفاغرة؛ ضعف تطور LIMA بسبب تضيق تحت الترقوة، ضعف تصريف بعيد بـLAD، أو غياب تضيق قريب مهم بـLAD (وجود تضيق قريب مهم ضروري للحفاظ على بقاء الطعم — تجاوز LAD بتضيق &lt;50-60% يؤدي لضمور استخدام الطعم "علامة الخيط" بـ~80% من المرضى).</p>
+    <p><strong>أسباب نقص التروية بمنطقة LIMA رغم ندرة تصلبه:</strong> (1) تضيق الشريان تحت الترقوة (الأشيع — قِس الضغط بكلا الذراعين لدى مرضى CABG بذبحة)؛ (2) رتاج الطعم (ضعف تطور مبكر)؛ (3) تضيق المفاغرة (فرط تنسج، 3-6 أشهر — يُعالَج برأب بالون بسيط)؛ (4) تقدم مرض LAD الأصلي بعد المفاغرة؛ (5) ظاهرة السرقة عبر الفروع الوربية (نادرة الأهمية سريريًا لاختلاف توقيت الجريان).</p>
+
+    <h3 class="subhead">ج-هـ. طعوم أخرى واستراتيجيات جراحية</h3>
+    <p><strong>الطعوم الكعبرية:</strong> صلاحية مشابهة لـSVG بالسنة الأولى، أفضل لاحقًا (~85% بـ5 سنوات)؛ لكن شديدة القابلية للتشنج — الأفضل عند تضيق أصلي &gt;90% وشريان مستقبِل كبير. <strong>RIMA:</strong> صلاحية أفضل من الكعبري وSVG، لكن تقنيًا أصعب وخطر عدوى جرح القص (خاصة بالسكري). <strong>الشريان المعدي الشحمي:</strong> بديل حر أو في موضعه. <strong>الطعوم متعددة المفاغرات</strong> (تسلسلية/Jump أو متفرعة/Y): تقلل مفاغرات الأبهر، مفيدة بضعف الجريان البعيد أو نقص طعوم متاحة؛ الأفضل: وضع آخر مفاغرة على الفرع ذي أكبر جريان بعيد. <strong>Off-pump CABG:</strong> نزف أقل، فشل كلوي وتنفسي أقل، ربما سكتات أقل؛ لكن إعادة توعية أقل اكتمالاً وخطر إقفار مبكر أعلى. <strong>MIDCAB:</strong> شكل من off-pump عبر شق صغير، عادة لطعم مفرد LIMA-LAD، أحيانًا ضمن استراتيجية هجينة.</p>
+  </section>
+
+  <!-- ============ Appendix 2 ============ -->
+  <section class="roman" id="c1t3app2">
+    <div class="roman-head"><div class="roman-badge">ملحق 2</div><h2>التشنج التاجي (ذبحة برينزميتال) — تفاصيل إضافية</h2></div>
+
+    <p>وُصفت أولاً بمرضى CAD انسدادي كامن (أحيانًا غير مستقر)؛ لاحقًا تبيَّن شيوعها أيضًا بمرضى بلا مرض انسدادي ظاهر. حتى بشرايين طبيعية بالقسطرة، يُظهر IVUS تصلبًا عصيديًا كامنًا بمواقع التشنج — خلل بطاني واضطراب NO يُسبب فرط استجابة وعائية موضعية. أنماط التشنج: سطحي بؤري (موقع واحد، متكرر بنفس المكان) أو منتشر (مقطعان+ أو شريانان، ~15%)؛ أو ميكروي فقط. الأكثر تأثرًا: LAD وRCA. بغياب مرض انسدادي: شفاء عفوي خلال 6-12 شهرًا؛ شفاء بـCCBs بنسبة ~83% (لكن ثلث ينكس). أكثر شيوعًا لدى النساء (وإن أشارت بعض الدراسات لتكافؤ مع الرجال)؛ عمر&gt;40 (متوسط 55-65)؛ أكثر شيوعًا بالآسيويين؛ التدخين والكحول/الكوكايين يزيدان الخطر.</p>
+    <p><strong>ECG:</strong> غالبًا ارتفاع ST عابر (نقص تروية عبر الجدار)؛ أحيانًا انخفاض إن لم يكن انسداديًا كاملاً؛ انقلاب T لاحقًا. <strong>مخاطر:</strong> VT/VF، بلوك AV، إغماء، موت مفاجئ، MI — خطر تراكمي ~20% خلال سنوات حتى بغياب CAD. <strong>النمط:</strong> الأشيع ذبحة راحة دون قيود جهدية، غالبًا ليلية، دورية، أطول وأشد من الذبحة الكلاسيكية؛ التوتر النفسي محفز شائع.</p>
+    <div class="card point-num">
+      <strong>معايير التشخيص القاطع (تلقائي أو بالتحريض):</strong> (1) تشنج بؤري/منتشر يُسبب تضيقًا ديناميكيًا ≥75% (بعض الدراسات ≥90%)؛ (2) تغيرات ST؛ (3) إعادة إحداث الأعراض المعتادة. <strong>تشنج الأوعية الدقيقة:</strong> تغيرات ST وأعراض بالتحريض دون تشنج مرئي بالسطحية؛ علامة إضافية: تباطؤ الجريان (زيادة عدد إطارات TIMI).
+    </div>
+    <p><strong>تأكيد التشنج التلقائي:</strong> تحسن التضيق لـ&lt;50% بعد NTG داخل الشريان (50-200 ميكروغرام). التشنج بفتحة طرف القسطرة لا يحمل قيمة تشخيصية. <strong>اختبار التحريض:</strong> إيرغونوفين، أو أكثر أمانًا: بولصات أستيل كولين بطيئة داخل الشريان (زوال سريع للتأثير) — آمن لكن غير روتيني بمعظم المراكز. بغياب اختبار تحريض، يُعتمد تشخيص افتراضي بثالوث: ذبحة (راحة أو جهد) + غياب CAD انسدادي + توثيق تغيرات ST عابرة (جهد أو هولتر).</p>
+    <p><strong>دراسة معدل الحدوث</strong> (مرضى ذبحة جهدية، شرايين &lt;20% انسداد): 62% أُصيبوا بتشنج مع أستيل كولين (28% سطحي، 34% ميكروي)؛ الأغلبية نساء. التشنج السطحي وحده لا يُفسِّر فقط ذبحة الراحة، بل أيضًا (مع خلل الأوعية الدقيقة) الذبحة الجهدية بغياب انسداد واضح. <strong>العلاج (تشنج سطحي):</strong> CABG/PCI إن وُجد CAD مهم فوق موقع التشنج (تصنيف IIa)؛ CCBs هي الخط الأول؛ يُضاف نترات طويلة المفعول عند الحاجة؛ حاصرات بيتا غير الانتقائية قد تُفاقم التشنج (تفعيل ألفا دون معارضة) فتُستخدم بحذر.</p>
+  </section>
+
+  <!-- ============ Appendix 3 ============ -->
+  <section class="roman" id="c1t3app3">
+    <div class="roman-head"><div class="roman-badge">ملحق 3</div><h2>خلل وظيفة الأوعية الدقيقة (Microvascular Dysfunction)</h2></div>
+
+    <p>شكلان رئيسيان، كلاهما يعكس خلل بطانة: (1) تشنج الأوعية الدقيقة (جزء من طيف التشنج التاجي)؛ (2) ضعف توسع الأوعية الدقيقة وزيادة التدفق أثناء الجهد (أقل من 2.5 ضعف الزيادة الطبيعية).</p>
+    <div class="card point-num">
+      <strong>طرق التشخيص:</strong> (1) اختبار تحريض بأستيل كولين مع مراقبة ST والألم؛ (2) ضعف احتياطي التدفق التاجي بعد الأدينوزين (&lt;2.5×، عبر سلك تدفق)؛ (3) ظاهرة التدفق البطيء التاجي بالقسطرة دون انسداد.
+    </div>
+    <p>غالبًا يترافق مع ارتفاع LVEDP (قد يكون سببًا أو نتيجة)، وقد يكون ثانويًا لـLVH. يُشخَّص افتراضيًا لدى مريض بألم صدري + تغيرات ECG/إقفار مثبت + غياب CAD مهم. ارتباط موثَّق بين ضعف استجابة الأستيل كولين وعيوب نقص التروية بالتصوير النووي؛ دراسة أخرى: انتشار 77% لاختبارات جهد غير طبيعية بمرضى خلل حركة الأوعية. SPECT التقليدي غير حساس كفاية؛ يُفضَّل PET أو MRI (يقيسان الاحتياطي التوسعي بدقة؛ PET يقيس التدفق المطلق، نسبة &lt;2-2.5 غير طبيعية).</p>
+    <p><strong>الانتشار السكاني (دراسة ACOVA):</strong> خلل الأوعية الدقيقة أكثر شيوعًا لدى النساء؛ التشنج السطحي متساوٍ تقريبًا بالجنسين. 20% من الرجال بألم صدري وشرايين غير مسدودة لديهم خلل دقيق، و20% تشنج سطحي؛ ~70% من النساء لديهن استجابة وعائية غير طبيعية (40% دقيق، 30% سطحي). ينتشر أكثر مع التقدم بالعمر (58-64). <strong>النمط السريري:</strong> التشنج السطحي = ألم راحة غالبًا؛ خلل الأوعية الدقيقة = ألم جهدي أو مختلط (~70%).</p>
+    <div class="callout gold">
+      <b>العلاج (خلل الأوعية الدقيقة):</b> بعكس التشنج السطحي، حاصرات بيتا هنا موصى بها وخط أول (تجربة CorMicA) — فعاليتها بتقليل الطلب الأكسجيني لا بتأثير مباشر على الأوعية الدقيقة. النترات لا توسِّع الأوعية الدقيقة لكنها تُخفف الإقفار بتقليل التحميل المسبق. رانولازين فعّال خاصة بتحسين الاسترخاء الانبساطي. CCBs، الستاتينات، ACE-I استُخدمت بنتائج متباينة. مكمل L-arginine (مقدمة NO) حسَّن التدفق بدراسة.
+    </div>
+    <p><strong>الخلاصة:</strong> اضطرابات التدفق التاجي قد تنجم عن: (1) CAD انسدادي (أعلى خطر أحداث)؛ (2) تشنج سطحي؛ (3) تشنج/خلل ميكروي — الأخيران بخطر متوسط (MI، اضطرابات نظم، تطور CAD)، أعلى من غياب أي خلل تام.</p>
+  </section>
+
+  <!-- ============ Appendix 4 ============ -->
+  <section class="roman" id="c1t3app4">
+    <div class="roman-head"><div class="roman-badge">ملحق 4</div><h2>النساء المصابات بألم صدري مع شرايين تاجية طبيعية</h2></div>
+
+    <p>النساء بذبحة نمطية كثيرًا ما لا يعانين من CAD انسدادي مهم (~50%). دراسة WISE: ~60% من النساء بألم صدري خضعن لقسطرة (متوسط عمر 58) لم يكن لديهن CAD مهم، رغم اختبارات جهد غير طبيعية بمعظمهن. ~50% من هؤلاء لديهن خلل أوعية دقيقة مثبت (احتياطي التدفق التاجي). انتشار مشترك يصل لـ70% لاضطرابات النغمة الوعائية بالنساء ذوات ألم نمطي/محتمل دون CAD.</p>
+    <div class="callout warn">
+      <b>الإنذار ليس حميدًا بالكامل:</b> 50% من هؤلاء النساء يستمر الألم لديهن &gt;سنة، مع مخاطر خلال 6 سنوات متابعة: MI 5.5%؛ HF 7.5%؛ مجموع أحداث قلبية وعائية 20% — أعلى من النساء بلا ألم مستمر، لكن أقل بكثير من CAD المثبت.
+    </div>
+    <p>خلل الأوعية الدقيقة قد يوجد حتى دون شذوذ باختبار الجهد؛ يُفضَّل PET أو MRI الإجهادي (أحسّ من SPECT). <strong>آليات ارتفاع الأحداث:</strong> (1) إقفار/MI بسبب تشنج تاجي؛ (2) خلل بطاني واستجابة غير طبيعية للأستيل كولين — مؤشر على تطور CAD مستقبلي (14% خطر أحداث خلال 3 سنوات)؛ (3) تآكل لويحات تحت السطح (البطانة المختلة تُضعف مقاومتها المضادة للأكسدة، فتُسهم بعدم استقرار اللويحة).</p>
+    <p><strong>معضلة السبب والنتيجة:</strong> خلل الوظيفة الانبساطية وارتفاع LVEDP قد يكون سببًا ونتيجة لخلل الأوعية الدقيقة معًا، خاصة بغياب إعادة تشكيل انقباضي واضح — يفسر جزئيًا نوبات HF لدى هؤلاء المريضات.</p>
+  </section>
+
+  <!-- ============ Appendix 5 ============ -->
+  <section class="roman" id="c1t3app5">
+    <div class="roman-head"><div class="roman-badge">ملحق 5</div><h2>استراتيجية تشخيص نقص التروية مع شرايين غير مسدودة (INOCA)</h2></div>
+
+    <div class="card point-num">
+      <strong>الخطوات الغازية بعد قسطرة تُظهر شرايين غير مسدودة:</strong>
+      <ol style="margin-top:8px">
+        <li><strong>تقييم الأوعية السطحية بالأستيل كولين داخل الشريان:</strong> كشف تشنج سطحي (تضيق &gt;75-90%) أو خلل بطاني سطحي (تضيق منتشر متفاوت &gt;20%).</li>
+        <li><strong>تقييم الأوعية الدقيقة بالأستيل كولين</strong> (إن لم يُلاحَظ تشنج سطحي): عبر استجابة ST (كما بدراسات Ong وCorMicA) أو قياس التدفق مباشرة — خلل البطانة الدقيقة: انخفاض التدفق أو زيادة &lt;50%.</li>
+        <li><strong>تقييم الأوعية الدقيقة بالأدينوزين الوريدي:</strong> عبر احتياطي التدفق التاجي (CFR) أو مؤشر مقاومة الأوعية الدقيقة (IMR).</li>
+      </ol>
+    </div>
+    <p><strong>التفاصيل التقنية:</strong> سلك دوبلر (تدفق=سرعة×مساحة) أو سلك FFR بحساس حرارة (زمن عبور 3 مل محلول ملحي، تدفق=1/زمن العبور). <strong>معايير التشخيص:</strong> CFR&lt;2.3-2.5 غير طبيعي؛ IMR≥25 يشير لخلل الأوعية الدقيقة (IMR=الضغط التاجي البعيد÷التدفق).</p>
+    <p><strong>آلية عمل الأدوية التشخيصية:</strong> الأستيل كولين يُسبب توسعًا فقط ببطانة سليمة (NO-dependent)؛ ببطانة مختلة، يعمل كمُضيِّق مباشر. الأدينوزين يُوسِّع مباشرة عبر العضلات الملساء (مستقل عن البطانة). معدلات الاكتشاف بالبروتوكول الكامل لدى ذبحة دون CAD انسدادي: خلل بطاني سطحي ~40%؛ خلل أوعية دقيقة 30-50%؛ تشنج سطحي 20-30%؛ الإجمالي: اضطرابات نغمة وعائية بـ~70% من الحالات. يُفضَّل تقييم LAD وRCA (أكثر شيوعًا) وأقل بـLCx؛ معظم الدراسات تقيِّم LAD فقط لأسباب سلامة. إن وُجدت تغيرات منتشرة غير منتظمة، يُقاس FFR؛ إن وُجد جسر عضلي، يُحسَب FFR الانبساطي بالدوبوتامين.</p>
+    <div class="callout gold">
+      <b>تجربة CorMicA:</b> العلاج الموجَّه بنتائج الفحوصات الوظيفية يُحسِّن شدة الذبحة ونوعية الحياة مقارنة بالعلاج الافتراضي. مرضى الذبحة الدقيقة: β-blocker← CCB← رانولازين. مرضى التشنج السطحي: CCB±نترات.
+    </div>
+    <p><strong>استراتيجية غير غازية بديلة</strong> (بعد قسطرة سلبية): PET أو MRI مع إجهاد الأدينوزين، يقيسان احتياطي التروية عبر شدة إشارة الغادولينيوم (MRI) أو سرعة التقاط الإشارة (PET) — كلاهما يحسب CFR بشكل غير غازٍ.</p>
+  </section>
+
+  <!-- ============ Appendix 6 ============ -->
+  <section class="roman" id="c1t3app6">
+    <div class="roman-head"><div class="roman-badge">ملحق 6</div><h2>الجسر العضلي القلبي (Myocardial Bridging)</h2></div>
+
+    <p>مقطع من الشريان التاجي يسير داخل عضلة القلب (لا فوقها)، فيتعرض للانضغاط أثناء الانقباض، مما قد يُسبب نقص تروية عرضي. يُشاهد بـ~2% من القساطر (أعلى بـCT، حتى 25%)، غالبًا بـLAD.</p>
+    <div class="card point-num">
+      <strong>الخصائص:</strong> تضيق متقطع (phasic) بالتصوير — &gt;70% فقط أثناء الانقباض ("تأثير الحلب")، بخلاف التشنج المستمر طوال الدورة. غياب نقص التروية المعتاد يعود لأن &gt;80% من جريان LAD يحدث بالانبساط؛ لكن بتسارع القلب، يزداد دور الانضغاط النسبي وقد يمتد للانبساط — لذا حتى 20% من مرضى الجسر العضلي يُظهرون إقفارًا باختبار الجهد.
+    </div>
+    <p><strong>الاشتباه:</strong> ذبحة جهدية + علامات إقفار بالجهد + جسر عضلي بالقسطرة دون تضيق انسدادي واضح. شدة الإقفار ترتبط بشدة التضيق وعمق المقطع المغطى. <strong>التقييم الديناميكي:</strong> FFR معدَّل مع دوبوتامين (قياس الضغط البعيد-للقريب بالانبساط فقط)؛ بديل غير غازٍ: إيكو إجهادي يُظهر انبعاجًا أوسط بالحاجز (mid-septal buckling) مع سلامة القمة (بعكس نقص التروية من تضيق LAD الثابت الذي يصيب ما بعد التضيق).</p>
+    <p><strong>الإنذار:</strong> حميد جدًا حتى مع الأعراض، خطر منخفض جدًا لـMI أو اضطرابات نظم؛ لكن الإجهاد غير الطبيعي قد يُسبب تصلبًا قريبًا من الجسر (20-30 ملم). <strong>العلاج:</strong> النترات والمدرات تُفاقم الحالة (تزيد التسرع والانقباضية) — قد تتحسن الأعراض فقط بإيقافها. NTG أثناء القسطرة مفيد لتوضيح الشدة (تأثير معاكس للتشنج). العلاج الأساسي: حاصرات بيتا.</p>
+  </section>
+
+  <!-- ============ Appendix 7 ============ -->
+  <section class="roman" id="c1t3app7">
+    <div class="roman-head"><div class="roman-badge">ملحق 7</div><h2>الدوران الجانبي التاجي والانسداد الكلي المزمن (CTO)</h2></div>
+
+    <p>وجود دوران جانبي لا يعني بالضرورة أن الانسداد مزمن — القنوات الجانبية تبدأ بالتوسع خلال 24 ساعة من الانسداد، وتنضج تدريجيًا (شبكة ناضجة معادلة للشريان الفرعي عادة تستغرق ≥أسبوعين، غالبًا ≥12 أسبوعًا). 50% من مرضى MI الحاد يُطورون تدفقًا جانبيًا خلال 6 ساعات، و100% خلال 24 ساعة — قد تظهر الدورانات الناضجة أبكر إذا سبق الاحتشاء تضيق مزمن شديد (≥90%).</p>
+    <div class="card">
+      <strong>تصنيف Rentrop للدوران الجانبي:</strong> درجة 1 — ملء الفروع الجانبية فقط. درجة 2 — ملء جزئي/خفيف لجسم الشريان المسدود. درجة 3 (ناضجة) — ملء كامل أو وعاء جانبي بحجم فرع شرياني.
+    </div>
+    <p>NO يُعزِّز نمو الدوران الجانبي؛ عوامل الخطر التقليدية (خاصة السكري) تُعيقه. التدفق الجانبي الناضج قد يوفر حتى 50% من التدفق الطبيعي الأمامي، يقلل الإقفار بشكل كبير خاصة بالراحة، لكن الجهد يبقى غالبًا محدودًا بدرجة تعتمد على حجم المنطقة المروية ونضج الدوران.</p>
+    <div class="card point-num">
+      <strong>تعريف CTO:</strong> انسداد كامل عمره &gt;3 أشهر بدون تدفق أمامي (true CTO) أو مع تدفق خفيف عبر قنوات دقيقة (functional CTO). يُميَّز عن الانسداد الحاد بالصورة السريرية (ذبحة مستقرة مقابل ACS) وECG. الجسور الجانبية (caput medusae) تدل على انسداد قديم (&gt;3 أشهر) وترتبط بنجاح أقل بـPCI؛ يجب تمييزها عن القنوات الدقيقة داخل CTO (تدل على فرصة نجاح أعلى).
+    </div>
+  </section>
+
+  <!-- ============ Appendix 8 ============ -->
+  <section class="roman" id="c1t3app8">
+    <div class="roman-head"><div class="roman-badge">ملحق 8</div><h2>التكيّفات القلبية مع الإقفار: Hibernation، Stunning، وIschemic Preconditioning</h2></div>
+
+    <h3 class="subhead">1. الكمون القلبي (Hibernation)</h3>
+    <p>ضعف مزمن بوظيفة العضلة بسبب تضيق تاجي شديد ومستمر؛ تُخفِّض العضلة نشاطها الوظيفي والأيضي كآلية بقاء، لكنها تبقى حية. مع استمرار الإقفار المزمن، قد يتطور لتليف لا رجعة فيه. <strong>سمات تشخيصية:</strong> انخفاض التقاط النويدات المشعة بالراحة والجهد لكن &gt;50% بالراحة (بعكس الاحتشاء)؛ محافظة على النشاط الأيضي بـPET؛ غياب موجات Q. التعافي: 1-6 أشهر بعد إعادة التروية.</p>
+
+    <h3 class="subhead">2. الصدمة القلبية المؤقتة (Stunning)</h3>
+    <p>ضعف عابر بعد نوبة إقفار حادة شديدة، ينتهي بزوال الإقفار والعضلة تبقى حية وتتعافى. أمثلة: انسداد حاد أُعيد فتحه بـPCI/حالّات؛ إقفار إجهادي؛ إقفار جراحي/بعد PCI. الفحص النووي بالراحة طبيعي عادة. قد يحتاج دعمًا مؤقتًا (إينوتروب/IABP) حتى التعافي، طالما لا إقفار نشط. التعافي: أيام إلى شهر.</p>
+
+    <h3 class="subhead">3. التكيّف مع الإقفار (Ischemic Preconditioning)</h3>
+    <p>تعريض القلب لنوبات إقفار قصيرة يجعله أكثر مقاومة لنوبة لاحقة شديدة — تحفيز مستقبلات وقائية (أدينوزين، بروتين G/كيناز C). نافذتان للحماية: الأولى تبدأ خلال دقائق وتستمر ساعات؛ الثانية تبدأ بعد 24 ساعة وتستمر حتى 96 ساعة. يُفسِّر لماذا المرضى بذبحة ما قبل الاحتشاء يُصابون باحتشاءات أصغر ونتائج أفضل؛ وكذلك مرضى التضيقات المزمنة الشديدة (دوران جانبي ناضج) يُصابون باحتشاءات أصغر.</p>
+  </section>
+
+  <!-- ============ Final Q&A ============ -->
+  <section class="roman" id="c1t3qa">
+    <div class="roman-head"><div class="roman-badge">؟</div><h2>أسئلة ختامية — مرض الشريان التاجي المزمن (23 سؤالًا)</h2></div>
+
+    <div class="card point-num">
+      <strong>السؤال 1:</strong> رجل 67 عامًا، ارتفاع ضغط وسكري، ذبحة جهدية (CCS III) منذ 3-4 أشهر، تخف بالراحة/NTG. عرج متقطع بالطرف السفلي الأيسر، لا نبضات بعيدة. ECG: LVH مع انخفاض ST 0.5 ملم. ما الخطوة التالية؟ <br>A. قسطرة تاجية. B. اختبار جهد ECG. C. اختبار جهد SPECT. D. أدينوزين SPECT.
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> حسب Hubbard، خطر المريض &gt;40% لمرض تاجي شديد نظرًا للعمر، الجنس، السكري، الذبحة النمطية، ووجود PAD (مؤشر إضافي على شدة CAD). شدة الذبحة تزيد الحاجة لقسطرة تشخيصية وربما إعادة توعية مباشرة.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 2:</strong> رجل 67 عامًا، دعامة LAD منذ سنتين، ذبحة خفيفة بجهد شديد (CCS I). أتينولول+أملوديبين+أسبرين+أتورفاستاتين. اختبار جهد: 8 دقائق، DTS=+4، إقفار قمي-جانبي صغير (مجموع درجة+3). القسطرة: 60% LCx القريب، 30% LAD، 40% RCA. ما الخطوة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D.</strong> مريض نموذجي لتجربة COURAGE — ذبحة خفيفة، قدرة وظيفية جيدة، اختبار جهد منخفض الخطورة. العلاج الدوائي وحده يكافئ PCI+علاج دوائي ما لم تستمر الأعراض؛ عندها يدعم تحليل COURAGE الفرعي استخدام PCI لتقليل الأعراض. لا حاجة لـFFR هنا لأن الإقفار بمنطقة LCx مثبت فعلاً بالتصوير النووي.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 3:</strong> رجل 76 عامًا، ذبحة بنشاط شديد، إقفار أمامي خفيف-متوسط، تضيق 80% منتصف LAD. ما الخطوة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> باستثناء الرئيسي الأيسر، المريض بذبحة مستقرة خفيفة يُعالَج بالعلاج الدوائي فقط بصرف النظر عن شدة الإقفار. تجربة MASS: لتضيق LAD معزول (&gt;80%)، لا فرق بالوفيات بين CABG وPCI والعلاج الطبي، لكن تحسن أعراض أكبر مع CABG.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 4:</strong> نفس السيناريو، لكن إقفار أمامي شديد وتضيق 80% بالجزء القريب من LAD. ما الخطوة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> مريض بذبحة خفيفة دون قيود وظيفية شديدة لا يحتاج إعادة توعية (نمط ISCHEMIA وCOURAGE وMASS). فائدة إعادة التوعية بـCAD المستقر عرضية فقط، ومحدودة إن لم تكن الأعراض شديدة/مقاومة.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 5:</strong> رجل 76 عامًا، ذبحة بجهد شديد فقط. إقفار أمامي متوسط. القسطرة: 80% LAD القريب، 75% RCA، 75% LCx (ثلاثي الأوعية). ما الخطوة؟ <br>A. علاج طبي. B. PCI. C. CABG. D. A أو C. E. B أو C.
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D.</strong> مرض ثلاثي الأوعية (&gt;70%) يجعل إعادة التوعية مقبولة (خاصة CABG بالتجارب القديمة)، لكن حسب ISCHEMIA وBARI 2D ليست ضرورية دومًا إن لم توجد أعراض شديدة أو اختبار جهد عالي الخطورة. ملاحظة: اختبار الجهد قد يستهين بشدة الإقفار الحقيقي (المقارنة بأفضل منطقة إرواء). إن تقررت إعادة التوعية، يُفضَّل FFR لـRCA وLCx بدقة.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 6:</strong> رجل 47 عامًا، لاعرضي، بدأ رياضة، اختبار جهد طلبه طبيب العائلة: 5 دقائق، انخفاض ST 1.5 ملم بلا ألم. تصوير نووي: عيب انعكاسي واسع أمامي-جانبي، EF طبيعي، TID طبيعي. ما الخطوة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D (B أو C).</strong> قد يكون مؤهلاً لإعادة توعية إذا وُجد مرض ثلاثي أو ثنائي يشمل LAD القريب (بالتجارب القديمة). CTA بديل مناسب للقسطرة حتى بعد اختبار جهد عالي الخطورة (ISCHEMIA). رغم التساؤل حول قيمة فحص مريض لاعرضي، استبعاد الرئيسي الأيسر يصبح معقولاً بعد إثبات إقفار.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 7:</strong> رجل 56 عامًا، ذبحة CCS III، بلا علاج مضاد للذبحة. إقفار سفلي شديد. CTO بـRCA (غير متكلس، طوله 2 سم — خصائص مناسبة). صح أم خطأ: PCI غير مناسب لأن المريض لا يتلقى أقصى علاج طبي؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ صحيح.</strong> PCI بـCTO أكثر تعقيدًا (مضاعفات 2-3 أضعاف)؛ يُوصى به فقط بذبحة شديدة مقاومة للعلاج الدوائي، ويُفضَّل خصائص تشريحية مناسبة (طول&lt;2سم، غياب تكلس شديد، طرف قريب جيد).</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 8:</strong> امرأة 50 عامًا مدخنة، ألم صدري متغير (جهد/راحة، ~45 دقيقة). ضغط 160/95، نبض 78. اختبار جهد نووي: 5 دقائق، بلا ألم، بلا تغيّر ST. عيب انعكاسي واسع أمامي، مجموع درجة+10. تفضل العلاج الطبي أولاً. الخطوة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة B.</strong> DTS=+5 (خطر منخفض) لكن هذا لا ينفي CAD خطيرًا (10% من DTS المنخفض لديهم رئيسي أيسر/ثلاثي). نتيجة التصوير عالية الخطورة تتفوق على DTS المنخفض. ابدأ أسبرين+ستاتين+β-blocker+أملوديبين، ويُوصى بـCTA لأن الخطر السنوي&gt;5%.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 9:</strong> رجل 65 عامًا سكري، سيخضع لاستئصال مرارة اختياري. ضيق نفس خفيف (&gt;4 METs)، لا ذبحة. SPECT: إقفار سفلي شديد، EF طبيعي. القسطرة: 80% منتصف RCA. الخطوة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A أو B</strong> (حسب تقدير الخطورة الجراحية). لا أعراض ذبحة واضحة؛ إعادة التوعية قبل الجراحة لا تُقلل مضاعفات القلب بعدها إلا بالرئيسي الأيسر أو ثلاثي شامل. التوصية: ستاتين وحاصر بيتا قبل الجراحة بأسبوع+، مع مراقبة دقيقة أثناء وبعدها.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 10:</strong> امرأة 58 عامًا، ألم بالجهد والتوتر. اختبار جهد: ألم شديد+ارتفاع ST سفلي+NSVT، زال خلال 5 دقائق راحة. القسطرة: تضيق ناعم 80% منتصف RCA، تحسَّن لـ25% بعد NTG. الإنذار والعلاج؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> حتى بغياب CAD انسدادي، الذبحة التشنجية ترتبط بخطر قلبي ~20% خلال سنوات، خاصة مع تغيرات ST واسعة/اضطرابات نظم. CCB (أملوديبين) يخفض الخطر لـ&lt;1%؛ الستاتين مفيد إضافيًا؛ IVUS يُنصح به إن كان التضيق≥50% أو المظهر مقلقًا.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 11:</strong> امرأة 55 عامًا مدخنة، ذبحة جهدية. تصوير نووي: عيب انعكاسي أمامي. القسطرة: لا تضيق انسدادي، جسر عضلي متوسط بمنتصف LAD (50%). التشخيص؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D (أي مما سبق).</strong> الجسر العضلي غالبًا عرضي (بالمصادفة) حتى لو واضحًا، لكن قد يكون السبب مع أعراض نمطية وإقفار أمامي مطابق. التشخيص التفريقي يشمل أيضًا التشنج السطحي وخلل الأوعية الدقيقة.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 12:</strong> ما الاختبارات المساعدة لتأكيد تشخيص مريضة السؤال 11؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة F (B، C، D، وE).</strong> أفضل وسيلتين غير غازيتين لخلل الأوعية الدقيقة: Stress MRI وStress PET (يليهما SPECT بإيجابيات كاذبة أعلى بالنساء). غازيًا: أستيل كولين للتشنج الميكروي، أدينوزين لضعف التوسع. إعطاء NTG قد يزيد شدة تضيق الجسر العضلي، داعمًا التشخيص.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 13:</strong> رجل 50 عامًا، ألم راحة مع ارتفاع ST سفلي. القسطرة: تضيق ناعم 90% منتصف RCA، تحسَّن بـNTG. أي عبارة غير صحيحة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A (خاطئة).</strong> "الذبحة التشنجية أكثر شيوعًا لدى النساء بالضعف" — التشنج السطحي أكثر شيوعًا قليلاً فقط لدى النساء، بينما خلل الأوعية الدقيقة أكثر شيوعًا بـ4 أضعاف لديهن.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 14:</strong> رجل 69 عامًا، ذبحة CCS III مزمنة. القسطرة: 90% RCA القريب. أي عبارة صحيحة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C.</strong> بـCAD المستقر، PCI يُحسِّن فقط أعراض الذبحة، لا خطر MI أو الوفيات، حتى مع تضيق شديد. CABG يُقلل الوفيات فقط بالرئيسي الأيسر، الثلاثي، أو الثنائي مع LAD القريب — لا بوعاء واحد (BARI 2D: قد تُقلل CABG خطر MI فقط بمرض متعدد بدون رئيسي أيسر، لا الوفيات).</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 15:</strong> امرأة 59 عامًا، ألم غير نمطي وغير جهدي. اختبار جهد: عيب أمامي كبير. القسطرة: 80% LAD القريب، FFR=0.67. أي العبارات صحيحة (متعددة)؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C وE فقط.</strong> PCI يُحسِّن أعراض الذبحة (C) فقط، لا يُقلل MI أو الوفيات (A وB خاطئتان بـCAD المستقر). لا علاقة لقسطرة LAD بتقليل MI حول جراحة غير قلبية مستقبلية (D خاطئة). CABG لوعاء واحد قد تُقلل الوفاة/MI فقط بحالات محددة كالرئيسي الأيسر أو مرض ثلاثي (E قد تصح حسب السياق التشريحي الأوسع).</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 16:</strong> بعد إعادة التوعية، أي عبارة غير صحيحة؟ A. بعد PCI لوعاء/وعاءين، خطر إعادة تداخل ~20% خلال 5 سنوات. B. بعد توعية متعددة، خطر أحداث ~27% مع CABG و~37% مع PCI خلال 5 سنوات. C. بعد PCI عالي الخطورة (LAD قريب معقد)، يُوصى باختبار جهد روتيني كل 6-12 شهرًا.
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C (خاطئة).</strong> التضيق المتكرر اللاعرضي ليس مؤشرًا مؤكدًا لسوء الإنذار؛ لا دليل على أن PCI للتضيقات المتكررة اللاعرضية يُحسِّن النتائج — الاختبارات الروتينية غير مبررة. ملاحظة: كل طعم SVG لديه خطر انسداد ~30% خلال 5 سنوات، معظمها لاعرضي.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 17:</strong> رجل 70 عامًا، PCI بدعامة DES منذ سنة بمنتصف LAD، ذبحة خفيفة متكررة الآن. القسطرة: 90% تضيق داخل الدعامة. الخطوة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D (PCI أو CABG).</strong> ISCHEMIA استبعدت مرضى PCI/CABG خلال السنة الماضية؛ COURAGE استبعدت تضيق الدعامة العائد. التوصية: PCI متكرر عادة، مع IVUS/OCT لتقييم تمدد الدعامة (عدم التمدد سبب &gt;50% من التضيقات العائدة) — بالون عالي ضغط إن كانت المشكلة تمددية، أو دعامة داخل دعامة إن كانت فرط تنسج/تضيق منتشر. CABG بديل مقبول إن كان التضيق بـLAD.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 18:</strong> امرأة 51 عامًا، ذبحة جهدية. اختبار جهد كهربائي: 7 دقائق، ذبحة معتادة، بلا تغيّر ST. الخطوة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> اختبار الجهد لا يُظهر علامات عالية الخطورة، وقدرة وظيفية جيدة. العلاج الدوائي مناسب لمرض تاجي منخفض الخطورة أو احتمال خلل بالأوعية الدقيقة. CTA/تصوير إضافي ممكن لكن غير ضروري بهذه المرحلة.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 19:</strong> قسطرة مريضة السؤال 18 لم تُظهر مرضًا هامًا. الخطوة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C.</strong> نصف النساء بذبحة نمطية لا يُظهرن CAD انسداديًا — الأرجح خلل بطاني/عدم توسع أوعية دقيقة أثناء الجهد (لا تشنج كبير، الذي يظهر كألم راحة لا جهد كما هنا). يُشخَّص بمقارنة PET/MRI بالراحة وبعد الأدينوزين. العلاج: ميتوبرولول الخط الأول (CorMicA) — يختلف عن علاج التشنج الكبير المعتمد على CCBs.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 20:</strong> رجل 50 عامًا سكري، ذبحة CCS I. الخطوة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> نموذج مريض ISCHEMIA — ذبحة خفيفة وحد وظيفي طفيف؛ PCI لم يُظهر فائدة بالوفيات أو الاحتشاء بهذه الحالات. التأهل لإعادة التوعية يتطلب ذبحة شديدة مستمرة رغم دواءين، أو مرض رئيسي أيسر/ثلاثي/ثنائي مع LAD قريب.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 21:</strong> بمريض سكري وCAD مستقر، أي عبارة غير صحيحة؟ A. حاصرات بيتا تُقلل الوفيات بـCAD المستقر دون MI سابق. B. ميتوبرولول يرفع HbA1c، كارفيديلول لا يؤثر ويُحسِّن مقاومة الإنسولين. C. كلما ارتفع HbA1c، زادت فعالية رانولازين بتقليل الذبحة. D. رانولازين يُحسِّن HbA1c حتى 1%.
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A (خاطئة).</strong> حاصرات بيتا لا تُثبت تقليل الوفيات بـCAD المستقر دون MI سابق أو فشل قلب — فائدتها الأساسية عرضية (تخفيف الذبحة) بهذا السياق.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 22:</strong> رجل 60 عامًا سكري، ضيق نفس جهدي وألم راحة عرضي. ECG: موجات Q سفلية هامشية. اختبار جهد إيكو: 8 دقائق، انخفاض ST 1 ملم، ضيق نفس بلا ألم، انعدام حركة سفلي، EF 35-40% دون تدهور بالجهد. القسطرة: CTO منتصف RCA، 50% LAD القريب. الخطوة؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C.</strong> إعادة التروية لا تُبرَّر إلا بذبحة شديدة أو HF ناتج عن ضعف LV؛ إن لم تتحسن الأعراض دوائيًا، يُفكَّر بـPCI لـRCA. الأفضل: FFR لـLAD أولاً — إن كانت مهمة، تُحال لـCABG لكلا الشريانين؛ إن لم تكن، PCI لـRCA. ملاحظة تقنية: يُفضَّل تأجيل FFR لـLAD حتى إعادة فتح RCA، لأن LAD قد يُغذي جانبيًا RCA فيُخفِّض FFR كاذبًا.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 23:</strong> في CAD المستقر، ما العاملان الأساسيان اللذان يوجهان قرار إعادة التوعية؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة:</strong> (1) شدة الذبحة الصدرية (خصوصًا الشديدة والمستمرة رغم العلاج الدوائي)؛ (2) وجود مرض الرئيسي الأيسر، أو صفات تشريحية عالية الخطورة كمرض ثلاثي الأوعية أو مرض ثنائي يشمل LAD القريب. <strong>ملاحظة ختامية من ISCHEMIA:</strong> شدة الإقفار التي كانت تُستخدم سابقًا وحدها لتحديد الحاجة للتداخل، ليست كافية بمفردها لاتخاذ القرار.</p>
+    </div>
+  </section>
+
+  <div style="text-align:center; margin:50px 0 20px; padding:28px 20px; background:linear-gradient(135deg, rgba(45,212,191,.12), rgba(251,191,36,.08)); border:1px solid var(--teal-dim); border-radius:16px;">
+    <div style="font-size:28px; margin-bottom:8px;">🎉</div>
+    <div style="font-weight:700; font-size:17px; color:var(--text); margin-bottom:6px;">اكتمل الفصل الأول بالكامل</div>
+    <p style="color:var(--text-dim); font-size:14px; max-width:480px; margin:0 auto 16px;">المتلازمة الإكليلية الحادة — بحروفه وصوره كاملة، من التعريف وحتى آخر سؤال مراجعة، عبر 19 جزءًا.</p>
+    <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap;">
+      <a href="practical-ch1-index.html" style="background:var(--panel); color:var(--gold); border:1px solid var(--border); padding:10px 20px; border-radius:10px; text-decoration:none; font-size:14px; font-weight:600;">↩ فهرس الفصل 1</a>
+      <a href="practical-index.html" style="background:var(--panel); color:var(--gold); border:1px solid var(--border); padding:10px 20px; border-radius:10px; text-decoration:none; font-size:14px; font-weight:600;">📚 فهرس الكتاب</a>
+      <a href="practical-ch2.html" style="background:var(--teal); color:#04211d; padding:10px 20px; border-radius:10px; text-decoration:none; font-size:14px; font-weight:700;">الفصل 2: قصور القلب ←</a>
+    </div>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 1، الجزء 19 (الأخير)
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

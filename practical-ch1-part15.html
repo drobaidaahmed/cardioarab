@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 1 (الجزء 1): المتلازمة الإكليلية الحادة | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch1-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 1</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 1 — الجزء 15</h3>
+  <div class="chgroup">
+    <span class="chtitle">القسم 3: CAD المزمن (تابع)</span>
+    <a href="#c1t3warranty">فترات الضمان والشكل 3.2</a>
+    <a href="#c1t3s3">III. نقص التروية الصامت</a>
+    <a href="#c1t3s4">IV. مضادات الصفيحات</a>
+    <a href="#c1t3s5">V. العلاج المضاد للذبحة</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch1-part14.html">→ الجزء 14</a>
+    <a href="practical-ch1-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch1-part16.html">الجزء 16 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الأول (الجزء 15)</span>
+    <h1>المتلازمة الإكليلية الحادة</h1>
+  </div>
+  <span class="chapno">1</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 1: المتلازمة الإكليلية الحادة — الجزء 15</h2>
+  </div>
+
+  <section class="roman" id="c1t3warranty">
+    <div class="roman-head"><div class="roman-badge">II (تتمة)</div><h2>فترات الضمان واستراتيجية التقييم الشاملة</h2></div>
+
+    <p>نفس المبادئ تنطبق على المرضى الذين خضعوا سابقًا لـCABG، حيث يُستبدل مصطلح تضيق الدعامة بمرض الطعم. <strong>التوصية:</strong> إذا ظهرت ذبحة نمطية أثناء جهد خفيف، تُعاد القسطرة للتقييم.</p>
+
+    <h3 class="subhead">فترات الضمان (Warranty periods)</h3>
+    <p>اختبارات الجهد لها "فترات ضمان" — فترات يكون خلالها خطر الأحداث القلبية منخفضًا (&lt;1% سنويًا)، ولا حاجة لقسطرة إلا بظهور دليل موضوعي على مرض جديد (ACS مع مؤشرات قلبية إيجابية، أو إقفار شديد جديد بECG). مدة فترة الضمان: عمومًا 1-2 سنة بعد اختبار جهد سلبي؛ أقصر مع: الاختبار الدوائي، كبار السن (&gt;70-80)، تاريخ CAD، أو عوامل خطورة غير مضبوطة.</p>
+    <div class="card">
+      <strong>سجل CASS:</strong> إذا أظهرت القسطرة شرايين طبيعية أو مرضًا بسيطًا، خطر الأحداث منخفض جدًا لـ5 سنوات، ولا تُعاد القسطرة خلالها ما لم يظهر دليل على MI. البقاء خلال 7 سنوات: 96% لوظيفة LV وشرايين طبيعية؛ 92% لمرض تاجي بسيط (&lt;50%) — أفضل بكثير من CAD الانسدادي.
+    </div>
+    <p>إذا أظهرت القسطرة مرضًا متوسطًا (30-70%) بوعاء أو أكثر، أو مرضًا شديدًا (&gt;70%) بفرع صغير لا يمكن التدخل فيه: إذا عاد المريض بألم مستمر/متكرر بعد أشهر أو 1-2 سنة، لا داعي لإعادة القسطرة إلا بوجود: شذوذ إقفاري بST، تروبونين إيجابي، أو تغيّر دراماتيكي بشدة الذبحة.</p>
+    <p><strong>بالنسبة للتضيقات المتوسطة (50-70%):</strong> مهم تقييم الأهمية الوظيفية عبر تصوير الجهد أو FFR. التضيقات غير المهمة وظيفيًا حسب FFR لديها خطر منخفض جدًا لكل تضيق فردي؛ لكن الخطر التراكمي من كل الآفات غير المهمة يبلغ ~1.5% سنويًا (دراسة FAME 2). <em>خلاصة:</em> "فترات الضمان" أداة إرشادية، لكن القرار النهائي يعتمد دائمًا على الحكم السريري.</p>
+
+    <div class="card point-num">
+      <strong>الشكل 3.2 — النهج التشخيصي والتدبيري الشامل لألم الصدر المزمن:</strong>
+      <ul style="margin-top:8px">
+        <li><strong>احتمالية عالية + ذبحة نمطية شديدة ومقاوِمة:</strong> قسطرة مباشرة + إعادة توعية.</li>
+        <li><strong>احتمالية عالية + ذبحة خفيفة:</strong> CTA (إلا بـCKD). وجود مرض بالرئيسي الأيسر ← قسطرة+توعية؛ عدم وجوده ← إدارة محافظة أو توعية حسب الحالة.</li>
+        <li><strong>احتمالية متوسطة:</strong> اختبار جهد (ECG أو تصوير) أو CTA. منخفض الخطورة ← علاج دوائي؛ متوسط ← CTA أو تصوير جهد إضافي؛ عالي ← مسارات الاحتمالية العالية.</li>
+      </ul>
+      <p style="margin-top:8px">أصبح لـCTA دور مركزي بالحالات عالية الاحتمالية بفضل دراسة ISCHEMIA، خصوصًا لاستبعاد مرض الرئيسي الأيسر (غيابه يسمح بالإدارة المحافظة). الاستثناء الرئيسي: مرضى CKD (GFR&lt;60) حيث يُفضَّل التصوير الإجهادي، مع اعتبار أن حتى النتائج عالية الخطورة يمكن إدارتها محافظةً دون تقييم تداخلي.</p>
+    </div>
+  </section>
+
+  <!-- ============ III. نقص التروية الصامت ============ -->
+  <section class="roman" id="c1t3s3">
+    <div class="roman-head"><div class="roman-badge">III</div><h2>نقص التروية القلبية الصامت (Silent Myocardial Ischemia)</h2></div>
+
+    <p>نقص التروية الشديد والصامت بالكامل غير شائع (10-15% فقط من CAD). الشكل الأكثر شيوعًا هو نقص التروية الصامت الذي يتخلله نقص تروية عرضي (ذبحة أو احتشاء سابق). حتى مع مريض لاعرضي، يُعتبر نقص التروية مؤشرًا قويًا على أحداث قلبية ووفيات، وقد يحمل نفس الأهمية التنبؤية كنقص التروية العرضي.</p>
+    <div class="callout warn">
+      <b>لكن:</b> إعادة التوعية لا تُغيِّر هذا التنبؤ. الفحص الروتيني للمرضى اللاعرضيين بناءً فقط على عوامل الخطورة غير موصى به؛ ولا يُوصى أيضًا بالفحص الروتيني بعد PCI.
+    </div>
+    <div class="card point-num">
+      <strong>دراسة DIAD:</strong> فحص مرضى سكريين لاعرضيين (فئة عالية الخطورة نسبيًا) بتصوير جهد نووي. النتائج: خطر منخفض جدًا للأحداث (~0.6% سنويًا)؛ بالمجموعة الصغيرة ذات نقص التروية المتوسط/الشديد، الخطر أعلى قليلاً (2.5% سنويًا)، لكن 70% من الأحداث وقعت بالمرضى ذوي الفحوصات الطبيعية (0.6% بـ90% من السكان = أحداث أكثر من 2.5% بـ10% منهم). حتى لو قلَّلت إعادة التوعية خطر MI المتأخر بهذه المجموعة الصغيرة، تُلغى الفائدة بخطر MI الإجرائي وخطر القسطرة التشخيصية غير الضرورية بسبب النتائج الإيجابية الكاذبة — لذا كان معدل الأحداث متشابهًا بين المجموعتين.
+    </div>
+    <p>بالتالي، اختبارات الجهد ليست مفيدة عمومًا بالمرضى اللاعرضيين، حتى ذوي الخطورة العالية ظاهريًا، خصوصًا إذا كانت عوامل الخطورة وHbA1c مضبوطة جيدًا.</p>
+    <div class="card point-num">
+      <strong>دراسة FACTOR-64:</strong> مرضى سكريون لاعرضيون، عُشوِّئوا بين CTA مقابل الرعاية الروتينية. CTA كشف مرضًا انسداديًا (&gt;70%) بـ11%، أدى لإعادة توعية 6%؛ لكن لم يُترجَم هذا لأي انخفاض بالوفيات، MI، أو الذبحة غير المستقرة.
+    </div>
+    <div class="card">
+      <strong>ثلاث أفكار تُعارض فحص/دعامة المرضى اللاعرضيين:</strong>
+      <ol style="margin-top:8px">
+        <li>~75% من حالات MI تأتي من لويحات غير انسدادية (&lt;50%) بتصوير حديث. ينطبق أكثر إذا كان المريض لاعرضيًا، وأكثر إذا كان لاعرضيًا رغم النشاط.</li>
+        <li>عبء التصلب العصيدي (كما يُقيَّم بدرجة تكلس الشرايين CT calcium scoring) يُعتبر متنبئًا للأحداث لا يقل أهمية عن التضيق الانسدادي؛ الدعامات لا تُغيِّر هذا العامل الرئيسي.</li>
+        <li>انسداد &gt;70% أقل احتمالاً للتسبب بـMI كبير مقارنة بمرض خفيف (30% مقابل 75%)، وأكثر احتمالاً لأن يُسبَق بالذبحة كأول عرض (70%، بسبب أوعية جانبية مزمنة تُقلل حجم الاحتشاء). البحث عن تضيقات &gt;70% يعني البحث عن المرض الأقل فتكًا.</li>
+      </ol>
+    </div>
+    <p>الاختبار الوحيد المفيد بالمرضى اللاعرضيين هو تكلس الشرايين (CT calcium scoring) — أداة قوية لتحديد الخطورة وتوجيه تعديل عوامل الخطورة بشكل أشد، لا إعادة التوعية. إذا أُجري اختبار جهد بمرضى لاعرضيين وكُشف نقص تروية شديد، تكون إعادة التوعية مبررة فقط بحالات المرض الواسع، خاصة الرئيسي الأيسر.</p>
+    <p><strong>نقص التروية الصامت بعد 6 أشهر من PCI:</strong> حتى لو شديدًا، لا يرتبط بزيادة مؤكدة بالوفاة أو MI. حوالي 50% من حالات التضيق المتكرر داخل الدعامة تكون لاعرضية، والإنذار جيد جدًا. المتابعة الروتينية بالقسطرة وPCI للتضيق المتكرر بالمرضى اللاعرضيين لا تُحسِّن النتائج مقارنة بـPCI الموجَّه بالذبحة فقط.</p>
+  </section>
+
+  <!-- ============ IV. مضادات الصفيحات ============ -->
+  <section class="roman" id="c1t3s4">
+    <div class="roman-head"><div class="roman-badge">IV</div><h2>العلاج الدوائي: مضادات الصفيحات في CAD المستقر</h2></div>
+
+    <p><strong>الجمع بين الأسبرين والكلوبيدوغريل:</strong> مفيد لمدة تصل لسنة بعد MI أو تركيب دعامة. <em>لكن:</em> هذا الجمع لم يُظهر تفوقًا على الأسبرين وحده بحالات CAD المستقر أو مرض الأوعية المحيطية (دراسة CHARISMA).</p>
+    <p><strong>تحليل فرعي من CHARISMA:</strong> المرضى ذوو MI سابق بدوا يستفيدون من العلاج المزدوج لفترة أطول (حتى 28 شهرًا)، خصوصًا إذا كانوا بمرض متعدد الأوعية (مثل MI مع PAD).</p>
+    <p><strong>العلاج الأحادي:</strong> الكلوبيدوغريل بديل للأسبرين، وقد يكون أفضل قليلاً بتقليل الأحداث التاجية والدماغية الوعائية، مع خطر أقل نسبيًا للنزيف الهضمي.</p>
+    <div class="callout info">
+      <b>المرضى ذوو مؤشر لمضاد تخثر</b> (AF، أو تاريخ DVT): بعد سنة من MI أو الدعامة، الأفضل استخدام مضاد تخثر فقط (وارفارين أو NOAC)، لأن مضادات التخثر بحد ذاتها تُقلل الأحداث التاجية بفعالية (دراسة AFIRE بالريفاروكسابان). بالدراسات الأقدم، كان الوارفارين وحده أو +أسبرين أكثر فعالية من الأسبرين وحده بالوقاية من الأحداث التاجية، لكن بتكلفة أعلى من حيث خطر النزيف.
+    </div>
+  </section>
+
+  <!-- ============ V. العلاج المضاد للذبحة ============ -->
+  <section class="roman" id="c1t3s5">
+    <div class="roman-head"><div class="roman-badge">V</div><h2>العلاج الدوائي: العلاج المضاد للذبحة والسيطرة على عوامل الخطورة</h2></div>
+
+    <p>متطلبات عضلة القلب من الأكسجين ترتبط بأربعة عوامل رئيسية: قوة الانقباض (inotropism)، معدل القلب (chronotropism)، العبء اللاحق (afterload)، والحمل المسبق (preload). كل دواء مضاد للذبحة يستهدف بعضًا من هذه العوامل.</p>
+
+    <p>النترات وموسِّعات قنوات الكالسيوم الوعائية تُقلل نقص التروية عبر تقليل الحمل المسبق والبعدي، وباستثناء الذبحة التشنجية الوعائية، فإن تأثيرها الموسِّع للأوعية التاجية يكون أقل أهمية.</p>
+
+    <h3 class="subhead">أ. حاصرات البيتا</h3>
+    <p><strong>عند مرضى CAD مثبت وذبحة:</strong> خط العلاج الأول لأنها تُقلل الوفيات خلال السنة الأولى بعد MI (Class I). لكن بمرضى CAD المستقر دون MI أو فشل سابق، أو MI مضى عليه &gt;سنة، لا دليل على تقليل الوفيات؛ الفائدة الأساسية تكمن فقط بتخفيف الذبحة. بغياب الذبحة أو MI سابق أو فشل قلب، التوصية ضعيفة (IIb).</p>
+    <p><strong>السيطرة المشددة على المعدل (&lt;70):</strong> أظهرت فائدة بـHFrEF، لكن لم تثبت فائدتها بـCAD المستقر، الذبحة، ارتفاع الضغط، AF، أو HFpEF. بدراسة SIMPLIFY، لم يستفد مرضى CAD المستقرين (نبض أساسي &gt;70، معظمهم MI مضى &gt;3 أشهر) من إبطاء النبض بالإيفابرادين، حتى مع ذبحة CCS≥II. لا حاجة لملاحقة معدل &lt;70 بـCAD المستقر مع وظيفة بطين طبيعية، إلا ربما بالذبحة الشديدة.</p>
+    <p><strong>التأثيرات على المستقبلات:</strong> β1 تأثير إيجابي على الانقباض والمعدل (يزيد متطلبات الأكسجين)؛ β2 أساسًا موسِّعة للأوعية والقصبات، تأثير محدود على الانقباض والمعدل القاعدي — لكن عند حجب β1، يُبالَغ في تأثير β2 المتبقي. حجب β2 قد يكون مفيدًا بمرضى يحتاجون حجبًا شاملاً (مثل فشل القلب بكارفيديلول)، لكنه قد يسبب تضيق أوعية وتشنج قصبات.</p>
+
+    <div class="card">
+      <strong>أنواع حاصرات البيتا:</strong>
+      <ol style="margin-top:8px">
+        <li>غير انتقائية (β1+β2): بروبرانولول.</li>
+        <li>انتقائية β1: ميتوبرولول، أتينولول، بيسوبرولول (تفقد الانتقائية بالجرعات العالية).</li>
+        <li>ذات نشاط ودي ذاتي: لا تُحدث حجبًا بالراحة، فقط أثناء اندفاع الكاتيكولامين — لا تُقلل الوفيات، يُفضَّل تجنبها.</li>
+        <li>مع حجب α وحجب β غير انتقائي: كارفيديلول، لابيتالول — تأثير موسِّع للأوعية وخافض للضغط أوضح (تأثير حجب α يضعف بالوقت، خصوصًا لابيتالول).</li>
+      </ol>
+    </div>
+    <div class="callout warn">
+      <b>موانع الاستعمال:</b> بطء قلب &lt;55 أو عرضي، PR&gt;0.24، بلوك AV درجة 2-3؛ فشل قلب لا تعويضي (تُبدأ فقط بعد التعويض)؛ تاريخ ربو شديد حتى لو مستقر حاليًا، أو COPD غير معوَّض بصفير نشط (يمكن جرعة منخفضة-متوسطة من انتقائي β1 مثل ميتوبرولول 100 ملغ/يوم بالربو الخفيف/المعتدل المستقر)؛ الحذر بالسكري مع نوبات نقص سكر متكررة.
+    </div>
+    <div class="card">
+      <strong>الجرعات:</strong> ميتوبرولول تارترات: 25 ملغ BID، رفع كل 3-7 أيام حتى 50-100 ملغ BID (أقصى 200 BID). ميتوبرولول سوكسينات (Toprol XL): جرعة يومية واحدة تعادل الإجمالي اليومي من التارترات. أتينولول: 12.5-25 ملغ BID (مرة يوميًا بالقصور الكلوي)، حتى 50 BID. كارفيديلول: 3.125-25 ملغ BID. لابيتالول: 100-400 ملغ BID.
+      <br><br><strong>ملاحظات:</strong> كان PAD الشديد مانعًا نسبيًا للحاصرات غير الانتقائية، لكن لم يعد كذلك (ثبت أمانها)؛ الأهم أن مرضى PAD غالبًا يموتون بـCAD فلحاصرات البيتا قيمة كبيرة لديهم. بالسكري، ميتوبرولول يزيد قليلاً مقاومة السكر (HbA1c)، بينما كارفيديلول ونيبيفولول لا يفعلان ذلك (دراسة GEMINI).
+    </div>
+
+    <h3 class="subhead">ب. النترات</h3>
+    <p><strong>آلية العمل:</strong> موسِّعات وريدية، تُقلل نقص التروية أساسًا بتقليل الحمل المسبق؛ تُحسِّن الجريان التاجي بتقليل الشد الانبساطي (LVEDP). بدرجة أقل، موسِّعات شريانية (تُقلل العبء اللاحق أيضًا). توسع الشرايين التاجية السطحية آلية ثانوية؛ توسع الأوعية الجانبية قد يكون مفيدًا خاصة. عمومًا، قد تُفاقم موسِّعات الأوعية نقص التروية بـCAD الحرج (سرقة تاجية عبر الجانبية، كما مع الأدينوزين) — لكن هذا لا يحدث عادة ً مع النترات لأنها لا تؤثر كثيرًا على نغمة الأوعية الدقيقة.</p>
+    <div class="card">
+      <strong>الاستخدامات:</strong> NTG تحت اللسان: عند الحاجة، تأثير &lt;5 دقائق. التركيبات طويلة المفعول: ISDN 10-40 ملغ TID؛ ISMN 30-240 ملغ مرة يوميًا؛ NTG paste 0.5-2 إنش TID؛ NTG patch 0.2-0.6 ملغ/ساعة كل 24 ساعة.
+    </div>
+    <p><strong>التحمل:</strong> يتطور خلال 24 ساعة من بدء العلاج. يُقلَّل عبر فترات خالية من النترات (مثال: ISDN 8ص و2ظ و8م، فترة خالية 10-14 ساعة؛ أو ISMN مرة يوميًا؛ أو لصقة NTG لـ12 من أصل 24 ساعة). قد يحدث نقص تروية ارتدادي خلال الفترات الخالية.</p>
+    <p><strong>الآلية الكيميائية:</strong> تُستقلَب النترات لـNO بواسطة الشرايين الكبيرة (لا تستطيع الشُريينات ذلك). NO يُعزِّز إطلاق cGMP الموسِّع للعضلات الملساء. مع الوقت، يُستقلَب NO لأنواع أكسجين تفاعلية، تُقلل توليده وتُضعف الوظيفة البطانية، وتُسهم التنشيطات العصبية الهرمونية بتطور التحمل — نفس الظاهرة تُسبب تضيق أوعية ونقص تروية ارتدادي خلال أول 4 ساعات بعد إيقاف النترات. الستاتينات، مثبطات ACE (وربما ARB)، الهيدرالازين، والكارفيديلول تُقلل تحمل النترات.</p>
+
+    <h3 class="subhead">ج. حاصرات قنوات الكالسيوم (CCBs)</h3>
+    <h4 class="subsub">1. غير ثنائية الهيدروبيريدين (Non-DHPs)</h4>
+    <p>تُقلل الانقباض والمعدل، مع تأثير موسِّع للأوعية (تقلل العبء اللاحق)؛ توسِّع الشرايين التاجية أيضًا. <strong>أمثلة:</strong> ديلتيازيم؛ فيراباميل (تأثير سلبي أقوى على الانقباض وأكبر قليلاً على عقدتي AV وSA مقارنة بديلتيازيم).</p>
+    <div class="callout warn">
+      <b>موانع:</b> بطء القلب، فشل قلب انقباضي؛ تجنَّب الجمع مع حاصرات بيتا (خصوصًا فيراباميل). يمكن الجمع بين ديلتيازيم وحاصر بيتا بـAF غير مسيطر عليه بالمعدل.
+    </div>
+    <p><strong>الجرعات:</strong> ديلتيازيم: 30-90 ملغ 3-4 مرات يوميًا؛ ER: 120-480 ملغ/يوم. فيراباميل: 80-120 ملغ 3-4 مرات يوميًا؛ ER: 180-480 ملغ/يوم.</p>
+
+    <h4 class="subsub">2. ثنائية الهيدروبيريدين (DHPs)</h4>
+    <p>موسِّعات وعائية قوية وأكثر نقاءً، بتأثير ضئيل على الانقباض والمعدل. فقط التركيبات طويلة المفعول تُستخدم (القصيرة قد تُسبب تسرعًا انعكاسيًا). ليست ممنوعة ببطء القلب أو فشل القلب، باستثناء نيفيديبين (تأثير سلبي طفيف على الانقباض، يُفضَّل تجنبه بفشل القلب). على عكس non-DHPs، يُفضَّل الجمع مع حاصرات بيتا لمعادلة أي تسرع انعكاسي. DHPs هي الخيار الأول بمرضى بطء القلب، والثاني بمن يتلقون حاصرات بيتا.</p>
+    <p><strong>أمثلة وجرعات:</strong> أملوديبين 2.5-10 ملغ/يوم؛ فيلوديبين 2.5-10 ملغ/يوم؛ نيفيديبين XL 30-90 ملغ/يوم.</p>
+
+    <h3 class="subhead">د. اختيار الأدوية المضادة للذبحة</h3>
+    <div class="card point-num">
+      <strong>الخط الأول:</strong> حاصرات البيتا.
+      <br><strong>إذا مُنعت بسبب تشنج القصبات:</strong> non-DHP (ديلتيازيم أو فيراباميل).
+      <br><strong>إذا مُنعت بسبب بطء القلب:</strong> DHP (أملوديبين أو فيلوديبين).
+      <br><strong>الخط الثاني/الثالث:</strong> النترات طويلة المفعول، رانولازين.
+      <p style="margin-top:8px">يمكن الجمع بين DHP+نترات لكنه أقل تفضيلاً (كلاهما موسِّع، يزيد خطر هبوط الضغط). إذا لم يخفف دواء واحد الذبحة كفاية: مزيج 2-4 أدوية مثل β-blocker + DHP ± نترات ± رانولازين.</p>
+      <p><strong>بمرضى فشل القلب مع ذبحة:</strong> يُبدأ حاصر بيتا ببطء وحذر؛ يمكن إضافة النترات؛ أو مزيج نترات+هيدرالازين لعلاج الفشل؛ إذا لزم، يُضاف DHP (أملوديبين/فيلوديبين) أو رانولازين ببطء، فقط إذا كان الفشل معوَّضًا.</p>
+    </div>
+
+    <h3 class="subhead">هـ. رانولازين</h3>
+    <p><strong>آلية العمل:</strong> يُثبِّط التيار المتأخر لقناة الصوديوم الداخل (late INa)، النشط خاصة بنقص التروية أو فشل القلب. هذا يُقلل صوديوم الخلية، وبالتالي كالسيوم الخلية عبر التبادل الصوديوم-كالسيوم (عكس تأثير الديجوكسين). <strong>التأثير الأساسي:</strong> تقليل التحميل الكالسيومي الانبساطي المفرط، يقلل استهلاك الأكسجين ويُحسِّن استرخاء LV. تحسين الاسترخاء يُقلل LVEDP والانضغاط التاجي، محسِّنًا وظيفة الأوعية الدقيقة والجريان.</p>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch1-part14.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 14</a>
+    <a href="practical-ch1-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch1-part16.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 16: رانولازين وإعادة التوعية ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 1، الجزء 15
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

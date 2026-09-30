@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 5: اضطرابات نظم القلب والفيزيولوجيا الكهربائية | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch5-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 5</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 5 — الجزء 8</h3>
+  <div class="chgroup">
+    <span class="chtitle">IV-V: ICD وQT الطويل</span>
+    <a href="#c5lqticd">ICD لمتلازمة QT الطويل</a>
+    <a href="#c5icdsec">V-A: الوقاية الثانوية</a>
+    <a href="#c5icdprim">V-B: الوقاية الأولية (MADIT II/SCD-HeFT)</a>
+    <a href="#c5icdmisc">C-E: الإغماء، DCM، HCM</a>
+    <a href="#c5lifevest">LifeVest وICD تحت الجلد</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">VI</span>
+    <a href="#c5arvd">A. اختلال تنسج البطين الأيمن (ARVD)</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch5-part7.html">→ الجزء 7</a>
+    <a href="practical-ch5-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch5-part9.html">الجزء 9 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الخامس (الجزء 8)</span>
+    <h1>اضطرابات نظم القلب والفيزيولوجيا الكهربائية</h1>
+  </div>
+  <span class="chapno">5</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 5: اضطرابات نظم القلب والفيزيولوجيا الكهربائية — الجزء 8</h2>
+  </div>
+
+  <section class="roman" id="c5lqticd">
+    <div class="roman-head"><div class="roman-badge">IV (تتمة)</div><h2>جهاز ICD لمتلازمة QT الطويل</h2></div>
+
+    <div class="card point-num">
+      <strong>Class I:</strong> بعد سكتة قلبية سابقة. بالإغماء، حاصرات بيتا قد تكفي؛ ICD إن تكرر.
+    </div>
+    <div class="callout warn">
+      <b>ملاحظة مهمة:</b> TdP ينتهي تلقائيًا عادة — قد لا يكون ICD مفيدًا جدًا للإغماء وحده؛ صدمة ICD قد تُسبب قلقًا+زيادة كاتيكولامينات → تُحفِّز مزيدًا من TdP/VF.
+    </div>
+    <p><strong>Class I للإغماء فقط إن:</strong> تكرر رغم حاصرات بيتا؛ أو عدم تحملها؛ أو عوامل خطورة عالية أخرى (QTc&gt;500، LQT2-3، عمر&lt;40). <strong>Class IIb (لاعرضيين عالي الخطورة):</strong> QTc&gt;500؛ نساء+LQT2؛ LQT3 (استجابة أضعف لحاصرات بيتا).</p>
+    <div class="card">
+      <strong>نساء LQT2 بعد الولادة:</strong> خطر SCD مرتفع جدًا بالأشهر التسعة التالية (×7 مقارنة بما قبل/أثناء الحمل) — يُوصى بـLifeVest إن لم يكن لديهن ICD.
+    </div>
+  </section>
+
+  <!-- ============ V. مؤشرات ICD ============ -->
+  <section class="roman" id="c5icdsec">
+    <div class="roman-head"><div class="roman-badge">V-A</div><h2>مؤشرات زرع ICD: الوقاية الثانوية</h2></div>
+
+    <p>يُوصى بـICD لأي VT مستمر بصرف النظر عن EF (دراستا AVID وCIDS)، <strong>باستثناء:</strong></p>
+    <div class="card point-num">
+      <ol>
+        <li>VT متعدد الأشكال/VF خلال أول 48 ساعة من MI واسع/STEMI.</li>
+        <li>VT متعدد الأشكال ثانوي لإقفار نشط قابل للعلاج بإعادة توعية عاجلة.</li>
+        <li>VT أحادي الشكل مجهول السبب بلا مرض بنيوي/قناة أيونية.</li>
+        <li>CAD+VT بلا MI حاد، أو بارتفاع طفيف فقط بالتروبونين → <strong>يستوفي معايير ICD بصرف النظر عن EF أو إمكانية إعادة التوعية الكاملة.</strong></li>
+      </ol>
+      <p style="margin-top:8px">VT أحادي الشكل (وحتى متعدد الأشكال بغياب MI حاد) يشير غالبًا لندبة، لا تتأثر قابليتها للاستحثاث بإعادة التروية. <strong>ACC:</strong> "إعادة التوعية وحدها علاج غير فعّال لمنع تكرار VT بمرضى CAD إقفاري مع VT أحادي الشكل مستمر".</p>
+    </div>
+  </section>
+
+  <section class="roman" id="c5icdprim">
+    <div class="roman-head"><div class="roman-badge">V-B</div><h2>الوقاية الأولية</h2></div>
+
+    <div class="card point-num">
+      <strong>Class I:</strong> اعتلال إقفاري/غير إقفاري، EF≤35%، عرضي (NYHA II-III) رغم العلاج الأمثل.
+    </div>
+    <div class="card point-num">
+      <strong>فترات الانتظار:</strong> &gt;40 يومًا بعد MI حاد؛ &gt;3 أشهر بعد إعادة التوعية بإقفار مزمن؛ &gt;3 أشهر من GDMT باعتلال غير إقفاري (للتأكد من عدم قابلية العكس).
+    </div>
+    <div class="card">
+      <strong>ملاحظات خاصة:</strong> إقفاري+EF≤30% → ICD موصى به حتى NYHA I. إقفاري+EF 36-40%+NSVT+استحثاث VT بدراسة EP → ICD (Class I).
+    </div>
+
+    <div class="card point-num">
+      <strong>الدراسات الداعمة:</strong> MADIT II وSCD-HeFT — تخفيض مطلق بالوفيات السنوية 3.5% و2% على التوالي. منحنيات البقاء تتباعد بعد~12 شهرًا (الفائدة طويلة الأمد، لمن يعيشون سنوات). <strong>NNT سنويًا (MADIT II) = 25.</strong>
+      <p style="margin-top:8px"><strong>MADIT II:</strong> إقفاري، Post-MI&gt;40 يوم، EF≤30%، NYHA I-III (75% كان MI قبل&gt;1.5 سنة، الوسيط~5 سنوات). <strong>SCD-HeFT:</strong> إقفاري أو غير إقفاري، EF≤35%، NYHA II-III؛ 3 أذرع (وهمي/أميودارون/ICD).</p>
+    </div>
+
+    <div class="callout gold">
+      <b>لماذا لا يُفيد ICD المبكر بعد MI (تجربتا DINAMIT وIRIS)؟</b> بالمرحلة المبكرة، الأكثر عرضة لـVT/VF هم أصحاب الاحتشاءات الكبيرة/HF الشديد — حتى لو أُنقذوا من VF، يموتون لاحقًا بفشل الضخ أو PEA. ICD يُحوِّل نمط الوفاة (لا موت مفاجئ→فشل ضخ/PEA) دون تغيير النتيجة النهائية. تحليل MADIT II: الفائدة الحقيقية ظهرت فقط بمن MI لديهم&gt;1.5 سنة (خطر VT/VF ثانوي للندبة يُصبح مهيمنًا بعد استقرار الحالة الحادة).
+    </div>
+    <div class="card point-num">
+      <strong>معايير خطورة إضافية (MADIT II)</strong> تزيد احتمال الاستفادة عند اجتماعها مع EF منخفض: AF؛ QRS&gt;120؛ NYHA II-III؛ قصور كلوي خفيف؛ عمر&gt;70. <strong>لكن ≥3 معايير، أو قصور كلوي متقدم، أو NYHA IV</strong> = أقل استفادة (منحنى U — يُقلل ICD الموت المفاجئ لكن لا الوفيات الكلية بفشل الضخ/الأمراض المرافقة).
+    </div>
+    <p><strong>تجربة CABG-PATCH:</strong> EF&lt;35%+ICD صدري وقت CABG = لا فائدة وفيات (إعادة التوعية بذاتها حسَّنت LV وقللت خطر SCD). <strong>لذا:</strong> يُعاد تقييم الحاجة لـICD بعد أشهر من إعادة التوعية بـCAD المستقر؛ أعلى خطر SCD بأول 3 أشهر بعد إعادة التوعية أيضًا (كأول 40 يومًا بعد MI).</p>
+    <div class="card point-num">
+      <strong>لا يُنصح بـICD بـFunctional Class IV</strong> إلا إن كان مؤهلاً لـBiV pacemaker أو مرشحًا لزراعة القلب. <strong>تجربة COMPANION:</strong> BiV-ICD قلَّل الوفيات مقارنة بـBiV فقط أو بلا جهاز، بـClass III أو IV المتنقلة.
+    </div>
+  </section>
+
+  <section class="roman" id="c5icdmisc">
+    <div class="roman-head"><div class="roman-badge">V-C,D,E</div><h2>الإغماء مجهول السبب، DCM، وHCM</h2></div>
+
+    <div class="card point-num">
+      <strong>C. Class I:</strong> إغماء مجهول السبب+VT مستمر أو VF مستحث/قابل للتكرار بأهمية ديناميكية أثناء دراسة EP (كجزء من تقييم الإغماء).
+    </div>
+    <div class="card point-num">
+      <strong>D. Class IIa:</strong> اعتلال توسعي+إغماء مجهول السبب.
+    </div>
+    <div class="card point-num">
+      <strong>E. HCM:</strong> يُوصى بـICD مع: إغماء غير مفسَّر، تاريخ عائلي SCD، أو سماكة حاجز&gt;30ملم.
+    </div>
+
+    <div class="card point-num" id="c5lifevest">
+      <strong>LifeVest (مزيل رجفان خارجي قابل للارتداء):</strong> لمرتفعي الخطورة مؤقتًا بلا معايير ICD — اعتلال غير إقفاري حديث (EF قد يتحسن)، أو أول 40 يومًا بعد MI.
+      <p style="margin-top:8px"><strong>سجل WEAR-IT:</strong> استُخدم حتى 3 أشهر؛ 1.1% أُصيبوا بـVT/VF مطوَّل غير مستقر عولج بنجاح، بقي الجميع أحياء حتى نهاية المتابعة. بعد 3 أشهر: EF&gt;35% لـ&gt;40%؛ 40% احتاجوا ICD.</p>
+      <p style="margin-top:8px"><strong>تجربة VEST</strong> (RCT الوحيدة، MI حديث&lt;7 أيام+EF&lt;35%): تقليل وفيات اضطراب النظم 0.8% (p=0.18، غير دال) — معظم وفيات LifeVest حدثت بلا ارتداء الجهاز فعليًا؛ فائدة هامشية بالملتزمين. <strong>الخلاصة:</strong> لا يُوصى به على نطاق واسع، انتقائي جدًا (IIb) لمرضى متحمسين/ملتزمين.</p>
+      <p style="margin-top:8px"><strong>ملاحظة:</strong> أميودارون مبكرًا بعد MI قلَّل وفيات اضطراب النظم~35% (EMIAT، CAMIAT) — بديل معقول لمرتفعي الخطورة.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>ICD تحت الجلد (S-ICD):</strong> بخط الإبط الأوسط، سلك تحت الجلد للقص، <strong>بلا سلك وريدي</strong>. مناسب لـ: صغار السن (خطر أعطال أسلاك طويل الأمد)، عدم توفر وصول وريدي جيد، خطر عدوى مرتفع. <strong>لا يملك خاصية Pacing.</strong>
+    </div>
+  </section>
+
+  <!-- ============ VI. VT بلا مرض واضح ============ -->
+  <section class="roman" id="c5arvd">
+    <div class="roman-head"><div class="roman-badge">VI-A</div><h2>VT بلا مرض قلبي واضح: خلل تنسج/اعتلال RV المُسبِّب لاضطراب النظم (ARVD/ARVC)</h2></div>
+
+    <p>اعتلال وراثي، استبدال تدريجي لعضلة RV بنسيج ليفي-دهني → توسع RV+أمهات دم موضعية، ثم امتداد لـLV. غالبًا تتأثر القمة والجدار الأمامي لـRV. يظهر بعمر 10-50، أكثر شيوعًا بالرجال، عائلي بـ30% (سائد جسديًا، نفوذية~30%). يبدأ باضطرابات نظم بطينية، يتطور لقصور RV/LV تدريجي.</p>
+
+    <div class="card point-num">
+      <strong>الميزات التخطيطية لتأخر التوصيل الموضَّع بـRV:</strong>
+      <ul style="margin-top:8px">
+        <li><strong>انعكاس T بـV1-V3</strong> (بغياب RBBB كامل) = مؤشر قوي جدًا (بالجنسين البالغين). <em>تنبيه:</em> نساء طبيعيات قد يُظهرن انعكاسًا بـV1-V2 (نادرًا V3،~4%).</li>
+        <li><strong>QRS≥110ملي موضعيًا بـV1-V3</strong>، والأهم: <strong>تباطؤ صعود S (من الحضيض للنهاية)≥55ملي بـ95% من المرضى.</strong> V6 طبيعي.</li>
+        <li><strong>موجة إبسيلون</strong> (موجبة صغيرة مباشرة بعد QRS).</li>
+        <li>RBBB كامل/غير كامل غير شائع، قد يظهر متقدمًا.</li>
+        <li><strong>VT الناتج ينشأ من RV → شكل LBBB.</strong></li>
+        <li>الشذوذات تزداد بالوقت؛ <strong>الجهود المتأخرة (Signal-averaged ECG)</strong> حساسة أيضًا للتشخيص.</li>
+      </ul>
+    </div>
+
+    <figure>
+      <img src="data:image/jpeg;base64,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" alt="Figure 9.10">
+      <figcaption><span class="fig-num">الشكل 9.10</span> — مثال تخطيطي لـARVD يُظهر السمات المميزة الموضعية بـV1-V3: انعكاس T، تباطؤ صعود S، وإمكانية رؤية موجة إبسيلون.</figcaption>
+    </figure>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch5-part7.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 7</a>
+    <a href="practical-ch5-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch5-part9.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 9: تتمة ARVD، بروغادا، CPVT ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 5، الجزء 8
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

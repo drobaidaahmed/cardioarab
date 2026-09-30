@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 1 (الجزء 1): المتلازمة الإكليلية الحادة | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch1-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 1</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 1 — الجزء 10</h3>
+  <div class="chgroup">
+    <span class="chtitle">القسم 2: STEMI (تابع)</span>
+    <a href="#c1t2compIIIcont">تتمة الاحتشاء المتكرر</a>
+    <a href="#c1t2compIV">IV. تسرعات النظم</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch1-part9.html">→ الجزء 9</a>
+    <a href="practical-ch1-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch1-part11.html">الجزء 11 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الأول (الجزء 10)</span>
+    <h1>المتلازمة الإكليلية الحادة</h1>
+  </div>
+  <span class="chapno">1</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 1: المتلازمة الإكليلية الحادة — الجزء 10</h2>
+  </div>
+
+  <section class="roman" id="c1t2compIIIcont">
+    <div class="roman-head"><div class="roman-badge">III (تتمة)</div><h2>علاج الاحتشاء المتكرر والإقفار</h2></div>
+    <p>تصعيد العلاج بـ: حاصرات بيتا، النتروغليسرين، وإعادة إعطاء مضادات التخثر. <strong>متى يُجرى PCI إسعافي؟</strong> بحالة STEMI أو عدم استقرار ديناميكي. إذا لم يكن هناك ضرورة إسعافية: يُجرى تصوير تاجي غير إسعافي. إذا حدث ارتفاع متكرر بST ولم يكن PCI متاحًا سريعًا: يمكن إعادة إعطاء أدوية التحليل الليفي المخصصة للفيبرين.</p>
+  </section>
+
+  <!-- ============ IV. تسرعات النظم ============ -->
+  <section class="roman" id="c1t2compIV">
+    <div class="roman-head"><div class="roman-badge">IV</div><h2>تسرعات النظم (Tachyarrhythmias)</h2></div>
+
+    <h3 class="subhead">أ. تسرعات النظم البطينية: الرجفان البطيني (VF) والموت المفاجئ</h3>
+    <p>بفضل تحسن علاجات إعادة التروية، انخفضت الوفيات خلال 30 يومًا لدى مرضى STEMI الذين يصلون للمستشفى من 15% إلى 5-6%.</p>
+    <div class="callout warn">
+      لكن: الوفيات خارج المستشفى تبقى مرتفعة جدًا وتشكل معظم وفيات MI، خصوصًا خلال الساعة الأولى. خطر السكتة القلبية خارج المستشفى بـSTEMI ≈30%؛ أكثر من نصف حالات VF تحدث بالساعة الأولى بعد بدء STEMI، ومعظم الباقي بين الساعة 1 والساعة 4.
+    </div>
+    <p>بالنسبة للمرضى الذين يصلون للمستشفى دون سكتة قلبية: خطر VF أولي خلال أول 48 ساعة ≈4% (معظمها بأول 4 ساعات)؛ خطر VT و/أو VF معًا ≈10%.</p>
+
+    <h3 class="subhead">ب. أنواع الرجفان البطيني (VF)</h3>
+    <p>في عصر إعادة التروية، يحدث VF مستمر بحوالي 4% من المرضى المنوَّمين بـSTEMI الحاد. ثلاثة أنواع من VF (معظمها موصوف بدراسات التحليل الليفي):</p>
+    <div class="card">
+      <strong>1. VF أولي (Primary VF):</strong> يُعرَّف بأنه VF يحدث خلال أول 48 ساعة بعد MI دون صدمة أو فشل قلبي شديد مرافق. أسبابه: تدفقات بوتاسيوم سريعة، زيادة الأوتوماتيكية، تشتت عودة الاستقطاب، أو زيادة النغمة الودية/المبهمية. يحدث أساسًا خلال أول 4 ساعات. يرتبط بزيادة الوفيات داخل المستشفى (2-4 أضعاف)، لكن لا يؤثر على الوفيات طويلة الأمد لدى الناجين.
+      <br><br><strong>ملاحظات إضافية:</strong> يرتبط بمدى الإقفار الأولي، ويُشاهد أكثر بـSTEMI من NSTEMI. لا يرتبط بحجم الاحتشاء النهائي، ويُشاهد بنفس التواتر تقريبًا بـMI السفلي كما الأمامي. قد يُحفَّز لدى مرضى MI السفلي ببطء الجيب أو التوقفات القلبية. حتى بعد PCI الأولي، نسبة صغيرة (~1.5%) تُصاب بـVT/VF خلال 24-48 ساعة — قد يُشير لخثرة بالدعامة ويتطلب تحقيقًا دقيقًا.
+      <br><br><strong>2. VF ثانوي (Secondary VF):</strong> يُعرَّف بأنه VF يحدث مع وجود فشل قلبي أو صدمة، سواء خلال أول 48 ساعة أو بعدها. يرتبط بإنذار سيئ قصير وطويل الأمد؛ السبب الرئيسي تدهور مسار الفشل القلبي.
+      <br><br><strong>3. VF متأخر (Late VF):</strong> يحدث بعد 48 ساعة دون فشل قلبي أو صدمة مرافقة. ينتج عن الندبة العضلية، ويرتبط بفشل المضخة، ضرر عضلي واسع، وزيادة الوفيات طويلة الأمد.
+    </div>
+
+    <h3 class="subhead">ج. التسرع البطيني المستمر (Sustained VT)</h3>
+    <p><strong>1. متعدد الأشكال (Polymorphic VT):</strong> عادة ً إيقاع إقفاري، يحدث خلال أول 48 ساعة من MI أو أثناء نوبات الإقفار المتكررة. على عكس torsades de pointes، يرتبط عادة ً بفترة QT طبيعية أو شبه مطوَّلة فقط. مشابه لـVF الأولي: يرتبط بزيادة الوفيات قصيرة الأمد، لا طويلة الأمد.</p>
+    <p><strong>2. أحادي الشكل (Monomorphic VT):</strong> سواء حدث مبكرًا (&lt;48 ساعة) أو متأخرًا، فهو علامة على ضرر عضلي واسع، ويرتبط بزيادة ملحوظة بالوفيات داخل المستشفى وطويلة الأمد، حتى دون فشل قلبي أو صدمة مرافقة (بيانات GUSTO-1). نادر (~2% من حالات MI)؛ يعكس عادة ً وجود ندبة كبيرة، وينشأ من المنطقة الفاصلة بين النسيج السليم والمحتشي. بالمقابل، polymorphic VT غالبًا يرتبط بإقفار نشط دون أساس تشريحي/ندبي كبير، وعادة ً مع كسر قذفي أعلى.</p>
+
+    <h3 class="subhead">د. تسرعات البطين غير المستمرة (NSVT)</h3>
+    <p>NSVT المبكر (&lt;48 ساعة): لا يرتبط بتأثير على البقاء. NSVT المتأخر (≥4 ضربات): يرتبط بتدهور البقاء طويل الأمد. لا يحتاج NSVT لعلاج نوعي؛ يُقدَّم العلاج العام لـMI، وبشكل خاص حاصر بيتا إن أمكن.</p>
+
+    <h3 class="subhead">هـ. الإيقاع البطيني الأذيني المعجَّل (Accelerated idioventricular rhythm = slow VT)</h3>
+    <p>تسرع بطيني بطيء (60-100، أحيانًا حتى 120 نبضة/دقيقة). شائع (~20%) خلال أول 48 ساعة، غالبًا بعد إعادة تروية ناجحة. إذا ظهر مباشرة بعد التحليل الليفي، قد يُشير لإعادة التروية؛ لكن بما أنه يظهر كثيرًا بدون إعادة تروية، لا يُعتمد عليه كمؤشر وحيد. حميد ويزول تلقائيًا؛ لا يحتاج علاجًا خاصًا.</p>
+
+    <h3 class="subhead">و. العلاج الحاد لـSustained VT وVF</h3>
+    <div class="card point-num">
+      <strong>خطوات العلاج:</strong>
+      <ul style="margin-top:8px">
+        <li>تقويم كهربائي مباشر.</li>
+        <li>أدوية مضادة لاضطرابات النظم وريديًا: أميودارون (الخيار الأول)؛ بروكايناميد بحذر بحالات الفشل القلبي (تأثير انقباضي سلبي)؛ ليدوكائين. مدة العلاج: 6-24 ساعة.</li>
+        <li>إعادة التروية.</li>
+        <li>حاصرات بيتا إن أمكن.</li>
+        <li>الحفاظ على بوتاسيوم &gt;4.0-4.5 mEq/L ومغنيزيوم &gt;2 mg/dl.</li>
+        <li>التفكير بإعادة قسطرة تاجية إذا استمر VT/VF رغم العلاج.</li>
+      </ul>
+      <p style="margin-top:8px">الوقاية الأولية من VT بأدوية مضادة لاضطرابات النظم (مثل الليدوكائين) غير موصى بها لأنها لا تُحسِّن النتائج.</p>
+    </div>
+
+    <h3 class="subhead">ز. الرجفان الأذيني (AF) والرفرفة الأذينية</h3>
+    <p>في عصر إعادة التروية، نسبة حدوث AF أو الرفرفة الجديدة أثناء MI ≈10% (غالبًا نوب عابرة). تزداد لدى مرضى: فشل قلبي، احتشاءات كبيرة (بما فيها RV MI)، التهاب تأمور، أو كبار السن.</p>
+    <div class="callout warn">
+      <b>مخاطر AF بعد MI:</b> يرتبط بارتفاع الوفيات داخل المستشفى وطويلة الأمد (جزئيًا بسبب الفشل القلبي وخطر VT/VF المتأخر). يرتبط بارتفاع واضح بخطر السكتة، حتى لو كان AF عابرًا (تجربة GUSTO-1: خطر سكتة داخل المستشفى 3.1% مع AF مقابل 1.3% دونه). دراسة على مرضى MI سفلي مع EF محفوظ: المرضى ذوو AF عابر (عادوا تلقائيًا للنظم الجيبي قبل الخروج) كانوا أكثر عرضة لـAF خلال سنة (22% مقابل 1.3%) وللسكتة تحت الأسبرين (~10% مقابل 2%)، رغم EF طبيعي — يشير هذا إلى أن AF أثناء MI ليس ظاهرة عابرة بل عملية مزمنة بخطر مرتفع للسكتة.
+    </div>
+    <p><strong>التوصيات العلاجية:</strong> يُدعم استخدام مضادات التخثر بحالات AF حول MI لتقليل خطر السكتة. في زمن PCI وDAPT: دور مضادات التخثر بـAF العابر حول MI غير واضح؛ يُشجَّع استخدام UFH داخل المستشفى؛ يُفكَّر بإعطاء NOAC مع كلوبيدوغريل للمرضى منخفضي خطر النزف، مع إبقاء الأسبرين قصير الأمد (أسبوع لشهر فقط).</p>
+    <p><strong>ضبط المعدل:</strong> حاصرات بيتا (لا تُعطى بالفشل القلبي الحاد؛ يمكن تحمل تسرع 100-110 لتجنب الصدمة بالمرضى شديدي المرض مع HF حاد). التدابير المضادة للاحتقان وتقليل العبء اللاحق تُحسِّن معدل AF. إذا لزم، يمكن إضافة الديجوكسين و/أو الأميودارون الوريدي.</p>
+
+    <h3 class="subhead">ح. النظم الوصلي المعجَّل (Accelerated junctional rhythm)</h3>
+    <p>إيقاع تلقائي ينشأ من العقدة الأذينية البطينية بمعدل 70-130 (غالبًا ~80). يكون أسرع من النظم الجيبي، مما يؤدي لانفصال أذيني بطيني. أحيانًا يتنافس النظم الجيبي والوصلي بمعدلات قريبة (انفصال أذيني بطيني متساوي الإيقاع). مركب QRS ضيق، ما عدا مع حصار سابق بفرع الحزمة.</p>
+    <p><strong>المسببات:</strong> يظهر عادة ً مع MI السفلي. حميد وعابر، لا يتطلب علاجًا خاصًا ما لم يكن المريض بصدمة (عندها: تحفيز أذيني بمعدل أسرع من النظم الوصلي لتحسين التزامن الأذيني البطيني).</p>
+    <p><strong>تسرع الجيب المستمر:</strong> علامة إنذارية سلبية قوية، غالبًا يشير لفشل المضخة بسبب احتشاء كبير. لا تحاول بالضرورة إبطاءه مباشرة؛ تجنَّب حاصرات بيتا خلال أول 24 ساعة إذا كان المعدل &gt;110. يمكن التفكير بإبطاء النبض بالشباب ذوي الدورة الدموية المفرطة الديناميكية واحتشاء محدود الحجم. غالبًا يتحسن مع التدابير المضادة للاحتقان وتقليل العبء اللاحق.</p>
+  </section>
+
+  <!-- ============ V. بطء النظم ============ -->
+  <section class="roman" id="c1t2compV">
+    <div class="roman-head"><div class="roman-badge">V</div><h2>بطء النظم، حصارات فرع الحزمة، وحصارات الحزم الفصيلية</h2></div>
+
+    <h3 class="subhead">أ. في احتشاء الجهة السفلية (Inferior MI)</h3>
+    <p>الشريان العقدي الجيبي ينشأ من الجزء القريب لـRCA في 60% من الحالات، أو من LCx في 40%. الشريان العقدي الأذيني البطيني ينشأ من استمرار الأخدود الأذيني البطيني عبر RCA مهيمن في 90%، أو LCx مهيمن في 10%.</p>
+    <p><strong>الآليات:</strong> في احتشاء الجهة السفلية، قد يظهر بطء الجيب وكتل AV خلال أول 24 ساعة، وغالبًا تكون قصيرة ناتجة عن زيادة النغمة المبهمية المرافقة. بعد 24 ساعة، إذا ظهر إحصار AV، يكون سببه الإقفار والوذمة بالعقدة AV، ويكون أكثر استمرارًا لكنه يتحسن خلال أيام قليلة (&lt;أسبوع). العقدة AV مقاومة للإقفار ولا تُصاب بالاحتشاء فعليًا. عندما يظهر إحصار AV مع معدل موجات P سريع، يكون سببه الإقفار أو الوذمة بالعقدة، وليس النغمة المبهمية العالية.</p>
+    <p><strong>أنماط الإحصار</strong> (نظرًا لكون الإحصار يقع على مستوى العقدة): إحصار AV درجة أولى؛ إحصار AV درجة ثانية نوع I؛ إحصار AV كامل مع نظم وصلي بمعدل 40-100. هذه الأنماط عادة ً: جيدة التحمل، تتطور تدريجيًا، وتتحسن تدريجيًا. الإحصار الكامل يظهر بـ4-5% من احتشاءات الجهة السفلية، معظمه باليوم الأول؛ يرتبط باحتشاء أكبر، احتشاء إضافي بـRV، ومعدل وفيات أعلى بمرتين داخل المستشفى. المرضى الذين ينجون حتى الخروج لا يُظهرون زيادة مؤكدة بالوفيات طويلة الأمد حسب بعض الدراسات (لا كلها).</p>
+    <div class="card point-num">
+      <strong>العلاج:</strong> إحصار AV خلال أول 24 ساعة يستجيب للأتروبين (يُعطى عند عدم استقرار ديناميكي). الإحصار اللاحق (&gt;24 ساعة) لا يستجيب عادة ً للأتروبين، بل قد يستجيب للأمينوفيلين (مثبط مستقبلات الأدينوزين، حسب توصيات ACC). نظرًا لأنه غالبًا جيد التحمل مع نظم هروبي جيد، لا يتطلب الإحصار الكامل تحفيزًا إلا بحالات: الصدمة، الفشل القلبي، أو علامات انخفاض النتاج. بطء الجيب العرضي أو التوقفات الجيبية: يُعالَج مبدئيًا بالأتروبين حتى 2 ملغ؛ إذا استمر، يمكن استخدام التحفيز عبر الجلد أو الوريد.
+    </div>
+
+    <h3 class="subhead">ب. احتشاء الجهة الأمامية (Anterior MI)</h3>
+    <p>فروع الحزمة والحزم الفصيلية تتلقى تغذيتها، جزئيًا على الأقل، من LAD. لذلك، قد يؤدي احتشاء الجهة الأمامية لحصارات بفروع الحزمة وإحصار AV.</p>
+    <p><strong>خصائص الإحصار:</strong> يكون على مستوى حزمة هيس أو تحتها؛ عادة ً يسبقه ظهور حصارات فروع الحزمة. إحصار AV عالي الدرجة يُشاهد بـ1-2% من احتشاءات الجهة الأمامية، ويرتبط بارتفاع شديد بالوفيات بسبب فشل المضخة: زيادة 3-4 أضعاف بالوفيات، وكانت &gt;50% بعصر ما قبل إعادة التروية. غالبًا يتحسن الإحصار بـMI الأمامي، لكنه قد يتكرر لدى قلة من المرضى.</p>
+    <p><strong>العلاج:</strong> يُوصى بالتحفيز الوريدي بأي إحصار عالي الدرجة (درجة 2-3) يحدث مع MI أمامي، حتى بدون أعراض. <em>رغم ذلك، هذا التدخل لا يُحسِّن الإنذار السيء الذي تحدده وظيفة المضخة.</em> التحفيز الدائم يُوصى به فقط بحالات الإحصار المستمر بالمنطقة تحت الحزمة.</p>
+
+    <h3 class="subhead">ج. حصارات فروع الحزمة والحزم الفصيلية</h3>
+    <p>حوالي 2-8% من مرضى STEMI يُطورون شكلاً من الحصار داخل البطين؛ أكثرها شيوعًا الحصار الفصيلي الأمامي الأيسر (LAFB).</p>
+    <div class="card">
+      <strong>الإمداد الشرياني لكل بنية:</strong> الحزمة اليمنى: تغذية وحيدة من LAD (الفرع الحاجزي الأول). الحزمة الفصيلية الأمامية اليسرى: تغذية وحيدة من LAD أيضًا. حزمة هيس، الحزمة الرئيسية اليسرى، والحزمة الفصيلية الخلفية: تغذية مزدوجة من فروع LAD الحاجزية ومن الشريان العقدي الأذيني البطيني.
+    </div>
+    <p>هذا يفسر لماذا من الصعب أن يحدث احتشاء كامل للحزمة اليسرى، ولماذا معظم حصارات LBBB الجديدة ليست إقفارية المنشأ. RBBB أو LAFB أكثر شيوعًا بـMI الأمامي، لكنهما قد يظهران أيضًا بـMI السفلي إذا كان هناك مرض شديد بـLAD مع اعتماد LAD على RCA للدوران الجانبي. LBBB الكامل قد ينتج عن احتشاء أمامي أو سفلي، وغالبًا يُشاهد عندما يكون كل من RCA وLAD متضررين (أحدهما مسدود حادًا والآخر مزمنًا) — في تجربة GUSTO، ارتبط LBBB بوجود المسبب بـRCA بقدر ما ارتبط بـLAD.</p>
+    <p><strong>مقاومة جهاز التوصيل للإقفار:</strong> أكثر مقاومة من عضلة القلب لأن الخلايا العضلية تحتاج أكسجينًا أكثر بكثير من الخلايا الكهربائية؛ كما أن جهاز التوصيل غالبًا يتلقى تغذية مزدوجة أو دورانًا جانبيًا. هذا يفسر لماذا تكون الحصارات غالبًا نتيجة وذمة أو إقفار لا نخرًا، ولماذا تكون قابلة للعكس بـ25-75% من الحالات. إذا لم تكن قابلة للعكس وكانت ثانوية لاحتشاء (لا لمرض تنكسي)، يشير هذا عادة ً لأذية عضلية شديدة.</p>
+    <div class="card point-num">
+      <strong>مخاطر التطور لإحصار AV كامل:</strong> الحصار المزمن لفروع الحزمة: خطر منخفض جدًا. الحصار الحاد: حوالي 20% يتطور لـAV block كامل؛ 25-40% من الحصارات الثنائية الفصيلية الحادة تتطور لكامل.
+      <br><br><strong>التأثير على الإنذار:</strong> الحصار الجديد لفروع الحزمة يرتبط بزيادة مستقلة بالوفيات داخل المستشفى، الفشل القلبي، وVF بمقدار 2-3 أضعاف (معدل وفيات 18% مقابل 11%، تجربة GUSTO-I؛ 35-50% بعصر ما قبل إعادة التروية). حوالي 75% من هذه الحصارات عابرة، ولا تزيد الوفيات. الحصارات القديمة لا ترتبط بزيادة الوفيات. كل من RBBB وLBBB يرتبطان بنفس زيادة الوفيات تقريبًا.
+    </div>
+    <p><strong>التوصية العملية:</strong> يُوصى بتجهيز محفز مؤقت (عبر الجلد أو الوريد) عند ظهور حصار جديد بفروع الحزمة أو حصار ثنائي الفصيلات بسياق MI أمامي.</p>
+  </section>
+
+  <!-- ============ VI. أم الدم البطينية ============ -->
+  <section class="roman" id="c1t2compVI">
+    <div class="roman-head"><div class="roman-badge">VI</div><h2>أم الدم البطينية اليسرى (LV aneurysm) وأم الدم الكاذبة (LV pseudoaneurysm)</h2></div>
+
+    <h3 class="subhead">أ. أم الدم البطينية اليسرى الحقيقية</h3>
+    <p><strong>ما هي الديسكينيزيا؟</strong> حركة غير طبيعية لمنطقة غير قابلة للانقباض من العضلة القلبية، تتحرك للخارج أثناء الانقباض (حركة متناقضة). <strong>أم الدم البطينية:</strong> الشكل الأقصى للديسكينيزيا، تُعرَّف بأنها منطقة رقيقة من العضلة النخرية، غير المنقبضة، تشكل جيبًا عضليًا. ديسكينيزيا بدون أم دم: بروز خلال الانقباض فقط. أم الدم الحقيقية: بروز خلال الانقباض والانبساط، وتشكل حجرة منفصلة بجدار رقيق دائمًا.</p>
+    <p>عادة ً تعكس أم الدم وجود نخر جداري عابر (transmural). بالمقابل، يمكن رؤية الديسكينيزيا بدون نخر بحالات: الإقفار العكوس الحاد، الصدمة ما بعد الإقفار (stunning)، أو تاكوتسوبو — وفي هذه الحالات يكون جدار العضلة غير رقيق (قد يبدو رقيقًا بالانقباض بسبب غياب التكثف، لكنه طبيعي بالانبساط). <em>ملاحظة:</em> الديسكينيزيا بدون أم دم أكثر شيوعًا من أم الدم الحقيقية.</p>
+    <p><strong>الآلية الزمنية:</strong> أم الدم تمثل نوعًا من إعادة التشكيل السلبي مع توسع المنطقة النخرية. حوالي 50% منها تتطور بشكل حاد خلال أول 48 ساعة؛ النصف الآخر يظهر خلال أسبوعين. الندبة الناضجة السميكة تظهر بعد أسابيع، تليها التكلسات. العلاج المبكر بمثبطات ACE، حاصرات بيتا، والسيطرة الصارمة على الضغط يمنع ظهور أم الدم أو توسعها.</p>
+    <p><strong>التأثيرات السريرية:</strong> زيادة التحميل المسبق واللاحق؛ مضاعفة معدل الوفيات لنفس EF. تحدث أم الدم بحوالي 5% من حالات STEMI، بشكل رئيسي أمامي قمي (80% من أم الدم)؛ الباقي بالمناطق السفلية الخلفية. <strong>المضاعفات:</strong> فشل قلبي، ذبحة صدرية (سوء ظروف التحميل)، تسرع بطيني، خثرة جدارية.</p>
+    <p><strong>التشخيص:</strong> بالإيكو. استمرار ارتفاع ST لأكثر من 3 أسابيع يوحي بأم الدم، لكنه قد يظهر أيضًا مع جدار غير متحرك وغير قابل للحياة (دون أم دم بالضرورة). <strong>العلاج:</strong> العلاج القياسي لفشل القلب لعكس إعادة التشكيل. استئصال أم الدم (aneurysmectomy) عند فشل قلبي مقاوم أو VT مقاوم، غالبًا بالتزامن مع CABG. معدل الوفيات الجراحي &lt;10%.</p>
+
+    <h3 class="subhead">ب. أم الدم الكاذبة للبطين الأيسر (LV pseudoaneurysm)</h3>
+    <p>هي تمزق بالعضلة القلبية تم إغلاقه بواسطة التأمور، خثرة منظمة، والليف. بخلاف أم الدم الحقيقية، جدار أم الدم الكاذبة لا يحتوي على أي نسيج عضلي قلبي. <em>ملاحظة:</em> توجد خثرة متوضعة داخل كل من أم الدم الحقيقية والكاذبة.</p>
+    <p><strong>متى قد تظهر؟</strong> بعد احتشاء قلبي؛ بعد رضوض صدرية؛ بعد جراحة قلبية، خصوصًا جراحات الصمام التاجي خاصة بالمستوى الخلفي القاعدي.</p>
+    <div class="callout warn">
+      <b>خطر التمزق:</b> أم الدم الكاذبة تحمل خطرًا مرتفعًا (40-50%) للتطور إلى تمزق كامل.
+    </div>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch1-part9.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 9</a>
+    <a href="practical-ch1-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch1-part11.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 11: الشكل 2.7، التأمور، الخثرة، والوفيات ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 1، الجزء 10
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

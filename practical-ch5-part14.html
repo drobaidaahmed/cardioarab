@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 5: اضطرابات نظم القلب والفيزيولوجيا الكهربائية | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch5-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 5</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 5 — الجزء 14</h3>
+  <div class="chgroup">
+    <span class="chtitle">V-VI</span>
+    <a href="#c5periconv">مضادات التخثر حول التحويل القلبي</a>
+    <a href="#c5antiarrhythmic">تدبير مضادات النظم بعد الحدث الحاد</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">VII</span>
+    <a href="#c5anticoaglong">مضادات التخثر طويلة الأمد (الجدول 10.5)</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch5-part13.html">→ الجزء 13</a>
+    <a href="practical-ch5-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch5-part15.html">الجزء 15 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الخامس (الجزء 14)</span>
+    <h1>اضطرابات نظم القلب والفيزيولوجيا الكهربائية</h1>
+  </div>
+  <span class="chapno">5</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 5: اضطرابات نظم القلب والفيزيولوجيا الكهربائية — الجزء 14</h2>
+  </div>
+
+  <!-- ============ V. مضادات التخثر حول التحويل ============ -->
+  <section class="roman" id="c5periconv">
+    <div class="roman-head"><div class="roman-badge">V</div><h2>تدبير مضادات التخثر بالفترة المحيطة بالتحويل القلبي</h2></div>
+
+    <p>خطر السكتة حول التحويل~8%، ينخفض لـ&lt;0.5% بمضاد تخثر مناسب.</p>
+    <div class="card point-num">
+      <strong>AF≥48 ساعة:</strong>
+      <ol style="margin-top:8px">
+        <li>TEE أو مضاد تخثر 3 أسابيع قبل DCCV.</li>
+        <li>استمرار مضاد التخثر≥4 أسابيع بعد التحويل (تلقائي أو نشط)، <strong>بصرف النظر</strong> عن الحاجة لعلاج مزمن — فترة "ذهول أذيني" (Atrial Stunning) بعد عودة الجيبي قد تُشكِّل خثرة تنصمُّ عند عودة التقلص الطبيعي.</li>
+      </ol>
+      <p style="margin-top:8px">بلا استطباب مزمن: 4 أسابيع فقط. <strong>الوارفارين يتطلب Bridging بـLMWH</strong> بالأيام الأولى الحرجة.</p>
+    </div>
+    <div class="card point-num">
+      <strong>AF&lt;48 ساعة:</strong> لا يُشترَط TEE/مضاد فموي مسبق — هيبارين أو LMWH بجرعة واحدة حول الإجراء يكفي.
+      <p style="margin-top:8px"><strong>المشكلة:</strong> قد يكون AF لاعرضيًا قبل ظهور الأعراض (الأعراض قد تُمثِّل تسارعًا لا بداية فعلية). <strong>دراسة:</strong> حتى 4% من AF&lt;48 ساعة لديهم خثرة LAA (خاصة مع مرض قلبي كامن). <strong>سجل:</strong> سكتة~1.1% بعد تحويل AF&lt;48 ساعة، <strong>حصريًا بـCHA2DS2-VASc≥2.</strong> دراسة فنلندية: خطر مماثل~1.1% بمدة 12-48 ساعة (أكثر أمانًا&lt;12 ساعة).</p>
+    </div>
+    <div class="card point-num">
+      <strong>الاستراتيجية الآمنة:</strong> TEE حتى لو&lt;48 ساعة، <strong>باستثناء</strong> AF&lt;12 ساعة أو CHA2DS2-VASc=0-1 (ESC/كندا). إلزام 4 أسابيع مضاد تخثر بعد DCCV حتى لو&lt;48 ساعة. <strong>ACC:</strong> لا يُلزم TEE إن AF مؤكد&lt;48 ساعة بصرف النظر عن الخطر (IIa). <strong>ACC/ESC:</strong> يمكن تخطي 4 أسابيع إن AF&lt;24 ساعة+CHA2DS2-VASc=0 (IIb).
+    </div>
+    <div class="card point-num">
+      <strong>خثرة LAA بـTEE الأول:</strong> مضاد تخثر≥3 أسابيع، إعادة TEE لتوثيق الزوال قبل التحويل. <strong>استمرار الخثرة</strong> → ضبط المعدل بدل التحويل.
+    </div>
+  </section>
+
+  <!-- ============ VI. تدبير مضادات النظم ============ -->
+  <section class="roman" id="c5antiarrhythmic">
+    <div class="roman-head"><div class="roman-badge">VI</div><h2>تدبير مضادات اضطراب النظم بعد العرض الحاد</h2></div>
+
+    <p>~25% فشل DCCV أو نكس خلال ثوانٍ/دقائق. ~25% إضافية نكس خلال أسبوعين.</p>
+    <div class="card point-num">
+      <strong>الفشل مقابل العودة الفورية:</strong> <strong>فشل</strong>=لا تحويل إطلاقًا (ولا نبضة واحدة). <strong>عودة فورية</strong>=نبضة/نبضات جيبية قبل عودة AF.
+    </div>
+    <div class="card point-num">
+      <strong>تدبير الفشل:</strong> طاقة أعلى؛ تغيير موضع اللواصق/اتجاه التفريغ؛ إيبوتيليد وريدي قبل الإجراء؛ ضغط اللواصق (بالسمنة).
+    </div>
+    <div class="card point-num">
+      <strong>تدبير العودة الفورية/المبكرة:</strong> محاولة DCCV ثانية بعد تحضير بمضاد نظم. <strong>ملاحظة:</strong> مضادات النظم تُقلل العودة الفورية لكن لا تُفيد بفشل DCCV ذاته (معظمها يرفع عتبة إزالة الرجفان)، <strong>باستثناء:</strong> إيبوتيليد، سوتالول، درونيدارون.
+    </div>
+    <div class="card point-num">
+      <strong>معدل النكس:</strong> 70-80% خلال سنة بعد DCCV. <strong>حتى مع مضادات النظم: 35-60%</strong> (ينخفض للنصف تقريبًا)، أعلى بعوامل الجدول 10.3. <strong>عدا Lone AF</strong>، معظم الانتيابي يتطور لمستمر/دائم خلال سنوات. <strong>يُفسِّر</strong> لماذا ضبط المعدل أكثر واقعية بمرتفعي خطر النكس، خاصة مع فشل DCCV أو نكس خلال أسبوعين رغم مضاد النظم.
+    </div>
+    <div class="card point-num">
+      <strong>استراتيجية ضبط النظم عمليًا:</strong> يُفكَّر بمضاد نظم <strong>بعد</strong> أول نكس لا بعد أول نوبة (بمنخفضي الخطر)، مدة أقصر (معظم النكس مبكر — شهر واحد فليكاينيد، ESC)، قد يُتبَع بـ"حبة عند الحاجة" (Pill-in-the-pocket). <strong>الهدف:</strong> السيطرة على الأعراض/جودة الحياة — نوبات قصيرة/نادرة/قليلة الأعراض لا تُعتبر فشلاً.
+    </div>
+    <p><strong>يُستمر بأدوية ضبط المعدل</strong> طوال استراتيجية ضبط النظم (ما لم يكن الجيبي الأساسي بطيئًا). <strong>AF السريع المتقطع</strong> أصعب ضبطًا من الدائم (إبطاء AF يُسبب بطءًا مفرطًا بالجيبي الأساسي) — يتطلب غالبًا ضبطًا صارمًا (استئصال أو PPM).</p>
+    <div class="card point-num">
+      <strong>عزل الأوردة الرئوية بالقسطرة:</strong> بديل الدواء، ينجح~70% خلال سنة. مُستطَب لـAF انتيابي/مستمر متكرر عرضي، خاصة LA&lt;4سم — ثانوي أو حتى أولي. <strong>فشل</strong> → استئصال جراحي بالتنظير الصدري. <strong>أخيرًا</strong> → استئصال العقدة AV+PPM.
+    </div>
+  </section>
+
+  <!-- ============ VII. مضادات التخثر طويلة الأمد ============ -->
+  <section class="roman" id="c5anticoaglong">
+    <div class="roman-head"><div class="roman-badge">VII-A</div><h2>مضادات التخثر طويلة الأمد</h2></div>
+
+    <p>خطر السكتة السنوي بلا علاج: 1-18%، متوسط~5%. يزداد بكلا الانتيابي والدائم (أقل قليلاً بعبء منخفض/انتيابي نادر قصير).</p>
+    <div class="card point-num">
+      <strong>CHADS2 وCHA2DS2-VASc:</strong> الثاني يُحسِّن التنبؤ، مفيد خاصة لتصنيف CHADS2=0-1 (بعضهم خطر عالٍ فعليًا).
+    </div>
+    <div class="card point-num">
+      <strong>الوارفارين:</strong> يخفض السكتة 75% (أي درجة CHADS2)، يزيد النزف الكبير×2.5. <strong>نقطة التوازن</strong> (الفائدة تفوق الخطر): خطر سكتة≥1.7%/سنة بالوارفارين، <strong>0.9%/سنة بـNOACs.</strong>
+    </div>
+    <div class="card point-num">
+      <strong>الأسبرين:</strong> لا يؤثر على سكتة AF، يخفض فقط سكتة الأوعية 21%، يزيد نزف كبير 60%. <strong>غير مُستطَب لوقاية AF بأي مجموعة (Class III، ESC).</strong>
+    </div>
+    <div class="card point-num">
+      <strong>التوصيات (ESC/ACC):</strong>
+      <ul style="margin-top:8px">
+        <li>CHA2DS2-VASc=0 (بلا احتساب الأنثوية): <strong>لا علاج</strong> (فائدة≤0.5%، لا تُبرِّر خطر النزف).</li>
+        <li>≥2: <strong>يُوصى بمضاد تخثر</strong>، NOACs مُفضَّلة على الوارفارين.</li>
+        <li>=1: مضاد تخثر بعد تقييم خطر النزف (IIa). فائدة هامشية (خطر مطلق 1.5-2%/سنة)، لكن أرجح بالفائدة مع: عمر 65-74 (~3%/سنة)، عامل خطر شديد (سكري غير مضبوط، HF شديد)، أو استخدام NOAC.</li>
+      </ul>
+    </div>
+    <div class="card point-num">
+      <strong>استثناءات لا تعتمد على CHADS2:</strong> <strong>AF الصمامي</strong> (MS أو صمام ميكانيكي) — خطر عالٍ دائمًا، <strong>وارفارين لا NOACs.</strong> <strong>HCM+AF</strong> — خطر عالٍ يستدعي مضاد تخثر بصرف النظر عن CHADS2.
+    </div>
+
+    <div class="card point-num">
+      <strong>الجدول 10.5 — مقارنة CHADS2 وCHA2DS2-VASc وخطر السكتة السنوي:</strong>
+      <table style="margin-top:10px; font-size:13px;">
+        <thead><tr><th>الدرجة</th><th>خطر CHADS2</th><th>خطر CHA2DS2-VASc</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>&lt;1%</td><td>1.9%</td></tr>
+          <tr><td>1</td><td>1.5-2%</td><td>2.8%</td></tr>
+          <tr><td>2</td><td>2.5-3%</td><td>4.0%</td></tr>
+          <tr><td>3</td><td>3.2%</td><td>5.9%</td></tr>
+          <tr><td>4</td><td>4%</td><td>8.5%</td></tr>
+          <tr><td>5</td><td>~7%</td><td>12.5%</td></tr>
+          <tr><td>6-8</td><td>~10%</td><td>18.2%(6)</td></tr>
+          <tr><td>9</td><td>—</td><td>15%*</td></tr>
+        </tbody>
+      </table>
+      <p class="tbl-caption">*انخفاض طفيف بدرجة 9 يُعزى لصغر حجم العينة بهذه الفئة النادرة. <strong>المكونات:</strong> CHADS2: قصور قلب(1)، HTN(1)، عمر≥75(1)، سكري(1)، سكتة/TIA سابقة(2). <strong>إضافات VASc:</strong> عمر65-74(1)، جنس أنثوي(1)، مرض وعائي (CAD/PAD/لويحة أبهرية)(1)، وعمر≥75 يُصبح نقطتين.</p>
+    </div>
+    <div class="card point-num">
+      <strong>تعريف "C" (قصور القلب) بمقياس ESC:</strong> EF منخفض، أو دليل تدهور HF (بصرف النظر عن EF — يشمل HFpEF).
+    </div>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch5-part13.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 13</a>
+    <a href="practical-ch5-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch5-part15.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 15 ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 5، الجزء 14
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

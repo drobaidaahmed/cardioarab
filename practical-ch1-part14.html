@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 1 (الجزء 1): المتلازمة الإكليلية الحادة | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch1-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 1</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 1 — الجزء 14</h3>
+  <div class="chgroup">
+    <span class="chtitle">القسم 3: CAD المزمن (تابع)</span>
+    <a href="#c1t3s1bc">ب-ج. الذبحة التشنجية وذبحة زيادة الطلب</a>
+    <a href="#c1t3s2">II. النهج التشخيصي</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch1-part13.html">→ الجزء 13</a>
+    <a href="practical-ch1-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch1-part15.html">الجزء 15 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الأول (الجزء 14)</span>
+    <h1>المتلازمة الإكليلية الحادة</h1>
+  </div>
+  <span class="chapno">1</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 1: المتلازمة الإكليلية الحادة — الجزء 14</h2>
+  </div>
+
+  <section class="roman" id="c1t3s1bc">
+    <div class="roman-head"><div class="roman-badge">I (تابع)</div><h2>الذبحة التشنجية الوعائية وذبحة زيادة الطلب</h2></div>
+
+    <h3 class="subhead">ب. الذبحة الصدرية التشنجية الوعائية (ذبحة برينزميتال) أو الانسداد التاجي الديناميكي</h3>
+    <p>افترضها مبدئيًا برينزميتال، ثم أُثبتت بدراسات قديمة أن التشنج الوعائي والذبحة التشنجية الوعائية يحدثان غالبًا بموقع تضيق تصلبي عصيدي مهم لدى مرضى CAD ذي الأهمية الإكلينيكية. لم يكن المرض التاجي مهمًا فقط، بل غالبًا ما كان غير مستقر أيضًا. في تقارير لاحقة، تبيَّن أن التشنج الوعائي تشخيص شائع أيضًا لدى مرضى الذبحة الذين لا يعانون من مرض تاجي مهم، سواء رجالاً أو نساءً.</p>
+    <p>حتى بالمرضى ذوي الشرايين الطبيعية أو شبه الطبيعية، أُثبت وجود تصلب عصيدي بموقع التشنج، ويتوافق حدوث التشنج مع عبء التصلب العصيدي بهذا الموقع. قد يكون التشنج مرتبطًا بمواد مقبضة للأوعية تُفرَز من الصفائح والكريات البيضاء عند موقع التصلب، أو بخلل وظيفي بالبطانة واستجابة وعائية شاذة ناتجة عن التصلب. يمكن أن يحدث التضيق المتناقض أثناء التمارين، التحفيز الأدرينالي (التوتر النفسي)، أو التعرض للبرد.</p>
+    <p>حوالي 60% من المرضى تظهر لديهم الأعراض فقط بالراحة أو النشاط الخفيف، دون قيود أثناء الجهد، وأحيانًا بنمط ليلي دوري؛ عندهم، تحدث الذبحة فقط عندما يزيد المكوِّن الديناميكي من شدة الانسداد الثابت. من ناحية أخرى، يعاني كثيرون من الذبحة الجهدية، سواء نتيجة المرض التاجي نفسه أو التشنج أثناء الجهد.</p>
+    <p>تُعتبَر الذبحة التشنجية أشد من ذات العتبة الثابتة، لأن الانسداد العرضي يكون كاملاً أو شبه كامل، مع زيادة احتمال اضطرابات النظم، بلوك AV عالي الدرجة، أو حتى الإغماء أثناء النوبات. رغم وصفها تقليديًا بأنها أكثر شيوعًا بالنساء، تشير بعض الدراسات إلى أن التشنج شائع بنفس الدرجة بالرجال أيضًا.</p>
+
+    <h3 class="subhead">ج. الذبحة الصدرية الثانوية لزيادة شديدة بالمتطلبات</h3>
+    <p>تُلاحَظ مع: تضخم LV الشديد، ارتفاع ضغط شديد، أمراض صمامية، فشل قلب، تسارع قلب ملحوظ، أو اضطرابات أيضية مثل فقر الدم أو فرط نشاط الدرقية. بعض هؤلاء لديهم مرض تاجي كامن مهم، لكن كثيرين لا يعانون من مرض تاجي، وتُفسَّر الذبحة لديهم بالكامل بزيادة المتطلبات الأيضية.</p>
+
+    <div class="card">
+      <strong>ملاحظة حول فيزيولوجيا الجريان التاجي:</strong> بسبب الانضغاط الانقباضي للدورة الدقيقة، يتلقى LV الدم بشكل أساسي أثناء الانبساط (&gt;80% من الجريان بالشريان الأيسر يحدث بالانبساط). تسارع القلب، إضافة لزيادة متطلبات الأكسجين، يُقلل الإمداد عبر تقليل زمن الانبساط. بالمقابل، RV رقيق ولا يضغط على دورته الدقيقة كثيرًا أثناء الانقباض، فلا يتأثر جريانه بنفس القدر؛ حوالي 50% من جريان RCA لـRV يحدث أثناء الانقباض.
+      <br><br><strong>عوامل تحديد جريان LV التاجي:</strong> الجريان يرتبط مباشرة بفارق الضغط بين DBP وLVEDP (ضغط التروية التاجية)، وعكسيًا بمقاومة الأوعية الدقيقة (تعتمد على صلابة عضلة القلب وبالتالي LVEDP). أي زيادة بـLVEDP تُقلل الجريان حتى بغياب التضيق. <strong>بالنسبة لـRV:</strong> نظرًا لتلقيه جريانًا مهمًا أثناء الانقباض، يعتمد جريانه جزئيًا على الفارق بين SBP وضغط RV الانقباضي، لا فقط DBP وRVEDP.</p>
+    </div>
+  </section>
+
+  <!-- ============ II. النهج التشخيصي ============ -->
+  <section class="roman" id="c1t3s2">
+    <div class="roman-head"><div class="roman-badge">II</div><h2>النهج التشخيصي (Diagnostic approach)</h2></div>
+
+    <h3 class="subhead">أ. الملامح السريرية للذبحة النمطية</h3>
+    <p>تتميَّز الذبحة النمطية بثلاث سمات رئيسية:</p>
+    <ol>
+      <li>انزعاج خلف القص أو بالمنطقة الشرسوفية، قد ينتشر للرقبة أو الفك أو الذراع.</li>
+      <li>حدوث الألم مع الجهد البدني أو التوتر العاطفي.</li>
+      <li>زوال سريع للألم بالراحة أو بعد النيتروغليسرين (خلال 30 ثانية-5 دقائق).</li>
+    </ol>
+    <p>الألم المطوَّل (&gt;20 دقيقة)، أو تأخر الزوال بعد الراحة/النتروغليسرين (&gt;5 دقائق)، عادة ً يشير لأحد طرفين: احتشاء حاد أو ألم غير قلبي المنشأ.</p>
+    <div class="card">
+      <strong>العوامل المحفِّزة:</strong> المشي صعودًا، الجو البارد، أو بعد الطعام. الغثيان أو التعرق البارد أثناء الألم يزيدان احتمالية كون الألم قلبيًا. <strong>الذبحة بعد الطعام:</strong> غالبًا علامة على مرض تاجي شديد، أحيانًا متعدد الأوعية (بخلاف المغص الصفراوي أو القرحة الهضمية، تحدث مباشرة بعد الوجبة وتزداد بالنشاط بعد الأكل). <strong>الذبحة الليلية:</strong> قد تشير لمرض تاجي شديد مقابل تشنج فوق انسداد ثابت (زيادة العود الوريدي بالاستلقاء تزيد الطلب وتُحفِّز نقص التروية بمرضى تضيقات حرجة). <strong>الذبحة بالراحة دون مكوِّن جهدي:</strong> قد تُرى بمرضى مرض تاجي مهم، ناجمة أساسًا عن تشنج. <strong>ضيق النفس كمعادل الذبحة:</strong> قد يشير لمرض تاجي واسع مع زيادة ثانوية بـLVEDP أثناء نوبات نقص التروية (غير نوعي مقارنة بألم الصدر). <strong>الذبحة التمهيدية (Warm-up angina):</strong> تبدأ مع بدء النشاط وتتحسن مع استمراره؛ تشير لتضيق شديد جدًا مع أوعية جانبية تُجنَّد أثناء الجهد وتكيُّف إقفاري مسبق.
+    </div>
+
+    <h3 class="subhead">ب. الاحتمالية السريرية قبل الاختبار لمرض تاجي مهم</h3>
+    <p>وجود جميع السمات الثلاث ← الذبحة النمطية (typical/definite angina). وجود سمتين فقط ← ألم صدري محتمل المصدر القلبي (possible angina). ألم بدون أي من السمات ← ألم غير قلبي.</p>
+    <p>تُحدَّد الاحتمالية من خلال دمج: (1) خصائص الألم؛ (2) العمر والجنس؛ (3) عوامل الخطورة — وفق تصنيفات Diamond-Forrester وDuke المدمجة (الشكل 3.1). <em>ملاحظة مهمة:</em> الذبحة النمطية تُعرَّف وفق علاقتها بالجهد، لا فقط وصف "الثقل بالصدر" أو انتشار الألم للذراع.</p>
+    <p><strong>تغيرات ECG:</strong> وجود تغيرات أساسية بـST-T أو موجات Q بالراحة يزيد احتمالية مرض تاجي، بل يشير لمرض عالي الخطورة حتى خارج سياق الذبحة غير المستقرة.</p>
+    <div class="callout info">
+      <b>الفروقات بين النساء والرجال:</b> فقط ~50% من النساء ذوات الذبحة النمطية لديهن فعليًا مرض تاجي (مقابل ~90% بالرجال). حسب سجل WISE، ~40% فقط من النساء اللواتي خضعن لتصوير الشرايين بسبب اشتباه نقص تروية لديهن مرض تاجي مثبت؛ الباقيات، السبب الأرجح لديهن تشنج وعائي كبير أو خلل وظيفي بالأوعية الدقيقة دون تضيق انسدادي. رغم أن عدد النساء المصابات بمرض تاجي انسدادي أقل، فإن النساء بلا تضيق انسدادي لكن مستمر لديهن ألم صدري لديهن خطر مقلق يصل لـ~9% للوفاة أو MI خلال 4 سنوات.
+    </div>
+
+    <div class="card point-num">
+      <strong>الشكل 3.1 — الاحتمالية السريرية لمرض الشريان التاجي:</strong>
+      <ul style="margin-top:8px">
+        <li>الذبحة النمطية + عمر كبير (ذكور ≥40، إناث ≥60) أو عدة عوامل خطورة (سكري، تدخين، فرط شحميات) ← احتمالية عالية جدًا (&gt;85%).</li>
+        <li>الذبحة الممكنة أو الألم غير القلبي + صغار السن (ذكور &lt;40، إناث &lt;60) بلا عوامل خطورة ← احتمالية منخفضة (&lt;15%).</li>
+        <li>الحالات المتوسطة (ذبحة نمطية عند شاب، أو ألم غير نمطي عند مسن مع عوامل خطورة) ← احتمالية متوسطة (15-85%).</li>
+      </ul>
+      <p style="margin-top:8px">وجود مزيج من عوامل الخطورة (السكري + التدخين + فرط شحميات الدم مع LDL&gt;160-190 ملغ/دل) يزيد الاحتمالية بشكل ملحوظ عند اجتماع الثلاثة.</p>
+    </div>
+
+    <h3 class="subhead">ج. الاحتمالية قبل الاختبار لمرض تاجي عالي الخطورة (ثلاثي الأوعية/الرئيسي الأيسر)</h3>
+    <p>وفقًا لـHubbard وزملائه، خمسة معايير سريرية تتنبأ بمرض تاجي شديد (إضافة للعمر):</p>
+    <ol>
+      <li>الجنس الذكري.</li>
+      <li>الذبحة النمطية.</li>
+      <li>الإصابة بالسكري.</li>
+      <li>الاعتماد على الإنسولين.</li>
+      <li>وجود احتشاء سابق (بالقصة أو مثبت بـECG).</li>
+    </ol>
+    <p>مريض بعمر 40 ولديه ≥4 معايير، أو بعمر 60 ولديه ≥3 معايير، احتمال &gt;40% لمرض تاجي شديد. مثال: رجل 60 عامًا مصاب بالسكري وذبحة نمطية — احتمال مرض شديد عالٍ جدًا.</p>
+    <div class="callout gold">
+      <b>التوجيه المباشر:</b> هؤلاء المرضى العَرَضيون يُحوَّلون مباشرة لتصوير الشرايين أو CTA دون حاجة لاختبارات الجهد، لأن احتمال أن تكون هذه الاختبارات طبيعية منخفض جدًا (وإذا كانت طبيعية، قد تكون نتيجة سلبية كاذبة).
+    </div>
+
+    <div class="card">
+      <strong>معايير سريرية إضافية تتنبأ بمرض شديد وتُبرِّر الإحالة المباشرة للقسطرة (Class I للذبحة الشديدة):</strong>
+      <ul style="margin-top:8px">
+        <li>الذبحة عالية الاحتمالية والشديدة أو المتكررة (≥يوميًا) — من المرجَّح أن تتطلب إعادة توعية للسيطرة على الأعراض بغض النظر عن نتائج اختبار الجهد، لأن العلاج الدوائي وحده أقل فعالية من PCI للسيطرة على ذبحة درجة III-IV.</li>
+        <li>فشل قلبي يُعتقد أنه إقفاري المنشأ (فشل قلبي مصحوب بالذبحة، وذمة رئوية حادة خاطفة، أو كبار السن بعوامل خطورة متعددة).</li>
+        <li>وجود موجات Q أو تغيرات أساسية بـST-T على ECG الأساسي، أو اضطرابات إقليمية بحركة الجدران بالإيكو.</li>
+      </ul>
+    </div>
+
+    <h3 class="subhead">د. وسائل الفحص (لأغراض تشخيصية وتنبؤية)</h3>
+    <div class="card point-num">
+      <strong>1. احتمالية عالية قبل الاختبار:</strong>
+      <p style="margin-top:8px">إذا كانت الذبحة الجهدية النمطية شديدة وتتطلب إعادة توعية: قسطرة تاجية مباشرة. إذا كانت غير شديدة: يُفضَّل CTA (يستبعد مرض الرئيسي الأيسر ويسمح بإدارة محافظة، حسب دراسة ISCHEMIA). كبديل لـCTA (خصوصًا بـCKD): اختبار جهد — أقل فائدة تشخيصية (احتمال CAD يبقى مرتفعًا حتى مع اختبار سلبي) لكن مفيد لتحديد الخطورة؛ نتيجة منخفضة الخطورة تسمح بإدارة تحفظية.</p>
+    </div>
+    <div class="card point-num">
+      <strong>2. احتمالية متوسطة قبل الاختبار:</strong>
+      <p style="margin-top:8px">يُجرى اختبار جهد أو CTA لأغراض التشخيص والتنبؤ. يُوصى بـCTA أيضًا بعد اختبار جهد متوسط/عالي الخطورة، أو حتى بعد اختبار سلبي إذا استمرت الأعراض. أظهرت دراسة SCOT-HEART أن CTA الروتيني إضافة للفحوصات الوظيفية يقلل خطر MI خلال 5 سنوات (ليس عبر زيادة إعادة التوعية، بل عبر تقييم عبء اللويحات وتوجيه السيطرة المكثفة على عوامل الخطورة).</p>
+    </div>
+    <div class="card point-num">
+      <strong>3. احتمالية منخفضة قبل الاختبار:</strong>
+      <p style="margin-top:8px">مثل مريض شاب بذبحة غير نمطية — غالبًا لا حاجة لاختبار جهد. حتى لو كان إيجابيًا، احتمال CAD يرتفع فقط من &lt;10% لـ~20% (على الأرجح إيجابية كاذبة). إذا كان الفحص مطلوبًا: اختبار جهد كهربائي أو إيكو إجهادي (IIa). يُتجنَّب اختبار الجهد النووي (ارتفاع الإيجابيات الكاذبة وخطر الإشعاع).</p>
+    </div>
+
+    <div class="card">
+      <strong>الجدول 3.1 — دواعي تصوير الجهد مقابل تخطيط القلب بجهد السير فقط:</strong>
+      <p style="margin-top:8px"><strong>يُفضَّل تصوير الجهد (نووي أو إيكو) عندما:</strong> انخفاض أساسي بST&gt;1 ملم؛ احتمالية عالية قبل الاختبار؛ تاريخ سابق لإعادة توعية تاجية (تصوير الجهد يحدد موقع الإقفار وحساسيته أعلى لإقفار شريان واحد)؛ نتيجة اختبار جهد سابق متوسطة.</p>
+      <p><strong>يُفضَّل تصوير جهد دوائي عندما:</strong> عدم القدرة على المشي؛ أو القدرة على المشي لكن ECG الأساسي يُظهر LBBB أو نظم بطيني محفَّز بجهاز (هنا يُجرى عادة ً تصوير نووي دوائي).</p>
+      <p class="tbl-caption">ملاحظة: LVH دون انخفاض ST مناسب لاختبار الجهد الكهربائي. التمرين والدوبوتامين قد يُبالغان بشذوذ حركة الحاجز بـLBBB موحيًا كاذبًا بنقص تروية؛ لكن الفحص يعطي نتائج مناسبة عند تحليل حركة/تروية القمة بدل الحاجز.</p>
+    </div>
+
+    <h3 class="subhead">هـ. تصنيف الخطورة باستخدام اختبارات الجهد</h3>
+    <div class="card point-num">
+      <strong>الجدول 3.2 — تصنيف الخطورة:</strong>
+      <p style="margin-top:8px">🟥 <strong>عالي الخطورة</strong> (وفيات قلبية سنوية &gt;3%، أحداث سنوية &gt;5%): درجة ديوك (DTS) ≤-11؛ عيب تروية كبير/شديد وقابل للانعكاس (مجموع درجات الجهد &gt;8، أي إقفار يشمل &gt;10% من العضلة)؛ عيب ثابت كبير/شديد مع توسع LV أو EF منخفض؛ خلل LV بالراحة أو الجهد مع EF≤35%؛ بالإيكو الإجهادي: إقفار ≥3 مقاطع (من 17) أو بأكثر من توزيع تاجي، خاصة عند معدل نبض منخفض (&lt;120) أو جرعة دوبوتامين منخفضة (≤10).</p>
+      <p>🟧 <strong>متوسط الخطورة</strong> (وفيات 1-3%، أحداث 1-5%): DTS بين -10 و+4؛ مجموع درجات الجهد بين 4-8.</p>
+      <p>🟩 <strong>منخفض الخطورة</strong> (وفيات وأحداث &lt;1%، ~0.5% مع تصوير الجهد): DTS≥+5 (≥+8 منخفض جدًا)؛ لا عيب تروية أو عيب صغير (&lt;4).</p>
+      <p class="tbl-caption">DTS = زمن التمرين ببروتوكول بروس - (5×أعمق انخفاض ST) - (4×درجة الذبحة). درجة الذبحة: 0=لا ذبحة، 1=ذبحة غير محدِّدة للجهد، 2=ذبحة تحد الجهد.</p>
+    </div>
+    <p>تخطيط القلب بجهد السير، وخاصة DTS، أداة قوية لتحديد الخطورة. DTS عالي الخطورة يعني زيادة الوفيات القلبية، واحتمال 75% لمرض الرئيسي الأيسر أو ثلاثي الأوعية، بغض النظر عن نتائج التصوير. DTS منخفض الخطورة غالبًا يشير لوفيات منخفضة؛ لكن ~10% من هؤلاء لديهم مرض ثلاثي/رئيسي أيسر شديد بوفيات مرتفعة، و~10% إضافيون لديهم مرض بوعاءين أو LAD القريب — أي 20% من المرضى العَرَضيين ذوي اختبار جهد طبيعي لديهم مرض تاجي مهم عالي الخطورة، خصوصًا الرجال. يُكشف هؤلاء غالبًا عبر تصوير الجهد؛ نتيجة عالية الخطورة بالتصوير النووي/الإيكو الإجهادي تُلغي تأثير نتيجة منخفضة/متوسطة بتخطيط القلب.</p>
+    <p>لهذا، يُفضَّل تصوير الجهد على اختبار الجهد الكهربائي بالمرضى ذوي احتمالية عالية لـCAD أو من خضعوا لإعادة توعية سابقًا، حتى لو كان ECG الأساسي قابلاً للتفسير. بالمقابل، يُفضَّل اختبار الجهد الكهربائي بالمرضى ذوي احتمالية متوسطة/منخفضة القادرين على المشي بECG أساسي قابل للتفسير.</p>
+    <div class="callout warn">
+      <b>ظاهرة "الإقفار المتوازن" (balanced ischemia):</b> بعض المرضى ذوي مرض تاجي واسع قد يظهر لديهم تصوير تروية طبيعي أو شبه طبيعي، لكن يمكن كشفهم عبر: متغيرات ECG، درجة ديوك، الذبحة الشديدة أثناء الاختبار، أو خلل LV بعد الجهد.
+    </div>
+
+    <h4 class="subsub">المرضى الذين خضعوا سابقًا لتركيب دعامة (PCI)</h4>
+    <p>(i) اختفاء ألم الصدر بعد الإجراء ثم عودته بعد أشهر — نمطي لحالتين: تضيق متكرر داخل الدعامة (in-stent restenosis)؛ أو تطور مرض متوسط الشدة خارج منطقة الدعامة، خصوصًا بمرضى تقديمهم الأولي كان بـACS.</p>
+    <p>(ii) استمرار الألم دون نمط زوال وعودة — يوحي بأحد احتمالين: ألم غير قلبي المنشأ.</p>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch1-part13.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 13</a>
+    <a href="practical-ch1-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch1-part15.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 15: نقص التروية الصامت ومضادات الصفيحات ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 1، الجزء 14
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

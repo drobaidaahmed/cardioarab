@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 1 (الجزء 1): المتلازمة الإكليلية الحادة | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch1-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 1</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 1 — الجزء 4</h3>
+  <div class="chgroup">
+    <span class="chtitle">القسم 1: NSTE-ACS (نهاية)</span>
+    <a href="#c1t1qa">أسئلة وأجوبة توضيحية (25 حالة)</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">القسم 2: STEMI</span>
+    <a href="#c1t2s1">I. التعريف</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch1-part3.html">→ الجزء 3</a>
+    <a href="practical-ch1-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch1-part5.html">الجزء 5 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الأول (الجزء 4)</span>
+    <h1>المتلازمة الإكليلية الحادة</h1>
+  </div>
+  <span class="chapno">1</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 1: المتلازمة الإكليلية الحادة — الجزء 4</h2>
+  </div>
+
+  <!-- ============ Q&A section ============ -->
+  <section class="roman" id="c1t1qa">
+    <div class="roman-head"><div class="roman-badge">؟</div><h2>أسئلة وأجوبة توضيحية — NSTE-ACS</h2></div>
+    <p class="dim">25 حالة سريرية بصيغة أسئلة متعددة الخيارات، مع الإجابات والشرح كما وردت في الكتاب.</p>
+
+    <div class="card point-num">
+      <strong>السؤال 1:</strong> رجل يبلغ من العمر 72 عامًا دخل إلى المستشفى بسبب الحمى، التهاب رئوي ثنائي شديد، وتعفن دم (sepsis). فحصه السريري لا يُظهر علامات فرط حجم. خلال اليوم الأول من دخوله، أظهر ECG انخفاضًا عميقًا وعابرًا في مقطع ST في الجهة الجانبية. تروبونين I وصل إلى ذروة 1.2 نانوغرام/مل، مع نمط ارتفاع وانخفاض. BNP=65. لديه فشل كلوي حاد مع كرياتينين 1.7 ملغ/دل. لا يشتكي من ألم صدري. الإيكو يُظهر بطينًا أيسر مفرط الحركية.
+      <p style="margin-top:6px"><strong>ما هي الخطوة التالية؟</strong><br>A. ارتفاع التروبونين سببه خلل توازن إقفاري، لا يُحقق تعريف MI، لا حاجة لتقييم إضافي.<br>B. يُحقق تعريف MI جزئيًا، يجب إجراء اختبار جهد قبل الخروج.<br>C. يُحقق تعريف MI جزئيًا، يجب إجراء تصوير الشرايين التاجية بعد استقرار الحالة الإنتانية ووظيفة الكلى.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: C.</strong> المريض يُحقق تعريف MI، لأنه لديه ارتفاع في التروبونين مع نمط ارتفاع وهبوط، بالإضافة إلى تغيرات ECG. درجة ارتفاع التروبونين (&gt;1 نانوغرام/مل) مع تغيرات ST مثيرة للقلق وتدل على وجود CAD كامن، سواء كان MI من النوع الأول (بسبب تمزق اللويحة الذي بدأ بسبب الحالة الإنتانية) أو عدم توازن إقفاري شديد على أرضية CAD موجود مسبقًا. في غياب موانع، يمكن إجراء قسطرة تاجية بعد استقرار العدوى ووظيفة الكلى.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 2:</strong> نفس المريض السابق، لكن ECG يُظهر انقلابًا بسيطًا في الموجة T الجانبية فقط، وتروبونين I ذروته 0.8 نانوغرام/مل.
+      <p style="margin-top:6px"><strong>ما هي الخطوة التالية؟</strong> (نفس خيارات السؤال 1)</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: A.</strong> المريض لا يُحقق تعريف MI، لأنه رغم وجود ارتفاع في التروبونين مع نمط ارتفاع وهبوط، لا يوجد ألم صدري مرافق، ولا تغيرات ST، ولا خلل في حركة جدار القلب. المرض غير القلبي الشديد، مع درجة ارتفاع التروبونين الخفيفة (&lt;1 نانوغرام/مل)، يتماشى مع عدم توازن إقفاري ولا يدل بالضرورة على وجود CAD كامن. لا توجد حاجة مؤكدة للعلاج بمضادات التخثر، ويمكن لاحقًا إجراء تقييم اختياري باستخدام اختبار جهد.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 3:</strong> رجل 72 عامًا دخل بسبب دم غامق في البراز (melena) وفقر دم شديد (Hb=6.5). سريع القلب لكن ليس في صدمة. ECG: انخفاض منتشر 1.5 ملم في ST، اختفى بعد نقل الدم. تروبونين I ذروته 3 نانوغرام/مل. لا ألم صدري. الإيكو: نقص حركة شديد بالجدار الأمامي.
+      <p style="margin-top:6px"><strong>ما هي الخطوة التالية؟</strong><br>A. نقل دم + PPI، لا حاجة لتصوير الشرايين، اختبار جهد خارجي بعد الخروج.<br>B. نقل دم + PPI، لا حاجة لتقييم قلبي ما لم تظهر ذبحة رغم استقرار الهيموغلوبين.<br>C. نقل دم + PPI + تنظير معدة، وتصوير الشرايين التاجية بعد استقرار النزيف 1-2 أسبوع.<br>D. نفس C + إعطاء حاصرات بيتا ونترات.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: C.</strong> المريض لديه ارتفاع وانخفاض في التروبونين، مع تغيرات ST وخلل في حركة الجدار — يُصنَّف كـMI من النوع الثاني بسبب عدم توازن إقفاري نتيجة فقر الدم الحاد. مع ذلك، فإن شدة تغيرات ST، وارتفاع التروبونين الكبير (&gt;0.5-1 نانوغرام/مل)، وخلل حركة الجدار تدعو للقلق وتشير إلى CAD شديد كامن، ربما كان مستقرًا وكُشف بسبب الضغط الناتج عن فقر الدم/تسرع القلب. يجب معالجة CAD — اختبار الجهد لن يضيف معلومات هنا، لأن المريض أظهر بالفعل إقفارًا كبيرًا. القسطرة التاجية وإعادة التوعية مبررة، لكن بعد استقرار النزف والهيموغلوبين لمدة أسبوع إلى أسبوعين مع العلاج الهضمي المناسب (PPI وتنظير). لا يُعطى حاصرات بيتا بشكل حاد لأنه في حالة ما قبل الصدمة، لكن يمكن إعطاؤها بعد 24-48 ساعة.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 4:</strong> رجل 62 عامًا، تاريخ فشل قلب مع LVEF=25%. قبل عام، قسطرة أظهرت لويحات بسيطة غير انسدادية. يأتي الآن بتفاقم حاد لفشل القلب مع فرط حجم وضيق صدر. تروبونين I ذروته 1 نانوغرام/مل (الخط الأساسي 0.05). ECG: LVH مع نمط إجهاد، لا موجات Q.
+      <p style="margin-top:6px"><strong>ما هي الخطوة التالية؟</strong><br>A. مدرات وموسعات أوعية، بدء مضاد صفيحات/تخثر بعد الإدرار، ثم تصوير الشرايين.<br>B. مدرات وموسعات أوعية فقط، لا حاجة لتكرار القسطرة.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: B.</strong> الارتفاع الخفيف في التروبونين ناتج عن عدم توازن إقفاري مرتبط بفشل القلب وليس ACS. الضغط الجداري المتزايد وانخفاض تدفق الدم التاجي يرفعان التروبونين كمؤشر إنذاري أكثر من كونه علامة على ACS. القسطرة التي أُجريت قبل 2-3 سنوات ولم تُظهر CAD انسداديًا تقلل بشدة احتمال وجود ACS حالي.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 5:</strong> رجل 62 عامًا، ضيق تنفس متفاقم وضيق صدر منذ أسبوع. وذمة رئوية وفشل قلبي شديد. الإيكو: LVEF=25% مع نقص حركة عام. تروبونين I ذروته 0.5. ECG: LVH مع نمط إجهاد. كرياتينين 1.7.
+      <p style="margin-top:6px"><strong>ما هي الخطوة التالية؟</strong><br>A. مدرات+موسعات+مضاد صفيحات/تخثر، ثم قسطرة خلال هذا الاستشفاء.<br>B. مدرات وموسعات، ثم قسطرة خلال هذا الاستشفاء (بدون مضاد صفيحات/تخثر مسبق).<br>C. مدرات وموسعات، ثم اختبار جهد.<br>D. مدرات وموسعات، قسطرة اختيارية لاحقًا كمريض خارجي.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: B.</strong> الارتفاع الخفيف في التروبونين يعود جزئيًا لعدم التوازن الإقفاري في HF. مع ذلك، أي HF يستدعي تقييمًا للإقفار المزمن الكامن باستخدام القسطرة قبل الخروج من المستشفى. لا حاجة لمضادات التخثر هنا، لأن التخطيط لا يُشير إلى إقفار حاد. إذا لم يُعالج CAD الكامن، هناك خطر مرتفع للوفاة أو تكرار HF خلال 60-90 يومًا.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 6:</strong> نفس السيناريو السابق، لكن الإيكو يُظهر أيضًا انعدام حركة سفلي (inferior akinesis)، وECG يُظهر انخفاضًا منتشرًا في ST وموجات Q سفلية. كرياتينين 1.7.
+      <p style="margin-top:6px"><strong>ما هي الخطوة التالية؟</strong> (نفس خيارات السؤال 5)</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: A.</strong> وجود موجات Q يُشير إلى سبب إقفاري لفشل القلب. الانخفاض المنتشر في ST وخلل حركة الجدار الممتد لما بعد منطقة الاحتشاء يُشيران إلى إقفار حاد. يُعالَج كـMI من النوع الأول بمضادات التخثر ويُجرى له قسطرة بعد تحقيق إدرار بول مناسب. لا حاجة لقسطرة أو PCI بشكل طارئ لأن ذلك قد يُفاقم HF بسبب التحميل على القلب.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 7:</strong> رجل 56 عامًا، بدون تاريخ قلبي، نوبة واحدة شديدة من ألم الصدر بعد دفع أثاث، استمرت 20 دقيقة ولم تتكرر. ضغط الدخول 160/95. لا نفخة أو احتكاك. ECG طبيعي. تروبونين I عند الدخول 0.02، الذروة 0.05 (الحد الأعلى للمئوية 99=0.04). وظيفة الكلى طبيعية.
+      <p style="margin-top:6px"><strong>ما هي الخطوة التالية؟</strong><br>A. مضاد صفيحات/تخثر + قسطرة خلال 24 ساعة.<br>B. مضاد صفيحات/تخثر + قسطرة خلال 72 ساعة.<br>C. اختبار جهد قبل الخروج لتحديد الخطورة.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: A.</strong> أي ارتفاع في التروبونين يتجاوز المئوية 99 مع نمط ارتفاع وهبوط، في سياق ذبحة صدرية، وغياب مرض غير قلبي شديد، يُشخَّص NSTEMI (ACS). يُعالَج بمضادات التخثر واستراتيجية تداخلية أولية، وليس باختبار الجهد. وفق تجربتي TIMACS وVERDICT، القسطرة خلال 24-72 ساعة مقبولة عند GRACE&lt;140، لكن الإرشادات الأوروبية والأمريكية تُفضِّل التداخل خلال &lt;24 ساعة.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 8:</strong> رجل 47 عامًا، مدخن ومصاب بالسكري، ألم صدري حاد متقطع أثناء الراحة خلال يومين، لا يمنعه من أنشطته اليومية. الفحص: ضغط 145/92، نبض 85، لا علامات HF، لا نفخة. ECG: انقلاب موجة T سفلي 1 ملم. hs-troponin I عند الدخول غير قابل للكشف (&lt;0.005).
+      <p style="margin-top:6px"><strong>ما هي الخطوة التالية؟</strong><br>A. اختبار جهد بالمستشفى، الخروج مع اختبار جهد خارجي غير مقبول.<br>B. اختبار جهد بالمستشفى، أو الخروج مع اختبار جهد خارجي خلال 72 ساعة مقبول.<br>C. قسطرة تاجية.<br>D. الخروج مع مراجعة عيادية خلال أسبوع، العمل الإضافي يُحدَّد لاحقًا حسب الأعراض.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: D.</strong> عوامل الخطر مثل التدخين والسكري ترفع الاحتمالية العامة لCAD لكنها لا ترفع احتمال ACS بشكل كبير عند مريض يعاني من ألم صدري حاد. العوامل الحاسمة هنا: (1) التروبونين غير القابل للكشف يجعل ACS غير مرجح، (2) انقلاب الموجة T&lt;3 ملم غير تشخيصي، (3) توقيت الألم غير نمطي. الخروج المبكر من المستشفى مناسب. يمكن عمل اختبار جهد لاحقًا، لكن ليس ضروريًا مع التروبونين غير القابل للكشف والأعراض غير النمطية.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 9:</strong> امرأة 56 عامًا، تاريخ PCI مع دعامة في RCA قبل 8 أشهر. نوبة واحدة من ألم صدري شبيه بذبحتها السابقة، حدثت أثناء الراحة قبل يومين، استمرت 20 دقيقة، لم تتكرر. ECG: LVH مع نمط إجهاد وموجات Q سفلية. تروبونين متسلسل كله &lt;0.04. كرياتينين طبيعي.
+      <p style="margin-top:6px"><strong>ما هي الخطوة التالية؟</strong><br>A. قسطرة خلال 72 ساعة.<br>B. قسطرة خلال 24 ساعة.<br>C. اختبار جهد بعد 3-6 ساعات من الحضور.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: C.</strong> في حال وجود تاريخ سابق لوضع دعامة، فإن عودة الألم النمطي خلال 6-12 شهرًا من الإجراء تقتضي اتباع استراتيجية غازية أولية. لكن هنا، الألم الحالي ليس نمطيًا إجهاديًا، بل هو ألم راحي، مع تروبونين سلبي وتخطيط قلب غير نوعي. في النساء مع تروبونين سلبي، بدون تغيرات ST ودرجة خطر TIMI منخفضة، فإن الاستراتيجية الغازية الأولية ترتبط بزيادة خطر الوفاة/احتشاء؛ بالتالي، يُفضَّل القيام باختبار إجهاد أولاً.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 10:</strong> بالمقارنة مع الرجال، النساء المصابات بACS — (قد تكون هناك إجابات متعددة صحيحة): A. معدل وفيات أعلى بالمستشفى. B. أقل استفادة من استراتيجية تداخلية مبكرة. C. أمراض مصاحبة أقل. D. نسبة أعلى من CAD غير انسدادي ومرض أقل شدة وانتشارًا. E. خطر نزيف أعلى. F. عبء إقفاري أعلى رغم انخفاض انتشار وشدة CAD.
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: A, B, D, E, F.</strong> النساء مع ACS لديهن معدل وفيات بالمستشفى أعلى، استفادة أقل من استراتيجية غازية مبكرة، نسبة أعلى من CAD غير انسدادي وأمراض أقل امتدادًا، خطر نزيف أعلى، وعبء إقفاري أعلى رغم انتشار وامتداد CAD أقل. الإجابة C خاطئة لأن النساء لديهن عادة المزيد من الأمراض المرافقة مثل السكري وفشل القلب الانبساطي.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 11:</strong> امرأة 56 عامًا، ضغط صدري شديد استمر ساعتين. ECG: انقلاب عميق للموجة T عبر كل المساري الصدرية. ضغط الدخول 190/105. تروبونين يرتفع إلى 2.5. القسطرة: لويحات بسيطة فقط (&lt;25%).
+      <p style="margin-top:6px"><strong>التشخيص التفريقي المحتمل</strong> (إجابات متعددة): A. تمزق لويحة مثبَّت. B. تشنج تاجي. C. تاكوتسوبو. D. التهاب العضلة/التامور. E. الانصمام الرئوي. F. أزمة فرط ضغط مع ارتفاع LVEDP وعدم توازن إقفاري. G. عدم توازن بسبب فقر دم أو تسرع نظم.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: A, B, C, D.</strong> لمريضة بألم صدري شديد مع تغيرات T عميقة، تروبونين مرتفع، وقسطرة تُظهر لويحات بسيطة فقط، يشمل التشخيص التفريقي: تمزق لويحة مستقر، تشنج وعائي تاجي، اعتلال تاكوتسوبو القلبي، والتهاب عضلة القلب/التامور.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 12:</strong> للمريضة بالسؤال 11، ما الفحص الأكثر فائدة لإثبات التشخيص؟ A. الرنين المغناطيسي القلبي. B. IVUS. C. الإيكو.
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: A.</strong> يُفضَّل استخدام MRI: إذا ظهر LGE بنمط لا يتماشى مع إمداد شرياني (subepicardial أو mid-wall) يشير لالتهاب عضلة القلب؛ إذا ظهر بنمط شرياني (subendocardial أو transmural) يشير لاحتشاء؛ في حال عدم وجود أي تحميل متأخر، يُرجَّح تاكوتسوبو. IVUS وOCT قد يكشفان التمزق الصغير في اللويحة إذا لم يكن MRI كافيًا.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 13:</strong> رجل 62 عامًا، ذبحة مع تروبونين 0.12. ECG: انخفاض ديناميكي 1 ملم جانبي. بدأ مضاد صفيحات/تخثر. القسطرة: آفة ضبابية 40% بمنتصف RCA، تدفق TIMI 3، لا مركزية بحواف متدلية (مطابقة للشكل 1.9، الملحق 1). لا أمراض أخرى مهمة.
+      <p style="margin-top:6px"><strong>ما هي الخطوة التالية؟</strong><br>A. PCI على الآفة الضبابية.<br>B. FFR للـRCA.<br>C. IVUS للـRCA.<br>D. متابعة العلاج الطبي فقط (الآفة &lt;50%).</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: C.</strong> في حالات ACS، من الضروري التأكد مما إذا كانت اللويحة الظاهرة في القسطرة غير انسدادية بالفعل أم لا. مثلاً، تضيق بنسبة 40-50% يبدو غامضًا مع حدود غير منتظمة أو بارزة قد يكون في الحقيقة غير مستقر وأكثر انسدادًا مما يظهر في القسطرة، ويمكن تقييم ذلك بدقة باستخدام IVUS.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 14:</strong> امرأة 66 عامًا، ألم صدري شديد بدأ قبل ساعتين، مستمر، لم يخف مع NTG. ضيق شديد، تعرق غزير، غثيان شديد. ضغط 165/90، نبض 90، تشبع أكسجين 100%. الفحص: لا HF، لا احتكاك، ضغط متساوٍ بالذراعين، بطن لين. ECG طبيعي. التروبونين الأولي قابل للكشف لكن دون حد MI.
+      <p style="margin-top:6px"><strong>ما هي الخطوة التالية؟</strong><br>A. الألم على الأرجح غير قلبي (ECG طبيعي أثناء الألم)، احتمال ACS منخفض، تروبونين متسلسل ثم اختبار جهد لاحقًا.<br>B. الألم على الأرجح قلبي حسب الصفات السريرية: مورفين+ميتوبرولول+مضاد تخثر، ثم قسطرة خلال 24 ساعة.<br>C. الألم على الأرجح قلبي: صورة صدر، ثم قسطرة عاجلة.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: C.</strong> حوالي 40-45% من حالات الانسداد الحاد في LCx لا تُظهر أي تغيرات ملحوظة في ST أو T على ECG — أي قد يكون التخطيط طبيعيًا بالرغم من وجود انسداد تاجي خطير. تقريبًا 20% من NSTEMI لديها انسداد تاجي كامل (غالبًا LCx أو RCA)، وتُسمى "معادلات STEMI". أول تحليل تروبونين قد يكون سلبيًا مما يؤخر التشخيص. العلامات الواجب الانتباه لها: (1) استمرار ألم لا يُفسَّر (مع استبعاد تسلخ الأبهر، الانثقاب الهضمي)؛ (2) ECG بأقطاب خلفية (V7-V9)؛ (3) تكرار ECG كل 10 دقائق. حتى لو كان ECG الخلفي طبيعيًا، إذا كان هناك اشتباه سريري قوي، يجب التعامل مع الحالة كاحتشاء حاد وإجراء قسطرة عاجلة. يُجرى أيضًا صورة صدر لنفي استرواح الصدر، تسلخ الأبهر، أو هواء تحت الحجاب. لا يُنصح بإعطاء المورفين لأنه قد يُخفي استمرار ألم الذبحة ويُعطي شعورًا زائفًا بالاطمئنان.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 15:</strong> رجل 70 عامًا، سكري معتمد على الإنسولين، ألم صدري مع انخفاض ST سفلي ديناميكي. تروبونين I=0.55. حاليًا بلا ألم. تسرع جيبي 105، ضغط 110/75.
+      <p style="margin-top:6px"><strong>ما هو العلاج المناسب؟</strong><br>A. أسبرين+كلوبيدوغريل+GPI+UFH، قسطرة خلال 24 ساعة.<br>B. أسبرين+UFH، قسطرة خلال 72 ساعة.<br>C. أسبرين+UFH، قسطرة خلال 24 ساعة.<br>D. أسبرين+كلوبيدوغريل+UFH، قسطرة خلال 24 ساعة.<br>E. أسبرين+كلوبيدوغريل+ميتوبرولول+UFH، قسطرة خلال 24 ساعة.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: D.</strong> لا يُبرَّر إعطاء مثبطات GP IIb/IIIa قبل القسطرة، سواء أُعطي كلوبيدوغريل مسبقًا أم لا — دراسات ACCOAST وISAR-REACT 5 وسجل SCAAR أظهرت أن إعطاء مثبطات ADP مسبقًا لم يُحسِّن النتائج. نظرًا لأن القسطرة ستتم خلال أقل من 12-24 ساعة، فإن الهيبارين أفضل من الإينوكسابارين. المريض يعاني من تسرع قلب وضغط دم منخفض نسبيًا (&lt;120)، أي في حالة ما قبل الصدمة، فلا يُعطى ميتوبرولول في أول 24 ساعة.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 16:</strong> امرأة 70 عامًا، NSTEMI. القسطرة: تضييقات متوسطة عدة في LAD وRCA. قرر الطبيب الإدارة الطبية (بدون PCI).
+      <p style="margin-top:6px"><strong>ما هو أفضل نظام مضاد صفيحات طويل الأمد؟</strong><br>A. أسبرين فقط (لم يُجرَ PCI).<br>B. أسبرين+كلوبيدوغريل لسنة.<br>C. أسبرين+تيكاغريلور لسنة.<br>D. أسبرين+براسوجريل لسنة.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: C (وB خيار مقبول أيضًا).</strong> المرجَّح أن المريضة كانت لديها لويحة تمزقت في أحد تضيقات الشرايين المعتدلة، مما أدى لتشكل خثرة وميكروصمات. استقرت الحالة مع العلاج المضاد للصفيحات. كلوبيدوغريل (CURE) وتيكاغريلور (PLATO) أظهرا فائدة في المرضى المعالَجين طبيًا، مع تفوق تيكاغريلور من حيث تقليل الوفاة واحتشاء العضلة القلبية. براسوجريل لا يُستعمَل في الحالات المعالَجة طبيًا، بل فقط في حالات PCI (TRILOGY-ACS).</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 17:</strong> امرأة 52 عامًا، ألم صدري، ECG: انقلاب 2 ملم بالموجة T الجانبية، تروبونين I=0.14. عند الدخول: كلوبيدوغريل 300، أسبرين 325، هيبارين 4000 وحدة بالتنقيط. القسطرة باليوم التالي: تضيق 95% بمنتصف RCA.
+      <p style="margin-top:6px"><strong>أفضل معالجة دوائية مرافقة لـPCI؟</strong><br>A. هيبارين فقط.<br>B. بيفاليرودين.<br>C. هيبارين+GPI.<br>D. هيبارين أو بيفاليرودين، وبدء تيكاغريلور بدل كلوبيدوغريل.<br>E. بيفاليرودين، وبدء تيكاغريلور بدل كلوبيدوغريل.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: D.</strong> استخدام مثبطات GP IIb/IIIa خلال PCI لا يُعطي فائدة واضحة إلا في الحالات الاضطرارية. تيكاغريلور يقلل الأحداث الإقفارية والوفيات أكثر من كلوبيدوغريل بعد ACS. أظهرت الدراسات أن الهيبارين فعّال وآمن مثل بيفاليرودين عند استخدام الوصول الشعاعي مع استخدام محدود ومتوازن لمثبطات GPI.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 18:</strong> (I) هل يجب أن تتلقى مريضة السؤال 16 (NSTEMI، مُعالَجة طبيًا بعد القسطرة دون PCI) مضادًا للتخثر بعد القسطرة؟ (II) هل يجب أن يتلقى مريض السؤال 17 (خضع لـPCI) مضادًا للتخثر بعد PCI؟
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: (1) نعم، (2) لا.</strong> المرضى بنوبة NSTEMI بدون PCI يحتاجون إلى مضادات تخثر على الأقل لمدة 48 ساعة بعد القسطرة (مثلاً UFH بجرعة منخفضة، بدون bolus). في المقابل، المرضى الذين خضعوا لPCI يُوقَف عنهم مضاد التخثر مباشرة بعد الإجراء (باستثناء بيفاليرودين الذي يمكن تمديد تسريبه 1-4 ساعات بعد PCI). إذا تم إعطاء GPI خلال PCI، يمكن تمديده حتى 24 ساعة.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 19 و20:</strong> أسئلة تفصيلية حول تيكاغريلور وبراسوجريل (توصيات ESC، دواعي الاستخدام، خطر النزيف، المقارنة المباشرة).
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: كل الخيارات المطروحة في كلا السؤالين صحيحة</strong> — تيكاغريلور يقلل الوفيات في ACS سواء المُدار تداخليًا أو تحفظيًا ويمكن إعطاؤه قبل القسطرة؛ هو مضاد عكسي لمستقبلات ADP لكن نصف عمره 15 ساعة يُطيل تأثيره لـ3-4 أيام؛ خطره النزفي (غير المرتبط بCABG) أعلى من كلوبيدوغريل لكن لا يتفاقم بوضوح بالمسنين أو أصحاب السكتة السابقة؛ براسوجريل يُستخدم فقط في مرضى PCI (يُحمَّل بعد القسطرة، إلا في STEMI)، يقلل معدل MI لكن ليس الوفيات إلا في STEMI (واتجاه لتقليلها بالسكري)، ويحمل خطر نزيف مفرط بالمسنين أو أصحاب السكتة السابقة. كلا الدواءين مفضَّلان على كلوبيدوغريل في ACS (Class I، ESC)، ومفيدان بشكل خاص بالحالات عالية الخطورة، مع وجوب الانتباه لخطر النزيف بالمسنين خاصة مع براسوجريل.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 21:</strong> رجل 56 عامًا، NSTEMI، دعامة معدنية عارية (BMS) بمنتصف RCA. لا تاريخ نزيف. EF طبيعي.
+      <p style="margin-top:6px"><strong>بالإضافة للأسبرين مدى الحياة، ما المعالجات المناسبة؟</strong> (إجابات متعددة): A. كلوبيدوغريل لشهر واحد. B. كلوبيدوغريل أو تيكاغريلور لسنة. C. كلوبيدوغريل أو براسوجريل أو تيكاغريلور لسنة. D. النظر في استمرار كلوبيدوغريل المزمن بعد السنة الأولى إذا كان خطر النزيف منخفضًا. E. ميتوبرولول مدى الحياة بجرعات متوسطة-عالية. F. ميتوبرولول لسنة واحدة بجرعات متوسطة.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: C, D, F.</strong> بغض النظر عن نوع الدعامة، مرضى NSTEMI يجب أن يستمروا على عالج مضاد ADP لمدة سنة كاملة. بعد سنة، تشير تجربة DAPT إلى إمكانية استمرار العلاج الثنائي لدى المرضى منخفضي خطر النزيف، خصوصًا إذا كان لديهم تاريخ MI. إذا كانت EF طبيعية، فإن الميتوبرولول لا يُظهر فائدة واضحة بعد مرور سنة من MI.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 22:</strong> امرأة 42 عامًا، مدخنة، ذبحة شديدة أثناء الراحة. ECG: انقلاب منتشر بالموجة T. تروبونين I ذروته 2. القسطرة: تضيق طويل (~35 ملم)، ناعم، غير متكلس، 70% بمنتصف RCA. الشرايين متعرجة.
+      <p style="margin-top:6px"><strong>ما هي الآلية المرجَّحة؟</strong> A. تشنج تاجي. B. تمزق لويحة. C. تآكل لويحة. D. SCAD.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: D.</strong> المظهر الأملس بالقسطرة، بالإضافة للعمر والجنس (أنثى صغيرة)، يشير لاحتمالية تشنج تاجي، تآكل لويحي، أو SCAD. لكن الطول الكبير للتضيق مع وجود شرايين متعرجة يُرجِّح بشدة تشخيص SCAD.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 23:</strong> ما الخطوة التالية لمريضة السؤال 22؟ A. دعامة مباشرة. B. NTG ثم دعامة مباشرة. C. NTG ثم علاج تحفظي. D. NTG ثم OCT ثم دعامة مباشرة.
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: C.</strong> رغم أن OCT يمكن أن يكشف خصائص تآكل اللويحة وتمزق الشريان التاجي، فإن الاشتباه بSCAD يستدعي تجنب أي تلاعب داخل الشريان (بما في ذلك OCT)، لأن أي تلاعب قد يزيد من خطر انتشار الورم الدموي الجداري. طالما الجريان محفوظ والمرض غير انسدادي، يُفضَّل علاج SCAD بشكل تحفظي بدون PCI، لأن معظم الحالات (70-97%) تلتئم تلقائيًا خلال 1-2 شهر.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 24:</strong> رجل 55 عامًا، ارتفاع ضغط غير معالَج، ألم صدري وضيق نفس. ضغط الدخول 220/120. الألم والضغط لا يتحسنان مع NTG، يحتاج نيكارديبين وريدي 24 ساعة + أدوية عدة. ECG: LVH مع نمط إجهاد. تروبونين الأولي 0.08، الذروة 0.6. كرياتينين 1.5. الإيكو: LVH مع خلل انقباضي بسيط وارتفاع ضغط الأذين الأيسر.
+      <p style="margin-top:6px"><strong>التشخيص والخطوة التالية؟</strong><br>A. MI نوع 1 بسبب تمزق لويحة، استراتيجية تداخلية مبكرة.<br>B. MI نوع 2 بسبب ارتفاع الضغط الشديد، التحكم بالضغط أولاً ثم اختبار جهد بعد السيطرة وزوال الألم.</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: B.</strong> استمرار ارتفاع الضغط رغم محاولات خفضه يشير إلى فرط ضغط خبيث كسبب أساسي للألم وارتفاع التروبونين، وليس ACS. فرط التوتر يسبب عبئًا إقفاريًا وارتفاعًا بسيطًا بالتروبونين (&lt;1 نانوغرام/مل).</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>السؤال 25:</strong> نفس سيناريو السؤال 24، لكن الضغط 190/110، وبعد قرصي NTG زال الألم وانخفض الضغط إلى 145/85. تروبونين الأولي 0.04، الذروة 0.15.
+      <p style="margin-top:6px"><strong>التشخيص والخطوة التالية؟</strong> (نفس خياري السؤال 24)</p>
+      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة: A.</strong> بعكس الحالة السابقة، الانخفاض السريع للضغط بعد إعطاء NTG يشير إلى أن ارتفاع الضغط كان ثانويًا للإقفار القلبي وليس السبب الأساسي له. حتى الارتفاع الطفيف في التروبونين هنا يدعو للقلق من وجود ACS وتمزق لويحة، مما يتطلب استراتيجية غازية مبكرة.</p>
+    </div>
+  </section>
+
+  <div class="topic-divider" id="topic2">
+    <span class="tnum">القسم 2</span>
+    <h2>احتشاء عضلة القلب مع ارتفاع مقطع ST (ST-Segment Elevation Myocardial Infarction, STEMI)</h2>
+  </div>
+
+  <!-- ============ I. التعريف ============ -->
+  <section class="roman" id="c1t2s1">
+    <div class="roman-head"><div class="roman-badge">I</div><h2>التعريف (Definition)</h2></div>
+
+    <p>احتشاء عضلة القلب مع ارتفاع مقطع ST (STEMI) هو متلازمة سريرية تتظاهر بـ: ألم الذبحة الصدرية أو ما يعادله (مثل ضيق النفس المفاجئ، الغثيان، التعرق، أو ألم الصدر غير النمطي)، مع واحد مما يلي:</p>
+    <ol>
+      <li><strong>ارتفاع مقطع ST في ECG:</strong> ≥2 ملم عند الرجال أو ≥1.5 ملم عند النساء في المشتقات V2-V3، أو ≥1 ملم في اثنين من المشتقات الصدرية أو الطرفية المتجاورة، وذلك بشرط أن يكون لشكل هذا الارتفاع مظهر متوافق مع نقص التروية (ischemic ST elevation).</li>
+    </ol>
+    <div class="callout warn">
+      <b>يجب التفريق</b> بين هذا الارتفاع وبين التغيرات الشبيهة به مثل: الارتفاع المبكر لإعادة الاستقطاب (early repolarization)، التهاب التامور (pericarditis)، أو الارتفاع الناتج عن ضخامة البطين الأيسر (LVH) أو الحصار الكامل للحزمة اليسرى (LBBB). في حال الشك، يمكن اللجوء إلى الإيكو الطارئ أو قسطرة الشرايين التاجية لتأكيد التشخيص.
+    </div>
+    <ol start="2">
+      <li><strong>انخفاض مقطع ST البارز أو المعزول في المشتقات V1-V3 ≥0.5 ملم:</strong> هذا يمثل تغيرًا انعكاسيًا لنقص التروية الخلفي (posterior ST elevation) الظاهر في المشتقات الخلفية V7-V9. وفي هذه المشتقات الخلفية، الحد الأدنى لاعتبار الارتفاع هامًا هو فقط ≥0.5 ملم، لأن الموقع البعيد لهذه المشتقات خلف القلب يقلل من شدة الارتفاع المسجل.</li>
+    </ol>
+    <p>حتى لو كان ارتفاع مقطع ST أقل من هذه العتبات، قد يُعتبر ذلك دليلاً على أذية قلبية إذا كان السياق السريري أو شكل مقطع ST يوحي بنقص تروية. في هذه الحالات، قد تُعطى المعالجة الطارئة (عادة بالقسطرة PCI)، لكن التحليل بالأدوية الحالّة للخثرة (thrombolysis) ليس مثبتًا في حالات الارتفاع الطفيف (&lt;1 ملم). بالمقابل، قد لا يعني تجاوز هذه العتبات تلقائيًا وجود STEMI، لذا يجب الانتباه بدقة إلى شكل مقطع ST والخصائص المرافقة مثل الموجة Q والموجات T المعكوسة أو المرتفعة بشكل كبير.</p>
+
+    <h3 class="subhead">الاختلافات مع NSTEMI</h3>
+    <p>عادة ً يتطور STEMI إلى احتشاء قلبي بوجود موجات Q (Q-wave MI)، وهو غالبًا احتشاء عميق عبر الجدار (transmural) وكبير الحجم. بالمقابل، NSTEMI غالبًا يتطور إلى احتشاء بدون موجات Q (non-Q-wave MI)، ويكون غالبًا احتشاءً تحت الشغاف (subendocardial) وأصغر حجمًا.</p>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch1-part3.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 3</a>
+    <a href="practical-ch1-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch1-part5.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 5: STEMI — إعادة التروية والمضاعفات ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 1، الجزء 4
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

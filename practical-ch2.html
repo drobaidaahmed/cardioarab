@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 2: قصور القلب | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a;
+    --bg2:#0f1524;
+    --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98);
+    --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e;
+    --panel2:#0d1526;
+    --border:#1e2c47;
+    --teal:#2dd4bf;
+    --teal-dim:#1a7f74;
+    --gold:#fbbf24;
+    --text:#e6ecf5;
+    --text-dim:#93a2bd;
+    --text-dimmer:#5f7093;
+    --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb;
+    --bg2:#eef1f8;
+    --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98);
+    --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff;
+    --panel2:#eef1f8;
+    --border:#e1e6f0;
+    --teal:#0d9488;
+    --teal-dim:#14ceb0;
+    --gold:#a8791f;
+    --text:#1b2434;
+    --text-dim:#4b5568;
+    --text-dimmer:#556070;
+    --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text);
+    font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9;
+    font-size:16px;
+    padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+    padding:14px 20px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس Practical</a>
+
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>محتويات الفصل 2</h3>
+  <div class="chgroup">
+    <span class="chtitle">الفصل 2 — قصور القلب</span>
+    <a href="#c2s1">I. التعريف والتصنيف السريري</a>
+    <a href="#c2s2">II. الأنواع حسب الإيكو (HFrEF‏/‏HFpEF‏/‏HFmrEF) والقصور الأيمن</a>
+    <a href="#c2s3">III. الفحوصات التشخيصية</a>
+    <a href="#c2s4">IV. علاج قصور القلب الانقباضي المزمن</a>
+    <a href="#c2s5">V. الأجهزة العلاجية، تدابير أخرى، والتنبؤ</a>
+    <a href="#c2s6">VI. قصور القلب الحاد: المحفزات والأنماط السريرية</a>
+    <a href="#c2s7">VII. علاج قصور القلب الحاد</a>
+    <a href="#c2s8">VIII. اعتلالات عضلة القلب النوعية</a>
+    <a href="#c2s9">IX. القصور القلبي المتقدم: الزرع وأجهزة المساعدة البطينية</a>
+    <a href="#c2s10">X. الفيزيولوجيا المرضية لقصور القلب</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الثاني</span>
+    <h1>قصور القلب</h1>
+  </div>
+  <span class="chapno">2</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab</span>
+    <h2>الفصل 2: قصور القلب</h2>
+  </div>
+
+  <div class="chapter-divider" id="chapter2">
+    <div class="num">2</div>
+    <div class="txt">
+      <span class="eyebrow">الفصل الثاني</span>
+      <h2>قصور القلب</h2>
+      <span class="authors">قصور القلب المزمن والحاد، اعتلالات عضلة القلب النوعية، والفيزيولوجيا المرضية</span>
+    </div>
+  </div>
+
+  <!-- ============ I. DEFINITION & CLINICAL CLASSIFICATION ============ -->
+  <section class="roman" id="c2s1">
+    <div class="roman-head"><div class="roman-badge">I</div><h2>التعريف والتصنيف السريري</h2></div>
+    <p>يُعرَّف قصور القلب بأنه متلازمة سريرية من العلامات والأعراض تشير إلى <strong>الاحتقان (Congestion)</strong> و/أو <strong>انخفاض النتاج القلبي (Low Output)</strong>، ويُدعَّم هذا التشخيص بدليل موضوعي على خلل في وظيفة القلب — أي أن قصور القلب <strong>يُشخَّص سريريًا وليس فقط بالإيكو</strong>. الدليل الموضوعي المطلوب يشمل أحد ما يلي:</p>
+    <ul>
+      <li>ارتفاع BNP أو NT-proBNP</li>
+      <li>دليل على خلل انقباضي أو انبساطي في الإيكو</li>
+      <li>أو ارتفاع ضغط الأذين الأيسر</li>
+    </ul>
+
+    <h3 class="subhead">أ. العلامات السريرية الدالة على الاحتقان (Congestive Findings)</h3>
+    <ul>
+      <li><strong>ضيق النفس عند الاستلقاء (Orthopnea) وضيق النفس الليلي الانتيابي (PND):</strong> علامتان مميزتان نسبيًا لقصور القلب، تنتجان عن زيادة العود الوريدي عند الاستلقاء مما يرفع الضغط في الشعيرات الرئوية. بعض المرضى لا يصفون "ضيق النفس" صراحة بل يعانون من كحة جافة أو صفير ليلي؛ الكحة الجافة أثناء الاستلقاء قد تكون مرادفًا لـ orthopnea ويجب أن تثير الشك بفشل القلب.</li>
+    </ul>
+    <div class="card">
+      <strong>اختبار Orthopnea:</strong> يُطلب من المريض الاستلقاء بشكل مستوٍ لمدة 1–2 دقيقة. ملاحظة: قد يظهر orthopnea أيضًا في السمنة وأمراض الرئة المتقدمة (مثل COPD) مع تسطّح الحجاب الحاجز.
+      <br><br><strong>ملاحظات عن PND:</strong> في قصور القلب يُخفَّف بالجلوس أو الوقوف؛ في COPD ناتج عن إفراز المخاط ويُخفَّف بالكحة أو الألبوتيرول؛ في الربو الليلي ناتج عن التشنج القصبي ويُخفَّف بالألبوتيرول.
+    </div>
+    <ul>
+      <li><strong>ضيق النفس أثناء الجهد (Exertional Dyspnea):</strong> قد يحدث حتى دون وذمة رئوية واضحة أو نقص أكسجين واضح، بسبب زيادة الضغط في الشعيرات الرئوية أثناء الجهد مما يسبب تصلبًا في الرئة وانخفاضًا في السعة الحيوية. قد ينجم أيضًا عن ضعف زيادة النتاج القلبي عند الجهد، وتعب العضلات الطرفية والتنفسية، ونقص التروية الرئوية وزيادة "الفراغ الميت" (Dead Space).</li>
+    </ul>
+    <div class="callout info">
+      <b>ملاحظة عملية:</b> مدرات البول لا تحسّن دائمًا ضيق النفس الجهدي، خصوصًا في غياب وذمة واضحة. وفي بعض مرضى قصور القلب يوصف ضيق النفس بـ"ضغط في الصدر"، لكنه ليس دائمًا ناتجًا عن مرض الشرايين التاجية (CAD).
+    </div>
+    <ul>
+      <li><strong>Bendopnea:</strong> ضيق نفس يحدث خلال 15 ثانية من الانحناء للأمام (كربط الحذاء) — علامة نوعية جدًا لارتفاع ضغط الأذين الأيمن أو الضغط الشعري الرئوي (PCWP).</li>
+      <li><strong>زيادة أو نقصان سريع في الوزن:</strong> يشير إلى احتباس أو فقدان سريع للسوائل.</li>
+      <li><strong>الخرخرات / الوذمة الرئوية / الانصباب الجنبي:</strong> ملاحظة مهمة — تغيب الخرخرات في 80% من حالات فشل القلب المزمن المتفاقم حتى مع ارتفاع كبير في الضغط الشعري الرئوي، لأن الجهاز اللمفاوي يصرّف السوائل من الحويصلات ويمنع ظهور وذمة رئوية واضحة.</li>
+      <li><strong>ارتفاع ضغط الوريد الوداجي (JVP ≥ 8 سم H₂O):</strong> يُفحص برؤية موجات نبض الوريد الوداجي الداخلي أو الخارجي.</li>
+    </ul>
+    <div class="card point-num">
+      <strong>اختبار الارتجاع الكبدي الوداجي (Hepatojugular Reflux):</strong> ضغط على الربع العلوي الأيمن من البطن لأكثر من 10 ثوانٍ خلال التنفس الطبيعي. نتيجة إيجابية = ارتفاع ثابت ≥ 3 سم H₂O في JVP، أو انخفاض ≥ 4 سم H₂O عند رفع الضغط.
+      <br><br>📌 <strong>JVD</strong> (احتقان الوريد الوداجي) = انتفاخ الوريد الوداجي الخارجي في وضعية الجلوس، ويدل عادة على ارتفاع JVP.
+    </div>
+    <ul>
+      <li><strong>الصوت الثالث (S3):</strong> في المرضى فوق 40 سنة، علامة نوعية جدًا (~90%) لارتفاع PCWP لكنها غير حساسة.</li>
+      <li><strong>الصوت الثاني الرئوي (P2) الصاخب:</strong> يشير لفرط ضغط الدم الرئوي ← يوحي بفشل قلب أيسر. عادةً يكون P2 خافتًا يُسمع فقط في الحافة العلوية اليسرى للقص؛ فإذا كان مرتفعًا يظهر كـ"S2 صاخب ومنقسم".</li>
+      <li><strong>الصوت الرابع (S4):</strong> أقل نوعية لارتفاع PCWP، لكنه قد يظهر في فشل البطين الأيسر المعوَّض.</li>
+      <li><strong>الوذمة المحيطية ± الحبن؛ تضخم الكبد الاحتقاني</strong> (وقد يكون نابضًا في حال قلس ثلاثي الشرف الشديد)، ونادرًا تضخم الطحال الاحتقاني في حالات الفشل المطوَّلة. يلزم أكثر من 4 لترات من فرط الحجم لرؤية الوذمة المحيطية، لذا فهي غير حساسة وقد تغيب في 60% من المرضى ذوي الضغط الشعري الرئوي المرتفع؛ كما أن الوذمة الرئوية كثيرًا ما تنتج عن إعادة توزيع الحجم إلى الرئتين لا عن فرط حجم فعلي. مع ذلك، تُعد الوذمة علامة محددة (specific) لقصور القلب لدى مريض يشكو ضيق نفس. <em>على عكس التهاب التامور الانقباضي، يكون الكبد ضامرًا (لا احتقانيًا) في استسقاء التليف الكبدي.</em></li>
+      <li><strong>الاحتقان في صورة الصدر (X-ray):</strong> محدودة كذلك في قصور القلب المزمن، إذ يمنع التصريف اللمفاوي ظهور وذمة سنخية أو خلالية واضحة لدى الغالبية. أكثر العلامات حساسية: توجّه الأوعية الرئوية نحو القمة (cephalization)، الانصباب الجنبي، والاحتقان حول بوابة الرئة (perihilar engorgement) — لكن قد لا تظهر أي علامة احتقانية في ~40% من المرضى ذوي PCWP مرتفع.</li>
+      <li><strong>التصوير الطبقي المحوسب (CT):</strong> أكثر فائدة؛ سماكة الحواجز بين الفصوص (interlobular septal thickening) علامة شديدة الحساسية والنوعية لارتفاع الضغط الشعري الرئوي.</li>
+      <li><strong>الخطوط B بالإيكو الرئوي (Lung Ultrasound):</strong> فحص الحقول الرئوية بمسبار بين الأضلاع؛ يظهر السائل الرئوي كخطوط بيضاء عمودية (شبيهة بشعاع مصباح يدوي) — علامة شديدة الحساسية والنوعية للوذمة الرئوية، وتتفوق على الصورة الشعاعية، خاصة عند ظهور ≥3 خطوط في كل لقطة بشكل ثنائي الجانب (تُفحص 4–6 مناطق في كل رئة). كلما زاد عدد الخطوط، وخصوصًا في الفصوص العلوية، زادت شدة الوذمة الرئوية؛ الرئة الطبيعية (هواء كثير وماء قليل) لا تُظهر خطوط B.</li>
+    </ul>
+    <div class="callout gold">
+      <b>خلاصة عملية:</b> يتطلب التشخيص السريري لقصور القلب وجود علامة احتقانية واحدة إلى اثنتين مع عرض سريري واحد على الأقل. العلامات الاحتقانية الأكثر موثوقية: orthopnea، ارتفاع JVP، الصوت الثالث S3، وزيادة سريعة ومتأخرة في الوزن. ارتفاع JVP أثناء الراحة أو مع جذر كبدي وداجي إيجابي هو الأكثر حساسية ونوعية (>80%) لتشخيص ارتفاع الضغوط الانبساطية القلبية اليمنى واليسرى (PCWP) معًا.
+    </div>
+
+    <h3 class="subhead">ب. علامات انخفاض النتاج القلبي (Low-Output Findings)</h3>
+    <p>تُعرف أيضًا بعلامات "البرودة" (Cold Signs)، وترتبط عادةً بمرحلة أكثر تقدمًا من فشل القلب:</p>
+    <ul>
+      <li><strong>الإرهاق الشديد:</strong> نتيجة انخفاض التروية العامة للأنسجة.</li>
+      <li><strong>ضيق فرق الضغط النبضي (Pulse Pressure):</strong> بما أن فرق الضغط النبضي يتناسب مع حجم الضربة القلبية (Stroke Volume)، فإن فرق ضغط نبضي ضيق (<25% من الضغط الانقباضي SBP) أو ضغط انقباضي عند الحد الأدنى يشير إلى حجم ضربة منخفض. يُعتبر هذا العلامة السريرية الأكثر دقة في التنبؤ بانخفاض النتاج القلبي (>85% حساسية ونوعية)، إلا أن التصلب الشرياني الشديد قد يمنع ضيق فرق الضغط رغم انخفاض النتاج فعليًا.</li>
+      <li><strong>تسرّع القلب التعويضي:</strong> محاولة الجسم الحفاظ على التروية رغم انخفاض النتاج القلبي.</li>
+      <li><strong>النبض المتناوب (Pulsus Alternans):</strong> تباين في شدة النبض كل نبضة أخرى — يختلف عن النبض التناقضي (Pulsus Paradoxus) الذي يمثل تباينًا تدريجيًا مع التنفس ويُشاهد عادة في اندكاك التامور (Tamponade).</li>
+      <li><strong>أطراف باردة ورطبة:</strong> نتيجة انخفاض التروية المحيطية وتحفيز الجهاز الودي.</li>
+      <li><strong>فشل كلوي، نقص صوديوم الدم، استجابة ضعيفة للمدرات:</strong> نتيجة انخفاض التروية الكلوية المزمن واحتباس السوائل.</li>
+      <li><strong>في المراحل المتقدمة:</strong> اضطراب الوعي أو ضعف الإدراك (Impaired Mentation)، النعاس (Drowsiness)، قصور التهوية المركزية بنمط تنفس شاين-ستوكس (Cheyne–Stokes) — تناوب دوري بين فرط التنفس (hyperpnea) ونقصه أو توقفه (hypopnea/apnea) — وألم بطني ناجم عن نقص تروية الأمعاء الوظيفي أو تمدد الكبد الاحتقاني.</li>
+    </ul>
+
+    <h3 class="subhead">ج. التصنيف الوظيفي (NYHA)</h3>
+    <p>تصنيف القدرة الوظيفية لمرضى فشل القلب وفق الجمعية القلبية النيويوركية:</p>
+    <table>
+      <thead><tr><th>الدرجة</th><th>الوصف</th></tr></thead>
+      <tbody>
+        <tr><td><strong>I</strong></td><td>لا توجد قيود وظيفية؛ يمكنه الجري أو حمل أكثر من 24 رطلًا (≈11 كغ) على درج</td></tr>
+        <tr><td><strong>II</strong></td><td>ظهور الأعراض عند حمل أوزان ثقيلة، أو المشي مسافتين (2 بلوك)، أو صعود درجتين</td></tr>
+        <tr><td><strong>IIIA</strong></td><td>أعراض عند المشي مسافة بلوك واحد</td></tr>
+        <tr><td><strong>IIIB</strong></td><td>أعراض مع نشاطات خفيفة كاللبس والاستحمام والمشي القصير</td></tr>
+        <tr><td><strong>IV</strong></td><td>أعراض حتى أثناء الراحة</td></tr>
+      </tbody>
+    </table>
+    <p class="tbl-caption">يُطبَّق هذا التصنيف على المريض في أكثر حالاته استقرارًا، خارج نوبات التفاقم الحاد. مع ذلك، فإن تكرار حالات الاستشفاء بسبب فشل القلب غالبًا ما يشير إلى درجة وظيفية أسوأ وإنذارًا أسوأ.</p>
+  </section>
+
+  <!-- ============ II. TYPES BY ECHO & CAUSES ============ -->
+  <section class="roman" id="c2s2">
+    <div class="roman-head"><div class="roman-badge">II</div><h2>الأنواع حسب الإيكو والقصور الأيمن</h2></div>
+    <p>بعد تشخيص قصور القلب سريريًا، يُستخدم الإيكو لتحديد ثلاثة أنواع رئيسية:</p>
+
+    <h3 class="subhead">أ. HFrEF — قصور القلب ذو الكفاءة الانقباضية المنخفضة (EF ≤ 40%)</h3>
+    <p>السبب: ضعف انقباض البطين الأيسر. الآلية: يتوسع جوف البطين الأيسر لتعويض انخفاض حجم الضربة، لكن قد يبقى الحجم طبيعيًا في القصور الانقباضي الحاد (مثل احتشاء حاد، قصور صمامي حاد، التهاب عضلة قلب حاد) — مما يسبب اضطرابًا ديناميكيًا دمويًا أشد.</p>
+
+    <h3 class="subhead">ب. HFpEF — قصور القلب ذو الكفاءة المحفوظة (EF ≥ 50%)</h3>
+    <p>السبب: خلل انبساطي — البطين غير مرن فيرتفع ضغطه الانبساطي رغم حجم امتلاء طبيعي (حجم البطين طبيعي أو صغير). يشكّل 40–50% من حالات قصور القلب.</p>
+    <div class="card point-num">
+      <strong>معايير تشخيص HFpEF (ESC) — الأربعة جميعًا مطلوبة:</strong>
+      <ol>
+        <li>أعراض أو علامات سريرية لقصور القلب</li>
+        <li>كفاءة انقباضية طبيعية (≥50%) مع حجم بطين أيسر طبيعي أو متوسع قليلًا فقط</li>
+        <li>عدم وجود ارتجاع تاجي ديناميكي هام، وعدم وجود خلل عابر بالانقباض ناتج عن نقص تروية (يُقيَّم بالإيكو الإجهادي أو خلال 72 ساعة من التفاقم)</li>
+        <li>دليل (غازي، إيكو، أو BNP) على ارتفاع ضغط الأذين الأيسر أو خلل انبساطي</li>
+      </ol>
+    </div>
+    <p>يصعب تشخيص HFpEF لدى مرضى ضيق النفس دون علامات احتقان واضحة؛ الدمج بين BNP والإيكو مفيد لكنه غير حساس بما يكفي (يُخطئ في 20–40% من الحالات). <strong>المعيار الذهبي:</strong> قياس PCWP >15 ملم زئبق بالراحة أو ≥25 ملم زئبق أثناء الجهد (قسطرة قلب يمنى مع جهد)، أو تقييم الانبساط بنسبة E/E′ وضغط الشريان الرئوي أثناء المجهود بالإيكو، أو درجة H2FPEF للتقييم السريري الافتراضي.</p>
+
+    <h4 class="subsub">علامات الخلل الانبساطي الأربع الرئيسية على الإيكو (ASE)</h4>
+    <ul>
+      <li>سرعة الحاجز E′ &lt; 7 سم/ثانية أو E′ الجانبي &lt; 10 سم/ثانية</li>
+      <li>نسبة E/E′ &gt; 14</li>
+      <li>حجم الأذين الأيسر &gt; 34 مل/م²</li>
+      <li>سرعة ارتجاع الصمام الثلاثي &gt; 2.8 م/ث (ضغط الشريان الرئوي &gt; 35 ملم زئبق)</li>
+    </ul>
+
+    <h4 class="subsub">خوارزمية ESC لتشخيص HFpEF عند ضيق نفس غير مفسَّر بدون احتقان ظاهر</h4>
+    <table>
+      <thead><tr><th>الحالة</th><th>المعطيات</th><th>الاستنتاج</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>BNP &lt;35 أو NT-proBNP &lt;125، وE/E′ &lt;14 مع 0–1 علامة انبساطية</td><td>HFpEF غير مرجّح (يمكن اللجوء لدرجة H₂FPEF أو اختبار الجهد الانبساطي أو قياسات غازية عند الشك)</td></tr>
+        <tr><td>2</td><td>BNP 35–100 أو NT-proBNP 125–300، أو علامتان انبساطيتان</td><td>احتمال متوسط / خلل انبساطي تحت سريري — يُقيَّم E/E′ وMR مع الجهد، وعند الحاجة قياسات غازية بالراحة (LVEDP&gt;16 أو PCWP&gt;15 يدعم) أو مع الجهد (PCWP≥25 يؤكد، &lt;25 ينفي)</td></tr>
+        <tr><td>3</td><td>BNP &gt;100 (أو &gt;240 مع AF) أو NT-proBNP &gt;300–400، أو 3–4 علامات انبساطية، أو H₂FPEF ≥6</td><td>HFpEF مرجّح</td></tr>
+      </tbody>
+    </table>
+    <p class="tbl-caption">درجة H₂FPEF: نقاط لكل من السمنة (BMI&gt;30)، ارتفاع ضغط يتطلب ≥2 أدوية، الرجفان الأذيني، ارتفاع الضغط الرئوي (PASP&gt;35)، العمر ≥60، وE/E′&gt;9 على الإيكو — المجموع 0–9؛ ≥6 نقاط: احتمال HFpEF &gt;90%، و2–5 نقاط: احتمال متوسط (30–70%).</p>
+
+    <h3 class="subhead">ج. HFmrEF — قصور القلب ذو الكفاءة المتوسطة (EF 40–50%)</h3>
+    <p>علاقة الضغط-الحجم في هذه الفئة حادة كما في القصور الانبساطي، لكن السبب أقرب لأسباب القصور الانقباضي. ملاحظة: مرضى EF&lt;40% يعانون غالبًا أيضًا من درجات متفاوتة من ضعف الامتلاء الانبساطي — أي أن القصور الانقباضي يتضمن خللًا انبساطيًا وانقباضيًا معًا؛ لكن مصطلح "القصور الانبساطي" لا يُستخدم إلا مع كفاءة انقباضية محفوظة.</p>
+
+    <h3 class="subhead">د. قصور القلب الناتج عن أمراض صمامية شديدة</h3>
+    <p>وظيفة البطين الأيسر طبيعية في البداية، لكن معظم أمراض الصمامات اليسرى (باستثناء تضيق الميترال) تؤدي مع الوقت لخلل انقباضي وانبساطي معًا. القصور المتقدم منخفض النتاج يُشاهد غالبًا مع ضعف الانقباض، لكن قد يحدث أيضًا في الاعتلال التحددي (كالداء النشواني) أو في HFpEF المصحوب بقصور أيمن شديد.</p>
+
+    <h3 class="subhead">هـ. النوعان الإضافيان: عالي النتاج، وقصور أيمن معزول</h3>
+    <p><strong>قصور القلب عالي النتاج (High-output HF):</strong> خصوصًا لدى مرضى السمنة المفرطة (يتداخل مع نمط HFpEF) — ارتفاع في ضغوط الامتلاء اليسرى ± اليمنى مع مؤشر قلبي في الحد الأعلى للطبيعي أو مرتفع (&gt;3.5–4 لتر/دقيقة/م²). أسباب شائعة: السمنة المرضية، فقر الدم، أمراض الرئة المزمنة. EF غالبًا طبيعي أو منخفض بشكل طفيف (تفصيل إضافي في القسم X).</p>
+    <p><strong>قصور القلب الأيمن السائد أو المعزول:</strong> غالبًا (55–80% من الحالات) يكون ثانويًا لقصور القلب الأيسر عبر ارتجاع الضغط وفقدان مساهمة الحاجز بين البطينين في انقباض البطين الأيمن ← قصور بطيني مزدوج. ارتفاع JVP أو ارتجاع كبدي-وداجي غير طبيعي يتنبآن أيضًا بارتفاع PCWP (حساسية 55–80%، قيمة تنبؤية إيجابية 85–95%). قد يصبح القصور الأيمن الأبرز سريريًا خصوصًا عند نقص امتلاء الرئتين (أقل وذمة رئوية)؛ في الاعتلال غير الإقفاري قد يتأثر البطين الأيمن مباشرة وأحيانًا أكثر من الأيسر. خلل البطين الأيمن موجود في 20–30% من حالات HFpEF. القصور الأيمن المعزول الحقيقي يُشاهد في: ASD، أمراض الرئة، أمراض الأوعية الرئوية — سريريًا: احتقان محيطي وارتفاع JVP مع رئتين صافيتين؛ غازيًا: ارتفاع ضغط الأذين الأيمن مع PCWP طبيعي أو مرتفع قليلًا يساوي ضغط الأذين الأيمن. قد تُلاحظ انصبابات جنبية في القصور الأيمن المعزول لأن الغشاء الجداري يصرف للأجوف العلوي بينما الغشاء الحشوي يصرف للأوردة الرئوية.</p>
+
+    <h3 class="subhead">و. أسباب HFrEF (الاعتلال الانقباضي)</h3>
+    <ul>
+      <li><strong>مرض الشريان التاجي (CAD)</strong> — السبب الأكثر شيوعًا؛ يُسمى عندئذٍ "الاعتلال القلبي الإقفاري". عمليتان تفسران خلل البطين الأيسر: احتشاء عضلي كبير عميق مسبب لموجات Q، أو "خمول عضلة القلب" (Hibernating myocardium) — توقف مؤقت عن العمل مع نسيج لا يزال حيًا وقابل للعكس بإعادة التروية. خلل البطين المصاحب لمرض شريان واحد فقط (لا يشمل الأيسر الرئيسي أو LAD القريب) دون احتشاء سابق يُعتبر أخف ويُصنَّف كاعتلال غير إقفاري (معدل وفيات مشابه). الاعتلال الإقفاري الحقيقي يتطلب: تاريخ احتشاء كبير سابق، أو مرض في ≥2 شرايين، أو مرض شريان واحد يشمل الأيسر الرئيسي أو LAD القريب — ومعدل وفياته أعلى بنحو 1.5 ضعف من الاعتلال غير الإقفاري. يُشتبه بالسبب الإقفاري غالبًا من التاريخ (احتشاء سابق، إعادة توعية سابقة، ذبحة)؛ لدى 7% من مرضى الاعتلال غير المفسَّر يُكتشف اعتلال إقفاري بالقسطرة.</li>
+      <li><strong>ارتفاع ضغط الدم</strong> — السبب الثاني الأكثر شيوعًا؛ يسبب خللًا انبساطيًا مبكرًا ثم انقباضيًا لاحقًا. الارتفاع الحاد لا يسبب عادة خللًا انقباضيًا مفاجئًا إلا مع مرض قلبي سابق، لكنه قد يسبب وذمة رئوية حادة عبر خلل انبساطي حاد.</li>
+      <li><strong>أمراض القلب الصمامية المتقدمة</strong> — MR، AI، AS — تؤدي دون علاج إلى إجهاد مزمن ثم فشل انقباضي.</li>
+      <li><strong>اعتلال عضلة القلب التوسعي (DCM)</strong> — خلل انقباضي عام (± موضعي) دون سبب إقفاري أو ضغطي أو صمامي. أسبابه: التهاب عضلة قلب فيروسي (تحت سريري يُشفى تلقائيًا غالبًا؛ خفيف EF 45–50% يتحسن خلال أسابيع-أشهر؛ شديد ينتهي بتحسن كامل في الثلث، جزئي في 40%، تدهور سريع في أقلية)؛ مجهول السبب (الأكثر شيوعًا بعد الفيروسي)؛ سام (كحول مزمن — قابل للعكس، كوكايين، إشعاع، دوكسوروبيسين — غير قابل للعكس، سيكلوفوسفاميد وتراستوزوماب — قابل للعكس)؛ وراثي (~30%، سائد جسديًا غالبًا)؛ فيروس HIV؛ أيضي (فرط/قصور درقية)؛ ترسيبي (ساركويد، ترسب حديد)؛ ناتج عن تسرع القلب؛ حول الولادة (يظهر بالشهر الأخير من الحمل أو خلال 5 أشهر بعده، قابل للعكس في 50–60% خلال 6 أشهر)؛ وتاكوتسوبو (متلازمة القلب المنكسر، غالبًا بعد ضغط نفسي/جسدي شديد). أسوأ الأنواع إنذارًا: اعتلال HIV، الداء النشواني، اعتلال الدوكسوروبيسين.</li>
+    </ul>
+
+    <div class="callout info">
+      <b>قابلية عكس DCM:</b> أنواع قابلة للعكس غالبًا: التهاب عضلة قلب، الاعتلال الكحولي (مع التوقف المبكر ± الثيامين)، اعتلال فرط ضغط الدم، حول الولادة، تسرع القلب، تاكوتسوبو، والاعتلالات المرتبطة بالتوتر (إنتان، حالات حرجة، اعتلال عصبي المنشأ بعد سكتة) واضطرابات الدرقية. نحو 35% من حالات DCM الحديثة (&lt;6 أشهر) مجهولة السبب أو التهابية تتحسن تلقائيًا/بالعلاج خلال 6 أشهر — يُسمى <strong>HF-recovered EF / HF-improved EF</strong> (تحسن EF≥10% ليصبح &gt;40%)؛ و40% أخرى تتحسن ملحوظًا دون استعادة كاملة. التحسن أعلى في الاعتلال المرتبط بالتوتر، وأقل في الاعتلال الوراثي.
+    </div>
+    <p>مرضى HF-recovered EF (أيًا كان السبب حتى الإقفاري) إنذارهم أفضل بكثير من HFrEF وHFpEF، لكن تبقى لديهم تشوهات هيكلية متبقية، ووفيات سنوية 1–2%، وخطر استشفاء بسبب HF &gt;5% سنويًا، وBNP غير طبيعي غالبًا، وتقلبات EF شائعة ("yo-yo EF") — لذا يجب <strong>الاستمرار بالعلاج الدوائي طويل الأمد</strong> حتى بعد تعافي EF. دراسة <em class="trial">TRED-HF</em> أظهرت أن التوقف التدريجي عن العلاج في HF-recovered EF أدى لعودة القصور في 44% خلال 6 أشهر فقط. استثناءات ذات خطر انتكاس منخفض يمكن فيها التفكير بتخفيف تدريجي تحت إشراف دقيق: اعتلال حول الولادة، تاكوتسوبو، والتهاب عضلة قلب حاد شديد (fulminant).</p>
+    <div class="callout warn">
+      <b>تحذير سريري:</b> المرضى في طور التحسن ما زالوا معرّضين لاضطرابات نظم وموت مفاجئ، خصوصًا بعد التهاب عضلة قلب حاد شديد (fulminant myocarditis).
+    </div>
+
+    <h3 class="subhead">ز. أسباب HFpEF والاعتلال التحددي</h3>
+    <p><strong>ارتفاع ضغط الدم أو السمنة (± LVH):</strong> أكثر عوامل الخطر شيوعًا للقصور الانبساطي. LVH شائع لكن الكتلة العضلية طبيعية في حتى 50% من المرضى، وسماكة الجدار طبيعية في ~25%؛ الخلل الانبساطي قد يسبق ظهور LVH. الآلية: زيادة صلابة الشرايين والبطين والأذين الأيسر (زيادة كولاجين، تغيرات هيكلية خلوية، اضطراب اتزان الكالسيوم) ← ارتفاع ملحوظ في ضغوط الامتلاء وحتى الضغط الانقباضي مع حمل حجمي بسيط فقط؛ صلابة الشرايين تفسر الارتفاع المفرط للضغط الانقباضي أثناء الجهد. عوامل خطر إضافية: عمر &gt;65، سكري (30–50% من مرضى HFpEF)، الجنس الأنثوي، الفشل الكلوي، الرجفان الأذيني.</p>
+    <p>آليات إضافية شائعة (فلا يُساوى HFpEF دائمًا بـ"قصور انبساطي بحت"): الرجفان الأذيني (يحد امتلاء البطين مباشرة؛ ومتلازمة الأذين الأيسر المتصلب قد ترفع ضغط الأذين حتى دون AF)؛ ضعف انقباض خفي (EF طبيعي لا يعني انقباضًا طبيعيًا دائمًا، إذ EF=حجم الضربة/حجم نهاية الانبساط ويتأثر بالتحميل الحجمي)؛ زيادة الحجم (كحالات النتاج العالي بالسمنة أو فقر الدم — لدى الشباب البدينين LV متمدد قليلًا، ولدى كبار السن LV صغير وصلب)؛ ضعف الاستجابة لتسارع النبض (chronotropic incompetence، في ~50% من مرضى HFpEF)؛ وخلل الأوعية الدقيقة (شائع لدى النساء متوسطات العمر).</p>
+    <p><strong>CAD (نقص تروية دون احتشاء):</strong> يسهم في الخلل الانبساطي لأن الارتخاء عملية نشطة؛ ارتفاع LVEDP من أوائل التغيرات الديناميكية عند الذبحة المحرَّضة. قد يسبب أيضًا سوء وظيفة انقباضي عابر أو ارتجاعًا تاجيًا إقفاريًا ديناميكيًا يُشخَّص خطأً كخلل انبساطي — لذا يجب دومًا نفي CAD في القصور الحاد المصنَّف كخلل انبساطي. يُعتبر سببًا كامنًا في 25–45% من مرضى HFpEF ضمن الدراسات الكبرى (يتطلب عادة مرضًا تاجيًا كبيرًا متعدد الأوعية).</p>
+
+    <h3 class="subhead">ح. اعتلال عضلة القلب التحددي (RCM) وتمييزه</h3>
+    <p>البطين الأيسر صغير وصلب مع خلل انبساطي شديد (بخلاف التوسعي: حجرة صغيرة مع وظيفة انقباضية محفوظة نسبيًا تتدهور تدريجيًا)؛ توسع/قصور انقباضي بالبطين الأيمن شائع بالمراحل المتقدمة وعلامة إنذارية سيئة؛ توسع أذيني واضح مع قلس وظيفي بـTR/MR قد يكون شديدًا. سماكة العضلة ≥14 ملم توحي بالاعتلال الارتشاحي (خاصة الداء النشواني، وقد تصل لمستويات شبيهة بـHCM &gt;20 ملم مع توزع غير متناظر أحيانًا) — لكن السماكة هنا من الترسب لا من التضخم الحقيقي، مما يفسّر التناقض بين انخفاض فولتاج ECG وسماكة العضلة بالإيكو.</p>
+    <p>علامات الداء النشواني بالإيكو: انصباب تاموري صغير، تثخّن الصمامات، ونسيج حبيبي "متلألئ" (granular sparkling) — قد يُحاكيه النسيج غير المتجانس في HCM أحيانًا. على ECG: أمواج Q كاذبة وانخفاض فولتاج QRS لا يتناسب مع سماكة العضلة، ولا تُشاهد معايير LVH بالأطراف إطلاقًا.</p>
+    <div class="card">
+      <strong>تشخيص تفريقي لمريض بسماكة عضلية + امتلاء تقييدي شديد + HF:</strong>
+      <ol>
+        <li>اعتلال ناتج عن ارتفاع ضغط الدم (قد يُظهر نفس نمط الامتلاء التقييدي الشديد خصوصًا لدى المسنين)</li>
+        <li>اعتلال عضلة القلب الضخامي (HCM)</li>
+        <li>اعتلال ارتشاحي — خاصة الداء النشواني، ومرض فابري</li>
+      </ol>
+      أدوات التمييز: ECG، تصوير إجهاد النسيج بالإيكو (يُلاحظ احتفاظ القمة بوظيفتها "apical sparing" في الداء النشواني)، وMRI. يُوصى بمسح البيروفوسفات المشع (Technetium pyrophosphate) لنفي الداء النشواني من نوع transthyretin واختبارات بروتينات أحادية النسيلة، في حالات HFpEF الشديدة مع سماكة ≥14 ملم. قد يُلجأ لقسطرة القلب اليمنى واليسرى لتأكيد ارتفاع الضغوط اليسرى، خاصة عند هيمنة الصورة السريرية للقصور الأيمن، وللتفريق عن التهاب التامور الانقباضي.
+    </div>
+    <p><strong>أسباب RCM:</strong> ترسيبية (الأكثر شيوعًا: الداء النشواني؛ وأيضًا فابري، ترسب الحديد، الساركويد، متلازمة فرط الحمضات)؛ مناعية ذاتية (تصلب الجلد، الذئبة، التهاب المفاصل الروماتويدي)؛ أولية مجهولة السبب؛ ومرض القلب الإشعاعي (يظهر بعد 5–30 سنة من التعرض، ويجمع بين اعتلال تحددي، التهاب تامور انقباضي، أمراض صمامية، CAD، وتليف رئوي).</p>
+    <p><strong>التهاب التامور الانقباضي</strong> يُحاكي سريريًا كلًا من RCM وقصور البطين الأيمن.</p>
+
+    <h3 class="subhead">ط. عوامل مُفاقِمة: انقطاع النفس النومي، وتسرع القلب</h3>
+    <p><strong>انقطاع النفس الانسدادي أثناء النوم:</strong> لا يفاقم القصور الأيمن فقط، بل الأيسر أيضًا — فالضغط السلبي داخل الصدر يزيد الضغط عبر جدار البطين الأيسر (زيادة العبء البعدي)، على عكس التهوية بالضغط الإيجابي. كما يزيد العود الوريدي فيوسّع البطين الأيمن ويُحدث تداخلًا بين البطينين يُقلل تدفق الأيسر أكثر. نوبات نقص الأكسجة تُنشّط الجهاز الودي وتسبب تضيقًا وعائيًا جهازيًا ورئويًا يُفاقم القصور الأيسر والأيمن والإقفار. المريض السليم يتعافى بسرعة بعد النوبة؛ أما مريض القصور المسبق فيتأخر تعافيه. يؤثر سلبًا على: ضغط الامتلاء، الوظيفة الانبساطية، LVEF، والإقفار العضلي.</p>
+    <p><strong>تسرع القلب:</strong> يقصّر زمن الانبساط فيقلل امتلاء البطين البطيء (على دوبلر: E/A ينعكس من &lt;1 لصالح E/A مرتفع وE ضيق سريع) ← قصور أيسر غير معاوض. لا يجب عكس تسرع القلب فورًا في هذه المرحلة لأن الامتلاء الانبساطي (المقصَّر والمُعاق أصلًا بالارتفاع السريع للضغط الانبساطي) لن يستفيد بالضرورة، وقد يكون البطين وصل للجزء المسطح من منحنى فرانك-ستارلينغ (لم يعد يعتمد على التحميل المسبق). حاد: تسرع القلب قد يُحسّن النتاج القلبي حتى ~110 نبضة/دقيقة، وبعدها تنخفض احتياطيات الطاقة فتُلغى الفائدة. مزمن: ضبط المعدل عند 60–70 نبضة/دقيقة مفيد خصوصًا في HFrEF المعوَّض بنظم جيبي؛ أما في HFpEF أو AF فتخفيض المعدل قد لا يفيد كثيرًا، ومعدل 80–100 قد يكون مقبولًا. التفسير: في LV الطبيعي تزداد التقلصية مع معدل القلب (ظاهرة Bowditch)؛ في HFrEF تقل الاحتياطيات فيتحسن الأداء بخفض الذروة القلبية؛ في HFpEF يكون LV صغيرًا وصلبًا فيعتمد على معدل القلب للحفاظ على النتاج — لذا قد يُحسّن إيفابرادين القدرة على التمارين في HFrEF لكنه قد يُفاقمها في HFpEF. تسرّع نظم جديد &gt;105–110 نبضة/دقيقة يتزامن مع تشخيص HF جديد يوحي باعتلال ناتج عن تسرع القلب (يحدث في 25–50% من حالات AF الجديد المصحوب بقصور قلب حديث، ويتطلب علاجًا حاسمًا للسيطرة على النظم/المعدل بعد فك التعويض).</p>
+
+    <h3 class="subhead">ي. آليات قصور البطين الأيمن</h3>
+    <p>القصور الأيسر هو السبب الأكثر شيوعًا للقصور الأيمن. ثلاث آليات (تشمل القصور المعزول):</p>
+    <ol>
+      <li><strong>الحمل الضغطي:</strong> ارتفاع ضغط رئوي ثانوي لأمراض القلب الأيسر، أمراض الرئة، الانصمام الرئوي، أو أمراض الأوعية الرئوية.</li>
+      <li><strong>الحمل الحجمي:</strong> كوجود ASD، أو قلس ثلاثي الشرفات/رئوي — وTR غالبًا وظيفي وثانوي لفشل الأيمن لكنه يُفاقمه بزيادة الحمل الحجمي؛ وقد يكون TR معزولًا وسببًا رئيسيًا لقصور أيمن غير مفسَّر.</li>
+      <li><strong>خلل جوهري في البطين الأيمن:</strong> كاعتلال البطين الأيمن العضلي المُحدث بعدم انتظام النظم (ARVD)، احتشاء البطين الأيمن. أسباب أخرى قد تصيب البطينين معًا بدرجات متفاوتة: التهاب عضلة قلب حاد، اعتلال ناتج عن تسرع القلب، والاعتلالات مجهولة السبب أو المرتبطة بـHIV أو الكحول.</li>
+    </ol>
+    <div class="callout warn">
+      <b>تنبيه تشخيصي:</b> في أي مريض تُوحي أعراضه بسيطرة القصور الأيمن، لا يجوز إغفال احتمال أمراض التامور أو الاعتلال التحددي — فكلاهما من أهم الحالات المُقلِّدة لقصور القلب الأيمن: الاندحاس القلبي (Tamponade) يُحاكي القصور الأيمن الحاد، بينما التهاب التامور الانقباضي والاعتلال التحددي (RCM) يُحاكيان القصور الأيمن المزمن. الاعتلال التحددي يُحدث عادة قصورًا ثنائي البطين لكنه كثيرًا ما يظهر سريريًا وكأنه قصور أيمن بشكل أساسي.
+    </div>
+  </section>
+
+  <!-- ============ III. DIAGNOSTIC TESTS ============ -->
+  <section class="roman" id="c2s3">
+    <div class="roman-head"><div class="roman-badge">III</div><h2>الفحوصات التشخيصية</h2></div>
+
+    <h3 class="subhead">أ. الإيكو (Echocardiography)</h3>
+    <p>قصور القلب تشخيص سريري بالدرجة الأولى؛ الإيكو يؤكد التشخيص ويصنّف الحالة عبر: الكسر القذفي (EF) لتحديد الطبيعة الانقباضية أو الانبساطية، وظيفة الصمامات، الخلل الانبساطي (انخفاض سرعة E′ بدوبلر الأنسجة)، وضغط الأذين الأيسر (يُقدَّر من ارتفاع E/E′).</p>
+    <div class="card">
+      <strong>نمط امتلاء البطين الأيسر بدوبلر المترالي (موجات E، A، L):</strong>
+      <br>• <strong>قصور القلب المعوَّض:</strong> موجة E صغيرة (خلل امتلاء مبكر) مع موجة A كبيرة تعويضية (الأذين يدفع أكثر). خفض معدل القلب هنا قد يفيد لأنه يمنح وقتًا أطول لتدفقي E وA فيحسّن الامتلاء.
+      <br>• <strong>قصور القلب غير المعوَّض:</strong> موجة E مرتفعة لكن ضيقة (ضغط أذيني مرتفع مع تساوٍ سريع للضغوط بين الأذين والبطين)، وموجة A منخفضة (الأذين لا يستطيع الدفع ضد الضغط المرتفع)؛ قد تظهر موجة L (محاولة الأذين المستمرة للدفع طوال الانبساط). هنا خفض معدل القلب <strong>لا يحسّن</strong> الامتلاء لأن الوقت المتاح أصلًا قصير جدًا؛ بل رفعه المعتدل (حتى 110/د) قد يفيد بزيادة عدد الدورات القلبية.
+    </div>
+    <p><strong>تشخيص القصور الانبساطي مع EF طبيعي:</strong> EF الطبيعي قد يعكس خللًا انبساطيًا، أو خللًا انقباضيًا عابرًا (كنقص التروية)، أو قلسًا تاجيًا وظيفيًا ديناميكيًا. علامات الخلل الانبساطي: انخفاض E′ (نادرًا ما يكون طبيعيًا في القصور الانبساطي أو الانقباضي، فانخفاضه حساس)، وE/E′ &gt;14 (ارتفاع ضغط الأذين الأيسر). في المرحلة الأولى المعوَّضة (Stage 1) من الخلل الانبساطي: E′ منخفض (&lt;7 سم/ث) لكن E/E′ طبيعي. داعم إضافي: سماكة الحاجز بين البطينين (متوسط 1.18 سم بدراسة) تُلاحظ في معظم مرضى HFpEF؛ وتوسع الأذين الأيسر شبه دائم في القصور غير المعوَّض (80% من HFpEF يُظهرون زيادة حجم/قطر الأذين حتى دون فك تعويض). <strong>في غياب</strong> E′ منخفض وE/E′ مرتفع وتوسع الأذين معًا، يجب إعادة النظر في تشخيص القصور الانبساطي والبحث عن سبب آخر لضيق النفس.</p>
+    <p>يقدّر الإيكو أيضًا ضغط الأذين الأيسر وضغط الشريان الرئوي (ارتفاعهما يدل على فك تعويض واحتقان رئوي)؛ علمًا أن فرط الضغط الرئوي قد يستمر بعد زوال الاحتقان، بل قد يتطور فرط ضغط رئوي تفاعلي يتأخر تحسنه حتى بعد عودة ضغط الأذين الأيسر لطبيعته. يساعد الإيكو أيضًا على اقتراح السبب (اضطرابات حركية بؤرية ← نقص تروية [غير نوعية بشدة]؛ سماكة الحاجز ← اعتلال ارتفاع ضغط أو ارتشاحي)، وعلى تقييم أشكال أخرى (القصور الأيمن المعزول وأسبابه: فرط ضغط رئوي، ASD)، وتمييز محاكيات قصور القلب (التهاب تامور انقباضي، اندكاك قلبي).</p>
+
+    <h3 class="subhead">ب. الببتيد المدر للصوديوم الدماغي (BNP)</h3>
+    <p>يُصنَّع BNP في عضلة القلب استجابة لتمدد الخلايا العضلية؛ المحفز الرئيسي هو الإجهاد الجداري (خاصة للبطين الأيسر) الناتج عن فرط الحجم أو الضغط، وقد يُحفَّز مباشرة أيضًا بنقص التروية والهرمونات العصبية. تمدد البطين الأيمن أو الأذينين يرفع BNP بدرجة أقل (كتلة عضلية أصغر). Pro-BNP سلف غير نشط يُشطر إلى BNP النشط وNT-proBNP غير النشط؛ NT-proBNP عادة ~4 أضعاف BNP، وقد يتجاوز 6 أضعاف مع العمر &gt;65 أو القصور الكلوي.</p>
+    <table>
+      <thead><tr><th>السياق</th><th>العتبة</th><th>الدلالة</th></tr></thead>
+      <tbody>
+        <tr><td>ضيق نفس حاد</td><td>BNP &gt;400–500 أو NT-proBNP &gt;1200 pg/ml</td><td>مؤشر قوي على قصور قلب أيسر حاد؛ يتوافق مع ارتفاع LVEDP (دون تناسب دقيق)</td></tr>
+        <tr><td>ضيق نفس حاد</td><td>BNP &lt;100 أو NT-proBNP &lt;300 pg/ml</td><td>يستبعد القصور الأيسر الحاد (لكن لا ينفي خللًا معتدلًا بدون أعراض واضحة)</td></tr>
+        <tr><td>حاد — نطاق متوسط</td><td>BNP 100–500 pg/ml</td><td>قد يكون قصورًا أيسر حادًا، أو مرضًا رئويًا/وعائيًا رئويًا حادًا، أو إنتانًا؛ أو ثانويًا لفشل أيمن/قصور كلوي/نقص تروية</td></tr>
+        <tr><td>أعراض مزمنة مجهودية</td><td>BNP &lt;35 أو NT-proBNP &lt;125 pg/ml</td><td>أفضل عتبة لاستبعاد القصور المزمن (توصية ESC)</td></tr>
+        <tr><td>مزمن — نطاق متوسط</td><td>BNP 35–100 pg/ml (حتى 240 مع AF)</td><td>ضيق نفس مزمن قد يكون قلبيًا أو غير قلبي المنشأ</td></tr>
+      </tbody>
+    </table>
+    <p>عند نفس مستوى الضغط، تُفرز البطينات المتوسعة كمية أكبر من BNP (زيادة الشد الجداري والكتلة/الحجم) — وهذا يفسر ارتفاع BNP في القصور الانقباضي أكثر من الانبساطي، وإمكانية ارتفاعه رغم ضغط امتلاء طبيعي ظاهريًا.</p>
+    <div class="callout warn">
+      <b>الاستثناء المهم:</b> الحالة الوحيدة التي قد تكون فيها مستويات BNP طبيعية رغم وجود علامات سريرية واضحة لقصور القلب (JVD، وذمة طرفية) هي <strong>التهاب التامور الانقباضي</strong>.
+    </div>
+    <h4 class="subsub">عوامل تشوّش تفسير BNP</h4>
+    <ul>
+      <li><strong>السمنة:</strong> BNP منخفض (انخفاض تصنيعه وزيادة تخلصه) — في المرضى البدينين يُستخدم حد مرجعي منخفض 50 pg/ml لاستبعاد القصور الأيسر الحاد. عند BMI&gt;35 ينخفض BNP للنصف عند نفس درجة القصور.</li>
+      <li><strong>الرجفان الأذيني:</strong> يرفع BNP بحد ذاته (النسيج الأذيني يفرزه) حتى بدون HF، وقد يصل لـ~500 pg/ml دون قصور قلب فعلي؛ لذا ترتفع عتبة الاستبعاد إلى ~240 pg/ml لـBNP و~1000 pg/ml لـNT-proBNP في AF (ويزداد الارتفاع أكثر في AF السريع بسبب زيادة تمدد الأذين). عند نفس الدرجة، يتضاعف BNP 3 مرات مع AF، ويتضاعف أيضًا فوق عمر 75 سنة.</li>
+      <li><strong>القصور الكلوي:</strong> يرفع كلا الواسمين، وNT-proBNP يعتمد على الإطراح الكلوي أكثر فيتأثر أكثر. في المرضى شديدي الاعتلال (إنتان شديد أو صدمة) لا يرتبط BNP جيدًا بضغوط الامتلاء الفعلية — قد يتجاوز 1000 مع PCWP طبيعي، مما يعكس القصور الكلوي أكثر من القصور القلبي.</li>
+      <li><strong>القصور الناتج عن تضيق/قلس الميترال الحاد:</strong> BNP أقل من القصور الناتج عن مرض البطين الأيسر (LVEDP ليس بالضرورة مرتفعًا).</li>
+      <li>يرتفع BNP خلال ساعة من بدء القصور، ويُطرح أساسًا عبر الأنزيمات الببتيدية النسيجية وجزئيًا كلويًا.</li>
+    </ul>
+    <h4 class="subsub">المتابعة والعلاج الموجَّه بـBNP</h4>
+    <p>مع المدرات، ينخفض BNP لكنه قد لا يعود طبيعيًا لأن البطين يبقى متوسعًا (يُعرف الارتفاع المتبقي بـ"BNP الجاف/residual BNP"، نادرًا يتجاوز 1000، ويعكس درجة إعادة التشكيل)؛ لا يُوصى بقياسه يوميًا — يُفضَّل قياسه قبل الخروج بعد تحقيق الجفاف السريري كخط أساس للمتابعة. BNP مرتفع عند الخروج = مؤشر تنبؤي سلبي لإعادة الدخول؛ وانخفاضه بنسبة 30–50% أثناء العلاج بالمستشفى مؤشر قوي على تقليل احتمال إعادة الدخول. في العيادات الخارجية يُظهر BNP تباينًا فرديًا حتى 25–50% دون علاقة مباشرة بالأعراض؛ لكن ارتفاعه &gt;25–50% قد ينبئ بتدهور سريري ويستدعي تعديل الجرعات.</p>
+    <div class="card point-num">
+      <strong>العلاج الموجَّه بـBNP (BNP-guided therapy):</strong> فعّال (توصية IIa) في مرضى القصور الانقباضي دون سن 75، بهدف خفض BNP إلى &lt;100–300 pg/ml (قياس كل 1–3 أشهر)، مع تخفيض معدل دخول المستشفى وتحسن البقيا. تُعطى الأولوية لتعديل جرعات ACE-I/حاصرات بيتا/مضادات الألدوستيرون قبل التفكير بتعديل المدرات، ما لم توجد علامات احتقان سريري. فعالية هذه الاستراتيجية غير واضحة فوق 75 سنة أو في الخلل الانبساطي، والمبالغة بخفض BNP في هذه الفئات قد ترتبط بزيادة الدوخة والإرهاق.
+    </div>
+
+    <h3 class="subhead">ج. تخطيط القلب الكهربائي (ECG)</h3>
+    <p>مخطط طبيعي تمامًا يكاد يستبعد القصور الانقباضي أو الحاد. موجات Q أهم علامة نوعية — توحي بقوة باعتلال قلبي إقفاري. بقية التغيرات غير نوعية لكن ذات قيمة إنذارية: LVH بنمط الشد، اضطرابات ST-T، RBBB/LBBB، AF واضطرابات نظم أخرى. البلوك الأذيني البطيني المتقدم أكثر شيوعًا في التهاب عضلة القلب والأمراض الترسيبية. جهد QRS مرتفع بالمساري الصدرية مع جهد منخفض بالمساري الطرفية ← بطين أيسر متوسع بEF منخفض. LBBB مع QRS&gt;130 مللي ثانية ← اعتلال ناجم عن/متفاقم بـLBBB، وله أهمية علاجية إذ يوحي بإمكانية الاستفادة من العلاج بإعادة التزامن القلبي (CRT).</p>
+
+    <h3 class="subhead">د. القسطرة التاجية والفحوصات الأخرى لكشف الإقفار</h3>
+    <p>توصى القسطرة (ESC، فئة I) في: الذبحة الصدرية، أو التظاهرات الحادة الشديدة لقصور القلب. خلاف ذلك تقتصر على مرضى HFrEF ذوي احتمال سريري مرتفع لـCAD (فئة IIb). البدائل: اختبارات الجهد الإقفارية (IIb)، أو تصوير الشرايين بالتصوير المقطعي المحوسب (IIa).</p>
+    <ul>
+      <li><strong>التصوير النووي (راحة/جهد):</strong> يبحث عن عيوب تروية قطاعية؛ لكن الندبات المتقطعة شائعة في الاعتلال غير الإقفاري، وحتى 30% من مرضى CAD متعدد الأوعية قد يُظهرون إقفارًا متوازنًا دون عيب واضح — أي أنه ليس حساسًا أو نوعيًا كافيًا لتشخيص CAD كسبب لاعتلال عضلة القلب.</li>
+      <li><strong>الإيكو بالجهد (دوبيوتامين):</strong> استجابة ثنائية الطور (تحسّن بجرعة منخفضة ثم تراجع بجرعة عالية) ← عضلة قابلة للحياة لكنها تُصاب بالإقفار عند الجهد العالي. استجابة أحادية الطور (تحسّن تدريجي) ← اعتلال غير إقفاري، أو عضلة تعافت، أو تليف تحت شغافي يمنع الشفاء الكامل رغم إعادة التروية. غياب أي تحسّن ← لا احتياطي تقلصي؛ قد تكون الإصابة إقفارية أو غير إقفارية ودائمة، لكن هذا لا ينفي تمامًا وجود عضلة قابلة للإنقاذ.</li>
+      <li><strong>التصوير المقطعي التاجي:</strong> يُستخدم لنفي CAD عند احتمال منخفض إلى متوسط للإقفار.</li>
+    </ul>
+
+    <h3 class="subhead">هـ. اختبار الجهد الانبساطي (Diastolic Stress Testing)</h3>
+    <p>يُخطئ أحيانًا بتصنيف ضيق النفس المزمن مع EF طبيعي وغياب علامات القصور كضيق نفس غير قلبي، بينما قد يكون خللًا انبساطيًا "كامنًا" لا يظهر إلا بالجهد (ضغوط طبيعية بالراحة، ترتفع بالجهد بسبب تيبس البطين). مفيد في: ضيق نفس مزمن غير مفسَّر، أو نتائج حدية بـBNP أو الإيكو (E منخفض، توسع أذين، LVH) مع E/E′ طبيعي.</p>
+    <p>يُعاد تقييم E/E′ عند الذروة (&gt;14 ← ارتفاع ضغط الأذين الأيسر) وسرعة القلس الرئوي TR (&gt;3.4 م/ث ← ارتفاع الضغط الرئوي)، مع تقييم الإقفار والقلس التاجي الديناميكي والقدرة الوظيفية الفعلية. الطريقة المثلى: دراجة نصف راقدة مع تصوير أثناء الجهد (أو جهاز مشي/دراجة واقفة مع تصوير خلال دقيقتين من الذروة). بديل: رفع الساقين السلبي (يماثل ~40% من الارتفاع النهائي في PCWP). يمكن إجراؤه غازيًا أيضًا (قثطار Swan-Ganz مع دراجة راقدة).</p>
+
+    <h3 class="subhead">و. خزعة عضلة القلب (Endomyocardial Biopsy)</h3>
+    <p>تُجرى عند الاشتباه بالتهاب عضلة قلب شديد متقدم لتمييز الحالات القابلة للعلاج من سريعة التدهور:</p>
+    <ul>
+      <li><strong>التهاب عضلة القلب اللمفاوي الحاد الشديد (Fulminant):</strong> قابل للعكس، يُشفى غالبًا خلال أسابيع لكن يتطلب دعمًا مكثفًا مبكرًا.</li>
+      <li><strong>التهاب عضلة القلب الحمضي بفرط التحسس:</strong> قابل للعلاج بالستيرويدات إذا شُخِّص مبكرًا.</li>
+      <li><strong>التهاب عضلة القلب بالخلايا العملاقة:</strong> سريع التدهور، قد يتطلب زراعة قلب أو علاجًا مثبطًا للمناعة أو LVAD كحل مؤقت.</li>
+    </ul>
+    <p>تُبرَّر الخزعة في: قصور قلبي حاد غير مفسَّر &lt;أسبوعين مع اضطراب هيموديناميكي واضح؛ أو قصور حديث &lt;3 أشهر مع استجابة ضعيفة للعلاج خلال 1–2 أسبوع، أو اضطرابات بطينية غير مسيطر عليها، أو بلوك AV متقدم. كذلك عند الاشتباه برد فعل دوائي مسبب للقصور (خاصة إن لم يتحسن سريعًا بعد إيقاف الدواء) — تكشف الخزعة التهاب عضلة القلب الحمضي فيُبدأ الكورتيزون. تُستخدم أيضًا لتأكيد أمراض ارتشاحية: الداء النشواني من نوع AL (عند إيجابية تثبيت البروتينات المصلية؛ خزعة الوسادة الدهنية البطنية غير حاسمة)، والساركويد القلبي (عند الشك دون تورط رئوي نموذجي).</p>
+
+    <h3 class="subhead">ز. الرنين المغناطيسي القلبي (Cardiac MRI)</h3>
+    <p>الجادولينيوم لا يخترق خلايا عضلة القلب السليمة طبيعيًا (يبقى داخل الأوعية)؛ في مناطق النخر أو التليف يتجمع بوضوح — وهو <strong>التحسين المتأخر بالجادولينيوم (LGE)</strong> على تسلسل T1، ويدل على نسيج نخري/ليفي عالي الألفة للجادولينيوم.</p>
+    <table>
+      <thead><tr><th>نمط LGE</th><th>الدلالة</th></tr></thead>
+      <tbody>
+        <tr><td>تحت شغافي أو ممتد لكامل الجدار (Transmural)</td><td>اعتلال قلبي إقفاري</td></tr>
+        <tr><td>تحت شغافي خارجي أو منتصف الجدار، توزيع لا يوافق الشرايين التاجية</td><td>اعتلال قلبي غير إقفاري</td></tr>
+        <tr><td>تحت شغافي شامل (Global subendocardial)</td><td>الداء النشواني (Amyloidosis)</td></tr>
+        <tr><td>متقطع في منتصف الجدار (Patchy midwall)</td><td>اعتلال عضلة القلب الضخامي (HCM)</td></tr>
+        <tr><td>متقطع في الجدار السفلي-الوحشي (Inferolateral)</td><td>مرض فابري (Fabry disease)</td></tr>
+      </tbody>
+    </table>
+    <p>الاستخدامات الأربعة الرئيسية للرنين في قصور القلب: (1) تمييز أنماط اعتلال عضلة القلب عبر LGE كما أعلاه؛ (2) تشخيص التهاب عضلة القلب خصوصًا مع اعتلال غير مفسَّر أو ارتفاع تروبونين دون سبب واضح؛ (3) التمييز بين الاعتلال التحددي والضخامي عند وجود سماكة جدارية؛ (4) تقييم عيوشية عضلة القلب في الاعتلال الإقفاري لتحديد قابلية إنقاذ النسيج بإعادة التروية.</p>
+  </section>
+
+  <!-- ============ IV. TREATMENT OF CHRONIC SYSTOLIC HF ============ -->
+  <section class="roman" id="c2s4">
+    <div class="roman-head"><div class="roman-badge">IV</div><h2>علاج قصور القلب الانقباضي المزمن</h2></div>
+
+    <h3 class="subhead">أ. معالجة السبب الكامن: ضغط الدم وCAD وإعادة التروية</h3>
+    <p>يُعالَج ارتفاع ضغط الدم لهدف &lt;130/80 ملم زئبق؛ في القصور الانقباضي قد يكون الضغط طبيعيًا أو منخفضًا بسبب انخفاض النتاج، لكن يجب إعطاء أدوية قصور القلب بصرف النظر عن مستوى الضغط ما دام المريض يتحملها سريريًا، حتى مع SBP بين 90–100.</p>
+    <p>يُنظر في CABG أو PCI لدى مرضى الاعتلال القلبي الإقفاري (أي أن CAD واسع بما يكفي ليفسّر الاعتلال، لا مجرد إصابة عرضية بشريان واحد صغير)، وكذلك في القصور الانبساطي المصحوب بمرض تاجي واسع.</p>
+
+    <div class="card point-num">
+      <strong>دراسة STICH (قيمة إعادة التروية في الاعتلال الإقفاري):</strong> قارنت CABG مقابل العلاج الطبي فقط في اعتلال قلبي إقفاري مع EF≤35% (غالبية ثلاثية الأوعية مع إصابة LAD قريبة وتاريخ احتشاء سابق؛ استُبعدت الذبحة الشديدة CCS 3–4؛ لم يُستبعد أحد بناءً على اختبار العيوشية). بعد 5 سنوات: اتجاه قوي نحو تقليل الوفيات بـCABG (~8%/سنة مقابل 6.5%/سنة، p=0.12) دون دلالة إحصائية بعد؛ بعد 10 سنوات أصبح الفرق دالًّا إحصائيًا مع انخفاض واضح في الوفيات القلبية الوعائية والاستشفاء. الفائدة لم تظهر إلا بعد سنتين من المتابعة، والخطورة الجراحية المبكرة كانت منخفضة نسبيًا (3.6% وفاة خلال 30 يومًا). لذلك CABG ليست عاجلة في معظم هذه الحالات، وتُصنَّف فئة IIb في ESC كعلاج لقصور القلب؛ الفائدة تبقى غير مؤكدة لدى الأشد مرضًا أو القصور المتقدم (مخاطر جراحية أعلى وقد لا يعيشون لجني الفائدة المتأخرة).
+    </div>
+
+    <h4 class="subsub">اختبار العيوشية (Viability) والإقفار</h4>
+    <p>في STICH، خضع ~50% لاختبار عيوشية (إيكو أو SPECT) ثم وُزِّعوا عشوائيًا لـCABG أو علاج طبي بصرف النظر عن النتيجة. أظهر CABG فائدة في الوفيات بغض النظر عن وجود العيوشية؛ الاختبار لم يميّز من سيستفيد من الجراحة، رغم أن وجود الحيوية ارتبط بتحسن لاحق في EF (بدرجة متشابهة سواء بـCABG أو علاج طبي). لم يرتبط تحسن EF أو وجود العيوشية بمعدل الوفيات على مدى 10 سنوات. <strong>الخلاصة:</strong> في الاعتلال الإقفاري المزمن، تقدّم إعادة التروية فائدة في تقليل الوفيات سواء أُجري اختبار عيوشية أم لا — لذا لا توصي ESC باختباره كشرط لقرار إعادة التروية.</p>
+    <p>تُعرَّف العيوشية بأن منطقة مختلة وظيفيًا لا تزال نشطة استقلابيًا، إما في <strong>سبات (Hibernation)</strong> بنقص تروية مزمن شديد، أو <strong>صدمة عضلية (Stunning)</strong> بعد نقص تروية حاد عابر. العيوشية الموضعية: تحسّن الحركة درجة واحدة على الأقل بعد إعادة التروية (akinesis→hypokinesis أو hypokinesis→طبيعي). العيوشية العامة: تحسّن EF الكلي &gt;5% بعد إعادة التروية — أي لا تُؤكَّد إلا بأثر رجعي. نحو 70% من مرضى الاعتلال الإقفاري المزمن يُظهرون تحسنًا ملحوظًا بعد إعادة التروية (81% في STICH).</p>
+    <table>
+      <thead><tr><th>وسيلة تقييم العيوشية</th><th>المبدأ / العتبة</th><th>الحساسية / النوعية</th></tr></thead>
+      <tbody>
+        <tr><td>الثاليوم/التكنيشيوم النووي (راحة، إعادة توزيع 4/24 ساعة)</td><td>امتصاص ≥50% أو تغيّر مطلق ≥12% بإعادة التوزيع = عيوشية</td><td>~80% / ~60%</td></tr>
+        <tr><td>إيكو الدوبيوتامين (جرعة منخفضة &lt;10 ميكروغرام/كغ/د)</td><td>استجابة ثنائية الطور (تحسّن ثم تراجع) = عيوشية مع إقفار؛ أحادية = عيوشية بدون إقفار أو تعافٍ؛ لا استجابة = غالبًا لا عيوشية (لكن 25–30% من القطاعات العيوشة لا تستجيب)</td><td>65% / 85%</td></tr>
+        <tr><td>PET (امتصاص الجلوكوز الأيضي مقابل التروية N13/Rb82)</td><td>عدم توافق (تروية منخفضة + امتصاص أيضي مرتفع) = عيوشية</td><td>~90% / ~58% (الأعلى حساسية، الأقل نوعية)</td></tr>
+        <tr><td>MRI (LGE بعد 10 دقائق)</td><td>تليف &lt;25% من سماكة الجدار = عيوشية عالية؛ 25–50% غير حاسم (عادة عيوشة)؛ &gt;50% = عدم عيوشية</td><td>90% حساسية/NPV، وPPV 60–80%</td></tr>
+      </tbody>
+    </table>
+    <p>مؤشرات مساعدة محدودة القيمة: غياب موجات Q يتنبأ بالتعافي (لكن وجودها لا ينفي الحيوية، فقد تظهر مع hibernation)؛ hypokinesis لا تعني بالضرورة تعافيًا أفضل من akinesis (لكنها تدل على نسيج حي، وإعادة توعيتها قد تمنع تدهورًا إضافيًا)؛ عضلة رقيقة مفرطة الصدى ≤5.5 ملم توحي بتليف (لكن لا تمنع دائمًا استفادة الجدران المجاورة — 18% من المناطق الرقيقة أظهرت عبئًا تليفيًا محدودًا بالـMRI واستعادت السماكة والتقلص)؛ توسع شديد للـLV (حجم نهاية الانبساط ≥ضعف الطبيعي، أو قطر ≥70 ملم) يوحي بتليف واسع وتشكيل سلبي لا ينعكس، وإنذار سيئ بعد إعادة التروية؛ ووجود جريان جانبي جيد (رتبة 2–3) يتنبأ بالتعافي الوظيفي (81% في إحدى الدراسات).</p>
+    <p>لا يوجد تعريف موحد للعيوشية العامة: STICH عرّفتها كحيوية في ≥65% من قطاعات القلب (11/17)؛ دراسات أخرى تعتمد ≥25% من حجم LV ضمن القطاعات المختلة وظيفيًا (أو ≥4 قطاعات). حتى بغياب أي دليل عيوشية أو تحسن EF، تُحسّن إعادة التروية الأعراض والقصور والوفيات — عبر تحسين إعادة التشكيل، منع تدهور إضافي، تقليل احتشاءات جديدة، حماية منطقة حول الاحتشاء، وتقليل التسبب باضطرابات نظم. المرضى الأشد اعتلالًا (اجتماع اثنين من: CAD ثلاثي الأوعية، EF&lt;27%، أو حجم نهاية الانقباض &gt;79 مل/م²) استفادوا أكثر من CABG في تحليل STICH (تقليل وفيات حتى 29%) رغم عيوشية محدودة غالبًا.</p>
+    <p><strong>الإقفار مقابل العيوشية:</strong> الإقفار مؤشر أقوى للتكهن واستعادة الوظيفة. نوويًا: العيوشية = امتصاص ملحوظ بالراحة؛ الإقفار = تفاقم العيب أو انحراف ST بالإجهاد مقارنة بالراحة. وجود إقفار يعني أن المنطقة عيوشة؛ لكن المنطقة العيوشة قد لا تكون مصابة بإقفار (فتستعيد وظيفتها تلقائيًا دون حاجة لإعادة التروية). العيوب الثابتة (بلا تغيّر بين الراحة والإجهاد) تعني تقليديًا تليفًا/نخرًا غير قابل للعكس؛ لكن مع وجود ذبحة، أو غياب موجات Q، أو امتصاص ≥50%، فقد تمثل خمولًا (hibernation) مع إقفار مزمن قابل للعكس — وقد تتحسن حتى 75% من هذه العيوب "الثابتة" بعد إعادة التروية. لهذا لم يكن الإقفار بحد ذاته مؤشرًا موثوقًا للتكهن أو الاستجابة لـCABG في التحليل الفرعي لـSTICH.</p>
+    <p><strong>دواعي إعادة التروية عمليًا:</strong> الفائدة من إعادة التروية الشاملة في الاعتلال الإقفاري المزمن مستقلة عن العيوشية. تقييم العيوشية مفيد لتوجيه إعادة التروية <em>الموضعية</em> (خاصة عبر PCI) — مثلًا تجنّب فتح انسداد مزمن كامل (CTO) غير عيوش في شريان واحد — دون أن يُستخدم لإلغاء الإجراء بالكامل. قد لا تفيد إعادة التروية بصرف النظر عن العيوشية في احتشاء STEMI حديث أو احتشاء بموجة Q عمره 1–28 يومًا كان السبب الرئيسي لانخفاض EF (استُبعد هؤلاء من STICH)؛ ودراسة <em class="trial">OAT</em> أظهرت عدم استفادة من إعادة التروية لدى مرضى احتشاء حاد لم يُعاد فتح الشريان المصاب خلال 24 ساعة، مع جدار عديم الحركة، شريان تام الانسداد، وغياب ذبحة متبقية.</p>
+
+    <h3 class="subhead">ب. الأدوية الست التي تُحسّن البقاء (EF&lt;40%)</h3>
+    <p>تعمل هذه العلاجات على تقليل التحورات البنيوية للبطين الأيسر (LV remodeling) وتعزز إعادة التشكيل العكسي، فترفع EF حتى دون تحسن حقيقي بالتقلص العضلي. ثلاث آليات تعويضية ضارة على المدى الطويل تفسر أهميتها: (1) <strong>إعادة التشكيل البنيوي</strong> — توسع تدريجي، تحول الشكل من بيضاوي لكروي، ترقق الجدران وزيادة التليف والعبء اللاحق؛ حجم نهاية الانقباض هو أفضل مقياس لإعادة التشكيل (أدق من EF الذي يتأثر بالتحميل المسبق والعبء اللاحق)؛ (2) <strong>فرط النشاط الودي</strong> — تحفيز مبدئي للتقلص ثم إرهاق العضلة وزيادة الاستماتة الخلوية؛ (3) <strong>تنشيط RAAS</strong> — تضيق وعائي واحتباس سوائل، وتأثير مباشر ضار لأنجيوتنسين II عبر مستقبلات AT1 (تحفيز نمو خلوي، توسع وتليف البطين، وزيادة إفراز نورإبينفرين).</p>
+    <p>الأدوية الستة: (1) ACE-I أو ARB؛ (2) حاصرات بيتا؛ (3) مضادات الألدوستيرون (سبيرونولاكتون، إبليرينون)؛ (4) ARNI (ساكوبيتريل/فالسارتان)؛ (5) SGLT2i (داباجليفلوزين، إمباجليفلوزين — فعّالة حتى بدون سكري)؛ (6) هيدرالازين+نترات. تُوصى الثلاثة الأولى (ACE-I/ARB وحاصرات بيتا) لكل مرضى EF&lt;40% حتى بدون أعراض. <em>ملاحظة:</em> خفض العبء اللاحق بأملوديبين أو حاصرات ألفا لا يحسّن نتائج قصور القلب.</p>
+
+    <h4 class="subsub">ACE-I / ARB</h4>
+    <p>يزيدان النتاج القلبي، يقللان إعادة التشكيل، يحسّنان EF، ويقللان الوفيات ~20% ودخول المستشفى ~30%. يُستخدم ARB بديلًا عند السعال أو الوذمة الوعائية بـACE-I (خطر تداخل &lt;5% للوذمة الوعائية مع ARB — حذر لا منع مطلق). الأكثر دراسة: كانديسارتان وفالسارتان (دراستا CHARM-Alternative وVal-HeFT). فسيولوجيًا: ACE-I يثبط تحويل أنجيوتنسين I→II ويرفع الكينين وأكسيد النيتريك (لكن كيميز عضلة القلب ينتج أنجيوتنسين II بمعزل عنه)؛ ARB يحجب AT1 دون التأثير على AT2 المفيد، ولا يرفع الكينين (فلا يسبب سعالًا/وذمة وعائية بنفس الدرجة). الفعالية السريرية متكافئة تقريبًا (تجربة ELITE II: وفيات متشابهة).</p>
+    <div class="card">
+      <strong>التدرج والجرعات:</strong> زيادة كل 5 أيام نحو الجرعة المستهدفة (نحو نصف الجرعة القصوى). تجربة ATLAS (ليسينوبريل منخفض 2.5–5 مقابل عالٍ 30–40 ملغ): الجرعات المتوسطة-العالية تقلل دخول المستشفى 24% إضافية دون تحسّن كبير بالوفيات — أي حتى الجرعات المنخفضة تعطي حماية مماثلة من الوفاة.
+      <ul>
+        <li><strong>ليسينوبريل:</strong> بدء 5 ملغ/يوم ← هدف 20–40 ملغ/يوم (يُطرح كليًا؛ ابدأ 2.5 ملغ في القصور الكلوي)</li>
+        <li><strong>إنالابريل:</strong> بدء 2.5 ملغ BID ← هدف 10 ملغ BID (يُطرح كليًا)</li>
+        <li><strong>كانديسارتان:</strong> بدء 4 ملغ/يوم ← هدف 32 ملغ/يوم (إطراح كبدي)</li>
+        <li><strong>فالسارتان:</strong> بدء 40 ملغ BID ← هدف 160 ملغ BID (إطراح كبدي)</li>
+      </ul>
+    </div>
+    <p>تحسّن الأعراض قد يظهر خلال 48 ساعة لكنه يكتمل خلال أسابيع-أشهر؛ تحسّن مدة التمارين 20–50%. تجنَّب الإيقاف المفاجئ إلا في قصور معاوَض غير متعوَّض بنتاج منخفض وهبوط ضغط، أو تدهور كلوي حاد.</p>
+    <div class="card point-num">
+      <strong>الكلى والبوتاسيوم:</strong> ارتفاع كرياتينين ≤25% أو ≤0.3 ملغ/دل لا يستدعي الإيقاف (يتحسن غالبًا لاحقًا؛ بل قد يدل على فائدة أكبر في القصور الشديد — تجربة CONSENSUS: أعلى فائدة مع كرياتينين 1.4–1.8). عند ارتفاع ≥50% أو ≥0.5 ملغ/دل: خفّض الأدوية الخافضة الأخرى، أوقف NSAIDs، قيّم الجفاف/إفراط المدرات، وأوقف ACE-I مؤقتًا مع إعادة البدء بنصف الجرعة؛ الإيقاف النهائي فقط عند ارتفاع ≥100%. حذر (لا منع) في CKD مرحلة 4–5 (معظم التجارب استبعدت GFR&lt;30)؛ يُمنع فقط في AKI الصريح (لكن يمكن البدء/الزيادة حتى في القصور اللامعاوَض غير الحاد لتحسين الاستجابة للمدرات). للبوتاسيوم: عند 5.5–5.9 مع ACE-I دون ارتفاع كرياتينين كبير — أوقف مكملات البوتاسيوم أولًا، ثم خفّض مضاد الألدوستيرون، ثم ACE-I إن استمر.
+    </div>
+    <p>إضافة ARB إلى ACE-I (تجربة CHARM-Added، مع حاصرات بيتا) قللت دخول المستشفى والوفيات القلبية الوعائية دون تقليل الوفيات الكلية — لذا يُفضَّل إضافة مضاد ألدوستيرون بدلًا من ARB (يقلل الوفيات الكلية أيضًا)؛ <strong>الجمع الثلاثي ACE-I+ARB+مضاد ألدوستيرون ممنوع</strong> لخطر فرط بوتاسيوم شديد.</p>
+
+    <h4 class="subsub">حاصرات بيتا</h4>
+    <p>كانت مضاد استطباب سابقًا وقد تُفاقم الحالة مؤقتًا أول 2–3 أسابيع (تأثير سلبي انقباضي عابر)، لكن طويل الأمد: تحسّن EF بـ5–15%، تحسّن الأعراض، تقليل الوفيات 35–60%، وتقليل دخول المستشفى 40%. الآلية: عكس سمّية الكاتيكولامينات والاستماتة، تقليل متطلبات الطاقة، عكس إعادة التشكيل، الوقاية من اضطرابات النظم، وتخفيض معدل القلب (يحسّن الامتلاء الانبساطي ويقلل استهلاك الأكسجين).</p>
+    <div class="card">
+      <strong>الأنواع الثلاثة المثبتة وجرعاتها:</strong>
+      <ul>
+        <li><strong>ميتوبرولول ساكسينات (ممتد المفعول):</strong> انتقائي β1 (يفقد الانتقائية &gt;100 ملغ)؛ أثبت ثباتًا مقارنة بطرطرات قصير المفعول. بدء 12.5–25 ملغ/يوم ← هدف 200 ملغ/يوم.</li>
+        <li><strong>كارفيديلول:</strong> غير انتقائي (β1+β2+α1) بتأثير موسّع وعائي (مؤقت، يتلاشى بالتحمل)؛ خصائص مضادة للأكسدة؛ كبح أدريناليني أقوى من ميتوبرولول (لا يعزز استجابة β2 المفرطة)؛ تحسين أوضح لـEF وSV وضغط PA/PCWP. بدء 3.125 ملغ BID ← هدف 25 ملغ BID (وزن&lt;85كغ) أو 50 ملغ BID (&gt;85كغ). الشكل الممتد Coreg CR: 10ملغ=3.125ملغ BID عادي؛ بدء 10 ← هدف 80 ملغ/يوم مرة واحدة.</li>
+        <li><strong>بيسوبرولول:</strong> انتقائي β1. بدء 1.25 ملغ/يوم ← هدف 10 ملغ/يوم.</li>
+      </ul>
+    </div>
+    <div class="callout warn">
+      <b>موانع البدء:</b> قصور قلب غير مستقر سريريًا، SBP&lt;90 أو أعراض هبوط ضغط، نبض &lt;55، بلوك AV درجة 2-3، PR&gt;0.24 ثانية، أو تشنج قصبي. يبدأ فقط بعد الوصول للجفاف السريري (يوفوليميا) — يُفضَّل بدء جرعة منخفضة قبل الخروج من المستشفى بعد الاستقرار.
+    </div>
+    <p><strong>التدرج:</strong> ضاعف الجرعة كل أسبوعين مع مراقبة تفاقم ضيق النفس/الوذمة/الوزن/بطء القلب/هبوط الضغط. توقف &gt;أسبوع أو صدمة قلبية ← أعد البدء من أدنى جرعة. عند تفاقم الاحتقان: زد المدرات أولًا؛ إن لم يتحسن، خفّض حاصر بيتا وأبطئ التدرج. تعب شديد: خفّض الجرعة (يتحسن غالبًا تلقائيًا خلال أسابيع). بطء قلب معرِض (&lt;55 مع أعراض أو &lt;50 بدون، أو بلوك AV): خفّض ديجوكسين/أميودارون أولًا، ثم حاصر بيتا. SBP 85–90 مقبول دون تخفيض إلا مع دوخة شديدة أو نقص إرواء — عندها: جرعات منخفضة، تدرج بطيء، تفريق توقيت ACE-I عن حاصر بيتا، وتقليل المدرات. SBP المنخفض عفويًا (&lt;100) عامل إنذار سيئ لكنه لا يقلل تحمّل أو فائدة ACE-I/ARB/حاصرات بيتا/هيدرالازين-نترات — بل تجارب COPERNICUS وCHARM وVal-HeFT وA-HeFT أظهرت أن الضغط قد يرتفع تدريجيًا بعد أيام من العلاج نتيجة تحسّن النتاج القلبي.</p>
+    <p>لا يُشترط بلوغ الجرعة المثلى من ACE-I قبل بدء حاصرات بيتا — يُفضَّل جرعتان منخفضتان معًا بالتناوب (تحسّن أكبر بالأعراض والوفيات من تصعيد ACE-I وحده). التسلسل المقترح: ACE-I جرعة منخفضة ← حاصر بيتا جرعة منخفضة (تعديل كل أسبوعين) ← سبيرونولاكتون ← SGLT2i، ثم تصعيد ACE-I أسبوعيًا إن سمح الضغط/الكلى. لا يوقف حاصر بيتا عادة عند دخول المستشفى بتفاقم (إلا بصدمة كاملة أو حاجة لمقويات القلب) — الإيقاف يرتبط بزيادة وفيات مستقلة قصيرة وطويلة الأمد؛ عند الإيقاف، يعاد البدء بأدنى جرعة قبل الخروج.</p>
+    <p>الفائدة تشمل EF 40–50% (دراستان صغيرتان وتحليل شمولي) ومرضى AF (رغم عدم ظهور فائدة خاصة بتحليلات لاحقة). العامل الأهم للفائدة: الجرعة المحققة، ثم شدة القصور الأساسية، ثم معدل القلب المحقق — فلا تُعدَّل الجرعة بهدف معدل قلب معين، رغم أن ~60–70 نبضة/دقيقة مرغوب (بنظم جيبي فقط؛ لا ينطبق على AF). كارفيديلول أظهر فائدة بقيا بدءًا من 6.25 ملغ BID وتزايدت مع 25 ملغ BID؛ بيسوبرولول وميتوبرولول XL أظهرا تقليل وفيات نسبي مماثل بجرعات منخفضة وعالية. إيفابرادين (مثبط عقدة الجيب الانتقائي) أكد دورًا مباشرًا لمعدل القلب: خفضه وحده ارتبط بتقليل دخول المستشفى.</p>
+
+    <h4 class="subsub">مضادات الألدوستيرون (سبيرونولاكتون، إبليرينون)</h4>
+    <p>الألدوستيرون المرتفع بقصور القلب يسبب تليّف عضلة القلب والشرايين مباشرة، لا فقط احتباس الصوديوم. بداية ونهاية مفعول بطيئتان (2–3 أيام) كالهرمونات الستيرويدية الأخرى.</p>
+    <div class="card point-num">
+      <strong>دواعي الاستطباب (Class I):</strong> EF≤35% مع NYHA III–IV؛ أو NYHA II مع EF≤35% وBNP مرتفع أو استشفاء قلبي وعائي حديث (خلال 6 أشهر)؛ أو ما بعد احتشاء حديث (&lt;30 يومًا) مع EF&lt;40% وأي أعراض قصور أو سكري.
+      <br><br><strong>موانع:</strong> كرياتينين &gt;2 ملغ/دل أو GFR&lt;30؛ بوتاسيوم &gt;5. (تجربة RALES: القصور الكلوي الخفيف GFR 30–60 زاد خطر التدهور الكلوي وفرط البوتاسيوم لكن حقق أكبر انخفاض مطلق بالوفيات — مرشحون مناسبون بمراقبة جيدة).
+      <br><br><strong>الجرعة:</strong> سبيرونولاكتون 12.5–25 ملغ/يوم (قد تُرفع بحذر إلى 37.5–50 مع مقاومة العلاج أو نقص بوتاسيوم مستمر)؛ عند التثدي، إبليرينون بديل. فحص البوتاسيوم والكرياتينين خلال 3 أيام، ثم أسبوع، ثم كل 2–4 أسابيع لثلاثة أشهر. توقف مكملات البوتاسيوم غالبًا عند البدء. فرط البوتاسيوم شائع بالسجلات الواقعية (حتى 20%) فيتطلب مراقبة صارمة؛ يُنبَّه المريض لإيقاف العلاج عند إسهال/جفاف. البوتاسيوم 5–5.4: استمر بنفس الجرعة؛ 5.5–5.9: أوقف أيامًا ثم استأنف بنصف الجرعة؛ ≥6: أوقف نهائيًا.
+    </div>
+    <p>في التليف الكبدي المرافق، جرعات عالية (100–400 ملغ، غير مدروسة بقصور القلب) تزيد الناتريوريز أكثر من مدرات العروة (إعادة الامتصاص النشط بالأنابيب البعيدة يُبطل فعالية مدرات العروة لدى 50% من مرضى التليف). تجربة ATHENA-HF: سبيرونولاكتون 100 ملغ×4 أيام مع فوروسيميد في القصور الحاد لم يحسّن الإخراج البولي أو الوزن أو NT-proBNP لكنه كان آمنًا. <strong>باتيرومير</strong> (رابط بوتاسيوم معوي، يخفضه ~1 ملي مكافئ/لتر) يسمح بمواصلة ACE-I/مضاد الألدوستيرون بنفس الجرعة عند بوتاسيوم 5.5–5.9، وحتى استئنافه بعد أسبوع من الإيقاف عند بوتاسيوم ≥6.</p>
+
+    <h4 class="subsub">مثبط مستقبلات الأنجيوتنسين-نيبريليسين (ARNI؛ ساكوبيتريل-فالسارتان)</h4>
+    <p>نيبريليسين إنزيم يحطم الببتيدات الناتريوتريتيكية والبراديكينين والأدرينوميدولين؛ تثبيطه يرفعها فيعاكس التضيق الوعائي واحتباس الصوديوم وإعادة التشكيل (ويقلل التضخم والتليف). في تجربة <em class="trial">PARADIGM-HF</em> (EF&lt;40%، NYHA II-IV، BNP&gt;150 أو استشفاء سابق خلال سنة): قلل الوفيات خلال سنتين ~3% مطلقًا (تقليل خطر نسبي 16%) مقارنة بACE-I، وخفض دخول المستشفى ~3% إضافية، مع هبوط ضغط عرضي أكثر لكن خلل كلوي وفرط بوتاسيوم أقل وإبطاء أكبر لتدهور الكلى (توسّع انتقائي للشريان الوارد الكلوي). الفائدة ظهرت رغم علاج خلفي كامل بحاصرات بيتا ومضادات ألدوستيرون، وحتى لدى NYHA II منخفضي الخطورة.</p>
+    <p>تجربة <em class="trial">PIONEER-HF</em>: البدء أثناء الإقامة بالمستشفى قلل إعادة الدخول المبكر 42% مقارنة بالبدء بACE-I ثم التحويل بعد 8 أسابيع. لكن لم يظهر تفوق في: القصور المتقدم (NYHA IV، SBP~110 — تجربة LIFE)، أو ما بعد احتشاء حاد حديث بEF منخفض (تجربة PARADISE-MI مقابل ACE-I).</p>
+    <div class="callout warn">
+      <b>السلامة:</b> فاصل 36 ساعة إلزامي بين إيقاف ACE-I والبدء بـARNI لتفادي الوذمة الوعائية. تاريخ وذمة وعائية سابقة مع ACE-I مانع مطلق لـARNI؛ أما السعال السابق فليس مانعًا.
+    </div>
+    <p>ARNI هو العلاج الوحيد الذي <strong>يرفع</strong> BNP مباشرة (فيُربك تفسيره التشخيصي عند البدء، لكن يبقى مفيدًا للمتابعة من خط أساس جديد)؛ NT-proBNP لا يتأثر مباشرة (ناتج ثانوي منفصل عن نفس السلف).</p>
+
+    <h4 class="subsub">مزيج الهيدرالازين-النترات</h4>
+    <p>تجربة <em class="trial">V-HeFT-I</em>: أول دليل على تقليل الوفيات بموسّع وعائي (34% مقارنة بالغفل/حاصرات ألفا)، مدفوعًا أساسًا بالمرضى السود. <em class="trial">V-HeFT-II</em> (مقابل إنالابريل): فعالية مماثلة بتقليل الوفيات لدى السود وتفوّق على الإنالابريل بتحمل التمارين وEF؛ لدى البيض كانت مفيدة أيضًا بهذين المقياسين لكن الوفيات كانت أقل مع الإنالابريل؛ تقليل دخول المستشفى تساوى بالعرقين مع الإنالابريل. <em class="trial">A-HeFT</em> (NYHA III-IV، سود، على ACE-I وحاصرات بيتا): إضافة المزيج قللت الوفيات 43% إضافية ودخول المستشفى 40%.</p>
+    <div class="callout gold">
+      <b>التوصية:</b> Class I لإضافة المزيج لدى المرضى السود من NYHA III-IV فوق ACE-I/ARB وحاصرات بيتا. يُنظر فيه لدى غير السود مع أعراض مستمرة أو ارتفاع ضغط مستمر (&gt;140/90). النترات وحدها يمكن استخدامها لتخفيف الاحتقان والأعراض لدى كل الأعراق (خوارزمية CHAMPION).
+    </div>
+    <p>يمكن استخدام المزيج بديلًا عن ACE-I/ARB عند عدم التحمل (فشل كلوي من ACE-I/ARB لا يتحسن حتى بعد خفض الفوروسيميد، أو فرط بوتاسيوم لا يتحسن بتقييد البوتاسيوم الغذائي) — توصية IIa بصرف النظر عن العرق. الآلية: تقليل العبء اللاحق والمسبق معًا؛ النترات تُستقلب لأكسيد النيتريك (NO) بينما يمنع الهيدرالازين أكسدة NO (خاصية مضادة للأكسدة) فيحافظ على تأثيره — وACE-I أيضًا يمنع أكسدة NO فقد يفيد الجمع معها. تحسّن الوظيفة البطانية وإعادة التشكيل يرفع EF حتى 5%، وقد تقلل مقاومة الأوعية الرئوية في فرط الضغط الرئوي الثانوي. تفسير الاستجابة العرقية المتفاوتة: قد يكون طفرة جينية بإنزيم NOS أكثر شيوعًا لدى السود (لكنها موجودة أيضًا لدى كثير من البيض) — ما يجعل الصيدلة الجينومية مستقبلًا أدق موجّه من العرق نفسه.</p>
+    <div class="card">
+      <strong>الجرعات:</strong> هيدرالازين — بدء 12.5 ملغ TID، رفع إلى 25 ملغ TID بعد 2–4 أيام، ثم زيادة 25 ملغ لكل جرعة أسبوعيًا حتى هدف 50–75 ملغ TID (يمكن BID بالفشل الكلوي). إيزوسوربيد ثنائي النترات — بدء 20 ملغ TID حتى 40 ملغ TID. <strong>BiDil</strong> (قرص مركب 37.5 ملغ هيدرالازين + 20 ملغ ISDN): ابدأ بنصف قرص TID وصولًا لقرصين TID.
+      <br><br><strong>تحذير:</strong> الهيدرالازين يسبب متلازمة شبيهة بالذئبة (طفح وألم مفصلي) لدى 5–10% من المرضى.
+    </div>
+
+    <h3 class="subhead">ج. أدوية تُحسّن الأعراض والمراضة (دون إثبات فائدة بالبقاء)</h3>
+    <h4 class="subsub">المدرات البولية</h4>
+    <p>الثيازيدات ضعيفة التأثير (تثبط ناقل Na-Cl بالأنبوب البعيد، تعيد امتصاص ~3–5% فقط من الصوديوم) وتُستخدم أساسًا لضغط الدم لا لقصور القلب. مدرات العروة (فوروسيميد، بوميتانيد، تورسيميد) تثبط ناقل Na-K-2Cl بعروة هنلي الصاعدة (~25% من إعادة الامتصاص) وهي الدعامة الأساسية بقصور القلب. كلاهما يُفرَز عبر الأنبوب القريب إلى التجويف ويعمل من الجهة اللمعية؛ بقصور القلب/الفشل الكلوي يقل التدفق الكلوي فتقل الكمية الواصلة، وينخفض الصوديوم المُرشَّح كليًا (خاصة بـGFR&lt;30) فتقل الكمية القابلة للطرح بكل جرعة — يستدعي جرعات أعلى وتكرارًا أكبر. جميع المدرات ترتبط بالألبومين الذي ينقلها لموقع الإفراز؛ نقص الألبومين الشديد (&lt;2 غ/دل) يُفقد بعضها بالحيز خارج الأوعية، وقد يرتبط المدر الواصل للمعة بالألبومين البولي (بالمتلازمة الكلوية) فيمنع تأثيره. رغم الاعتقاد الشائع، تبقى الثيازيدات فعالة بالفشل الكلوي المتقدم عند إضافتها لمدر عروة (تزيد الصوديوم الواصل للأنبوب البعيد)؛ الميتولازون (شبيه ثيازيد يعمل أيضًا بالأنبوب القريب) يحافظ على فعاليته بالفشل الكلوي المتقدم وله مفعول ممتد (~أسبوع).</p>
+    <div class="card point-num">
+      <strong>عتبة التأثير (Diuretic Threshold):</strong> لا يحدث إدرار قبل تجاوز عتبة معينة بمستوى الأنابيب؛ بعد تجاوزها يصل الناتريوريز لأقصاه ولا تضيف جرعات أعلى شيئًا. الشخص الطبيعي: عتبة فوروسيميد وريدي ~10 ملغ، أقصى فعالية ~40 ملغ. مريض قصور القلب: عتبة أعلى (~40 ملغ) واستجابة وتأثير أقصى أقل (منحنى أقل انحدارًا). لذا 20 ملغ BID قد لا يعطي أي إدرار إن كانت العتبة 40، بينما 40 ملغ مرة واحدة فعّالة؛ وإن كانت 40 ملغ فعالة (بول&gt;500 مل) لكن لا تكفي للجفاف الكامل، فـ40 ملغ BID أفضل من 80 ملغ مرة واحدة. <strong>القاعدة العملية: كرر الجرعة العتبية بدل زيادتها.</strong>
+    </div>
+    <p>فوروسيميد الوريدي: ذروة البول خلال 30–60 دقيقة. فمويًا: امتصاص ~50% متغير جدًا (10–90%) فالجرعة الفموية الفعالة ضعف الوريدية عدديًا؛ بوميتانيد وتورسيميد يُمتصان بثبات أكبر (80–100%). الوذمة المعوية تبطئ الامتصاص فتمنع بلوغ العتبة (يستدعي جرعات أعلى أو بدء وريدي). مدة تأثير قصيرة (4–6 ساعات) تستدعي تقسيم الجرعة اليومية العالية. تورسيميد: مدة أطول (~12 ساعة)، توافر حيوي فموي أفضل، استقلاب كبدي، جرعة واحدة يوميًا؛ تجربتان صغيرتان أظهرتا تفوقه على الفوروسيميد بتقليل الاستشفاء وعكس التليف القلبي — يُفكَّر فيه عند استجابة غير منتظمة أو مقاومة. الجرعات المكافئة: بوميتانيد 1 ملغ = فوروسيميد 40 ملغ (أو 20 بالفشل الكلوي المتقدم)؛ تورسيميد 20 ملغ = فوروسيميد 40 ملغ. فوروسيميد يُطرح كليًا (يتأخر تصفيته بالفشل الكلوي فيطول تأثيره)، بينما بوميتانيد وتورسيميد يُستقلبان كبديًا.</p>
+    <div class="card">
+      <strong>بروتوكول عملي للمرضى الخارجيين:</strong>
+      <ul>
+        <li>أقل جرعة مزمنة تحافظ على الجفاف السريري (فوروسيميد 20 ملغ/يوم قابلة للزيادة حتى 40–80 ملغ 2–3 مرات/يوم)</li>
+        <li>استجابة جيدة على 40 ملغ لكن حاجة لـ80 ملغ يوميًا؟ فضِّل 40 ملغ BID على 80 ملغ مرة واحدة</li>
+        <li>زيادة وزن &gt;3 أرطال (~1.36 كغ) خلال &lt;5 أيام ← جرعة إضافية يوميًا حتى عودة الوزن؛ استمرار الارتفاع 1–2 يوم ← زيارة عيادة فورية ± ميتولازون 1–2 يوم</li>
+        <li>مرضى مستقرون بأعراض خفيفة على جرعة منخفضة (≤40 ملغ) — يمكن التفكير بسحب الفوروسيميد (تجربة ReBIC)</li>
+        <li>قصور شديد يتطلب &gt;200 ملغ/يوم مزمنًا — دعم بجرعة كلورثاليدون أو ميتولازون كل 2–3 أسابيع</li>
+        <li>بوتاسيوم فموي 20–40 ملي مكافئ/يوم (خاصة دون مضاد ألدوستيرون) بهدف ≥4؛ من يحتاج جرعات عالية غالبًا لديه نقص مغنيزيوم مرافق يستدعي تعويضًا</li>
+      </ul>
+    </div>
+    <p><strong>تفسير BUN/الكرياتينين:</strong> بالقصور الحاد اللامعاوض، ارتفاعهما مع المدرات يعكس غالبًا احتقانًا متفاقمًا (لا إفراط إدرار) — معظم هؤلاء لا يزالون محمَّلين بالسوائل، فيُستمر أو يُزاد الإدرار حتى الجفاف السريري. بالحالات المزمنة المستقرة، ارتفاعهما يوحي غالبًا بانكماش حجمي مفرط ويستدعي عادة تخفيض الجرعة ما لم توجد علامات احتباس. جرعات مزمنة عالية (&gt;160 ملغ/يوم) قد تلزم بالقصور المتقدم، وقد ترتبط حتى بانخفاض وفيات (بتحليل معدَّل) ما دام BUN لم يرتفع. علاجان حديثان يقللان جرعة مدر العروة اللازمة مع تحسين الوفيات وإبطاء تدهور الكلى: <strong>ARNI</strong> و<strong>SGLT2i</strong>.</p>
+
+    <h4 class="subsub">الديجوكسين</h4>
+    <p>فريد بجمعه بين تأثير تقلّصي إيجابي خفيف وتأثير زمني سلبي — الدواء الوحيد من فئة المقويات الانقباضية الذي لا يرفع الوفيات. الآلية: تثبيط مضخة Na/K-ATPase الغشائية ← ارتفاع صوديوم داخل الخلية ← ارتفاع كالسيوم عبر التبادل الصوديوم-كالسيوم (تأثير تقلّصي)؛ كما يرفع النغمة المبهمة فيضاد فرط الكاتيكولامين، فيخفض معدل القلب، يزيد تقلب معدل القلب، ويحقق توسعًا وعائيًا خفيفًا. هذا التعديل العصبي-الهرموني عند مستويات منخفضة يفسّر معظم الفائدة (وليس التأثير الانقباضي)؛ EF يتحسن حتى 5% حتى بجرعات منخفضة، بينما التركيزات المرتفعة تقوّي التأثير الانقباضي لكنها تُضعف الفائدة العصبية-الهرمونية (تفسير محتمل لزيادة الوفيات بالمستويات العالية) دون تحسّن إضافي بالأعراض أو التحكم بالمعدل.</p>
+    <div class="card point-num">
+      <strong>الاستطباب (Class IIa):</strong> أعراض مستمرة رغم كل الأدوية السابقة. تجربة <em class="trial">DIG</em> (نظم جيبي): قلل وفيات فشل الضخ لكن عوّضه ارتفاع وفيات اضطراب النظم (تأثير محايد صافٍ على الوفيات)؛ قلل الاستشفاء ~30% (أوضح بـEF&lt;25% وNYHA III-IV). خطر أعلى لدى النساء (يُرجَّح بسبب ارتفاع مستوياته الدموية لديهن). في HF+AF: خيار ثانٍ إذا لم تُسيطر حاصرات بيتا وحدها على المعدل. <strong>لا يوقف إلا عند السمية</strong> — سحبه بعد البدء يُفاقم القصور ويزيد الاستشفاء.
+    </div>
+    <p><strong>الجرعة:</strong> 0.125 ملغ/يوم لمعظم المرضى؛ كل يومين لصغار الحجم، النساء، كبار السن (&gt;70)، والفشل الكلوي؛ 0.25 ملغ/يوم ممكنة للشباب كبار الحجم بوظيفة كلوية طبيعية. لا حاجة لجرعة تحميل بقصور القلب (فقط باضطرابات فوق بطينية). راقب المستوى بعد أسبوعين (الاستقرار)، خاصة بالفشل الكلوي، النساء، تداخلات دوائية، أو اشتباه سمية — هدف الحضيض ≤0.8 نانوغرام/مل (بعد ≥6 ساعات من آخر جرعة). في DIG: حضيض 0.5–0.8 ارتبط بانخفاض الوفيات، بينما &gt;1.1 ارتبط بارتفاعها؛ كل الفوائد الهيموديناميكية وEF والعصبية-الهرمونية ظهرت عند الجرعة/التركيز المنخفض دون فائدة إضافية بالجرعات الأعلى.</p>
+    <div class="callout warn">
+      <b>السمية:</b> تظهر عادة &gt;1.5–1.8 نانوغرام/مل (وقد تحدث بمستويات أقل مع الاستخدام المطول أو نقص بوتاسيوم). تشمل: تسرع أذيني مع حصار، تسرع وصلي غير نوبي، تسرع بطيني (بما فيه ثنائي الاتجاه المميز)، غثيان/قيء، هالات بصرية/هلوسات ضوئية، وتغيرات عصبية. نصف العمر ~36 ساعة (يستمر التأثير ~4 أيام بعد الإيقاف). أضداد الديجوكسين (DigiFab) عند اضطراب نظم مع عدم استقرار هيموديناميكي — عدد القوارير = (مستوى الديجوكسين × الوزن كغ)÷100؛ يرتبط بالديجوكسين مشكِّلًا مركبًا خاملًا يُطرح كليًا (نصف عمر 15–20 ساعة، يطول بالفشل الكلوي)؛ مستوى الديجوكسين الكلي قد يبقى مرتفعًا أو يزداد بعد الإعطاء دون دلالة سريرية (يمثل الشكل المرتبط لا الحر)؛ راقب نقص البوتاسيوم بعد الإعطاء.
+    </div>
+
+    <h4 class="subsub">إيفابرادين</h4>
+    <p>مخفِّض نقي لمعدل القلب عبر تثبيط مباشر للعقدة الجيبية. تجربة <em class="trial">SHIFT</em> (NYHA II-IV، EF≤35%، استشفاء سابق خلال سنة، معدل ≥70 رغم أقصى جرعة متحملة من حاصرات بيتا): قلل الاستشفاء والوفيات بسبب قصور القلب 26%، وثابت حتى بـNYHA IV. لا دور له بالرجفان الأذيني (بل قد يزيد خطره قليلًا بالنظم الجيبي). بعد المعايرة الكاملة لحاصرات بيتا، ~14% فقط يستوفون معايير استخدامه.</p>
+
+    <h4 class="subsub">مثبطات SGLT2 (الجليفلوزينات)</h4>
+    <p>توصية Class I في HFrEF (ESC). SGLT2 الناقل الرئيسي لإعادة امتصاص الغلوكوز بالأنبوب القريب (مع الصوديوم تزامنًا)؛ تثبيطه يحدث بيلة سكرية فإدرارًا أسموزيًا وناتريوريز. بمرضى السكري قللت الاستشفاء بقصور القلب ~35% بصرف النظر عن وجوده أساسًا.</p>
+    <div class="card point-num">
+      <strong>الأدلة في HFrEF:</strong> <em class="trial">DAPA-HF</em> (داباجليفلوزين 10 ملغ/يوم، EF&lt;40%، مع/دون سكري [58%]، NYHA II-IV): تقليل لافت للاستشفاء بالسكريين وغير السكريين، تحسّن الأعراض، وتقليل الوفيات 17% — رغم علاج قياسي كامل بالفعل (أغلبهم NYHA II). <em class="trial">EMPEROR-Reduced</em> (إمباجليفلوزين 10 ملغ/يوم): نتيجة مماثلة مع/دون سكري؛ جرعة الفوروسيميد لم تتغير لدى معظم المرضى.
+    </div>
+    <p>آليات الفائدة: تأثير مدر أسموزي-ناتريوتريتيكي؛ تأثيرات استقلابية قلبية مباشرة (زيادة أجسام الكيتون كوقود أكفأ للقلب، وزيادة أكسدة الغلوكوز القلبي على حساب الدهون)؛ وتأثيرات كلوية (إبطاء انخفاض GFR مقارنة بالغفل في EMPEROR-Reduced وDAPA-CKD). يُتجنَّب عند GFR&lt;30 مل/دقيقة.</p>
+  </section>
+
+  <!-- ============ V. DEVICES, OTHER THERAPIES, PROGNOSIS ============ -->
+  <section class="roman" id="c2s5">
+    <div class="roman-head"><div class="roman-badge">V</div><h2>الأجهزة العلاجية، تدابير أخرى، والتنبؤ</h2></div>
+
+    <h3 class="subhead">أ. مزيل الرجفان القابل للزرع (ICD)</h3>
+    <p>50% من وفيات قصور القلب بسبب تسرع/رجفان بطيني، و50% بفشل ضخ نهائي منخفض النتاج؛ الاحتشاءات المتأخرة تسهم بـ30–50% من كلا النمطين بالاعتلال الإقفاري. الموت المفاجئ أقل شيوعًا بالقيمة المطلقة لكنه أكثر شيوعًا نسبيًا بـNYHA II مقارنة بـIV.</p>
+    <div class="card point-num">
+      <strong>الاستطباب:</strong> وقاية ثانوية — تاريخ تسرع بطيني مستدام. وقاية أولية — اعتلال إقفاري أو غير إقفاري مع EF≤35% مستمر رغم العلاج الأمثل، NYHA II-III، وتوقع بقاء &gt;سنة (أو NYHA I مع اعتلال إقفاري وEF&lt;30%). فترات انتظار: &gt;40 يومًا بعد احتشاء؛ &gt;3 أشهر بعد إعادة توعية بإقفار مزمن؛ 3–6 أشهر باعتلال غير إقفاري (للتأكد من عدم انعكاسه — معقولة لا إلزامية بإرشادات ACC).
+    </div>
+    <p><strong>لا استطباب بـNYHA IV</strong> (وفيات مرتفعة جدًا؛ رغم تعرضهم أكثر لـVT/VF فهم معرضون أكثر لوفاة فشل الضخ — فـICD يُحوّل نمط الوفاة دون تقليل معدلها الكلي). استثناء: مريض NYHA IV قادر على الحركة ومستطب لناظمة ثنائية البطين (BiV) ← جهاز مشترك BiV/ICD مستطب ويحسّن البقيا والحياة. حالات مشابهة بلا فائدة واضحة: CKD مرحلة ≥4 (تجربة MADIT II)، أو أمراض مرافقة متعددة (عمر&gt;70 مع استشفاءات متكررة).</p>
+
+    <h3 class="subhead">ب. المعالجة بإعادة التزامن القلبي (CRT / BiV Pacemaker)</h3>
+    <p>20–30% من مرضى قصور القلب لديهم QRS&gt;120 مللي ثانية (80% بسبب LBBB) مسببًا عدم تزامن داخل البطين وبينهما، حركة متتالية لشرفتي الميترال ← قلس تاجي وظيفي. طول QRS مرتبط باستقلالية بارتفاع الوفيات. CRT يحفّز البطينين معًا فيعيد التزامن، ويحسّن الوظيفة الانبساطية (تقصير الانقباض ← إطالة زمن الامتلاء).</p>
+    <div class="card point-num">
+      <strong>الاستطباب:</strong> EF≤35% وQRS≥150 مللي ثانية (خاصة LBBB أو نظم مُحفَّز بالبطين الأيمن) وNYHA II-IV (قادر على الحركة) رغم علاج مناسب، بنظم جيبي أو AF (هؤلاء لديهم استطباب مشترك CRT/ICD أيضًا). Class IIa: LBBB مع QRS 130–150، أو RBBB مع QRS&gt;150.
+    </div>
+    <p>تجربتا <em class="trial">CARE-HF</em> وRAFT: تحسّن البقيا والأعراض وEF، تقليل حجم الانقباض (إعادة تشكيل عكسية) وتقليل القلس التاجي الوظيفي. مرضى AF مع EF≤35% وQRS عريض يستفيدون بنفس الدرجة لكن يحتاجون ضبطًا صارمًا للمعدل لضمان تحفيز CRT المستمر (قد يستلزم استئصال العقدة الأذينية البطينية).</p>
+    <p><strong>عدم الاستجابة (~30% من المرضى)</strong> لعدة أسباب: QRS العريض لا يعني دائمًا عدم تزامنًا حقيقيًا (كلما زاد QRS زادت احتمالية الاستجابة؛ تقييم الإيكو يساعد باختيار مرضى QRS 130–150 — تجربة CARE-HF)؛ الاعتلال الإقفاري بندبات كبيرة يستجيب أضعف من غير الإقفاري؛ وضع القطب غير الأمثل (القمة بدل الجدار الجانبي القاعدي)؛ وRBBB النقي أقل استجابة من LBBB (رغم تساوي الإنذار السيئ) إلا إذا كان البطين الأيمن هو الجانب المتأخر الأساسي، أو وُجدت خصائص إيكو لعدم تزامن مع تباطؤ توصيل بالحزمة اليسرى. لا فائدة من CRT بـQRS&lt;130 حتى مع عدم تزامن مرئي بالإيكو (~30% من هؤلاء يُظهرونه). CRT غير موصى به عمومًا بـNYHA IV المعتمد على الإينوتروبيات، لكن مع QRS&gt;150 قد تُحقق فائدة دراماتيكية (تحسن بقيا كبير خلال سنة، وفصل 93% عن الإينوتروبيات).</p>
+    <p><strong>ناظمة قلبية بسيطة:</strong> 5–10% من مرضى EF≤35% يحتاجون ناظمة لبطء نظم (لا لعلاج القصور بحد ذاته)؛ عند الحاجة لتحفيز بطيني متكرر، تُفضَّل الناظمة ثنائية البطين (BiV) على ناظمة البطين الأيمن وحده إذا EF≤35% (أو حتى &lt;50% ببعض الدراسات) — توصية IIa بصرف النظر عن الدرجة الوظيفية.</p>
+
+    <h3 class="subhead">ج. تدابير علاجية أخرى</h3>
+    <ul>
+      <li><strong>تقييد الصوديوم:</strong> &lt;2–3 غ/يوم؛ تقييد السوائل 1.5–2 لتر/يوم بالقصور المتقدم/اللامعاوض أو نقص صوديوم الدم.</li>
+      <li><strong>التدريب البدني:</strong> يحسّن وظيفة الأوعية، استخلاص الأكسجين العضلي، والأعراض.</li>
+      <li><strong>أوميغا-3:</strong> تجربة GISSI-HF (1 غ/يوم، NYHA II-IV بصرف النظر عن EF) — تقليل نسبي طفيف للوفيات 9% (Class IIa). المحتوى الفعلي يتفاوت (350–850 ملغ لكل غرام زيت سمك تجاري)؛ الهدف 850 ملغ/يوم (ESC).</li>
+      <li><strong>مضادات التخثر:</strong> تُستطب مع AF، خثرة بالبطين الأيسر، أو تاريخ سكتة/TIA مع خلل شديد بالبطين. الأسبرين يُستطب بالاعتلال الإقفاري فقط؛ فائدته غير مؤكدة بغياب CAD (وكـNSAID قد يعاكس فوائد ACE-I — تحليل WATCH ربطه بزيادة الاستشفاء). أسبرين مقابل وارفارين (تجربتا WATCH وWARCEF، EF&lt;35% بنظم جيبي): الوارفارين خفّض خطر السكتة الإقفارية للنصف (كان أصلًا منخفضًا ~1.3%/سنة) لكن زاد النزف الدماغي والكبير، فلم يظهر فرق صافٍ بالوفاة/الاحتشاء/السكتة الكلي — يعكس انخفاض خطر السكتة أصلًا بمرضى مستقرين بنظم جيبي.</li>
+      <li><strong>تجنَّب:</strong> NSAIDs، حاصرات كالسيوم غير ثنائية الهيدروبيريدين (فيراباميل، ديلتيازيم — تأثير سلبي انقباضي)، الجليتازونات، ومضادات TNF-α.</li>
+      <li><strong>ثنائيات الهيدروبيريدين:</strong> ليست مستطبة مباشرة لكن ليست ممنوعة (باستثناء نيفيديبين ذو التأثير السلبي الانقباضي الطفيف). أملوديبين وفيلوديبين آمنان بـEF&lt;30% (تجارب PRAISE) ويمكن استخدامهما مع ACE-I وحاصرات بيتا لضبط الضغط أو الذبحة عند الحاجة.</li>
+      <li><strong>اضطرابات النوم التنفسية:</strong> OSA لدى 25% من المرضى — CPAP+أكسجين ليلي يحسّن EF (حتى 8%) والوظيفة الانبساطية والبطين الأيمن والقدرة الوظيفية. انقطاع النفس المركزي (Cheyne-Stokes) لدى حتى 35% (خاصة بالحالات المتقدمة) — يُعالَج بأكسجين ليلي (تحسّن عرضي)؛ <strong>التهوية غير الغازية ليست مفيدة هنا وقد تزيد الوفيات</strong> (تجربة SERVE-HF).</li>
+      <li><strong>علاج الحديد:</strong> نقص الحديد شائع جدًا (~40%، بينها 30% دون فقر دم) ويؤثر سلبًا على استقلاب العضلة حتى بغياب فقر الدم. تُستخدم عتبات فيريتين أعلى بقصور القلب (احتجاز بالجهاز الشبكي البطاني): فيريتين&lt;100، أو 100–300 مع تشبع حديد&lt;20%. الحديد الوريدي حسّن مسافة المشي والدرجة الوظيفية وقلل الاستشفاء (تجربة CONFIRM-HF) — Class IIa بـEF&lt;50%. الإريثروبويتين لم يُظهر فائدة.</li>
+    </ul>
+
+    <h3 class="subhead">د. التنبؤ بالخطر (HFrEF)</h3>
+    <p>معدل الوفيات السنوي بـNYHA II-III: 6–10%؛ نصفها موت مفاجئ ونصفها فشل ضخ؛ الاحتشاءات تسهم 30–50% من كلا النمطين بالاعتلال الإقفاري. الموت المفاجئ أكثر شيوعًا نسبيًا بـNYHA II من IV.</p>
+    <div class="card">
+      <strong>عوامل إنذار سيئ:</strong> EF&lt;30%؛ NYHA IIIB-IV مقاوم (وفيات سنة واحدة 30–50%)؛ استشفاء بقصور لامعاوض (خطر وفاة ×4–10 خاصة بالأشهر الأولى بعد الخروج، ينخفض تدريجيًا خلال 12 شهرًا دون عودة لخط الأساس؛ يزداد مع تكرار الاستشفاء حتى ×10)؛ نمط منخفض النتاج (فشل كلوي، ضعف استجابة للمدرات، هبوط ضغط، تسرع قلب راحي، هزال، صوديوم&lt;133، فقر دم بـHb&lt;12، وSBP&lt;100 مع عدم تحمل ACE-I/حاصرات بيتا)؛ استهلاك أكسجين قمي&lt;14 مل/دقيقة/كغ بالجهد؛ الاعتلال الإقفاري (وفيات ×1.5–2 من غير الإقفاري)؛ قصور أيمن مرافق للأيسر؛ تضخم حجم/كتلة البطين الأيسر (مؤشر إعادة تشكيل سلبي قوي — العلاجات الحالية ACE-I/حاصرات بيتا/سبيرونولاكتون/CRT تساعد بتقليله)؛ قلس تاجي وظيفي شديد وAF؛ والفشل الكلوي (بخط الأساس أو عند الخروج، بما فيه متلازمة القلب-الكلى).
+    </div>
+
+    <h3 class="subhead">هـ. علاج قصور القلب مع الكسر القذفي المحافظ (HFpEF)</h3>
+    <p>وبائيًا: أكثر شيوعًا بالأعمار المتقدمة، أقل ارتباطًا بـCAD من الانقباضي، أكثر ارتباطًا بارتفاع الضغط وAF، ويصيب النساء أكثر. دراستان أظهرتا وفيات طويلة الأمد مقاربة للانقباضي؛ تحليل شمولي أظهر وفيات سنوية أقل بـ~30% (خاصة القلبية الوعائية) — لكنها تبقى مرتفعة عمومًا (يُفسَّر جزئيًا بالعمر والأمراض المرافقة غير القلبية). <strong>لا يوجد حتى الآن علاج نوعي مثبت يحسّن البقيا في HFpEF بحد ذاته.</strong></p>
+    <p>أنماط الوفاة تختلف جوهريًا عن الانقباضي: 60% قلبية بـHFpEF (15% فقط بسبب القصور نفسه، 27% مفاجئة، 5% احتشاء) مقابل ~85% وفيات قلبية (مفاجئة أو بالقصور) بالانقباضي. آليات الموت المفاجئ المحتملة: نقص تروية ثانوي (LVEDP مرتفع، LVH، اختلال توازن الأكسجين، CAD كامن) واضطراب النظم الناتج، إضافة لتليف الكولاجين المبعثر. رغم أن خطر الموت المفاجئ أقل من الانقباضي، يبقى مرتفعًا — <strong>لا استطباب لـICD في HFpEF بحد ذاته.</strong> معدل إعادة الاستشفاء السنوي متشابه بين النوعين.</p>
+    <div class="card point-num">
+      <strong>ركائز العلاج في HFpEF:</strong>
+      <ol>
+        <li><strong>علاج الأمراض المرافقة</strong> (ارتفاع ضغط الدم، سمنة، CAD) — الركيزة الأساسية إذ لا دواء نوعي مثبت.</li>
+        <li><strong>مثبطات SGLT2</strong> — الدواء الوحيد المُثبَت قطعيًا لتقليل إعادة الاستشفاء وتحسين جودة الحياة سريعًا (تجربة EMPEROR-Preserved: تقليل إعادة الدخول السنوي من 6% إلى 4.3%).</li>
+        <li><strong>ضبط ضغط الدم</strong> لهدف &lt;130/80 (ACC) أو &lt;140/80 (ESC) — تقليل العبء اللاحق يحسّن الاسترخاء وعلاقة الضغط-الحجم والحجم النبضي؛ ACE-I أو CCB يحسّنان مطاوعة الشرايين. لكن التخفيض المفرط أقل تحملًا من الانقباضي (SBP حدّي ~110 أقل تحملًا هنا)؛ بسجل كبار السن (متوسط 79 سنة)، SBP&lt;130 ارتبط بزيادة الوفيات وإعادة الاستشفاء.</li>
+        <li><strong>إزالة الاحتقان بالمدرات لا النترات:</strong> يتحمل مرضى HFpEF اللامعاوض جرعات عالية من المدرات؛ لكن بسبب انحدار علاقة الضغط-الحجم، قد يكون PCWP مرتفعًا رغم حجم LV طبيعي (اعتماد على التحميل المسبق) — فالمدرات قد تخفض النتاج القلبي أكثر مما بالانقباضي، ويُنصح طويل الأمد بجرعة أقل. النترات طويلة المفعول لم تحسّن التمارين بل فاقمت النشاط (تجربة NEAT-HFpEF، ومعظم المشاركين NT-proBNP طبيعي) — النافذة العلاجية بين تخفيف الاحتقان (تقليل التحميل المسبق) وتحسين النتاج (تقليل العبء اللاحق) أضيق من الانقباضي.</li>
+        <li><strong>ضبط النظم بالاضطرابات السريعة المزمنة:</strong> يُفكَّر بالتحكم بالنظم عند استمرار الأعراض رغم ضبط المعدل، شريطة إمكانية الحفاظ على النظم الجيبي طويل الأمد.</li>
+        <li><strong>إعادة التوعية</strong> عند CAD واسع مساهم — ارتبطت بانخفاض الوفيات ومنع تدهور EF.</li>
+      </ol>
+    </div>
+    <div class="callout warn">
+      <b>قيمة مشكوك بها: تخفيض معدل القلب.</b> حاصرات بيتا وحاصرات الكالسيوم غير DHP وإيفابرادين. حادًا: إبطاء المعدل لا يحسّن الامتلاء بالقصور اللامعاوض (الوقت المتاح أصلًا قصير)؛ معدل حتى 110–120 مقبول حادًا، وحاصرات بيتا/CCB غير DHP يمكن استخدامها فقط عند حاجة ضبط حاد لتسرع نظم حقيقي. مزمنًا: إطالة الانبساط نادرًا ما تخفف الأعراض بـHFpEF؛ بل قد تُفاقم حاصرات بيتا الأعراض لدى ~50% (عدم كفاءة تسارع النبض) أو بحجرة صغيرة صلبة معتمدة كليًا على معدل القلب للنتاج. إيفابرادين أظهر ضررًا في تجربتين (تراجع القدرة على التمارين؛ تدهور E وزيادة حجم الأذين). الاستثناء: نيبيفولول (حاصر β1 موسّع وعائي) قلل الاستشفاء القلبي الوعائي في كل أنواع القصور لدى كبار السن، بما فيها HFpEF.
+    </div>
+    <p><strong>ACE-I / ARB / ARNI في HFpEF:</strong> دورها محل تساؤل رغم فائدتها بعكس LVH وبضغط الدم. CHARM-Preserved (كانديسارتان): تقليل طفيف للاستشفاء (فرق مطلق ≤2% خلال 3 سنوات). I-PRESERVE وPARAGON-HF (ARB وARNI): لا فائدة. الضغط كان مضبوطًا جيدًا بخط الأساس بالتجارب الثلاث (SBP~130–135). <strong>تحذير مهم:</strong> على عكس الانقباضي (حيث لا يؤثر التدهور الكلوي المبكر على الفائدة طويلة الأمد)، التدهور الكلوي المبكر بعد بدء ACE-I/ARB (كرياتينين≥0.3 أو GFR↓≥20%) بـHFpEF يرتبط بتدهور النتائج القلبية الوعائية وزيادة الوفيات.</p>
+    <p><strong>سبيرونولاكتون:</strong> تجربة Aldo-DHF (NYHA II مستقرين، ضغط مضبوط): حسّن E/E′ وكتلة LV وNT-proBNP لكن دون تحسّن أعراض أو قدرة تمارين. تجربة <em class="trial">TOPCAT</em> (NYHA II-III مع BNP مرتفع أو استشفاء سابق): في مرضى الأمريكيتين، خفّض الوفيات القلبية الوعائية 26% (5%→3.5%/سنة) والاستشفاء 20% (10%→8%/سنة) — يُتوقَّع فائدة أكبر بالأشد اعتلالًا مع دليل موضوعي (BNP مرتفع) — توصية IIb (ACC).</p>
+    <div class="callout info">
+      <b>مسار NO-cGMP:</b> يساهم بارتخاء البطين ومرونة الشرايين. <strong>سيلدينافيل غير موصى به في HFpEF</strong> — فشلت تجربتان (حتى مع فرط ضغط رئوي بعد الشعيرات ± مكوّن ما قبلها) بإظهار فائدة على التمارين أو VO₂ القمي أو الديناميكا الدموية. لكن تحفيز نفس المسار قد يفيد في <strong>HFrEF</strong>: فيريسيغوات (محفز غوانيلات سيكليز) قلل إعادة الاستشفاء بتجربة VICTORIA؛ وسيلدينافيل حسّن الأعراض بدراسة أخرى هناك.
+    </div>
+  </section>
+
+  <!-- ============ VI. ACUTE HF: TRIGGERS & CLINICAL PATTERNS ============ -->
+  <section class="roman" id="c2s6">
+    <div class="roman-head"><div class="roman-badge">VI</div><h2>قصور القلب الحاد: المحفزات والأنماط السريرية</h2></div>
+    <p>العرض الحاد لقصور القلب يشمل ثلاث متلازمات: (1) <strong>القصور اللامعاوض الحاد (ADHF)</strong> — تدهور قصور مزمن معاوَض، الأكثر شيوعًا (~70%) وغالبًا أول عرض لقصور تدريجي مزمن؛ (2) <strong>قصور حاد جديد (De novo)</strong> — نتيجة إقفار/احتشاء حاد، قلس صمامي حاد، أزمة ضغط مع قصور انبساطي حاد، أو التهاب عضلة قلب كاسح (~25% من العروض؛ البطين هنا غير متوسع كما بالمزمن)؛ (3) نسبة صغيرة (~5%) ثانوية لقصور انقباضي مزمن شديد بتدهور تدريجي لا يمكن كبحه (حالة نتاج منخفض). عمومًا 50–60% من حالات القصور الحاد انقباضية والباقي HFpEF. الحمل الزائد يكون ظاهرًا سريريًا (احتقان) لدى معظم المرضى، لكن فئة (خاصة بأعراض مفاجئة) قد تُظهر فرط حجم خفيفًا فقط مع ارتفاع شديد بضغط الامتلاء ناتج عن <strong>إعادة توزيع السوائل</strong> — وحتى بهؤلاء يسبق ارتفاع ضغط الامتلاء العرض السريري بأيام-أسابيع (تغير ديناميكي تدريجي رغم ظهور مفاجئ للأعراض).</p>
+
+    <h3 class="subhead">أ. محفزات التدهور الحاد</h3>
+    <ul>
+      <li><strong>عدم الالتزام بالعلاج</strong> — تقييد الصوديوم/السوائل، أو استخدام NSAIDs.</li>
+      <li><strong>ارتفاع ضغط الدم الحاد</strong> — ضعف المطاوعة الوعائية يسبب تقلبات حادة بالضغط من تغيرات حجمية طفيفة نسبيًا ← ارتفاع مفاجئ بالعبء اللاحق. ~50% من ADHF لديهم ارتفاع ضغط عند العرض (70% بخط الأساس). قد يكون الارتفاع الحاد جزئيًا نتيجة الوذمة الرئوية والانفجار الودي المرافق — يفسر الهبوط المفاجئ بالضغط عند بدء الإدرار. <strong>تجنَّب البدء العدواني بالموسّعات الوعائية/خافضات الضغط المتعددة عند الدخول قبل بدء المدرات أولًا</strong> — التوسع المفرط (كما بالتنبيب/التخدير) قد لا يقابله ارتفاع كافٍ بالنتاج (احتياطي محدود) فيسبب هبوطًا حادًا شديدًا.</li>
+      <li><strong>الإقفار الحاد</strong> — ACS يسبب ~30% من حالات القصور الحاد (خاصة De novo)؛ وCAD بلا ACS موثق بـ30% إضافية. دراسة تشريحية: احتشاء حاد في 54% من الموت المفاجئ بالاعتلال الإقفاري و30% من وفيات فشل الضخ.</li>
+      <li><strong>اضطراب النظم</strong> — بطء غير مناسب (بلوك AV أو بطء جيبي حتى 50–60) يدل على مساهمته بالتدهور. معدل نبض 80–110 طبيعي متوقع باللامعاوض. AF بمعدل بطيني سريع لدى 30–40% من ADHF (قد يكون سببًا أو نتيجة).</li>
+      <li><strong>عدوى جهازية أو فقر دم</strong> — يزيدان التحميل المسبق والتقلص لتلبية الطلب الاستقلابي، لكن بوجود خلل قلبي: (1) البطين لا يستوعب التحميل المرتفع ← ارتفاع ضغوط الامتلاء؛ (2) الحجم النبضي لا يزيد كفاية ← نقص تروية نسيجي؛ (3) التسرع المرافق قد يُفكك التعويض.</li>
+      <li><strong>القصور الصمامي الحاد</strong> — خاصة القلس التاجي الديناميكي الوظيفي، بتأثير فوري على ضغط الامتلاء وحجم الطرد.</li>
+    </ul>
+    <div class="card">
+      <strong>ملاحظات:</strong> 30–64% من مرضى القصور الحاد لديهم فشل كلوي متوسط-شديد عند الدخول — غالبًا من القصور نفسه لا من إفراط الإدرار؛ يخلق ذلك حلقة مفرغة (فشل كلوي ← فرط حجم ← تنشيط عصبي هرموني إضافي ← تفاقم أكبر). الانصمام الرئوي قد يُفاقم القصور الأيمن لكن نادرًا ما يسبب وذمة رئوية. <strong>في 40–50% من حالات القصور الحاد لا يوجد محفز واضح.</strong>
+    </div>
+
+    <h3 class="subhead">ب. الأنماط السريرية (التقييم الديناميكي الدموي)</h3>
+    <p>يُقيَّم دومًا محوران: <strong>الاحتقان</strong> ("رطب") و<strong>التروية المحيطية</strong> ("دافئ/بارد").</p>
+    <p><strong>الاحتقان (النمط الرطب):</strong> أورثوبنيا (حساسية ~90%)، بندوبنيا، وذمة محيطية، خرخرات (غير شائعة نسبيًا)، انصباب جنبي، استسقاء، ارتفاع JVP، S3، وP2 صاخب. علامة مميزة: غياب انخفاض ≥30% بالضغط الانقباضي/النبضي خلال مرحلة الشد بمناورة فالسالفا — حساسية ونوعية عالية (~90%) لفرط الحجم.</p>
+    <p><strong>التروية المحيطية (النمط البارد):</strong> ينذر بإنذار أسوأ (وفيات مضاعفة مقارنة بالدافئ). العلامات: SBP&lt;90–100، ضغط نبضي ضيق (&lt;25% من الانقباضي — أقل حساسية بكبار السن لتيبس الشرايين)، نبض متناوب، هبوط ضغط عرضي بجرعات منخفضة من ACE-I، برودة الأطراف (الساعد/الساق أكثر نوعية من اليد/القدم)، إعياء شديد ونعاس، تنفس Cheyne-Stokes، تدهور كلوي شديد، ونقص صوديوم.</p>
+    <table>
+      <thead><tr><th>النمط</th><th>النسبة</th><th>الوصف</th></tr></thead>
+      <tbody>
+        <tr><td>رطب ودافئ</td><td>~66%</td><td>احتقان دون علامات نتاج منخفض — الأكثر شيوعًا</td></tr>
+        <tr><td>رطب وبارد</td><td>~30%</td><td>احتقان مع نتاج منخفض؛ هبوط ضغط شديد (&lt;90) بـ5% فقط؛ ارتفاع لاكتات وSvO₂&lt;60% يدعمان التشخيص</td></tr>
+        <tr><td>جاف وبارد</td><td>~5%</td><td>نتاج منخفض دون وذمة (نقص حجم أو قصور شديد بحجم طبيعي) — أسوأ إنذار رغم ندرته</td></tr>
+      </tbody>
+    </table>
+    <p>الصدمة القلبية تُوصف كلاسيكيًا مع احتشاء حاد كبير، لكنها قد تحدث أيضًا باعتلال مزمن شديد مع محفز إضافي (عدوى، اضطراب نظم، توسّع وعائي مفرط، تخدير زائد) — الاحتياطي المحدود لا يجاري التوسع الدوراني. فرط الحجم بحد ذاته يقلل التروية التاجية ويُضعف النتاج، فيُطلق حلقة تدهور مفرغة.</p>
+  </section>
+
+  <!-- ============ VII. TREATMENT OF ACUTE HF ============ -->
+  <section class="roman" id="c2s7">
+    <div class="roman-head"><div class="roman-badge">VII</div><h2>علاج قصور القلب الحاد</h2></div>
+
+    <h3 class="subhead">أ. تشخيص وعلاج العوامل المحفِّزة أولًا</h3>
+    <ul>
+      <li><strong>الإقفار:</strong> عند تشخيص ACS (تغيرات ST ديناميكية، موجات Q جديدة، أو تروبونين&gt;1 نغ/مل) — تُبدأ فورًا مضادات الصفيحات والتخثر مع تخطيط لاستراتيجية غازية مبكرة؛ إعادة التروية طارئة بـSTEMI أو صدمة مع تغيرات ST شديدة. حتى دون اشتباه ACS، يُجرى تصوير تاجي كجزء من تقييم القصور الحاد/الشديد (ما لم يُجرَ سابقًا)، يُفضَّل بنفس فترة الدخول بعد إدرار كافٍ. سجل OPTIMIZE-HF: مرضى القصور الحاد مع CAD لديهم وفيات أعلى بوضوح خلال 60–90 يومًا (بصرف النظر عن EF)؛ هذا الفرق يزول لدى من خضعوا لإعادة توعية قبل/أثناء الدخول.</li>
+      <li><strong>AF:</strong> بالقصور اللامعاوض، معدل 100–110 مقبول (يعزز النتاج وتفريغ الأذين)؛ &gt;110–120 يصبح عكسيًا (يُنهك عضلة مستهلكة للطاقة) فيُخفَّض لـ&lt;110 (ESC). &gt;130 مع تدهور ديناميكي شديد (صدمة أو وذمة رئوية شديدة) ← تحويل نظم فوري بصدمة كهربائية مباشرة (خاصة بالانقباضي). يُفكَّر أيضًا بضبط النظم اختياريًا قبل الخروج إن كان AF مستمرًا يُعتقد أنه مساهم رئيسي بالتفاقم — استعادة النظم الجيبي رفعت EF&gt;10% بتجارب الاستئصال مقارنة بضبط المعدل وحده. عند تزامن قصور جديد مع اضطراب أذيني حديث التشخيص، 25–50% اعتلال ناتج عن التسرع — يبرر محاولة ضبط النظم اختياريًا (رغم أن AF-CHF لم تدعم التقويم بمرضى NYHA II مستقرين، لا ينفي فائدة بمن تدهور حادًا مؤخرًا).</li>
+      <li><strong>MitraClip/الجراحة:</strong> يُنظر فيهما بقلس تاجي وظيفي شديد مستمر رغم المدرات والعلاج الدوائي الأمثل.</li>
+      <li><strong>البحث عن:</strong> فقر دم، عدوى، فشل كلوي، نقص صوديوم (غالبًا يدل على قصور متقدم منخفض النتاج، ارتفاع فازوبريسين، وتخفف دم بفرط الحجم؛ بينما فرط الصوديوم بالمرضى الخارجيين يوحي بجفاف — نادر جدًا بالقصور الحاد).</li>
+      <li><strong>خزعة عضلة القلب:</strong> عند الاشتباه بالتهاب عضلة قلب حاد/كاسح.</li>
+    </ul>
+    <div class="callout info">
+      <b>ارتفاع التروبونين الخفيف بـADHF:</b> ارتفاع LVEDP بالقصور الحاد يضغط الدوران التاجي الدقيق ويقلل التدرج الأبهري-البطيني المحرك لتدفق الشرايين التاجية — يفسر الارتفاع الطفيف الشائع بالتروبونين غير المرتبط بحدث خثاري. في 6% من ADHF يرتفع التروبونين بشكل لافت (&gt;1 نغ/مل) بصرف النظر عن وجود CAD — ويبقى مؤشرًا لزيادة الوفيات حتى بغيابه. ملاحظة سريرية: ضيق النفس بالقصور اللامعاوض يُوصف أحيانًا كـ"ضغط بالصدر" لا يمثل بالضرورة ذبحة حقيقية.
+    </div>
+
+    <h3 class="subhead">ب. المدرات، متلازمة القلب-الكلى، وإزالة الاحتقان المكثفة</h3>
+    <p>مدرات العروة هي الدعامة الأساسية. الجرعة الابتدائية الوريدية (بولس) 40–80 ملغ، ويجب أن تساوي أو تفوق عدديًا الجرعة الفموية اليومية المعتادة (<strong>40 وريدي ≈ 80 فموي</strong>) — فمريض على 80 فمويًا يحتاج ≥80 وريديًا (حتى 160 عند الحاجة). 20 ملغ وريدي قد تكفي بقصور خفيف غير مستخدم للفوروسيميد مزمنًا؛ &gt;80 قد يلزم بالفشل الكلوي أو مقاومة المدرات (حتى بولس واحد 200 ملغ). الشكل الفموي محدود الفعالية بالحالات الحادة (وذمة معوية ونقص تروية هضمية يبطئان الامتصاص ويسطحان المنحنى دون بلوغ العتبة الناتريوتريتيكية المرتفعة أصلًا بـADHF). الاستجابة: راحة فورية بتوسع وريدي، ثم ذروة إدرار خلال 30–60 دقيقة تستمر 4–6 ساعات.</p>
+    <div class="card point-num">
+      <strong>بروتوكول الجرعة العتبية:</strong> إن لم تُحدث الجرعة "X" استجابة خلال 1–2 ساعة (بول&lt;500 مل) فهي دون العتبة — أعطِ ضعفها بالساعتين التاليتين. العتبة الوريدية المعتادة 40–80 ملغ (دون فشل كلوي)، وقد تصل 200 ملغ خلال 30 دقيقة بالفشل الكلوي. بعد تحديد الجرعة الفعالة، عدِّل <strong>التكرار</strong> (كل 6–12 ساعة) لا الجرعة المفردة لبلوغ هدف الإدرار (~4 لتر/24 ساعة) — تكرار الجرعة العتبية أفعل من مضاعفتها لأنه يمنع إعادة امتصاص الصوديوم بعد انتهاء المفعول (مثال: 40 ملغ كل 6 ساعات أفضل من 80 كل 12). سمية أذنية محتملة &gt;120 ملغ — أعطِ ببطء خلال 30 دقيقة. تسريب مستمر (10–40 ملغ/ساعة) إذا تجاوزت الحاجة اليومية 250 ملغ وريدي — يبدأ بعد بولس فعّال فقط، ويُرافَق كل تصعيد بمعدل التسريب ببولس مكرر. لمن على مدرات عروة مزمنة: البولس الوريدي ≥ الجرعة الفموية المفردة عدديًا، والجرعة اليومية الوريدية الكلية ≈2.5 ضعف الجرعة الفموية اليومية (~5 أضعاف بالتكافؤ الحيوي)؛ مثال: 60 ملغ فمويًا BID (120/يوم) ← ابدأ 120 وريدي كل 12 ساعة أو 100 كل 8 ساعات، ثم عدِّل حسب الاستجابة وهدف إدرار 3.5–5 لتر/24 ساعة.
+    </div>
+    <p><strong>عدم الاستجابة للجرعة القصوى:</strong> فكِّر بـ(1) انخفاض شديد بالتدفق الكلوي (نتاج قلبي غير كافٍ أو ضغط غير مناسب 90–100) — يُعطى مقوٍّ انقباضي فيبدأ الإدرار؛ أو (2) إصابة كلوية جوهرية غير مستجيبة (نخر أنبوبي حاد). استجابة متوسطة (بول~500 مل بعد 160–200 ملغ) توحي بإعادة امتصاص بالأنبوب البعيد (بعد عروة هنلي) — أضف ثيازيديًا (ميتولازون فموي 2.5–20 ملغ/يوم، هيدروكلوروثيازيد 25–50 ملغ/يوم، أو كلورثيازيد وريدي 500–1000 ملغ/يوم) أو مضاد ADH (تولفابتان 15–30 ملغ/يوم) — "حصار متسلسل للنفرون". الميتولازون يعمل على الأنبوبين القريب والبعيد ويبقى فعالًا بالفشل الكلوي المتقدم (كذلك باقي الثيازيدات عند دمجها مع مدر عروة)؛ لا حاجة لإعطائه قبل مدر العروة بساعة. سبيرونولاكتون بجرعات عالية ممكن لكن بطيء البدء (2–3 أيام) ولم يُظهر زيادة حادة بالإدرار (ATHENA-HF).</p>
+    <p><strong>هدف الإدرار:</strong> توازن سلبي 2–3 لتر/يوم (بول 3.5–5 لتر/يوم)؛ ينطبق أيضًا على القصور الأيمن الحاد المحتقن. هدف أقل عند غياب وذمة طرفية كبيرة مع بطينين غير متوسعين (علاقة ضغط-حجم حادة الميل)، أو عند الاستسقاء كعرض أساسي (الغشاء البريتوني ينقل ≤500 مل/يوم فقط للدوران، فإدرار أكبر يُستنزف من الحجم داخل الأوعية).</p>
+    <div class="card">
+      <strong>مضاعفات استقلابية وحلولها:</strong>
+      <ul>
+        <li>نقص K/Mg/Ca — عوِّض حسب الحاجة (نقص Mg يرافق غالبًا حاجة K عالية).</li>
+        <li>نقص صوديوم (أشيع من فرطه رغم أن بول مدرات العروة نصف مركّز) — ناتج عن تنشيط ADH والمحور العصبي الهرموني؛ يزداد بدمج ثيازيد (بول أكثر تركيزًا بالصوديوم المفقود). إن كان شديدًا (&lt;125) استخدم مضاد مستقبلات V2 (تولفابتان 15 ملغ مرة أو مرتين).</li>
+        <li>قلاء استقلابي انكماشي (علامة نقص كلوريد) — أبطئ الإدرار أو عوِّض K بقوة؛ استمر بالإدرار عند فرط الحجم لكن أضف أسيتازولاميد (يعاكس القلاء عبر طرح البيكربونات والصوديوم).</li>
+      </ul>
+    </div>
+    <p><strong>تدهور وظائف الكلى (~30% من ADHF، كرياتينين≥0.3 أو ≥1.5×الأساس، أو GFR↓≥30%):</strong> إن استمرت علامات الاحتقان سريريًا/شعاعيًا، استمر بالإدرار رغم ارتفاع الكرياتينين — فهو غالبًا يعكس <strong>احتقانًا وريديًا مستمرًا (متلازمة القلب-الكلى)</strong> لا "إفراط إدرار"؛ في الواقع نقص الإدرار وارتفاع ضغوط الامتلاء يتزامنان عادة مع تدهور الكلى.</p>
+
+    <h4 class="subsub">متلازمة القلب-الكلى الحادة (النوع 1)</h4>
+    <p>تدهور تدريجي بوظائف الكلى وتراكم سوائل مع فشل قلب حاد، يقلل الاستجابة للمدرات. دراسة ESCAPE: علاقة ضعيفة بين المؤشر القلبي القاعدي وتدهور الكلى — قد يكون النتاج المركزي طبيعيًا مع تروية كلوية موضعية منخفضة. الآليات:</p>
+    <ol>
+      <li><strong>فرط الحجم بحد ذاته</strong> — يرفع الحمل الخلفي الوريدي الكلوي فيعيق الجريان الأمامي؛ التروية الكلوية = ΔP/R حيث ΔP=الضغط الشرياني الكلوي ناقص الوريدي؛ ضغط الأذين الأيمن هو العامل الأهم بتدهور الكلى بالتحليلات.</li>
+      <li><strong>انخفاض الضغط الشرياني بالعلاج</strong> — تدهور الكلى يرتبط بقوة بانخفاض الضغط المتوسط/الانقباضي أثناء العلاج (مثال: انخفاض &gt;15% أو 10–15 ملم من خط أساس ~115). آليات التنظيم الذاتي الكلوي (توسيع الشريان الوارد وتضييق الصادر للحفاظ على GFR عند ΔP منخفض) تكون منهكة أصلًا بالقصور المزمن/CKD؛ وتنشيط الأنجيوتنسين والودي يزيد تضييق الشريان الوارد فيزيد حساسية الكلى لانخفاض ΔP.</li>
+      <li><strong>بطء إعادة تعبئة البلازما</strong> — إزالة السوائل من داخل الأوعية بالمدرات يليها إعادة ملء من الخلالي (انخفاض الضغط الهيدروستاتيكي وارتفاع الأونكوتيكي)؛ إن كان معدل الإدرار أسرع من إعادة التعبئة، ينخفض الحجم داخل الأوعية فعليًا رغم بقاء فرط حجم كلي — مريض بفرط حجم 20 لترًا قد لا يتحمل فقدان 2 لتر خلال 3 ساعات (نقص حجم فعّال مؤقت ← تنشيط RAAS/الودي وانخفاض GFR حتى مع نتاج مركزي محفوظ لاحقًا).</li>
+      <li><strong>ارتفاع الضغط داخل البطن</strong> (استسقاء واحتقان أحشاء) — يرفع الضغط الوريدي الكلوي بمعزل عن الضغط الوريدي المركزي.</li>
+      <li><strong>CKD سابق</strong> — أقوى عوامل الخطر (تنظيم ذاتي ضعيف أصلًا). هذه الآليات مجتمعة تفسر حدوث متلازمة القلب-الكلى بحتى 50% من القصور الحاد.</li>
+    </ol>
+    <p>تقليل حجم البطين يحسّن النتاج عبر أربع آليات: تقليل توتر الجدار (العبء اللاحق)، تقليل القلس الوظيفي MR/TR، تقليل التداخل البطيني المتبادل، وتقليل LVEDP/RVEDP (تحسين تروية العضلة الانبساطية). عاملان يتنبآن بتحمل كلوي سيئ للإدرار الحاد: غياب/خفة الوذمة الطرفية، وبطينان غير متوسعين بعلاقة ضغط-حجم حادة (كما بـDe novo أو HFpEF) — هنا حجم التحميل المسبق غير مرتفع فعليًا رغم ارتفاع ضغطه (LVEDP)؛ يُفضَّل إدرار حذر (سلبي 1–1.5 لتر/يوم).</p>
+    <div class="callout info">
+      <b>تصنيف متلازمة القلب-الكلى:</b> النوع 1 (حادة، قلب→كلى)، النوع 2 (مزمنة، قلب→كلى)، النوع 3 (كلى→قلب حادة)، النوع 4 (كلى→قلب مزمنة)، النوع 5 (جهازية: سكري، ضغط، التهاب أوعية يصيب كليهما معًا).
+    </div>
+    <p>رغم أن EF&gt;40% نظريًا قد يزيد سوء المتلازمة مع الإدرار، فإنها غالبًا تتحسن معه: ~30% يتدهورون أثناء العلاج، لكن &gt;50% يتحسنون (خاصة بتقييم الكرياتينين بعد 30–60 يومًا) — عبر انخفاض الضغط الوريدي الكلوي، تخفيف الضغط داخل البطن، وتحسن النتاج بانخفاض أحجام البطينين. <strong>الاحتقان هو العامل المحوري</strong>: إزالته المكثفة تحسّن التروية الكلوية والقلبية وظروف تحميل البطينين، فتتيح الاستمرار بجرعات أقل لاحقًا وتحمّلًا أفضل لانخفاض الضغط الجهازي دون أذى.</p>
+    <div class="card point-num">
+      <strong>ارتفاع الكرياتينين مع الإدرار المكثف لا ينذر بالضرورة بسوء:</strong> إزالة احتقان مكثفة مع تركيز دم (ارتفاع هيماتوكريت وألبومين) ارتبطت بانخفاض وفيات 70% خلال 6 أشهر <em>رغم</em> ارتباطها بارتفاع الكرياتينين — فعدم إزالة الاحتقان الكامل، لا ارتفاع الكرياتينين بحد ذاته، هو العامل الأقوى بسوء الإنذار؛ الارتفاع قد يعكس تركيز الدم المرغوب لا أذى كلويًا (لا يترافق مع ارتفاع مؤشرات إصابة الأنابيب). تجربة <em class="trial">DOSE</em>: الجرعات العالية رفعت الكرياتينين مؤقتًا أول 72 ساعة لكن أعطت نتائج أفضل، وعاد الكرياتينين للانخفاض بعد 60 يومًا لدى من أُزيل احتقانهم فعليًا (بخلاف من لم يُزَل احتقانهم، الذين استمر ارتفاع كرياتينينهم). <strong>ارتفاع BUN</strong> (ونسبة BUN/كرياتينين≥20) عادة يعكس احتقانًا شديدًا وBNP مرتفعًا وSBP منخفضًا مع احتمال أعلى لتحسن كلوي لاحق (لا نقص حجم) — إلا إذا بدأ الارتفاع بعد إزالة كاملة وسريرية للاحتقان (عندها يوحي بنقص حجم فعلي).
+    </div>
+    <p><strong>إصابة كلوية جوهرية</strong> (نخر أنبوبي حاد بإقفار مطوّل [7-10 يومًا، قد يستدعي غسيلًا مؤقتًا]؛ أو أسباب سابقة للقصور: انسداد ما بعد كلوي، التهاب كبيبات، نفروز دوائي [NSAIDs]، التهاب خلالي حاد) — يُشتبه بها مع قلة بول وعدم استجابة للمدرات؛ يُوصى بتحليل بول مجهري لنفي مرض برنشيمي. القصور الكلوي أشيع بالفشل ثنائي البطين (ارتفاع RA، ودفع حاجزي نحو LV يُنقص نتاجه أكثر).</p>
+
+    <h4 class="subsub">التسريب المستمر مقابل الجرعات المتقطعة، والفلترة فوق الطبيعية</h4>
+    <p>الجرعات البلعية تحدث "إدرارًا نبضيًا" سريعًا قد يتجاوز معدل إعادة تعبئة البلازما (نقص حجم فعّال مؤقت، تنشيط RAAS/الودي، إعادة امتصاص صوديوم قوية لاحقًا) — آلية نظرية للتخوف من زيادة الوفيات، لكن الدراسات لم تثبتها. التسريب المستمر يزيل السوائل بثبات متوافق مع إعادة التعبئة. تجربة <em class="trial">DOSE</em>: التسريب المستمر أعطى نتائج مماثلة للبلعات كلويًا وسريريًا؛ لكن <strong>الجرعات العالية</strong> (مقارنة بالمنخفضة) حققت فقدان سوائل ووزن أكبر، إزالة احتقان أفضل، تحسنًا أكبر بضيق النفس، وميلًا لتقليل إعادة الدخول — رغم تدهور كرياتينين مؤقت.</p>
+    <div class="card">
+      <strong>الفلترة فوق الطبيعية المستمرة (Ultrafiltration):</strong> طريقة غير دوائية (جهاز Aquadex: قسطرة وريدية صغيرة، تدفق 10–40 مل/دقيقة، حجم خارج الجسم صغير [40 مل]، إزالة 100–250 مل/ساعة حتى 6 لتر/يوم) — نظريًا تحافظ على حجم البلازما (إزالة سوائل متساوية التوتر بمعدل إعادة التعبئة) بخلاف البول منخفض الصوديوم بالمدرات. لكن تجربة <em class="trial">CARRESS-HF</em> (متلازمة قلب-كلى، فلترة 200 مل/ساعة) لم تتفوق على الجرعات العالية من المدرات بإزالة الاحتقان أو فقدان الوزن أو التحسن السريري، بل رفعت الكرياتينين أكثر (استمر حتى 60 يومًا) — يُرجَّح بسبب مضاعفات القسطرة وتكرار توقف العلاج (تخثر).
+    </div>
+    <p>ملاحظة: قد يكون للمدرات تأثير حماية كلوية (تثبيط مضخة ATP بعروة هنلي يقلل استهلاك الأكسجين بالنخاع الكلوي، وتعطيل التغذية الراجعة الأنبوبية-الكبيبية يوسّع الشريان الوارد ويحسّن التروية). <strong>الخلاصة:</strong> التسريب المستمر لا يتفوق على البلعات؛ الجرعات العالية فعّالة رغم أثرها العابر بالكرياتينين؛ والفلترة خيار محتمل لكن دون تفوق واضح ومع تحديات تقنية. الهدف الأساسي يبقى <strong>إزالة الاحتقان المكثفة</strong> عبر إدرار عالي الحجم (3.5–5 لتر/يوم) — <strong>الاستثناء:</strong> قصور حاد جديد (de novo) دون وذمة محيطية مهمة وبطين أيسر غير متوسع قد لا يتحمل إدرارًا عالي الحجم (احتياطي تحميل مسبق محدود واعتماد كبير على الضغط الانبساطي للحفاظ على النتاج).</p>
+
+    <h4 class="subsub">مقاومة المدرات (Diuretic Resistance)</h4>
+    <p>حتى الأصحاء لديهم كبح جزئي طبيعي لتأثير المدرات (تثبيط كامل لعروة هنلي نظريًا قد يُخرج 45 لترًا يوميًا!). المقاومة = انخفاض الإدرار والناتريوريز رغم جرعات متوسطة-عالية، ويُعرَّف بأحد: (1) &lt;1 لتر بول خلال 6 ساعات بعد جرعة؛ (2) توازن سلبي &lt;2 لتر/يوم رغم فوروسيميد وريدي يومي &gt;160–240 ملغ؛ أو (3) صوديوم بولي بعد الجرعة &lt;50–70 ملي مكافئ/لتر. تُلاحَظ بحتى 25% من ADHF.</p>
+    <p><strong>الآليات:</strong> انخفاض التروية الكلوية (ضغط وريدي كلوي مرتفع أو "متلازمة الحيز الكلوي"، أو انخفاض نتاج/ضغط جهازي)؛ قصور كلوي جوهري؛ تنشيط RAAS؛ فرط نشاط عروة هنلي بعد التكرار؛ ارتداد ما بعد الجرعة (امتصاص أنبوبي مفرط بين الجرعات)؛ فرط وظيفة/تضخم الأنبوب البعيد بعد الاستخدام المتكرر (الآلية الأهم — يعالجها الثيازيد والتولفابتان؛ وفرط الألدوستيرونية المرافق يفيد معه السبيرونولاكتون)؛ وقلاء استقلابي بنقص كلوريد (الأربعة الأخيرة = "ظاهرة الكبح"). العلاج: زيادة جرعة/تكرار مدر العروة، ودمجه مع ثيازيد أو تولفابتان (تجربة 3T).</p>
+    <div class="card point-num">
+      <strong>عدم الاستجابة الكاملة:</strong> يعكس غالبًا تروية كلوية منخفضة جدًا. الخيارات: مقويات انقباضية (Inotropes) أو الفلترة فوق الطبيعية؛ عدم استجابة حتى مع المقويات يوحي بنخر أنبوبي حاد وقد يستدعي غسيلًا كلويًا. بعد 24–48 ساعة من المقويات أو الفلترة تتحسن الاستجابة للمدرات غالبًا (تحسن النتاج بتقليل العبء اللاحق، تقليل التداخل البطيني، تحسن MR الوظيفي، وتحسن التروية الكلوية بخفض الضغط الوريدي الكلوي). بفشل كلوي بنيوي شديد (GFR&lt;30) قد تكون الفلترة غير كافية — بسلسلة حالات صغيرة، جهاز Aquadex كان آمنًا لكن نصف المرضى احتاجوا غسيلًا كاملًا مع وفيات مرتفعة.
+    </div>
+
+    <h3 class="subhead">ج. الموسّعات الوعائية</h3>
+    <p>الآلية: تقليل العبء اللاحق (يحسّن النتاج)، وتوسع وريدي (يقلل التحميل المسبق، يخفف الوذمة الرئوية، ويقلل الحمل الخلفي الوريدي الكلوي).</p>
+    <div class="callout warn">
+      <b>تحذير أساسي:</b> حتى الانخفاض العابر بالضغط قد يضعف وظائف الكلى ويؤثر سلبًا على المآل. <strong>يُمنع استخدام الموسّعات إذا SBP&lt;110 (ESC)</strong> — ويجب التأكد أن الضغط مستقر فعليًا لا مدعومًا زائفًا بفرط الكاتيكولامين (قد ينهار فجأة عند تخفيف ضيق النفس). ابدأ بجرعة منخفضة وببطء (زيادة تدريجية بالنتاج تعادل التأثير الخافض للضغط). الأفضل بالنمط "الدافئ الرطب" خاصة بإعادة توزيع السوائل (لا احتباسها) مع ارتفاع ضغط واختلال توسع الأوعية. تجربة GALACTIC الحديثة لم تُثبت فائدة حادة واضحة — توصية ESC ضعيفة (IIb). حذارِ: القصور الانبساطي أكثر حساسية للموسّعات من الانقباضي (قد ينخفض الضغط شديدًا رغم ارتفاعه بالتقديم)؛ والقصور "البارد" (نتاج محدود) لا يمكنه ملء الدوران المتوسع فينهار الضغط. <strong>ابدأ دومًا بالإدرار وتأكد من استقرار الضغط قبل الموسّعات، بجرعات منخفضة وتصعيد بطيء.</strong>
+    </div>
+    <ul>
+      <li><strong>نتروغليسرين وريدي:</strong> موسّع وريدي أساسًا (مختلط شرياني-وريدي بجرعات متوسطة، خاصة مع مقاومة وعائية جهازية عالية أو بعد جرعات مدر عالية تنشّط RAAS). التحمل يتطور بعد ساعات (يقل بدمج هيدرالازين أو ACE-I). الجرعة: بدء 10 ميكروغرام/دقيقة، معايرة 10–20 كل 5 دقائق، حتى 200 ميكروغرام/دقيقة، بشرط SBP≥110.</li>
+      <li><strong>نيتروبروسيد وريدي:</strong> يوسّع الشرايين والأوردة والشرايين الرئوية. يُفضَّل تقليديًا بقسطرة شريانية للمراقبة (ليست إلزامية دومًا). دراسة أظهرت تحسنًا بجرعات منخفضة حادة بالقصور البارد منخفض النتاج.</li>
+      <li><strong>موسّعات فموية:</strong> تُبدأ فقط بعد استقرار الضغط، كعلاج طويل الأمد — ACE-I أو مزيج هيدرالازين-نترات فموي (يُفضَّل بخلل انقباضي؛ يمكن بدء المزيج فوريًا حتى أثناء الإقامة بأدلة داعمة).</li>
+    </ul>
+
+    <h3 class="subhead">د. المقويات الانقباضية الوريدية (Inotropes)</h3>
+    <div class="callout warn">
+      <b>تحذير أساسي:</b> قد تحسّن الديناميكا الدموية قصير المدى لكنها قد تُفاقم البقيا طويل المدى حتى باستخدام مؤقت. تجربة <em class="trial">OPTIME-HF</em> (ميلرينون قصير المدى): زاد الوفيات داخل المستشفى، وزاد الوفاة/إعادة الدخول خلال 60 يومًا بالاعتلال الإقفاري، وزاد اضطرابات النظم بجميع المرضى. الآلية المرجحة: التحفيز الخارجي لعضلة مستنزفة الطاقة يسبب ضررًا إقفاريًا إضافيًا واستماتة خلوية رغم التحسن الفوري المؤقت.
+    </div>
+    <p><strong>متى تُبرَّر:</strong> جرعات منخفضة لفترة محدودة بـ"الرطب البارد" مع SBP&lt;90، أو "الرطب البارد" غير المستجيب للمدرات. إن لم يتحسن المريض رغم الدعم المنخفض الجرعة، فكِّر بأجهزة دعم بطيني مؤقتة عبر الجلد (IABP، Impella) كجسر للتعافي أو للزرع/جهاز دعم جراحي دائم.</p>
+    <div class="card">
+      <strong>الخيارات الرئيسية:</strong>
+      <ul>
+        <li><strong>ميلرينون:</strong> مثبط PDE-3 يرفع cAMP (تقلّص + توسع وعائي أضعف قليلًا من نيتروبروسيد لكن أقوى من دوبوتامين). نصف عمر أطول (~2.5 ساعة، يتضاعف بالفشل الكلوي). يُفضَّل بفرط ضغط رئوي. تجنَّب إذا SBP&lt;80؛ خفّض الجرعة 50% بالفشل الكلوي؛ تجنَّب البولس (هبوط حاد بالضغط)؛ ابدأ تسريبًا منخفضًا (0.2 ميكروغرام/كغ/د) وصعِّد ببطء. AF لدى حتى 25%. تأثيره لا يتأثر بحاصرات بيتا (يعمل بعد المستقبل).</li>
+        <li><strong>دوبوتامين:</strong> ناهض β1 أساسًا (± β2/α1 أضعف). هبوط الضغط طفيف غالبًا (بل قد يرتفع بزيادة النتاج). الجرعة 2–5 ميكروغرام/كغ/د (حتى 10 مع حاصرات بيتا مزمنة — كارفيديلول خاصة يُضعف تأثيره الديناميكي). اضطرابات نظم: تسرع جيبي شائع، PVCs وNSVT شائعة (خاصة معه)، VT نادر.</li>
+        <li><strong>نورإبينفرين ودوبامين:</strong> تقلّص + تضييق وعائي — لهبوط الضغط الشديد (SBP&lt;70–80) حيث تكون الأدوية الأخرى خطرة. الدوبامين يرفع معدل القلب أكثر ويزيد اضطرابات النظم (خاصة VF وVT) أكثر من الدوبوتامين أو النورإبينفرين.</li>
+        <li><strong>ليفوسيمندان</strong> (أوروبا): محسّس كالسيوم (يحسّن استجابة الخيوط العضلية دون رفع كالسيوم داخل الخلية — يحافظ على الطاقة ويقلل خطر الإقفار) + موسّع شرياني مباشر (قنوات K+ المعتمدة على ATP). الوحيد الذي لا يزيد استهلاك الأكسجين/الإقفار؛ بيانات تشير لخفض وفيات محتمل مقارنة بدوبوتامين/الغفل؛ تأثيره لا يتأثر بحاصرات بيتا؛ يستمر بعد إيقاف التسريب (نصف عمر طويل جدًا ~70 ساعة). يزيد AF أكثر من دوبوتامين، وقد يزيد VT؛ خطر هبوط ضغط كبير كالميلرينون — تجنَّب البولس، خاصة إذا SBP&lt;90.</li>
+      </ul>
+    </div>
+    <p><strong>الإيقاف التدريجي:</strong> عادة خلال أيام قليلة (يوم واحد لليفوسيمندان لطول نصف عمره). أثناء العلاج تحدث تحسينات دائمة حتى بعد التخفيض: بدء إدرار، تقليل حجم البطينين، تحسن العبء اللاحق وMR/TR الوظيفي، وتحسن تروية العضلة — مما يمكّن تحمل ضغط جهازي أدنى دون أذى، وتحسن وظيفي كلوي يسمح باستمرار الإدرار. بالقصور الأقل حدة، الإدرار المكثف وحده قد يحقق نفس الفائدة (تحسين التحميل، تروية العضلة، ووظيفة الكلى) دون حاجة للمقويات.</p>
+
+    <h3 class="subhead">هـ. ACE-I/ARB/ARNI وحاصرات بيتا أثناء الإقامة وقبل الخروج</h3>
+    <div class="card point-num">
+      <strong>الاستمرار مقابل الإيقاف:</strong> استمر بـACE-I وحاصرات بيتا بمعظم حالات القصور الحاد، إلا مع: (1) تدهور كلوي شديد ← أوقف ACE-I؛ (2) قصور منخفض النتاج مع ضغط منخفض/حدّي مع اعتبار مقويات ← أوقف كليهما مؤقتًا. لا توقف ACE-I/ARB المزمن بهدف "تحسين" الكلى رغم تدهور طفيف — الإيقاف لهذا الغرض يسوّئ النتائج ويُضعف الاستجابة للمدرات. إن لم يكن المريض عليها، يمكن البدء المبكر بعد 12–24 ساعة استقرار ديناميكي — تزيد الإدرار (تثبيط إعادة امتصاص أنبوبي مرتبط بأنجيوتنسين II) ولا تؤذي الكلى ما لم ينخفض الضغط مفرطًا؛ في الواقع أنجيوتنسين II الزائد يضيّق الشريان الوارد الكلوي مفرطًا، فقد يحسّن ACE-I/ARB التروية الكلوية "بشكل غير متوقع". ARNI: البدء أثناء الإقامة أفضل من البدء بACE-I والتحويل لاحقًا (8 أسابيع).
+    </div>
+    <table>
+      <thead><tr><th>الحالة</th><th>التوصية</th></tr></thead>
+      <tbody>
+        <tr><td>على ACE/ARB مسبقًا + تدهور كلوي طفيف</td><td>استمر بالدواء</td></tr>
+        <tr><td>على ACE/ARB + تدهور كلوي شديد أو ضغط منخفض جدًا</td><td>أوقف مؤقتًا</td></tr>
+        <tr><td>لم يكن على ACE/ARB مسبقًا</td><td>ابدأ بعد استقرار الضغط (12–24 ساعة)</td></tr>
+        <tr><td>موقوف/لم يُبدأ حاصر بيتا</td><td>ابدأ قبل ≥24 ساعة من الخروج، بعد تحسن الحالة الباردة والأزوتيميا</td></tr>
+        <tr><td>بعد إيقاف مقويات انقباضية</td><td>ابدأ حاصر بيتا بعد ≥1 يوم من الإيقاف، مع مراقبة</td></tr>
+      </tbody>
+    </table>
+    <p>بدء حاصر بيتا قبل الخروج يقلل الوفيات خلال 60 يومًا بنسبة 59%. المبدأ نفسه ينطبق على ACE-I بعد تحسن الأزوتيميا — أي انتظار ≥24 ساعة من الاستقرار قبل البدء أو إعادة الإدخال، مع مراقبة يوم أو أكثر.</p>
+    <div class="callout info">
+      <b>ملخص فيزيولوجي (الإدرار/المقويات معًا):</b> بفرط الحجم الحاد مع نتاج منخفض ±هبوط ضغط، يعمل الإدرار المكثف والمقويات عبر 3 مسارات متوازية بفوائد تدوم حتى بعد تقليل الجرعات: (1) تقليل العبء اللاحق للبطينين والتداخل البطيني والقلس الوظيفي ← زيادة حجم الضربة وتقليل استهلاك الأكسجين؛ (2) تقليل LVEDP/RVEDP وضغط الشريان الرئوي ← تحسن تروية البطينين (تروية LV تعتمد على الفرق بين الضغط الانبساطي الأبهري وLVEDP؛ تروية RV تعتمد على الفرق بين RVEDP والضغط الوريدي الرئوي، وبين SBP الأبهري والضغط الانقباضي RV)؛ (3) تقليل العبء اللاحق الكلوي ← تحسن التروية الكلوية.
+    </div>
+
+    <h3 class="subhead">و. الأكسجين، الدعم التنفسي غير الغازي، والتنبيب</h3>
+    <p><strong>CPAP/BiPAP:</strong> يُستخدم فوريًا بالضيق التنفسي الحاد كجسر مؤقت حتى تتحسن الوذمة الرئوية بالمدرات. شروط الاستخدام: مريض مستيقظ بوعي كافٍ، دون نقص أكسجة أو حماض شديد (pH&gt;7.2)، وغير منخفض الضغط. إن لم تظهر استجابة خلال 30 دقيقة، أزل الجهاز فورًا — الاستخدام المطوّل غير الفعّال يزيد العمل التنفسي، ينفخ المعدة، يزيد خطر الشفط، ويؤخر قرار التنبيب الضروري.</p>
+    <p><strong>التنبيب الرغامي:</strong> يُصبح ضروريًا عند فشل CPAP/BiPAP والفوروسيميد بتحقيق تحسن سريع، أو استمرار الضيق الحاد.</p>
+    <div class="card">
+      <strong>تأثير التهوية بالضغط الإيجابي (PPV):</strong> على LV — تقلل التحميل القبلي والبعدي معًا (الضغط "عبر الجدار" = الضغط داخل البطين ناقص الضغط حول القلب؛ PPV يرفع الضغط حول القلب فيقلل العبء اللاحق الحقيقي) ← تحسن فوري بظروف التحميل وتخفيف الوذمة الرئوية. لكن <strong>بعد الإزالة (Extubation)</strong>، قد لا يتحملها مرضى القصور الشديد أو CAD الحرج (عودة مفاجئة لرفع التحميل القبلي والبعدي قد تُفاقم الحالة). على RV — العكس: PPV تزيد العبء اللاحق للـRV (رفع ضغط الشريان الرئوي)، قد تخفض النتاج خاصة بقصور RV المسيطر.
+    </div>
+
+    <h3 class="subhead">ز. مفاتيح العلاج: التقييم السريري والقسطرة الرئوية</h3>
+    <p>العلامات السريرية لـ"الرطب" (احتقان) و"البارد" (نتاج منخفض) كافية عادة لتوجيه العلاج المبدئي — استخدام قسطرة سوان-غانز الروتيني <strong>لا يحسّن النتائج</strong> (تجربة <em class="trial">ESCAPE</em>). مع ذلك، ليست عديمة الفائدة: تُستخدم انتقائيًا عند (1) حالة حجم غير واضحة مع تدهور الضغط/التنفس أو ضعف استجابة المدرات؛ (2) صدمة شديدة تتطلب جرعات متوسطة-عالية من مقويات/قابضات وعائية أو اشتباه صدمة مختلطة (قلبية+إنتانية)؛ (3) تحضيرًا لتصعيد العلاج أو أجهزة دعم (IABP، Impella). ملاحظة: ESCAPE لم تشمل صدمة قلبية صريحة (متوسط SBP~106؛ ثلث المرضى احتاجوا مقويات) — فلا تستبعد الدراسة دور القسطرة بالصدمة الحقيقية أو الحاجة لأجهزة دعم.</p>
+    <table>
+      <thead><tr><th></th><th>دافئ (Warm)</th><th>بارد (Cold)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>جاف (Dry)</strong></td><td>ليس فشل قلب — فكِّر بسبب آخر</td><td>احتمال نقص حجم — أعطِ سوائل تدريجيًا (فمويًا أفضل من وريديًا)</td></tr>
+        <tr><td><strong>رطب (Wet)</strong></td><td>إدرار ± موسّعات أوعية</td><td>إدرار ± موسّعات بجرعات منخفضة إن SBP&lt;90؛ فكِّر بمقويات إن استمر نقص التروية (قد تفيد قسطرة سوان-غانز لتوجيه العلاج بهذه الفئة)</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subhead">ح. الخروج من المستشفى ومعايير ما قبله</h3>
+    <p><strong>الهدف: حالة حجم شبه مثالية (Near-euvolemia).</strong> المعايير السريرية: JVP طبيعي، غياب البندوبنيا، غياب "الأورثوإدما" (لا orthopnea ولا وذمة طرفية). المعيار المخبري: انخفاض BNP/NT-proBNP &gt;30%. اختبارات وظيفية: استلقاء أفقي دقيقة واحدة دون ضيق نفس؛ اختبار الانحناء 15 ثانية؛ والمشي دون دوار وبأقل ضيق نفس.</p>
+    <div class="card point-num">
+      <strong>التحول من الوريدي للفموي:</strong> يتم بعد استقرار عدة ساعات؛ يجب أن يحافظ المدر الفموي على توازن سلبي خفيف. القاعدة: الجرعة الفموية = 0.5–0.75 × الجرعة الوريدية السابقة (مثال: 80 ملغ IV كل 12 ساعة [160/يوم] ← 40 ملغ فموي BID [80/يوم]) — رغم أن التوافر الحيوي الفموي أقل بكثير (~ربع الوريدي)، تكفي هذه الجرعة بمرحلة التعويض مع تحسن التروية الكلوية.
+    </div>
+    <p><strong>المتابعة المبكرة (خلال أسبوع):</strong> تقييم سريري + كرياتينين + بوتاسيوم + BNP/NT-proBNP، مع تعديل جرعة الفوروسيميد الفموي حسب الحاجة.</p>
+    <div class="card">
+      <strong>الإنذار (سجل ADHERE):</strong> الوفيات داخل المستشفى بالقصور الحاد (انقباضي أو انبساطي) ~4%. أربعة عوامل خطر رئيسية: (1) ارتفاع BUN/كرياتينين عند الدخول؛ (2) SBP&lt;115؛ (3) نمط بارد منخفض النتاج؛ (4) تروبونين إيجابي (خاصة&gt;1 نغ/مل، بوجود أو غياب إقفار). وجود ≥1 منها يرفع الوفيات لـ10–20%، وغيابها جميعًا يخفضها لـ~2%. وفيات/إعادة دخول خلال 60–90 يومًا: ~8–10% / ~30%؛ خلال سنة: ~30% / ~50% — أعلى بكثير من وفيات الاحتشاء.
+    </div>
+
+    <h3 class="subhead">ط. عدم تحمل توسيع الأوعية أو الغسيل الكلوي</h3>
+    <p>بمرضى الاحتياطي القلبي المحدود بشدة، قد لا يقابل توسّع الأوعية زيادة كافية بالنتاج لملء الجهاز الموسّع ← هبوط حاد بالضغط (شبيه بتضيق الأبهر الحرج). كذلك، إزالة السوائل السريعة بالغسيل الكلوي (2–3 لتر خلال 3 ساعات) قد تفوق سرعة إعادة تعبئة البلازما ← نقص حجم داخل الأوعية مؤقت. المرضى بوظيفة قلبية محفوظة يعوّضون بزيادة التقلص والحجم الانقباضي وEF؛ أما محدودو الاحتياطي (خاصة بضغط أساسي منخفض) فيهبط ضغطهم حادًا. يمكن استخدام <strong>النورإبينفرين</strong> لتضييق الجهاز الدوري الفارغ أثناء الغسيل — برفع SBP لحدود 90–100 فقط دون زيادة ضارة بالعبء اللاحق، مما يثبّت الدوران دون تحميل إضافي على القلب.</p>
+
+    <h3 class="subhead">ي. المراقبة الخارجية والوقاية من الاستشفاء</h3>
+    <p>تراكم السوائل الرئوي يحدث تدريجيًا (أسبوع-3 أسابيع) ويسبق التفاقم الظاهر لدى معظم المرضى. الوزن اليومي هو الأداة الأبسط (زيادة &gt;3 أرطال [~1.4كغ] خلال &lt;أسبوع ← جرعة إضافية) لكن حساسيته منخفضة (~20%؛ &gt;50% من التدهورات لا تسبقها زيادة وزن واضحة &gt;2 رطل — بسبب إعادة توزيع السوائل دون احتباس كبير). عوامل أخرى (زيادة العبء اللاحق، إقفار، AF، عدوى) قد تسبب تدهورًا مفاجئًا دون سبق بزيادة وزن. دراسة بحساس ضغط شرياني رئوي: ارتفاع الضغط الانبساطي الرئوي المستمر تنبأ بموثوقية بالاستشفاء (يبدأ الارتفاع ~20 يومًا قبل الدخول، أبكر بالانقباضي) بينما تغير الوزن كان طفيفًا فقط.</p>
+    <div class="card">
+      <strong>أدوات المراقبة الخارجية:</strong>
+      <ul>
+        <li><strong>مراقبة BNP</strong> — مفيدة خاصة دون سن 75 بالانقباضي.</li>
+        <li><strong>تخطيط المقاومة الصدرية</strong> — كلما زاد السائل الصدري قلّت المقاومة؛ قياس كل أسبوعين مفيد للتنبؤ لكن غير واسع الاستخدام. الأجهزة المزروعة (ICD/CRT) تقيسها يوميًا (ميزة OptiVol) بحساسية وقيمة تنبؤية إيجابية 70–80% للتفاقم.</li>
+        <li><strong>السترة الذكية القابلة للارتداء</strong> — تقيس محتوى السوائل الرئوية بانبعاثات كهرومغناطيسية.</li>
+        <li><strong>CardioMEMS</strong> — حساس يُزرع بالشريان الرئوي وينقل الضغط لاسلكيًا؛ بمرضى NYHA III مع استشفاء بالسنة الماضية، قلل معدل التكرار بصرف النظر عن EF (تجربة CHAMPION). يسجل المريض الضغط صباحًا، يراقبه الطبيب أسبوعيًا على الأقل، وتُعدَّل جرعة المزيل للاحتقان (مثل النترات) لضغط رئوي طبيعي؛ الاتجاه التصاعدي المستمر عبر أيام أهم من التقلبات اليومية.</li>
+      </ul>
+    </div>
+
+    <h3 class="subhead">ك. ملحق: تدبير فشل البطين الأيمن المعزول أو السائد</h3>
+    <p>الأسباب تندرج ضمن ثلاث فئات (كما بالقسم II): حمل ضغطي، حمل حجمي، ومرض جوهري بالـRV. القصور الحاد بالـRV ينتج عن: احتشاء RV، انصمام رئوي حاد، أو حالة ارتفاع ضغط رئوي حاد (إنتان، ARDS)، أو تفاقم سبب مزمن — <strong>ارتفاع الضغط الرئوي الحاد هو المحور الأساسي</strong> بمعظم حالات القصور الأيمن الحاد.</p>
+    <div class="card point-num">
+      <strong>تفريق آلية القصور الأيمن (عبر PA pressure وPVR):</strong>
+      <br>• PA&gt;50 أو PVR مرتفعة ← فرط ضغط رئوي (قد يكون ثانويًا لقصور أيسر؛ قد يكون PA طبيعيًا مع نتاج منخفض جدًا لكن PVR المرتفعة تكشف الفرط الرئوي).
+      <br>• PA طبيعي/&lt;50 وPVR طبيعية ← قصور أيمن معزول من حمل حجمي (ASD، TR) أو مرض جوهري (اعتلال عضلة، احتشاء RV). فرط ضغط رئوي خفيف مع PVR طبيعية هنا نتيجة لا سبب (التداخل البطيني يرفع ضغط الأذين الأيسر فينعكس سلبًا على الضغط الرئوي).
+    </div>
+    <p><strong>ملاحظات تشريحية-إيكو:</strong> الـRV هرمي الشكل متصل بمخرج عضلي بالكامل (infundibulum، بخلاف LVOT المتصل نسيجيًا بالصمام التاجي)؛ حجمه ثلاثي الأبعاد أكبر من LV رغم قطر أصغر بالعرض الرباعي، فـEF الطبيعي الأدنى للـRV أقل (~40%) من LV لنفس حجم الضربة. بالمرض يصبح كرويًا بدل هلالي. تشخيص التوسع الخفيف صعب بالإيكو (هندسة معقدة)؛ يُستعان بحركة الحاجز: زيادة الحجم (Volume overload) تُدفع الحاجز نحو LV بالانبساط وتُسحب بالانقباض؛ زيادة الضغط (Pressure overload) تُنتج حاجزًا مسطحًا/على شكل D مستمرًا بالدورتين.</p>
+  </section>
+
+  <!-- ============ VIII. SPECIFIC CARDIOMYOPATHIES ============ -->
+  <section class="roman" id="c2s8">
+    <div class="roman-head"><div class="roman-badge">VIII</div><h2>اعتلالات عضلة القلب النوعية</h2></div>
+
+    <h3 class="subhead">أ. اعتلال عضلة القلب الناتج عن اضطراب النظم (Arrhythmia-Induced)</h3>
+    <p>ثلاثة أنواع قابلة للعكس خلال 2–12 أسبوعًا بعد ضبط الاضطراب، وعادة دون ندوب كبيرة بـMRI؛ قد يكون الاضطراب السبب الوحيد أو عاملًا مفاقمًا لاعتلال قائم.</p>
+    <ul>
+      <li><strong>الناجم عن تسرع القلب (Tachycardia-induced):</strong> توسع بطيني ثنائي يتبعه قصور بعد تسرع نظم غير مضبوط &gt;أسبوعين (نطاق 3 أيام–6 أشهر) — نضوب مخازن الطاقة، شكل من "الركود الإقفاري"؛ توسع دون تضخم جداري يُذكر (ترقق خفيف فقط). قد يحدث حتى بمعدلات مزمنة "محتملة طبيًا" (105–110) لا تُكتشف إلا عند ظهور القصور؛ حتى تسرع &lt;10-15% من ساعات اليوم قد يسببه. يرتبط بـAF/رفرفة/تسرع أذين غير مضبوط أو PJRT. الاشتباه: تزامن تسرع جديد (&gt;105–110) مع تدهور HF (يحدث في 25-50% من AF جديد مع تدهور حديث)؛ يُعزَّز الشك إن استمر تسرع القلب مرتفعًا رغم تحسن الاحتقان بالمدرات. <strong>العلاج:</strong> بعد علاج القصور، استهداف خفض المعدل لـ&lt;100 (فعّال بقدر هدف 80 — RACE-II)، مع محاولة ضبط الإيقاع (استئصال، صدمة، أدوية). يتحسن الاعتلال خلال 2-12 أسبوعًا من ضبط الإيقاع (انقباض أولًا ثم انكماش البطين تدريجيًا)؛ ضبط المعدل وحده يعطي تحسنًا طفيفًا فقط؛ تبقى تغيرات بنيوية دقيقة تفسر عودة سريعة للقصور مع عودة التسرع.</li>
+      <li><strong>الناتج عن PVCs:</strong> عبء PVC &gt;10% بهولتر قد يسبب توسعًا وانخفاض EF (7–30% ممن لديهم عبء&gt;10%، خاصة &gt;24%). يتطور ببطء (أشهر-سنوات)، يتحسن خلال 2-12 أسبوعًا بعد الاستئصال. الآلية: خلل تعامل الكالسيوم (تراكم سيتوبلازمي بعد انقباضين متقاربين، ثم تحسس منخفض لقنوات الكالسيوم، وتنشيط ودي ضار بالتوقف التعويضي)؛ لكن هذا وحده غير كافٍ (PACs المماثلة لا تسبب ضررًا مشابهًا) — عدم التزامن البطيني الذي يسببه PVC هو الأهم لانخفاض EF (خاصة QRS&gt;150 أو منشأ نخابي epicardial). عدم تزامن AV (أذين ينقبض ضد صمامات مغلقة) يقلل النتاج ويسبب موجات A مدوية بالوداجي — شائع بفواصل &lt;450 مللي ثانية. نسيجيًا: لا تليف/استماتة عادة (فقط تغيرات وظيفية-كهربائية)؛ تليف خفيف ممكن بالتسرعات المزمنة أو AF. PVCs تُعتبر السبب الأساسي أو مفاقمًا بـ~85% من حالات الاعتلال المرافق لعبء&gt;10%. مؤشرات الدور السببي: غياب ندوب بالMRI، PVCs أحادية الشكل (لا متعددة البؤر)، قصور انقباضي عام، وتقوية ما بعد PVC (ارتفاع SBP/ضغط نبضي ≥10 بعد PVC ← تنبؤ جيد بتحسن EF بعد الاستئصال). التقييم: هولتر 6 أيام. قبل الاعتلال: حاصرات بيتا/فيراباميل (فعالية 10-24%) أو فليكاينيد (&gt;70%)؛ 12% تنخفض تلقائيًا. بعد الاعتلال: الاستئصال أو الأميودارون (فعّالان). لا داعٍ للعلاج بـPVCs متكررة غير عرضية مع وظيفة طبيعية (الاعتلال قابل للعكس) — مراقبة EF كل 6-12 شهرًا.</li>
+      <li><strong>الناتج عن AF:</strong> حتى مع ضبط المعدل، يضعف AF بحد ذاته وظيفة LV الانقباضية — فقدان مساهمة الأذين بالتحميل المسبق، وعدم الانتظام (فواصل R-R قصيرة تضعف حجم الضربة أكثر من نظم منتظم بنفس المعدل، مع خلل أشد بتنظيم الكالسيوم). استئصال AF بمرضى مضبوطي المعدل ومصابين بقصور حسّن EF بـ10–18% (CAMERA-MRI). يُشتبه به مع AF، غياب تليف/ندبة بـMRI، وانخفاض EF مستمر رغم ضبط المعدل.</li>
+      <li><strong>الناتج عن LBBB:</strong> نادر (&lt;5-10% من مرضى LBBB)، يتطور بعقود (متوسط 11.6 سنة) عبر عدم تزامن LV، أكثر احتمالًا مع LBBB واسع جدًا (≥150 مللي ثانية). مرضى LBBB المعزول لديهم خطر قصور أعلى 2-3 أضعاف (Swedish وFramingham). 20-25% من مرضى EF منخفض+LBBB "مستجيبون فائقون" لـCRT (EF يعود طبيعيًا) — يوحي بأن عدم التزامن هو السبب الرئيسي (أكثر احتمالًا بالنساء مع اعتلال غير إقفاري وLBBB≥150). العلاج التقليدي لقصور القلب لا يحسّن EF بهذا النوع (بتحليل استعادي).</li>
+    </ul>
+
+    <h3 class="subhead">ب. التهاب عضلة القلب الفيروسي</h3>
+    <p><strong>تحت سريري:</strong> بلا أعراض، غالبًا ذاتي الشفاء لكن أقلية تتطور لقصور مزمن يُشخَّص لاحقًا كاعتلال توسعي مجهول السبب.</p>
+    <p><strong>سريري:</strong></p>
+    <ul>
+      <li><strong>حاد خفيف:</strong> EF 45-50%، أعراض التهاب تامور حاد ± قصور خفيف؛ يتعافى &gt;90% خلال أسابيع-أشهر.</li>
+      <li><strong>حاد شديد:</strong> قصور أو خلل كبير بLV؛ تعافٍ كامل 35%، تحسن كبير 40%، تدهور لقصور أشد 25% — وفيات 5 سنوات بمن يستمر القصور لديهم تقارب الاعتلال التوسعي مجهول السبب (~50%).</li>
+      <li><strong>حاد شديد جدًا:</strong> قصور حديث (~أسبوعين) مع صدمة قلبية أو اضطراب نظم بطيني؛ حجم LV طبيعي عادة (لم يُتح وقت للتمدد) مع سماكة جدارية بالوذمة ← انخفاض فولتاج QRS. نوعان: (i) <strong>لمفاوي خاطف (Fulminant lymphocytic):</strong> غير مستقر حادًا لكن قابل لتعافٍ كامل بدعم مناسب (رافعات ضغط/أجهزة مساعدة)؛ السبب تثبيط سيتوكيني لا نخر خلوي؛ بقيا &gt;90%/10 سنوات بسجلات قديمة، لكن ~80%/60 يومًا بسجلات حديثة. (ii) <strong>بالخلايا العملاقة (Giant-cell):</strong> تدمير مناعي ذاتي، مسار متدهور سريعًا مع اضطرابات بطينية مقاومة؛ خلايا عملاقة متعددة النوى نسيجيًا (أصل هدبي)؛ يُلاحَظ خاصة بالشباب ذوي المناعة العدوانية.</li>
+    </ul>
+    <p>يرتبط التهاب عضلة القلب بمظهرين: قصور قلب (قد يكون شديدًا مع صدمة)، أو متلازمة تحاكي الاحتشاء (ألم شبيه بالتهاب التامور، تغيرات ECG منتشرة أو موضعية بنمط "احتشاء زائف"، ارتفاع CRP، وانصباب تاموري التهابي) — غالبًا تُطلب قسطرة تاجية لنفي CAD مع ارتفاع ST وتروبونين. ارتفاع تروبونين أكبر من المتوقع بقصور حاد دون CAD يوحي بالتهاب عضلة قلب. الخلل غالبًا عام لكن قد يكون قطاعيًا. بالشباب مع بلوك AV أو VT، فكِّر بـ: الساركويد، ARVD، التهاب عضلة القلب (خلايا عملاقة أو حمضي)، طفرة Lamin A/C، أو داء شاغاس — تميل هذه لإحداث اضطراب نظم قبل ظهور واضح لمرض العضلة.</p>
+    <div class="card point-num">
+      <strong>التشخيص:</strong> الخزعة (معايير دالاس: ارتشاح لمفاوي + نخر خلوي، أو تحليل جزيئي للمادة الوراثية الفيروسية) — حساسية منخفضة نسبيًا (35–50%، لطبيعة الالتهاب البقعية) لكن أعلى بكثير (~85%) بالخلايا العملاقة (التهاب أكثر انتشارًا). <strong>تُطلب فقط</strong> بالحالات الشديدة جدًا عند الحاجة الملحة لتأكيد التهاب الخلايا العملاقة تمهيدًا لتثبيط مناعي أو VAD/زرع.
+    </div>
+    <p><strong>العلاج المناعي:</strong> مزيج 2-3 من (بريدنيزون، مايكوفينولات، أزاثيوبرين، سايكلوسبورين، موروموناب) يحسّن البقيا بدون زرع إلى 69% (سنة) و58% (5 سنوات) — خاصة لالتهاب بالخلايا العملاقة. ستيرويدات ±أزاثيوبرين ممكنة باللمفاوي الخاطف رغم عدم إثبات فائدة واضحة بتجارب عشوائية للالتهاب الحاد عمومًا. تشخيص ظني مبكر: ألم صدري حاد + تروبونين مرتفع + تغيرات ECG، مع قسطرة سليمة وغياب نمط تاكوتسوبو ← "التهاب التامور والعضلة القلبية" (myopericarditis) الظني. بقصور قلب دون سبب واضح، يُفترض التهاب عضلة قلب أو اعتلال توسعي وراثي.</p>
+    <div class="card">
+      <strong>دور MRI:</strong> إشارة T2 مرتفعة ← وذمة/التهاب حاد؛ LGE بتسلسل T1 ← نخر/تليف. كلاهما (LGE) يظهر أيضًا بالاحتشاء، لكن بالتهاب عضلة القلب: التوزيع لا يتبع الشرايين التاجية، والنمط تحت التاموري (subepicardial) أو منتصف الجدار (لا تحت البطاني/عبر الجدار كالاحتشاء)؛ تحت البطانة غالبًا سليمة ونادرًا ما يُشاهد تعزيز عابر للجدار بالكامل.
+    </div>
+
+    <h3 class="subhead">ج. التهاب عضلة القلب الحمضي الحاد (Eosinophilic)</h3>
+    <p>أسباب: فرط تحسس دوائي (بنسلينات، سلفا)، التهاب أوعية تشورج-ستروس، أو متلازمة فرط الحمضات (النوع المزمن = متلازمة لوفلر)، أو مجهول السبب. الحماضات موجودة بـ75% (قد تظهر متأخرًا بعد الدخول)؛ قد ترافقها حمى وطفح وأعراض عامة. حتى بغياب الحماضات، تعرّض لدواء محسِّس مع انخفاض EF حديث أو ارتفاع تروبونين ← اشتباه بهذا التشخيص. الآلية: مهاجمة الحمضات لبطانة العضلة القلبية ← خثرات ببطين واحد أو كليهما (15-30%). <strong>قابل للعكس</strong> بسحب الدواء المسبب وستيرويدات عالية الجرعة — يستجيب جيدًا جدًا للكورتيزون (بخلاف أنواع التهاب عضلة القلب الأخرى). الخزعة (بالحالات الشديدة أو غير الواضحة) تُظهر ارتشاحًا حمضيًا.</p>
+
+    <h3 class="subhead">د. اعتلال عضلة القلب المرتبط بـHIV</h3>
+    <p>يُعزى لعدوى فيروسية مباشرة، أو مناعة ذاتية محفَّزة بـHIV، أو عدوى مشتركة (CMV، توكسوبلازما، EBV)، أو نقص سيلينيوم. يُميَّز عن الاعتلال العابر القابل للعكس بأمراض حادة مؤقتة أثناء الاستشفاء. يظهر عادة مع CD4&lt;400 (نحو 8% يطورونه خلال 5 سنوات متابعة)؛ قد يبدأ كالتهاب عضلة قلب حاد. الشكل التوسعي عالي الخطورة (وفيات &gt;50% خلال سنتين، جزئيًا لتقدم المرض نفسه). عند مسار متدهور/غير مفسَّر: خزعة لتحديد وعلاج عداوى انتهازية مرافقة. فعالية HAART بتحسين الاعتلال غير واضحة تمامًا. الخلل الانبساطي شائع لكن لا يؤثر عادة على الإنذار ما لم يرافقه انخفاض EF.</p>
+
+    <h3 class="subhead">هـ. مرض شاغاس</h3>
+    <p>شائع بأمريكا اللاتينية (طفيلي Trypanosoma cruzi، ينتقل بلدغة "حشرة التقبيل"). <strong>العدوى الحادة</strong> غالبًا خفيفة، نادرًا تسبب التهاب عضلة قلب حاد قابل للعلاج والانعكاس. <strong>العدوى المزمنة:</strong> ~30% يطورون بعد سنوات اعتلالًا تدريجيًا مع قصور ثنائي البطين وتمدد/تمزق قمي مميز شبه نوعي (Apical aneurysm)؛ مضاعفات شائعة: خثارات، اضطرابات توصيل، اضطرابات نظم. الآلية: استمرار الطفيلي بالعضلة + استجابة مناعية مدمرة. التشخيص باختبارات مصلية؛ علاج القصور بالمعايير المعتادة؛ البنزنيدازول فعّال بالمرحلة الحادة وقد يفيد بإبطاء التطور المبكر، لكن دراسة كبيرة لم تُظهر فائدة بتقليل الحوادث القلبية بالاعتلال المزمن غير المتقدم (EF طبيعي) رغم تقليله الواضح للطفيلي بالدم.</p>
+
+    <h3 class="subhead">و. الساركويد القلبي</h3>
+    <p>تسلل حبيبي (حبيبات ووذمة مبكرًا، ثم تليف متقدمًا)، إما يسمّك الجدار (خلل انبساطي) أو يرقّقه بتليف موضعي/أم دم موضعية (خلل انقباضي). يصيب الحاجز القاعدي والجدار الجانبي عادة ← خلل حركي موضعي، اضطرابات توصيل (بلوك AV≥2، RBBB/LBBB، موجات Q كاذبة)، واضطرابات نظم (VT، PVCs، اضطرابات أذينية). RV لا يُصاب مباشرة عادة لكن قد يتأثر ثانويًا بفرط ضغط رئوي قبل شعري.</p>
+    <p>~20-30% من مرضى الساركويد لديهم تورط قلبي مجهري لكن 5% فقط أعراض قلبية سريرية واضحة؛ تورط رئوي/منصفي موجود بـ80-90% حتى بغياب أعراض خارج القلب — لكن 5-20% ساركويد قلبي معزول. أسباب الوفاة: موت مفاجئ باضطراب نظم/بلوك (30-65%، الأشيع)، ثم تدهور تدريجي بوظيفة القلب.</p>
+    <div class="card point-num">
+      <strong>التشخيص:</strong> يُشتبه بحالتين: (1) ساركويد خارج القلب معروف — يُفحص الجميع بقصة سريرية + ECG + إيكو + هولتر؛ عند أي خلل تُجرى MRI (تغيرات ← يرجّح الساركويد؛ طبيعي ← احتمال منخفض) وFDG-PET (يحدد الالتهاب النشط، يفيد بتحديد مستجيبي الكورتيزون خاصة مع AV block/VT/ضعف LV) — MRI يحدد التليف (خطر موت مفاجئ ← ICD)، PET يحدد الالتهاب النشط، يتكاملان. (2) شاب بـVT/بلوك توصيل/اعتلال مع RBBB أو LBBB دون ساركويد معروف — يُؤكَّد بإصابة خارج القلب (CT صدر، فحص عين) + MRI (وذمة/تليف بالحاجز القاعدي أو الجدار السفلي-الوحشي). الخزعة غالبًا مطلوبة للتأكيد النسيجي — الأفضل من عقد/رئتين إن توفرت إصابة خارج القلب؛ خزعة RV حساسية منخفضة (~25%، طابع موضعي) وتتحسن بالتوجيه بخريطة كهربائية (EP mapping) لمناطق الجهد المنخفض.
+    </div>
+    <p><strong>العلاج:</strong> الكورتيزون بالمراحل المبكرة قد يحسّن وظيفة العضلة والندبات بالMRI وتكوّن الحبيبات — لكن بلوك AV وخطر VT قد لا يتحسنان به. الإنذار قريب من الاعتلال التوسعي مجهول السبب (أفضل من الداء النشواني).</p>
+    <div class="callout gold">
+      <b>دواعي ICD:</b> بلوك درجة ≥2 (خطر VT حتى 50%/2-3 سنوات)، إغماء غير مفسَّر، انخفاض RVEF كبير، LVEF&lt;35%، أو LVEF&gt;35% مع تليف بMRI (خاصة إن شمل RV) — ACC 2017. NSVT أو bundle branch block وحدهما لا يستدعيان ICD مباشرة، بل تقييمًا إضافيًا (EP/MRI) ومراقبة دقيقة (HRS 2014).
+    </div>
+
+    <h3 class="subhead">ز. اعتلال عضلة القلب غير المتكدس للبطين الأيسر (LVNC)</h3>
+    <p>جنينيًا، الطبقة تحت التامورية تخضع للتضاغط الطبيعي بينما تبقى تحت الشغافية شبكية رخوة عند عدم اكتمال العملية — يُنتج حزنًا بارزة (trabeculations) وتجاويف عميقة (خاصة بمنتصف/قمة LV). يُعرَّف بنسبة سماكة الطبقة الرخوة الداخلية للمضغوطة الخارجية ≥2 بنهاية الانقباض؛ EF قد يكون طبيعيًا أو متدهورًا. قد يُخطأ تشخيصه كخثرة — يميّزه محسِّن التباين بالإيكو.</p>
+    <p>تقارير مبكرة ربطته بضعف شديد وزيادة اضطرابات نظم ومضاعفات خثارية (ركودة بالتجاويف العميقة)؛ لكن تقارير لاحقة أظهرت أن الشكل بحد ذاته <strong>لا يحمل قيمة تشخيصية/إنذارية إضافية</strong> على ما توفره EF وحالة القصور. اعتلالات مكتسبة (فيروسية، ارتفاع ضغط) قد تزيد التربيق فتُشخَّص خطأً كـLVNC. ~25% من مرضى القصور الانقباضي يستوفون معايير LVNC (29% منهم لديهم CAD مرافق)؛ حتى 8% من الأصحاء (خاصة ذوي البشرة السمراء) يستوفونها أيضًا، و8% من النساء الحوامل الأصحاء (يختفي بعد الولادة)، و8% من الرياضيين (تكيّف فيزيولوجي). في فئة فرعية (ضعف LV أو تاريخ عائلي)، قد يمثل اعتلالًا وراثيًا حقيقيًا — 9-32% من مرضى LVNC لديهم اختبار جيني إيجابي (دون جين محدد مسؤول). <strong>الإنذار</strong> يعتمد على EF وحالة القصور فقط؛ مرضى بEF طبيعي عند التشخيص لديهم تنبؤ ممتاز (متابعة حتى 9.5 سنة دون زيادة خطر).</p>
+
+    <h3 class="subhead">ح. تاكوتسوبو وأنواع أخرى من اعتلالات القلب المرتبطة بالتوتر</h3>
+    <p><strong>تاكوتسوبو (متلازمة انتفاخ قمة القلب):</strong> عابر، بعد توتر نفسي/جسدي حاد، يسبب خلل حركة وانتفاخ قمي. الآلية: ارتفاع كاتيكولامين مفاجئ ← "نخر الأشرطة الانقباضية" (تثبيط عابر لا نخر حقيقي، بخلاف تسمم الكوكايين)؛ تشنج الشرايين التاجية متعددة الفروع/الدقيقة (شائع بتحريض أستيل كولين) يُعتقد أنه يسهم أيضًا. أنماط غير تقليدية: انتفاخ منتصف البطين، وانتفاخ القاعدة ("تاكوتسوبو المعكوس"). وبائيًا: نساء بعد سن اليأس (~95%)، فقط 2% تحت الـ50.</p>
+    <p>سريريًا يحاكي ACS/STEMI: ألم صدري، ارتفاع ST أمامي (&gt;80% من الحالات، نادرًا سفلي أو انخفاض ST انعكاسي &lt;10%)، انعكاس T عميق وإطالة QT خلال 24-48 ساعة (يحدث بمعظم المرضى حتى دون ارتفاع ST سابق)، موجات Q عابرة بـ30%. إيكو: توقف/خلل حركة قمي مع فرط انقباض قاعدي، EF~20-40% (متوسط 30%)؛ RV يُصاب بثلث الحالات؛ انتفاخ منتصف البطين 17%، قاعدي 2%. <strong>التفريق عن احتشاء أمامي</strong> غير واضح بـECG/إيكو وحدهما — تلزم قسطرة لنفي مرض LAD (لا يوجد مرض تاجي مهم بتاكوتسوبو). تروبونين مرتفع طفيفًا (حتى 5 نغ/مل، أقل بكثير من STEMI)؛ MRI لا يُظهر LGE متأخرًا (بخلاف STEMI والتهاب عضلة القلب).</p>
+    <div class="card">
+      <strong>المسار والمضاعفات:</strong> شفاء خلال شهرين بكل الحالات (50% خلال أسبوع)؛ يُثبَّت التشخيص بأثر رجعي عند استعادة الوظيفة. نكس 11%/4 سنوات؛ وفاة داخل المستشفى ~1%. مضاعفات (أقل من STEMI): قصور قلب 17%، صدمة قلبية 4%، VT/VF 1-6%، خثرة LV 2.5% (خطر سكتة ~1%، عادة خلال 48 ساعة)، وانسداد LVOT بـ~15% (يجب تفريقه عن ضعف الوظيفة بالإيكو — عند وجوده: تُمنع المقويات الانقباضية، تُستخدم حاصرات بيتا بحذر مع قصور، ومنبهات ألفا مع صدمة). قلس تاجي وظيفي بـ20% (توسع البطين أو SAM/انسداد المخرج).
+    </div>
+    <p>المحفزات (ثلث لكل نوع): (1) ضغط نفسي-عاطفي — إنذار ممتاز (وفاة حادة ~1%)؛ (2) ضغط جسدي (مرض حاد، جراحة، مجهود) — وفاة أعلى بكثير (7-10%، مرتبطة بالحالة الصحية العامة)؛ (3) دون محفز واضح — إنذار متوسط (~2%).</p>
+    <p><strong>أنواع أخرى مرتبطة بالتوتر:</strong> الاعتلال العصبي المنشأ (20-30% من نزف تحت العنكبوتية، أقل بالسكتة الإقفارية) — يصيب القطع القاعدية/المتوسطة مع سلامة القمة (نمط معكوس). الاعتلال الإنتاني/بمرض حاد — ~50% من مرضى الإنتان الشديد يصابون به (تثبيط سيتوكيني، خاصة TNF-α)، بضعف حركي شامل منتشر (لا نمط تاكوتسوبو محدد؛ قد يتطور النمط النمطي حسب نسبة الكاتيكولامين/السيتوكين)، RV يتأثر أيضًا، وقابل للانعكاس دومًا خلال 7-10 أيام.</p>
+
+    <h3 class="subhead">ط. الاعتلال الارتشاحي الانقباضي المحدود — الداء النشواني</h3>
+    <p>تراكم بروتينات مشوّهة ("أميلويد") بالأنسجة. ثلاثة أنماط رئيسية:</p>
+    <div class="card">
+      <strong>AL (سلاسل أمينو خفيفة):</strong> أولي أو ثانوي للورم النقوي المتعدد؛ يظهر بعمر 40-50؛ يترافق بفشل كلوي نشواني، متلازمة نفروزية، ضخامة لسان، تشنج فك بالمضغ، وكدمات حول العينين.
+      <br><br><strong>TTR الطافر (وراثي):</strong> ترسّب ترانستيريتين غير طبيعي، سائد جسمي؛ يسبب اعتلالًا قلبيًا واعتلال أعصاب طرفية/ذاتية دون إصابة كلوية. ~3.4% من الأمريكيين الأفارقة يحملون طفرة معينة (اختراق منخفض 10-20%، يظهر متأخرًا بمتوسط 69 سنة، يحاكي النمط البري).
+      <br><br><strong>TTR البري (شيخوخي):</strong> الأشيع قلبيًا؛ رجال مسنون (متوسط 75) أساسًا لكن يظهر بالنساء أيضًا (5-50% من الحالات)؛ اعتلال أعصاب أقل شيوعًا/حدة (10%) من الشكل الوراثي.
+    </div>
+    <p>فيزيولوجيًا: TTR بروتين رباعي الوحدات؛ طالما مرتبطًا لا يسبب مرضًا؛ انفصاله لوحدات مفردة (بالطفرة أو بالتقدم بالعمر) يسمح بترسبها كألياف نشوانية، خاصة بمناطق الإجهاد الميكانيكي العالي كالقلب. كلا نمطي TTR يتطوران أبطأ من AL. متوسط البقيا بعد ظهور القصور: AL ~15 شهرًا مقابل TTR ~5 سنوات؛ مرضى TTR يُظهرون سماكة جدارية وتغيرات هيموديناميكية أوضح لكن حالتهم السريرية أفضل من AL (العكس: AL أشد سريريًا رغم تصوير أقل وضوحًا). علامات مبكرة مرافقة: متلازمة النفق الرسغي الثنائية (شائعة بكل الأنماط، قد تسبق الأعراض القلبية بسنوات)؛ تضيق القناة الشوكية (بالنمط البري، تسلل أربطة شوكية).</p>
+    <p>انتشار TTR ببعض حالات القصور: 13% من مسني HFpEF، و15% من مسني تضيق الأبهر منخفض النتاج.</p>
+    <div class="card point-num">
+      <strong>مؤشرات سريرية تثير الشك بالداء النشواني:</strong> ضغط دم منخفض/طبيعي بمريض كان مرتفع الضغط سابقًا؛ عدم تحمل ACE-I/حاصرات بيتا أو الحاجة لإيقاف خافضات الضغط؛ HFpEF مع ارتفاع مزمن ملحوظ بBNP أو تروبونين دائم؛ HFpEF مع قصور أيمن شديد؛ متلازمة نفق رسغي/تضيق قناة شوكية أو اعتلال أعصاب محيطي/ذاتي؛ فولتاج QRS منخفض بشكل غير متناسب مع سماكة الجدار؛ وحفاظ وظيفة القمة (Apical Sparing) بتخطيط الإجهاد ("Cherry-on-top sign").
+    </div>
+    <p>سماكة الحاجز: ~15 ملم بAL، ~18 ملم بTTR البري — تُشبه HCM (وقد تكون غير متناظرة 20-25% مع انسداد LVOT)؛ يجب استبعاد النشواني قبل تثبيت تشخيص HCM أو اعتلال ارتفاع الضغط بالشباب (TTR الوراثي) أو كبار السن (TTR البري أو AL). ECG: انخفاض جهد QRS وموجات Q كاذبة (الانخفاض الحقيقي غير حساس — يُشاهد فقط بـ30% من TTR و50% من AL؛ العلامة الأعم هي انخفاض الجهد نسبيًا مقارنة بسماكة الجدار). إيكو (بتقنية strain): نمط Apical sparing (نسبة قمة/قاعدة&gt;1) يميّز النشواني عن ارتفاع الضغط وHCM بدقة 70-80%؛ عالمات إضافية: تثخن الصمامات، تثخن RV، وتثخن الحاجز بين الأذينين (مميز). تضيق الأبهر الشيخي قد يترافق مع TTR البري (الإجهاد الميكانيكي يزيد الترسب) — ~10% من AS بكبار السن مرتبط بـTTR.</p>
+    <div class="card point-num">
+      <strong>التشخيص:</strong> لـTTR (وراثي أو شيخي) — مسح نووي بتكنيتيوم بيروفوسفات (امتصاص قلبي ≥الأضلاع = حساسية &gt;99%، نوعية 86%؛ لكن إيجابي أيضًا بـ~30% من AL فلا يكفي وحده للتمييز). لـAL — رحلان كهربي بالترسيب المناعي للبلازما والبول + اختبار سلاسل أمينو حرة بالمصل (نسبة كابا/لامدا)؛ الدمج يعطي حساسية 99%. MRI (حساسية/نوعية ~90% لأي نوع): LGE منتشر تحت الشغاف و/أو زيادة الحجم خارج الخلوي؛ تثخن الأذينين قد يُظهر تعزيزًا نشوانيًا. الفحص الجيني بعد تأكيد TTR نوويًا لتحديد وراثي أم شيخي. <strong>تحذير:</strong> 2-8% من كبار السن لديهم MGUS (بروتين أحادي النسيلة عرضي دون علاقة بالقلب) — فوجود شذوذ بروتيني حتى مع فحص نووي إيجابي يستلزم خزعة للتمييز بين AL وTTR.
+    </div>
+    <p><strong>الخزعات:</strong> دهن حول السرة (حساسية 60-80% بAL وTTR الوراثي، فقط 14% بالشيخي)؛ نقي العظم (يبحث عن ترسبات وخلايا بلازما — &gt;10% يوحي بورم نقوي متعدد/AL أولي)؛ خزعة عضلة القلب (تُجرى إن فشلت السابقتان، حساسية ~100%، مع تحليل نوع البروتين).</p>
+    <div class="card">
+      <strong>مسار تشخيصي مختصر (الشكل 5.1):</strong> HFpEF + عمر&gt;65(رجال)/70(نساء) + سماكة جدارية≥14 ملم + علامة تحذيرية واحدة على الأقل (نفق رسغي/تضيق شوكي، اعتلال أعصاب، قصور أيمن شديد، عدم تحمل ACE-I/حاصرات بيتا، انخفاض جهد QRS غير متناسب، أو Apical sparing/تثخن صمامي-أذيني بالإيكو) ← ابدأ بنسبة كابا/لامدا + رحلان مصلي/بولي + مسح عظمي. سلاسل خفيفة إيجابية ← أكِّد AL بخزعة دهن/نقي عظم (±قلب). مسح عظمي إيجابي فقط ← TTR. كلاهما إيجابي ← الأرجح AL، لكن قد يكون TTR مترافقًا مع MGUS عرضي — الخزعة ضرورية للحسم.
+    </div>
+
+    <h4 class="subsub">علاج الداء النشواني</h4>
+    <p>تجويف LV صغير وقاسٍ (احتياطي تحميل محدود) ← PCWP مرتفع رغم حمل طبيعي/منخفض، فتُمنع الجرعات العالية من المدرات. يُفضَّل تجنب الديجوكسين (ارتباط عالٍ بالمادة النشوانية يزيد سميته حتى بجرعات علاجية). احتياطي حجم الضربة محدود جدًا فالموسّعات (كACE-I) قد تسبب هبوط ضغط شديدًا؛ والنتاج معتمد على معدل القلب فلا تُتحمَّل حاصرات بيتا؛ خلل الجهاز الذاتي يزيد حدة الهبوط. AF شائع جدًا بالنشواني الشيخي وصعب الضبط — يُحافَظ على معدل مرتفع نسبيًا (النتاج يعتمد عليه بالاعتلال التحددي)؛ CCB وحاصرات بيتا غالبًا لا تُتحمَّل، فقد يكون الأميودارون الخيار الوحيد لضبط المعدل.</p>
+    <div class="card point-num">
+      <strong>TTR (شيخي أو وراثي):</strong> إنذار أفضل من AL. <strong>تافاميديس</strong> يرتبط بالترانستيريتين ويمنع انقساماته — خفّض الوفيات الكلية (29% مقابل 42% خلال 2.5 سنة — تجربة ATTR-ACT). <strong>ديفلونيزال</strong> مثبّت بديل لكنه NSAID (خطر بقصور القلب). بـAS الشديد المترافق مع نشواني (~10% من AS بكبار السن، عمر متوسط 83.4)، TAVR أعطى نتائج جيدة مماثلة لـAS المعزول (حتى مع قلة استخدام تافاميديس) — يُعتقد أنه يقلل إجهاد القص بLV ويبطئ التطور.
+      <br><br><strong>AL:</strong> علاج كيميائي، مناعي، وزرع نقي عظم؛ لكن مع تأثر قلبي شديد وقصور مقاوم، الإنذار سيئ وغالبًا لا يتحمل المريض جرعات كيميائية عالية. استجابة القلب: سماكة العضلة عادة لا تتغير بالعلاج، لكن الشد الطولي والوظيفة الانبساطية قد تتحسنان بالحالات المستجيبة (وينخفض NT-proBNP &gt;30% لدى المستجيبين).
+    </div>
+
+    <h3 class="subhead">ي. اعتلالات عضلة القلب الارتشاحية التقييدية الأخرى</h3>
+    <ul>
+      <li><strong>داء ترسب الحديد (Hemochromatosis):</strong> وراثي متنحٍّ، ترسب حديد بأعضاء متعددة ← اعتلال ارتشاحي، سكري، اسمرار جلد، تشمع كبد. مخبريًا: ارتفاع فيريتين وتشبع حديد.</li>
+      <li><strong>داء فابري:</strong> اضطراب تخزيني مرتبط بالكروموسوم X (نقص إنزيم α-galactosidase) ← تراكم غليكوسفينغوليبيدات بالعضلة القلبية (تضخم LV±RV)، الكلى (فشل متقدم)، وأحيانًا الجلد والجهاز العصبي. يصيب الرجال أساسًا لكن قد تظهر الأعراض بالنساء الحاملات للطفرة (Heterozygous). مسارات توصيل إضافية شائعة. <strong>بخلاف انخفاض فولتاج النشواني، يُظهر فابري فولتاجًا مرتفعًا (LVH حقيقي).</strong> الأعراض الشديدة تظهر بالعقد 3-4 من العمر (أحيانًا لاحقًا، خاصة بالنساء). التشخيص: خزعة نسيجية، اختبارات جينية، أو قياس نشاط α-galactosidase بالكريات البيضاء. <strong>قابل للعلاج</strong> بتسريب إنزيم α-galactosidase الوريدي.</li>
+    </ul>
+    <div class="card point-num">
+      <strong>تفريق البطين المتضخم مع امتلاء تحددي:</strong> HCM، اعتلال ارتفاع الضغط، النشواني، وفابري. MRI-LGE يساعد: النشواني = تعزيز عام منتشر؛ HCM = تعزيز رقعي شبيه بالرمل بمنتصف الجدار (خاصة الحاجز)؛ فابري = تعزيز بمنتصف الجدار السفلي-الوحشي القاعدي. Echo strain: "قمة حمراء" مميزة للنشواني. الفشل الكلوي المرافق يوحي غالبًا باعتلال ارتفاع الضغط، لكن يجب التفكير أيضًا بفابري أو النشواني حسب السياق. <strong>بشاب</strong> مع تضخم بطيني ثنائي وامتلاء تحددي: فكِّر بـTTR الوراثي، فابري، أو HCM بنمط تحددي.
+    </div>
+    <p><strong>التهاب شغاف لوفلر (Loeffler Endocarditis):</strong> ثانوي لفرط حمضات جهازي مزمن شديد (تشورج-ستروس، متلازمة فرط حمضات بدئية/نيوبلازمية، أو عدوى طفيلية) ← تسلل حمضي شديد بالشغاف، اعتلال تحددي، وقلس MR/TR مع خثرات داخل التجاويف. العلاج: ستيرويدات ±مضادات طفيليات عند وجود عدوى. اضطراب متداخل: <strong>التليف الشغافي القلبي</strong> — شكل متقدم من لوفلر بتليف واسع بالشغاف، يُشاهد بإفريقيا وأمريكا المدارية والشرق الأوسط.</p>
+    <p><strong>أمراض الروماتيزم المناعية الذاتية</strong> (تصلب الجلد، الذئبة، RA، مرض النسيج الضام المختلط، التهاب العضلات/الجلد والعضلات، التهاب الأوعية): قد تسبب (1) التهاب عضلة قلب يتبعه تليف بأنماط متعددة على MRI (فوق شغافي، تحت شغافي، عبر الجدار، أو منتشر)؛ (2) مرض أوعية دقيقة بخلل تفاعل وعائي أو CAD؛ (3) أمراض صمامية (تُلاحظ أساسًا بالذئبة والتصلب الجلدي).</p>
+    <div class="callout warn">
+      <b>أسوأ ثلاثة أنواع اعتلال من حيث الإنذار</b> (بقيا &lt;50% خلال سنتين): اعتلال HIV، الاعتلالات الارتشاحية (النشواني، ترسب الحديد)، واعتلال الدوكسوروبيسين.
+    </div>
+  </section>
+
+  <!-- ============ IX. ADVANCED HF: TRANSPLANT & VAD ============ -->
+  <section class="roman" id="c2s9">
+    <div class="roman-head"><div class="roman-badge">IX</div><h2>القصور القلبي المتقدم: الزرع وأجهزة المساعدة البطينية</h2></div>
+
+    <h3 class="subhead">أ. مراحل قصور القلب (ACC/AHA)</h3>
+    <table>
+      <thead><tr><th>المرحلة</th><th>الوصف</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A</strong></td><td>معرض للخطر دون مرض قلبي بنيوي أو أعراض (ارتفاع ضغط، CAD بلا احتشاء، سكري)</td></tr>
+        <tr><td><strong>B</strong></td><td>مرض قلبي بنيوي دون أعراض (احتشاء سابق، LVH، EF منخفض، مرض صمامي شديد)</td></tr>
+        <tr><td><strong>C</strong></td><td>مرض بنيوي مع أعراض حالية/سابقة (NYHA II-IV)، غير مقاوم للعلاج كما بالمرحلة D</td></tr>
+        <tr><td><strong>D</strong></td><td>NYHA IV أو III متقدمة ومقاومة للعلاج الطبي، مع استشفاءات متكررة</td></tr>
+      </tbody>
+    </table>
+    <p>بالمرحلة D، تُجرَّب العلاجات العصبية الهرمونية (ACE-I، حاصرات بيتا، سبيرونولاكتون) تسلسليًا بجرعات منخفضة جدًا إن كان SBP≥85 وبغياب نقص تروية شديد — لكن التحمل غالبًا ضعيف (ACE-I قد يسبب هبوط ضغط وتدهورًا كلويًا؛ حاصرات بيتا قد تسبب هبوط ضغط وتفاقم الأعراض). قد لا يمكن سحب مقويات الانقباض بسبب انخفاض النتاج الشديد — قد يحتاج المريض دعمًا مزمنًا خارجيًا بها. IABP (بما فيه دعم طويل الأمد عبر الشريان الإبطي) يُستخدم كجسر انتظاري لـLVAD أو الزرع — أفضل من المقويات وحدها برفع SvO2 والقوة القلبية.</p>
+
+    <h3 class="subhead">ب. زراعة القلب</h3>
+    <p>بقيا 5 سنوات ~70-75%؛ خيار مناسب لمن تقل فرصة بقائهم سنتين عن 50% (ACC والجمعية الدولية لزرع القلب والرئة).</p>
+    <div class="card point-num">
+      <strong>مؤشرات الزرع:</strong> (1) الاعتماد على IABP/جهاز مساعدة مؤقت عبر الجلد أو مقويات انقباضية (أعلى أولوية؛ مرضى LVAD يعمل جيدًا أولويتهم أقل)؛ (2) NYHA III-IV مقاوم (مرحلة D) مع: peak VO₂≤14 مل/كغ/د باختبار جهد قلبي رئوي يبلغ العتبة اللاهوائية (تُستنفد بسرعة بالقصور الشديد، أحيانًا خلال دقيقة)؛ أدلة غازية على ضعف الديناميكا الدموية (ضغوط امتلاء مرتفعة، نتاج منخفض)؛ وEF عادة &lt;30% (ليس ضروريًا دومًا، كالاعتلال التحددي). يُستخدم حد أقل (12 مل/كغ/د) بمرضى حاصرات بيتا. الشباب (&lt;50) بـpeak VO₂≤50% من المتوقع للعمر/الجنس لديهم مؤشر نسبي (عضلاتهم، خاصة الرياضيين سابقًا، تستخرج الأكسجين بكفاءة عالية حتى مع ضعف التوصيل، فقد تسمح قيم &gt;14 بالزرع لديهم). (1 MET = 3.5 مل/كغ/د استهلاك أكسجين). عدم بلوغ 14 مل/كغ/د يعكس عجزًا وظيفيًا قلبيًا رئويًا حقيقيًا (لا مفصليًا/ألمًا) إذا تحقق ذلك عند بلوغ العتبة اللاهوائية. بالبدانة، يُستخدم الوزن المثالي لا الفعلي (النسيج الدهني غير نشط أيضيًا) لتجنب نتيجة كاذبة.
+    </div>
+    <div class="card">
+      <strong>موانع الزرع:</strong> فرط ضغط رئوي قبل شعري شديد مع PVR&gt;3 وحدات وود (خطر فشل RV بعد الزرع) — يُختبَر بموسّع (نيتروبروسيد): إن لم ينخفض PVR حادًا، يُجرَّب علاج 24-48 ساعة (مقويات، مدرات، موسّعات ±IABP)؛ انخفاض PVR&lt;3 يؤهل للزرع مع موسّعات محيط الجراحة. بفرط الضغط المقاوم، تفريغ LV الكامل بـLVAD قد يعكس الفرط الرئوي خلال 3-6 أشهر (جسر للزرع). موانع أخرى: سكري غير مضبوط، قصور كلوي غير قابل للعكس (GFR&lt;40)، تليف كبد، سرطان عولج خلال 5 سنوات، تدخين نشط خلال 6 أشهر أو تعاطي كحول/مخدرات (حاليًا أو خلال سنتين). موانع نسبية قوية: سمنة (BMI&gt;30 — وفيات ضعف خلال 5 سنوات، خطر رفض واعتلال أوعية أعلى)، وعمر&gt;70.
+    </div>
+    <p><strong>ملاحظات مناعية:</strong> تطابق ABO ضروري (لا Rh، غير معبَّر بخلايا عضلة القلب). يُفحص أجسام HLA المضادة (خاصة بعد نقل دم). الرفض المفرط الحاد (دقائق-ساعات، بعدم توافق ABO أو أجسام HLA) قاتل غالبًا ما لم يُعالج فورًا بإعادة زرع أو دعم ميكانيكي. الرفض الخلوي الحاد (بوساطة خلايا T) الأشيع، عادة بالأشهر 3 الأولى (قد يحدث لاحقًا)، يُكتشف بخزعات مراقبة منتظمة ويُعالَج مناعيًا.</p>
+    <div class="card">
+      <strong>الأدوية المناعية:</strong> مثبطات كالسينيورين (سيكلوسبورين، تاكروليموس)؛ مضادات أيض (أزاثيوبرين، مايكوفينولات)؛ ستيرويدات (تُخفَّض/تُوقَف تدريجيًا)؛ سيرولimus (مثبط mTOR) بديل يقلل اعتلال أوعية الطعم وفشل الكلى — يُوقَف قبل جراحة اختيارية بأسبوع ولا يُستأنف 4-6 أسابيع بعدها (يبطئ التئام الجروح؛ يُستبدل مؤقتًا بمثبط كالسينيورين). بدء الستاتين مبكرًا بعد الزرع يخفض الوفيات والرفض واعتلال أوعية الطعم.
+    </div>
+    <div class="card point-num">
+      <strong>مضاعفات ما بعد الزرع:</strong>
+      <ul>
+        <li><strong>الرفض الحاد</strong> — الأشيع بالأشهر الأولى؛ السبب الرئيسي للوفاة بالشهر الأول. خزعات مراقبة: أسبوعيًا بدايةً، شهريًا حتى 6 أشهر، ثم كل 3-6 أشهر. الرفض السريري الحاد طارئ — يُشتبه به بأي قصور حاد مفاجئ (خاصة مع حمى)؛ تُبدأ ستيرويدات وريدية فورًا حتى قبل الخزعة.</li>
+        <li><strong>فشل RV</strong> — ثاني أسباب الوفاة بالشهر الأول، خاصة بمن لديهم فرط ضغط رئوي غير قابل للعكس قبل الزرع.</li>
+        <li><strong>عدوى مكتسبة بالمستشفى</strong> (أول 30 يومًا) ثم عداوى انتهازية (Pneumocystis jirovecii، CMV، توكسوبلازما) بالأشهر الستة الأولى — وقاية بـTrimethoprim/sulfamethoxazole ومضادات فيروسية.</li>
+        <li><strong>السرطانات</strong> (خاصة جلدية ولمفاوية) بسبب كبت المناعة المزمن.</li>
+        <li><strong>القصور الكلوي</strong> — أساسًا بسمية مثبطات الكالسينيورين.</li>
+        <li><strong>اعتلال أوعية الطعم القلبي</strong> — مرض تاجي منتشر تدريجي (فرط نمو الطبقة الداخلية)؛ آليات مناعية وغير مناعية (متلازمة أيضية، شحميات، عمر، إقفار الزرع الطويل)؛ السبب الرئيسي للوفاة بعد السنة الأولى. معدل الحدوث: 8% (سنة)، 30% (5 سنوات)، 50% (10 سنوات). التشخيص: منتشر وقد لا يظهر بالتصوير التقليدي — يُفضَّل IVUS (يكشف تثخنًا داخليًا&gt;0.5 ملم بقوس&gt;180°، ويقيّم درجة الانسداد بدقة). العلاج: PCI لتضيق بؤري، ستاتين، استبدال الكالسينيورين بسيرولimus، وعلاج مكثف للمتلازمة الأيضية؛ تصوير سنوي بـIVUS يُوصى به بمراكز عديدة (لا يغيّر العلاج الفوري لكن يفيد بالتقييم طويل الأمد). بالمرض المتقدم المنتشر، العلاج النهائي إعادة الزرع.</li>
+      </ul>
+    </div>
+
+    <h3 class="subhead">ج. أجهزة المساعدة البطينية اليسرى (LVADs)</h3>
+    <p>تُستخدم كجسر للزرع — تُثبِّت الديناميكا الدموية فتُمكِّن تحمل ACE-I/حاصرات بيتا/سبيرونولاكتون، وتحسّن تروية الأعضاء والكلى وضغط PA والبقيا، فتجعل المريض مرشحًا أفضل للزرع.</p>
+    <div class="card point-num">
+      <strong>استخدامات أخرى:</strong> علاج دائم (Destination therapy) لغير المؤهلين للزرع؛ أو جسر للتعافي بحالات صدمة قابلة للانعكاس (احتشاء معاد ترويته مع صدمة، التهاب عضلة قلب شديد، صدمة بعد جراحة قلبية، أو اعتلال غير إقفاري شديد لكن قابل للعكس أحيانًا) — لا يمكن تحديد الهدف النهائي (زرع/تعافٍ/دائم) إلا مع الوقت؛ 15-20% من اعتلال غير إقفاري قد يتحسنون بشكل كبير مع LVAD+علاج طبي فيُزال الجهاز (Explantation) بعد 1-2 سنة. تجربة <em class="trial">REMATCH</em> (NYHA IV مقاوم، غير مؤهلين للزرع): HeartMate LVAD حسّن البقيا سنة واحدة بشكل كبير (52% مقابل 25% بدونه).
+    </div>
+    <p><strong>مكونات LVAD:</strong> مضخة (قبل الصفاق أو داخل التامور)، أنبوب دخول بقمة LV، أنبوب خروج بالأبهر الصاعد، متصلة بوحدة تحكم/بطارية خارجية عبر سلك ناقل عابر للجلد (Driveline — مصدر عدوى محتمل). الأجهزة الحديثة داخلية بالكامل (بخلاف القديمة خارج الجسم). <strong>RVAD</strong>: دخول بالأذين/البطين الأيمن، خروج بالشريان الرئوي؛ الاستخدام المشترك مع LVAD يُسمى <strong>BiVAD</strong> — لكن دعم RVAD أقل كفاءة من LVAD (المقاومة الرئوية المنخفضة قد تسبب تدفقًا مفرطًا واحتقانًا رئويًا)، فيُستخدم عادة مؤقتًا بسرعة منخفضة، مع مخاطر نزيف/عدوى أعلى من جراحات الزرع/الإزالة الإضافية.</p>
+    <div class="card">
+      <strong>أجيال المضخات:</strong> (1) <strong>نابضة</strong> (HeartMate الأصلي) — صمامان، حسّنت البقيا لكن أعطال 35%/سنتين (بقيا سنتين 24%). (2) <strong>تدفق مستمر محوري</strong> (HeartMate II) — أصغر، أقل استهلاكًا وأعطالًا (إعادة جراحة 10% مقابل 36%؛ بقيا سنتين 58% مقابل 24%). (3) <strong>تدفق مستمر مركزي/طردي</strong> (HeartMate 3، HeartWare) — دوار معلق مغناطيسيًا بلا محامل ميكانيكية (أصغر، داخل الصدر بالكامل)؛ تجربة MOMENTUM 3: تجلط أقل بالمضخة وإعادة جراحة أقل من HeartMate II.
+    </div>
+    <p><strong>ديناميكية التدفق:</strong> يعتمد على فرق الضغط (Delta P = ضغط الخروج الأبهري - ضغط الدخول بLV) — كلما انخفض الفرق زاد التدفق؛ لذا يُحافَظ على عبء لاحق منخفض (ضغط متوسط&lt;90) وحمل مسبق مرتفع لتحفيز التدفق. رغم استمرارية التدفق، يبقى نبضان خفيف من انقباض LV المتبقي (انقباض: ضغط دخول أعلى فتدفق أعلى؛ انبساط: العكس)؛ المرضى بانخفاض SBP شديد وارتفاع ضغط امتلاء لديهم أقل نبضان؛ ودعم المضخة الإضافي أعلى عند ضعف وظيفة القلب الذاتية. المضخات المركزية أكثر حساسية لفرق الضغط وقد تتوقف عن الضخ إن ارتفع كثيرًا.</p>
+
+    <h3 class="subhead">د. مؤشرات LVAD واعتبارات إضافية</h3>
+    <div class="card point-num">
+      <strong>المؤشرات</strong> (شبيهة بزرع القلب): NYHA IIIB-IV مقاوم (استشفاءات متكررة، أو نتاج منخفض مع عدم تحمل ACE-I/حاصرات بيتا)، مع EF≤25% وأحد: peak VO₂≤14، اعتماد على مقويات &gt;أسبوعين، أو اعتماد على IABP &gt;أسبوع (معايير تجربة HeartMate II). <strong>الاعتماد على المقويات هو المؤشر الأكثر تحديدًا</strong>؛ يبقى غير واضح إن كان مبررًا لغير المعتمدين عليها رغم قيود وظيفية شديدة (دراسة ROADMAP). يمكن دعم الانتظار بـIABP لأسابيع (الوصول الإبطي يسمح بالحركة). <strong>العمر والسمنة ليسا مانعين مهمين</strong>؛ فرط الضغط الرئوي الثابت (مانع للزرع القلبي) <strong>ليس مانعًا لـLVAD</strong> — الجهاز قد يعكسه بمرور الوقت.
+    </div>
+    <p><strong>تقييم RV قبل الزرع ضروري</strong> — بشكل لافت، ارتفاع الضغط الرئوي قد يوحي بوظيفة RV أفضل (مشجع لزرع LVAD) مقارنة بضغط طبيعي مع RV ضعيف. فشل RV بعد LVAD يحدث بـ~20%؛ مؤشرات خطر مرتفع: RA&gt;20، RA&gt;0.63×PCWP، انخفاض مؤشر عمل RV، مؤشر نبضان PA&lt;2، وعلامات فشل RV بالإيكو قبل الزرع. تفريغ LV عادة يفيد RV، لكن مبدئيًا قد يزيح الحاجز لليسار (توسع RV، فقدان مساهمة الحاجز، وزيادة الحمل المسبق على RV بزيادة نتاج LV) ← إرهاق RV. العلاج: محافظ (مقويات + موسّعات رئوية) أولًا؛ RVAD إن قاوم. <strong>قصور أبهري شديد</strong> يستوجب AVR وقت زرع LVAD (بيولوجي لا ميكانيكي، لمنع دائرة مغلقة LV-أبهر دون تروية جهازية فعالة وتقليل خطر التجلط بصمام غير محمَّل).</p>
+
+    <h3 class="subhead">هـ. جوانب تقنية ومراقبة LVAD</h3>
+    <div class="card">
+      <strong>المؤشرات المراقَبة:</strong> سرعة المضخة (rpm — المتغير الوحيد القابل للتعديل عادة)؛ القدرة (Power — تتناسب طرديًا مع السرعة والتدفق، عكسيًا مع فرق الضغط)؛ مؤشر النبضان (PI، 1-10 — يعكس مساهمة LV الذاتية؛ منخفض = اعتماد كبير على المضخة/ضعف شديد بLV، أو نقص حمل مسبق)؛ التدفق (لا يُقاس مباشرة، يُحسَب من القدرة والسرعة ولزوجة الدم [الهيموغلوبين]).
+    </div>
+    <p><strong>زيادة القدرة</strong> (بسرعة ثابتة): تدفق حقيقي أعلى (زيادة استقلابية أو توسع وعائي — مع PI مرتفع لمساهمة LV الذاتية)؛ أو تدفق مفرط برفع ضغط (سرعة زائدة — يُصحَّح بخفض السرعة)؛ أو جلطة بالمضخة (زيادة مقاومة داخلية ترفع القدرة لكن التدفق المحسوب يبدو كاذبًا مرتفعًا).</p>
+    <p><strong>انخفاض القدرة</strong> يرتبط بانخفاض التدفق: نقص حمل مسبق أو زيادة عبء لاحق — أسباب: فرط تفريغ LV، فشل RV، اندكاك تاموري، انسداد مدخل/مخرج (انثناء أو جلطة)، أو ارتفاع ضغط (يُحافَظ على متوسط 65-90).</p>
+    <div class="card point-num">
+      <strong>ملاحظات سريرية:</strong> النبض غالبًا غير ملموس (يصعب قياس الضغط بجهاز عادي) — يُقاس بدوبلر شرياني (بداية الصوت المستمر عند إزالة الكفة = MAP). <strong>ارتفاع الضغط</strong> يزيد خطر السكتة — قد ينتج عن زيادة تدفق (نادر، يحتاج خافض ضغط) أو تضيق وعائي يعيق التدفق. <strong>انخفاض الضغط</strong>: مرتبط بالجهاز (فشل RV، خلل/جلطة بالمضخة، شفط LV) أو غير مرتبط (إنتان، اندكاك، نزيف). <strong>شفط LV</strong> (LV suction) بسبب نقص حجم، فشل RV، أو سرعة مفرطة — العلاج: سوائل وخفض السرعة. بالإيكو: الحاجز بين البطينين يجب أن يبقى بالمنتصف؛ انجذابه لليسار ← اخفض السرعة؛ توسع LV ← جلطة بالمضخة أو سرعة غير كافية.
+    </div>
+    <p><strong>اختبار الزيادة التدريجية (Ramp Test):</strong> لمرضى تفريغ غير كافٍ أو PCWP مرتفع — زيادة السرعة تدريجيًا مع تقييم بالإيكو (تقلص LV بلا جذب حاجزي، تجنب توسع RV) ±قسطرة يمنى (PCWP، RA) ومراقبة قراءات الجهاز، لضبط الجهاز بدقة وكشف الخلل مبكرًا.</p>
+    <div class="card point-num">
+      <strong>المضاعفات:</strong>
+      <ul>
+        <li><strong>فشل الجهاز</strong> — بالمضخات المحورية بلا صمامات قد يكون كارثيًا (يُشبه قصور أبهري شديد)؛ النابضة أقل خطورة (الصمامات تقي من الارتجاع) لكن فشل صمام واحد قد يُحدث نفس التأثير.</li>
+        <li><strong>حساسية نقص الحمل الحجمي</strong> — المحورية تولّد ضغطًا سلبيًا عاليًا قد يسبب انهيار البطين وتوقف التدفق وتجلطًا وانحلال دم وVF؛ تستمر "بالشفط" حتى بضغط وريدي منخفض. المركزية تتوقف عند انخفاض الضغط الوريدي وارتفاع التدرج بين المدخل والمخرج — استجابة فيزيولوجية أفضل.</li>
+        <li><strong>فشل RV (~20%)</strong> — مبكرًا أو متأخرًا؛ العلاج: مقويات وموسّعات رئوية مستنشقة (أكسيد نيتريك) مبدئيًا، RVAD بالحالات المقاومة.</li>
+        <li><strong>العدوى (~20%/سنتين)</strong> — شائعة بموقع خروج السلك الجلدي أو تلوث مكونات الجهاز.</li>
+        <li><strong>مضاعفات خثارية-صمامية</strong> — تتطلب معظم الأجهزة (باستثناء HeartMate I) وارفارين؛ HeartMate II يتطلب INR 2-3.34؛ ~12% سكتة دماغية خلال سنتين (دراسة ما بعد الاعتماد).</li>
+        <li><strong>مضاعفات نزفية (~54%/سنتين)</strong> — احتقان كبدي وسوء تغذية بعد الجراحة، مضادات التخثر؛ التدفق المستمر يسبب تشوهات شريانية وريدية وتدهور عامل فون ويلبراند ← نزيف هضمي. نزيف مستمر قد يستدعي زرعًا عاجلًا لإيقاف الجهاز وسحب مضادات التخثر.</li>
+        <li><strong>قصور أبهري</strong> — التدفق المستمر يُغلق الصمام الأبهري دائمًا فيسبب التحام الشرفات وقصورًا؛ يصل لـ30%/3 سنوات؛ الوقاية بتعديل السرعة للسماح بفتح متقطع؛ العلاج AVR.</li>
+        <li><strong>انحلال الدم</strong> — أشيع بالتدفق المستمر خاصة مع جلطة داخلية.</li>
+        <li><strong>اضطرابات النظم (VF)</strong> — بالمرضى المستقرين بعد الزرع، VF لا يوقف الدوران (الضخ يستمر عبر LV بالمضخة؛ RV يتوقف لكن الدم قد يتدفق سلبيًا عبر الرئتين بضغط رئوي منخفض، شبيهًا بدورة فونتان) — لا ينطبق هذا مباشرة بعد الجراحة (وظيفة RV حيوية حينها لتجاوز السحب الأيسر المرتفع).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ X. PATHOPHYSIOLOGY ============ -->
+  <section class="roman" id="c2s10">
+    <div class="roman-head"><div class="roman-badge">X</div><h2>الفيزيولوجيا المرضية لقصور القلب</h2></div>
+
+    <h3 class="subhead">أ. الضغط الانبساطي للبطين الأيسر: الطبيعي مقابل قصور القلب</h3>
+    <p>طبيعيًا، يرتفع الضغط الانبساطي لـLV طفيفًا مع انخفاض أولي ببداية الانبساط يساعد "سحب" الدم من الأذين (خاصة بالشباب ذوي المطاوعة العالية — يُعرفون بـ"الماصّين/suckers"). <strong>LVEDP</strong> = الضغط بعد موجة A مباشرة (يعادل تقريبًا الضغط الانبساطي قبل A بالأفراد الطبيعيين). <strong>LVEDP&gt;16</strong> مؤشر قوي على خلل وظيفي (انقباضي أو انبساطي)؛ إن كان مرتفعًا مع EF وحجم طبيعيين ← خلل انبساطي (شرط أساسي لتعريف القصور الانبساطي).</p>
+    <div class="card">
+      <strong>الحالة المعاوَضة:</strong> لا يرتفع الضغط ملحوظًا إلا بنهاية الانبساط (بعد انقباض الأذين) — LVEDP مرتفع مع موجة A كبيرة، لكن الضغط الانبساطي قبل A والمتوسط يبقيان طبيعيين أو مرتفعين قليلًا فقط. العلامات: S4، وانعكاس E/A بالدوبلر. الأذين يتحمل الحمل الحجمي جيدًا بهذه المرحلة فيبقى ضغطه منخفضًا حتى أواخر الانبساط — فمتوسط ضغط الأذين طبيعي (لا يعكس ارتفاع LVEDP)، ولا وذمة رئوية بالراحة، لكن قد يرتفع الضغط الأذيني بالجهد.
+      <br><br><strong>الحالة الحادة/اللامعاوضة:</strong> مطاوعة LV منخفضة ببداية الانبساط ← ارتفاع الضغط طوال الانبساط؛ الأذين أيضًا يفقد مطاوعته فيرتفع ضغطه ويدفع بقوة ← تدرج مرتفع مبكر بين LA وLV ← موجة E كبيرة، E/A مرتفعة. الامتلاء السريع ← S3 (بخلاف S4: LVEDP مرتفع مع ضغط طبيعي قبل A، تمثل حالة متقدمة بلا حمل زائد؛ S3 يدل على حمل حجمي زائد بالأذين والبطين).
+    </div>
+    <p>المرضى المعوَّضون سريريًا لديهم PCWP طبيعي أو شبه طبيعي بالراحة، لكن يُظهرون ارتفاعًا ملحوظًا بضغط LA ونسبة E/A أثناء التمارين/تسرع القلب، مع ضعف زيادة حجم الضربة — يفسر ضيق النفس والإرهاق بالجهد رغم ضغط راحة طبيعي.</p>
+    <div class="card point-num">
+      <strong>درجات الخلل الانبساطي (تسجيلات LA/LV المتزامنة):</strong>
+      <br>• <strong>طبيعي:</strong> استرخاء يُقاس بثابت تاو (τ) أو سرعة E′ بدوبلر الأنسجة؛ مطاوعة LV بميل منحنى الضغط الانبساطي؛ تدرج مبكر بين LA وLV يُترجم لموجة E.
+      <br>• <strong>درجة 1 (ضعف استرخاء):</strong> غياب انخفاض الضغط الانبساطي المبكر (استرخاء ضعيف)؛ LVEDP مرتفع (مطاوعة منخفضة)؛ دخول حجم كبير بموجة A يرفع الضغط سريعًا ← موجة A كبيرة، S4؛ ضغط LA طبيعي غالبًا (خاصة إن بقي مطاوعًا).
+      <br>• <strong>متقدم/لا معاوَض:</strong> ضغط LA مرتفع طوال الانبساط؛ تدرج مبكر مرتفع (LA "يدفع")؛ استرخاء ضعيف جدًا ومطاوعة منخفضة للغاية؛ نزول الضغط بطيء جدًا ثم ارتفاع سريع (يقلل التدرج ويحد الامتلاء)؛ موجة E عالية لكن ضيقة (سريعة ومختصرة)؛ S3 (تمدد LV الأقصى)؛ موجة A صغيرة رغم ارتفاع ضغطها (E/A&gt;1.5-2). <strong>قاعدة:</strong> بما أن E = ضغط LA × استرخاء LV، وE′ = استرخاء LV، فإن E/E′ = ضغط LA.
+    </div>
+
+    <h3 class="subhead">ب. تعريف العبء اللاحق (Afterload)</h3>
+    <p>التوتر/الإجهاد الذي تضخ عضلة القلب ضده أثناء الانقباض (إجهاد جدار البطين) — لا يعادل ببساطة ضغط الأبهر، بل يعتمد على: الضغط الانقباضي داخل التجويف، وحجم/تمدد البطين (كلما زاد التمدد زاد الشد لنفس الضغط الداخلي). كذلك تؤثر الضغوط المحيطة (الضغط الإيجابي بالتامور/الصدر يعادل جزءًا من الضغط الداخلي فيخفض الشد الفعلي) — لذا <strong>الضغط العابر للجدار</strong> (Transmural = ضغط داخل البطين - ضغط داخل التامور) هو الممثل الحقيقي للعبء اللاحق. سماكة جدار البطين تلعب دورًا كبيرًا أيضًا: كلما كان الجدار أسمك، توزع التوتر على وحدات ساركومير أكثر فقلّ الشد لكل وحدة — لذا RV (أنحف من LV) أكثر اعتمادًا/حساسية للعبء اللاحق من LV الطبيعي.</p>
+    <div class="card point-num">
+      <strong>معادلة لابلاس:</strong> العبء اللاحق = (نصف قطر LV الانقباضي × الضغط العابر للجدار) ÷ (2 × سماكة الجدار). العوامل التي تقلله: <strong>الإدرار</strong> (يقلص نصف القطر، فيقلل الإجهاد وفق المعادلة — إضافة لتقليل الحمل المسبق)؛ <strong>التهوية بالضغط الإيجابي</strong> (ترفع الضغط داخل التامور فتقلل الضغط العابر للجدار).
+    </div>
+    <div class="card">
+      <strong>منحنى فرانك-ستارلينغ (النتاج مقابل الحمل المسبق):</strong> المحور الأفقي = حجم نهاية الانبساط (الحمل المسبق، لا الضغط). ثلاثة منحنيات: (1) <strong>قصور انقباضي</strong> — جزء مسطح/نازل؛ غير معتمد على الحمل المسبق، فزيادته لا تحسّن النتاج، والإدرار لا يخفضه (وقد يحسّنه). (2) <strong>طبيعي بالراحة</strong> — علاقة تصاعدية طبيعية. (3) <strong>طبيعي بالجهد</strong> — تحسّن أكبر بالنتاج مع نفس زيادة الحمل المسبق.
+    </div>
+
+    <h3 class="subhead">ج. نتاج القلب وعلاقته بالحمل المسبق واللاحق</h3>
+    <p>محددات النتاج القلبي:</p>
+    <ul>
+      <li><strong>التقلص الذاتي (Inotropism):</strong> الوظيفة التقلصية الجوهرية بطول ساركومير معين، مستقلة عن ظروف التحميل — التحميل يغيّر القوة الظاهرة (Contractility) لا الخاصية الذاتية.</li>
+      <li><strong>معدل القلب (Chronotropism):</strong> بالقصور الحاد اللامعاوض، لا يمكن زيادة حجم الضربة رغم زيادة وقت الامتلاء — فتسرع القلب هنا يساعد على زيادة النتاج ويجب عدم تثبيطه مفرطًا؛ كما يزيد التسرع التقلص العضلي لحد معين.</li>
+      <li><strong>الحمل المسبق:</strong> تمدد LV بنهاية الانبساط (LVEDV). زيادته تحسّن حجم الضربة حتى نقطة معينة، وبعدها الاستمرار بالزيادة قد يُنقص حجم الضربة (تمدد أكبر ← زيادة العبء اللاحق الانقباضي، تفاقم MR الوظيفي، وانخفاض النتاج حسب فرانك-ستارلينغ).</li>
+      <li><strong>العبء اللاحق:</strong> القلب الفاشل أكثر اعتمادًا وحساسية له من الحمل المسبق — تغيّر بسيط بالعبء اللاحق يُحدث تغيرات كبيرة بحجم الضربة؛ بالمقابل، زيادة الحمل المسبق عادة لا تزيد النتاج بالقلب الفاشل (منحنى مسطح) وقد تُنقصه بالتمدد المفرط.</li>
+    </ul>
+    <div class="card point-num">
+      <strong>عمليًا:</strong> بالقصور، انخفاض الحمل المسبق (بالمدرات) عادة جيد التحمل ويحسّن الوذمة دون أذى للنتاج (منحنى مسطح) — <strong>استثناءات هامة:</strong> القصور الانبساطي الشديد، أو القصور الانقباضي الحاد المفاجئ (كاحتشاء ضخم) — هنا LVEDV غير مرتفع فعليًا، لكن الوذمة الرئوية تحدث حتى بحجم "طبيعي" بسبب مطاوعة ضعيفة جدًا وعلاقة ضغط-حجم حادة — هؤلاء لا يتحملون نقص حجم كبيرًا حتى ضمن "الطبيعي"، فيُعالَجون بحذر شديد بالمدرات.
+    </div>
+    <p><strong>حساسية العبء اللاحق (البطين المتوسع الفاشل):</strong> القلب الطبيعي يُظهر انخفاضًا تدريجيًا بحجم الضربة مع زيادة العبء اللاحق (تعويض جيد نسبيًا)؛ القلب الفاشل المتوسع يُظهر انخفاضًا حادًا حتى بزيادات صغيرة — البطين المتمدد المفرط الامتلاء لا يستطيع الحفاظ على حجم ضربة فعّال أمام مقاومة إخراج أكبر. RV الطبيعي حساس للعبء اللاحق كالبطين الفاشل تمامًا (أنحف جدارًا).</p>
+
+    <h3 class="subhead">د. علاقة الضغط-الحجم: استنتاجات علاجية للانقباضي مقابل الانبساطي</h3>
+    <div class="card">
+      <strong>الانقباضي:</strong> ضعف تقلص ← توسع تدريجي (يحافظ مؤقتًا على حجم الضربة بفرانك-ستارلينغ، لكن يزيد العبء اللاحق فيُفاقم لاحقًا). <strong>الانبساطي:</strong> تباطؤ استرخاء (τ) ومنحنى ضغط-حجم حاد (β) دون توسع — بطين طبيعي الحجم مع LVEDP مرتفع يعني مطاوعة منخفضة. <strong>التداخل:</strong> كل قصور انقباضي لامعاوض يحوي مكونًا انبساطيًا (البطين متصلب، حتى المعوَّضين لديهم ضعف استرخاء) — فالقصور الانقباضي دائمًا مزيج من الاثنين. الفرق بالمطاوعة: بالانبساطي، حجم قليل يكفي لتجاوز المطاوعة المحدودة فيرتفع الضغط سريعًا؛ بالانقباضي المزمن، يبقى البطين مطاوعًا طويلًا حتى بتحميل حجمي كبير (بعض المرضى لديهم زيادة خفيفة بالحجم لكن ارتفاعًا ملحوظًا بالضغط = "انقباضي بسمات انبساطية غالبة").
+    </div>
+    <p><strong>أهداف العلاج:</strong> تطبيع PCWP وضغط الأذين الأيمن (حتى فرط الضغط الرئوي الشديد/التفاعلي يتحسن غالبًا بخفض PCWP، رغم تأخر التحسن أحيانًا أسابيع). بالبطين الفاشل المتوسع، خفض الحمل المسبق لا يخفض النتاج (جزء مسطح بفرانك-ستارلينغ)؛ توسع معتدل مفيد للحفاظ على حجم الضربة لكن المفرط ضار؛ PCWP 15-18 يشير لتحميل زائد غير ضروري ويمكن خفضه بأمان لـ12 (حتى بالحالات الحادة). آليات تحسن النتاج بعد الإدرار: خفض حجم LV يقلل الحمل المسبق واللاحق؛ خفض التمدد يقلل MR الوظيفي فيحسّن النتاج الأمامي؛ وبفشل RV، يقلل الإدرار حجم RV فيقلل الضغط على LV. الاستنتاج: PCWP&lt;15 مقبول مع خفض كبير بحجم LV — أفضل حجم ضربة يتحقق عند PCWP منخفض. <strong>استثناءات:</strong> المطاوعة شديدة السوء (قصور انبساطي شديد، قصور حاد جديد، اعتلال تحددي) — قد يحتاجون PCWP أعلى للحفاظ على حجم نهاية الانبساط والنتاج الكافي.</p>
+    <div class="card">
+      <strong>منحنى المطاوعة الانبساطية:</strong> بالخلل الانقباضي الشديد، LV مطاوع (بمنطقة الحجم الكبير الحادة من المنحنى، منخفضة المطاوعة رغم ذلك بحجمها الكبير). بالخلل الانبساطي، حجم نهاية انبساط طبيعي (100-120 مل) يكفي لرفع LVEDP بشدة ← وذمة رئوية — هؤلاء أقل تحملًا للمدرات وأكثر اعتمادًا على الحمل المسبق من الانقباضي. تحسين الاسترخاء (التأثير اللوسيتروبي، Lusitropic) ينقل المنحنى نحو الطبيعي — حتى خفض العبء اللاحق له تأثير لوسيتروبي.
+    </div>
+
+    <h3 class="subhead">هـ. معدل القلب الأمثل في قصور القلب</h3>
+    <p>المرضى المعوَّضون (E/A&lt;0.8) قد يفقدون تعويضهم بزيادة حمل خفيفة أو مجهود (E/A يتحول لـ&gt;1.5) — كذلك بتسرع غير مناسب، فقدان انقباض الأذين (AF)، أو إطالة PR (يعيق إفراغ الأذين). بمجرد اللامعاوض (E/A مرتفعة)، الامتلاء يحدث فقط بموجة E المبكرة القصيرة — فباستثناء تسرع&gt;110، إبطاء المعدل لإطالة الانبساط <strong>لا يفيد</strong> هنا (الامتلاء الإضافي ضئيل ويقع على الجزء المسطح من فرانك-ستارلينغ). تسرع حتى 110 قد يفيد حادًا (يزيد دورات الإفراغ)؛ فوق 110 يصبح ضارًا. الأساس العلاجي هنا: الإدرار وتقليل الحملين.</p>
+    <div class="callout info">
+      <b>مزمنًا:</b> بعد تعويض القصور الانقباضي (E/A طبيعية)، خفض المعدل مزمنًا لـ&lt;70 يحسّن الكفاءة الاستقلابية وإفراغ الأذين — <strong>لكن هذا يفيد القصور الانقباضي فقط</strong>، لا HFpEF ولا AF (حتى الانقباضي مع AF). لذا حسّن إيفابرادين التمارين بالانقباضي لكن ليس بHFpEF.
+    </div>
+    <p><strong>محدودية الفائدة فوق 110 بالانقباضي:</strong> بالأصحاء، زيادة المعدل تزيد قوة التقلص (ظاهرة Bowditch). بالقصور الانقباضي، الفائدة محدودة أكثر (احتياطيات طاقة منخفضة) — يوجد معدل يتجاوزه تدهور معالجة الكالسيوم والتقلص، فتنخفض القدرة على التمارين وVO₂ القمي (بنظم جيبي أو AF سواء). المعدل الفعّال الأقصى أقل بالقصور من الأصحاء (103±22 مقابل 126±15 بالسبعينيات) — يعكس قصورًا كرونوتروبيًا تكيفيًا نسبيًا.</p>
+
+    <h3 class="subhead">و. آليات عدم تحمل التمارين</h3>
+    <p>طبيعيًا بالجهد: يزيد LVEDV (الحمل المسبق) ويقل حجم نهاية الانقباض (زيادة تقلصية) ← زيادة حجم الضربة؛ ينخفض LVEDP (قد يرتفع قليلًا [≤2] بكبار السن لضعف زيادة التقلص). بالقصور (انقباضي بضعف احتياطي تقلصي، أو انبساطي): (1) فشل استيعاب الحمل المسبق الزائد ← ارتفاع ضغوط الامتلاء دون زيادة كافية بحجم الضربة؛ (2) النتاج قد يكون طبيعيًا بالراحة لكن <strong>احتياطي النتاج</strong> ضعيف — تثبيط بزيادة "مؤشر حجم الضربة" مقارنة بالأصحاء أو مرتفعي الضغط بلا قصور، يفسر جزئيًا التعب المبكر.</p>
+    <p>بـHFpEF تحديدًا: لا يستطيع LV زيادة امتلائه/حجمه بالجهد رغم زيادة العود الوريدي (حجرة صغيرة قاسية بلا احتياطي حمل مسبق، عجز عن استخدام فرانك-ستارلينغ) ← ارتفاع رجعي بضغط الأذين. كذلك ضعف زيادة التقلصية بالجهد رغم EF طبيعي بالراحة، واستجابة مضطربة لتوسع الأوعية بالجهد (ارتفاع العبء اللاحق يُضعف حجم الضربة أكثر ويزيد PCWP بالجهد).</p>
+
+    <h3 class="subhead">ز. حلقات الضغط-الحجم (PV Loops)</h3>
+    <p>تُحدَّد الحلقة من الأسفل بعلاقة الضغط-الحجم بنهاية الانبساط (EDPVR — صلابة الحجرة والوظيفة الانبساطية)، ومن الأعلى بعلاقة نهاية الانقباض (ESPVR/المرونة — تحكمها انقباضية العضلة). عرض الحلقة = حجم الضربة؛ مساحتها الكلية = عمل الضربة (حجم الضربة × [الضغط الشرياني - الضغط الانبساطي لLV]) — ترتبط باستهلاك الأكسجين القلبي والوظيفة الضخية العامة.</p>
+
+    <h3 class="subhead">ح. خصائص إضافية لـHFpEF</h3>
+    <p>ارتفاع ضغط الدم بالجهد شائع (صلابة شرايين، ضعف توسع بالتمارين ← عبء لاحق مرتفع). خلل بسيط بالتقلص شائع أيضًا — القدرة على زيادة التقلصية وEF بالجهد مضطربة بوضوح رغم EF طبيعي بالراحة. <strong>EF ليس مقياسًا نقيًا للتقلصية</strong> (=حجم الضربة/حجم نهاية الانبساط، يتأثر بالتحميل): انخفاض الحمل المسبق يقلل المقام فيرفع EF ظاهريًا؛ انخفاض العبء اللاحق يرفع حجم الضربة فيرفع EF أيضًا — فقد يظهر EF طبيعي مع ضعف تقلص حقيقي إن كان LV صغيرًا والعبء اللاحق منخفضًا. لذا EF يعكس إعادة التشكيل أكثر من التقلصية الجوهرية؛ التشخيص الأدق لضعف الانقباض: (1) انخفاض إجهاد LV (strain) بالإيكو (شائع جدًا بـHFpEF، ~50% بتجربة TOPCAT)؛ (2) ضعف تقليل حجم نهاية الانقباض بالجهد؛ (3) <strong>مرونة نهاية الانقباض (Ees)</strong> — المقياس الحقيقي المستقل عن التحميل = الضغط الانقباضي النهائي ÷ حجم نهاية الانقباض.</p>
+    <div class="card">
+      <strong>حلقات PV مقارنة:</strong> <em>طبيعي</em> — EDPVR وESPVR طبيعيان، Ees يمثل التقلصية الحقيقية. <em>HFrEF</em> — ESPVR مائل لأسفل (انخفاض تقلصية)، EDV يزداد (احتباس)، حلقة أوسع لكن أقصر (SV منخفض، ضغط منخفض)؛ تغيّر ESPVR يؤثر بحجم الضربة أكثر من تغيّر الحمل المسبق. <em>HFpEF</em> — EDPVR منحنٍ لأعلى (صلابة زائدة)، ESPVR ثابت (التقلصية قد تكون محفوظة)، حجم نهاية الانبساط منخفض (بطين صغير)، حلقة ضيقة ومرتفعة (SV منخفض، ضغط انبساطي مرتفع)؛ تغيّر العبء اللاحق لا يزيد حجم الضربة كالمتوقع. <strong>خلاصة:</strong> HFpEF = بطين صغير وصلب؛ HFrEF = بطين متوسع وضعيف الانقباض — كلاهما ينتج حلقة غير فعالة (حجم ضربة منخفض).
+    </div>
+    <p>بخلاف التوسع بـHFrEF، غالبًا ما يكون LV بـHFpEF <strong>صغير الحجم</strong> (خاصة بالمسنين غير البدينين) — رغم فرط التقلص الظاهري، يشير صغر الحجم لقصور انبساطي شديد يمنع توليد حجم ضربة كافٍ. مقارنة بضوابط متطابقة العمر أو مرتفعي الضغط، لدى مرضى HFpEF حجم انبساطي أقل وضعف بزيادة الحجم بالجهد (احتياطي حمل مسبق محدود، آلية فرانك-ستارلينغ محدودة). فرط الديناميكية وسماكة الجدران قد تسبب انسداد LVOT. <strong>حاصرات بيتا قد تضر</strong> بمرضى LV الصغير المعتمدين على معدل القلب لرفع النتاج (حمل مسبق وحجم ضربة محدودان).</p>
+    <p>فئة فرعية لديها LV متوسع خفيفًا حيث <strong>فرط الحجم</strong> هو الآلية الرئيسية (يرتبط بالسمنة وقصور القلب عالي النتاج) — حتى بوظيفة طبيعية، قد يرتفع LVEDP/PCWP بحجم زائد (&gt;250 مل، كأمراض الكلى المتقدمة والنتاج المرتفع).</p>
+    <div class="callout warn">
+      <b>تسرع القلب:</b> بالأصحاء يحسّن الاسترخاء (تنبيه كهربائي أو جهد)؛ بالخلل الانبساطي يُفاقم الاسترخاء والامتلاء. لكن كبح المعدل قد يضر أيضًا — بعض المرضى لا يستطيعون زيادة الامتلاء بإطالة الانبساط فيعتمدون على المعدل للنتاج. ~50% من HFpEF لديهم قصور كرونوتروبي (مساهم رئيسي بعدم تحمل التمارين)؛ تحفيز مزمن لمستقبلات بيتا (بكل أشكال القصور) يسبب فقدان حساسيتها واستجابة ضعيفة للجهد حتى بمعدل راحة مرتفع — حاصرات بيتا قد تحسّن هذا لكن قد تفاقم الأعراض إن كان القصور الكرونوتروبي بخلل ذاتي عصبي (شائع).
+    </div>
+    <p><strong>فرط ضغط رئوي غير متناسب مع PCWP:</strong> دراسة: 83% من HFpEF لديهم فرط ضغط رئوي (وسيط الضغط الانقباضي الرئوي ~48)؛ أعلى بكثير من المتوقع من PCWP وحده (أعلى من مرتفعي الضغط بلا قصور لنفس PCWP) — إلى جانب الفرط بعد الشعري، يتزامن/يتطور فرط ضغط <strong>قبل شعري</strong> مستقل، مساهم بالأعراض.</p>
+    <p><strong>اعتلال عضلة الأذين:</strong> الأذين الأيسر بـHFpEF يعاني ضعف امتثال وانقباض ("أذين أيسر قاسٍ") — يزداد سوءًا بـAF (يُلغي الانقباض الفعّال، يرفع الضغط الحجمي والوريدي الرئوي).</p>
+    <div class="card point-num">
+      <strong>الموسّعات الوعائية بـHFpEF أقل تحملًا</strong> (تميل لخفض SBP أكثر من تحسين حجم الضربة) لثلاث آليات: (1) تأثير وريدي يقلل الحمل المسبق، وHFpEF حساس جدًا له فلا يزداد حجم الضربة كثيرًا؛ (2) خفض العبء اللاحق يعطي زيادة أقل بحجم الضربة لكن هبوطًا أكبر بالضغط (رغم أن مرتفعي الضغط الشديد قد يستفيدون بصرف النظر عن نوع القصور)؛ (3) تصلب الشرايين المرافق يجعل الضغط حساسًا جدًا لأي تغيّر بالعبء اللاحق — الزيادة الطفيفة ضارة (ارتفاع ضغط ملحوظ) والخفض المفرط قد لا يُتحمَّل أيضًا. مرضى الاعتلال التحددي الشديد (كالنشواني) بلا ارتفاع ضغط أساسي لا يتحملون الموسّعات جيدًا (هبوط ضغط شديد).
+    </div>
+
+    <h3 class="subhead">ط. قصور القلب عالي النتاج</h3>
+    <p>ضغوط امتلاء مرتفعة (LV±RV) مع مؤشر قلبي بالحد الأعلى للطبيعي أو أعلى (≥4 لتر/د/م²، أو نتاج≥8 لتر/د)، مع <strong>فرق ضغط نبضي واسع</strong> (بخلاف القصور الكلاسيكي الضيق).</p>
+    <div class="card point-num">
+      <strong>الأسباب الثلاثة الأهم:</strong> السمنة المفرطة، فقر الدم الشديد، أمراض الرئة. أسباب إضافية: تشمع الكبد، ناسور شرياني وريدي كبير (بما فيه ناسور الغسيل الكلوي، ومرض باجيت العظمي)، فرط الدرقية، نقص الثيامين (بري بري، خاصة بمدمني الكحول)، وفرط الحجم بالقصور الكلوي المتقدم. بأمراض الرئة وفقر الدم، يرتفع النتاج تعويضًا عن نقص الأكسجة/الهيموغلوبين (وفرط CO2 يوسّع الأوعية فيزيد النتاج أكثر). بالسمنة، يرتفع النتاج لتلبية الكتلة الجسمية الأكبر والدوران المتوسع بالنسيج الدهني.
+    </div>
+    <p><strong>آليتان مرضيتان رئيسيتان:</strong> (1) توسع وعائي جهازي أو ناسور شرياني-وريدي يستلزم نتاجًا مرتفعًا للحفاظ على الضغط الجهازي — مع الوقت يسبب احتباس صوديوم كلويًا وزيادة عود وريدي/حمل مسبق ← ارتفاع ضغوط الامتلاء بالجهتين (حتى بمطاوعة طبيعية، يرتفع LVEDP عند تجاوز الحجم الانبساطي 250-300 مل)؛ غالبًا يرافقه درجة من خلل وظيفي بطيني يزيد الحساسية لزيادة الحمل المسبق. (2) رغم الزيادة المطلقة بالنتاج، قد لا يكفي لملء الدوران الموسّع (نتاج منخفض "نسبيًا") — يشبه استجابة القصور بالجهد (يتضاعف النتاج لكن يبقى أقل من المطلوب [4-5 أضعاف طبيعيًا] مع عجز عن مجاراة العود الوريدي المرتفع). LV متوسع غالبًا أو بالحد الأعلى، EF طبيعي أو حتى مرتفع (فرط ديناميكية) مقارنة بالأصحاء؛ قد يتدهور EF بالوقت (توسع مفرط وزيادة إجهاد جداري) لكن نادرًا بشدة.</p>
+    <div class="callout gold">
+      <b>العلاج:</b> المدرات (خاصة سبيرونولاكتون، وربما مثبطات SGLT2) حجر الأساس. تجنَّب موسّعات الأوعية كـCCB (قد تُفاقم الحالة). ACE-I عند الحاجة قد لا تكون ضارة بنفس القدر (تثبط محور أنجيوتنسين-ألدوستيرون المسؤول عن احتباس الصوديوم).
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — مرجع طب القلب باللغة العربية
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

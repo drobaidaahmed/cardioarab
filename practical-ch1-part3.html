@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 1 (الجزء 1): المتلازمة الإكليلية الحادة | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch1-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 1</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 1 — الجزء 3</h3>
+  <div class="chgroup">
+    <span class="chtitle">القسم 1: NSTE-ACS (تابع)</span>
+    <a href="#c1t1app4">الملحق 4: مضادات الصفيحات والتخثر بالتفصيل</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">القسم 2: STEMI</span>
+    <a href="#c1t2start">مراحل وتشخيص STEMI</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch1-part2.html">→ الجزء 2</a>
+    <a href="practical-ch1-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch1-part4.html">الجزء 4 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الأول (الجزء 3)</span>
+    <h1>المتلازمة الإكليلية الحادة</h1>
+  </div>
+  <span class="chapno">1</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 1: المتلازمة الإكليلية الحادة — الجزء 3</h2>
+  </div>
+
+  <!-- ============ ملحق 4 ============ -->
+  <section class="roman" id="c1t1app4">
+    <div class="roman-head"><div class="roman-badge">ملحق 4</div><h2>العلاج المضاد للصفيحات ومضادات التخثر بالتفصيل</h2></div>
+
+    <h3 class="subhead">أ. العلاج المضاد للصفيحات — الجدول 1.7</h3>
+    <h4 class="subsub">1. الأسبرين (Aspirin)</h4>
+    <p>يُعطى بجرعة 325 ملغ في اليوم الأول (يُمضغ لضمان الامتصاص السريع والتأثير السريع)، ثم يُعطى 81 ملغ يوميًا. في اليوم الثاني وما بعده، تكون جرعة 81 ملغ فعالة بقدر 325 ملغ ولكن مع خطر نزيف أقل، بما في ذلك لدى المرضى الذين يتلقون دعامات تاجية (حسب تجربة CURRENT-OASIS). في حالة وجود حساسية للأسبرين تتمثل في الربو أو الشرى دون حدوث صدمة تأقية، يُجرى إزالة التحسس للأسبرين، ويمكن القيام بذلك بشكل طارئ خلال أقل من 24 ساعة.</p>
+
+    <h4 class="subsub">2. كلوبيدوغريل (Clopidogrel)</h4>
+    <p>يُعطى بجرعة تحميلية 300 ملغ، تليها جرعة صيانة 75 ملغ يوميًا. في تجربة CURE على مرضى NSTE-ACS الذين أُديرت حالاتهم سواء بالتداخل أو تحفظيًا، سواء كانوا عاليي أو منخفضي الخطورة، قلَّل هذا النظام العلاجي من الخطر المشترك للوفاة/MI بنسبة 2% على حساب زيادة خطر النزيف الكبير بنسبة 1%. لم يزد النزيف المهدد للحياة، وكان النزيف أقل عمومًا عندما استُخدم الأسبرين بجرعة 81 ملغ بدلاً من 325 ملغ. كان التأثير الإيجابي أوضح لدى المرضى الذين أُجريت لهم إدارة تداخلية (~3% تقليل في الخطر) (حسب تجربة PCI-CURE).</p>
+    <p>كان التأثير ملحوظًا بالفعل خلال 24 ساعة من بدء العلاج، ووصل إلى الذروة خلال أيام قليلة. بالنسبة للمرضى الذين يخضعون لـPCI، يجب تحميلهم بجرعة 600 ملغ من كلوبيدوغريل، لأنها توفر تأثيرًا أقوى وأسرع مقارنة بـ300 ملغ (ساعتان للـ600 ملغ مقابل 6-24 ساعة للـ300 ملغ). إذا كان المريض قد تلقى بالفعل 300 ملغ، يُعطى 300 ملغ إضافية أثناء PCI.</p>
+    <p>إذا كان المريض بحاجة إلى CABG، من الأفضل إيقاف الكلوبيدوغريل لمدة 5 أيام لتقليل خطر النزيف (الزيادة المطلقة في الخطر = 4%). مع ذلك، لدى المرضى عاليي الخطورة جدًا الذين يعانون من CAD حرج أو إقفار مستمر، يمكن إجراء CABG بعد 3 أيام فقط من إيقاف كلوبيدوغريل، وهو غالبًا كافٍ. بالإضافة إلى ذلك، فإن استخدام كلوبيدوغريل حول CABG لا يؤثر سلبًا على معدل الوفيات.</p>
+
+    <h4 class="subsub">3. براسوجريل (Prasugrel) وتيكاغريلور (Ticagrelor)</h4>
+    <p>هذان العاملان أكثر قوة من كلوبيدوغريل (75% مقابل 35% تثبيط لتكدس الصفيحات)، ولهما بداية تأثير أسرع (30 دقيقة للبداية، وساعتان للذروة)، دون التباين بين الأفراد ولا نقص الاستجابة (~30%) الذي يُرى مع كلوبيدوغريل. تمت دراسة هذه العوامل فقط في سياق ACS (براسوجريل لدى مرضى ACS الذين يخضعون لـPCI، وتيكاغريلور لدى مرضى ACS سواء مع PCI أو مع العلاج الطبي فقط). بالمقارنة مع كلوبيدوغريل، أظهر كلاهما تقليلاً إضافيًا لخطر الوفاة/MI المشترك، لكن على حساب زيادة خطر النزيف الكبير.</p>
+    <p>تكون تفوقهما واضحًا بشكل خاص في الفئات الثلاث الأعلى خطورة: STEMI، مرضى السكري، والمرضى ذوي ACS المتكرر. من ناحية أخرى، هناك ثلاث فئات من المرضى لديهم خطر نزيف مرتفع مع براسوجريل دون أي فائدة صافية، وتشكل موانع استخدام لبراسوجريل: (i) تاريخ سابق للسكتة الدماغية أو TIA؛ (ii) عمر &gt;75 سنة؛ (iii) وزن &lt;60 كغ (الأخيران موانع نسبية).</p>
+    <p>تُعطي إرشادات ESC تفضيلاً من الدرجة الأولى (class I) لتيكاغريلور أو براسوجريل على كلوبيدوغريل في ACS. مع ذلك، يجب أخذ الخطر الإقفاري والعمر في الحسبان؛ في المرضى الذين تزيد أعمارهم عن 70 عامًا، أظهر كلوبيدوغريل نتائج مقبولة مقارنة بتيكاغريلور، مع نزيف أقل ونتائج إقفارية مماثلة (حسب تجربة POPular Age).</p>
+    <p>بالمقارنة مع براسوجريل، يتميز تيكاغريلور بـ: (i) ارتباط عكسي بمستقبلات ADP، مما يسمح بانعكاس تأثيره المضاد للصفيحات خلال 3-4 أيام (مقارنة بـ5 أيام مع كلوبيدوغريل و7 أيام مع براسوجريل)؛ (ii) زيادة إطلاق الأدينوزين، الذي قد يحسّن تدفق الدم التاجي ولكنه قد يزيد أيضًا من خطر التشنج القصبي أو التوقفات اللاعرضية؛ (iii) لم يزد تيكاغريلور النزيف القاتل ولم يُضر تحديدًا المرضى ذوي السكتة السابقة أو الأكبر من 75 عامًا، لكن يجب استخدام كل من تيكاغريلور وبراسوجريل بحذر أو تجنبها تمامًا في المرضى ذوي خطر النزيف العالي؛ (iv) يُستخدم تيكاغريلور ليس فقط في المرضى الذين يُدارون بالتداخل (PCI)، بل أيضًا في مرضى ACS عاليي الخطورة الذين يُدارون تحفظيًا أو يُعتبرون غير مناسبين لإعادة التوعية؛ في هؤلاء المرضى، قلَّل تيكاغريلور بشكل لافت من خطر الوفاة/MI مقارنة بكلوبيدوغريل، في المقابل، لم يُظهر براسوجريل أي فائدة لدى المرضى الذين لا يخضعون لـPCI (حسب تجربة TRILOGY-ACS)؛ (v) يمكن إعطاء تيكاغريلور أو كلوبيدوغريل عند الدخول إلى المستشفى، قبل القسطرة التاجية (upstream)، بينما يجب إعطاء براسوجريل فقط بعد إجراء القسطرة التاجية واستبعاد الحاجة إلى جراحة CABG، لأنه إذا أُجريت جراحة CABG خلال 7 أيام من بدء براسوجريل، فإن ذلك يزيد خطر النزيف بشكل كبير.</p>
+    <p>رغم هذه التفاصيل، أظهرت تجربة مباشرة (ISAR-REACT-5) مقارنة تيكاغريلور المعطى مسبقًا (upstream) مقابل براسوجريل المعطى بعد القسطرة (downstream)، أن براسوجريل المتأخر كان أفضل في تقليل الوفاة/MI؛ وبطريقة ما، يُضاف هذا إلى الأدلة التي تقول إن العلاج بمضاد ADP-receptor مطلوب فقط بعد القسطرة (downstream).</p>
+
+    <h4 class="subsub">4. كانغريلور (Cangrelor)</h4>
+    <p>هو مضاد قوي جدًا لمستقبل ADP يُعطى وريديًا (يُثبط 90% من تكدس الصفيحات)، وهو قابل للعكس وله نصف عمر قصير جدًا. يُعطى بالتسريب طوال مدة إجراء PCI (ولمدة إجمالية لا تقل عن ساعتين)، ويتميز ببداية تأثير وزوال تأثير سريعين جدًا (حوالي ساعة واحدة). تمت دراسته في مرضى CAD المستقر وغير المستقر الذين لم يتلقوا كلوبيدوغريل مسبقًا قبل PCI، حيث وفَّر بدءًا سريعًا وقويًا لتأثير مضاد ADP أثناء الإجراء.</p>
+    <p>يقلل كانغريلور من خثرة الدعامة الحادة والمضاعفات أثناء الإجراء، ويزيد النزيف البسيط (minor) لكن لا يزيد النزيف الكبير (major)، ولم يُظهر فائدة مؤكدة في تقليل الوفيات (حسب تجارب Champion). يجب بدء كلوبيدوغريل أو براسوجريل بعد انتهاء تسريب كانغريلور؛ إذا تم إعطاؤهما أثناء التسريب، فإن كانغريلور سيمنع ارتباط مستقلباتهما قصيرة العمر بمستقبل ADP، وسيتم التخلص منها بنهاية التسريب. أما تيكاغريلور، فيمكن إعطاؤه أثناء تسريب كانغريلور لأن له نصف عمر بلازمي أطول.</p>
+    <p>يُعتبر كانغريلور خيارًا في المرضى الذين لم يتلقوا مسبقًا مضاد ADP (antagonist-naïve) ويخضعون لـPCI، سواء في سياق ACS أو CAD مستقر (توصية درجة IIb). وقد يكون مفيدًا بشكل خاص في حالات الصدمة، حيث يكون امتصاص العوامل الفموية محدودًا، وكذلك في PCI عالي الخطورة.</p>
+
+    <h4 class="subsub">5. مثبطات الغليكوبروتين IIb/IIIa (GPIs)</h4>
+    <p>هي أدوية قوية مضادة للصفيحات تُعطى وريديًا، وتقوم بحجب المسار النهائي المشترك لتكدس الصفيحات (تثبيط بنسبة 95%). هذا يأتي على حساب زيادة مطلقة بنسبة 2-4% في خطر النزيف الكبير. بشكل خاص، أظهر العلاج بـGPI المعطى قبل القسطرة (upstream) أنه يزيد من خطر النزيف دون تقليل ملحوظ في الأحداث الإقفارية (حسب تجربة EARLY ACS). لذلك، تُستخدم هذه الأدوية عادة أثناء PCI فقط، وفي بعض المرضى ذوي التروبونين المرتفع، خصوصًا في الحالات التي يكون فيها عبء خثري كبير أو عند حدوث مضاعفات أثناء PCI. يرتفع خطر النزيف المرتبط بGPI بشكل ملحوظ في المرضى الذين تزيد أعمارهم عن 70 عامًا، وفي النساء، وفي المرضى المصابين بالفشل الكلوي المزمن (CKD).</p>
+    <p>العلاج بمضاد مستقبل ADP قبل القسطرة التاجية (upstream ADP-receptor antagonist therapy) يُفترض نظريًا أن: (i) يقلل من الأحداث الإقفارية قبل PCI (حسب تجربة CURE)؛ (ii) يحسّن نتائج PCI ويقلل من المضاعفات الخثارية أثناء PCI وفي الفترة المبكرة بعدها. ومع ذلك، أظهرت تجربة ACCOAST (التي استخدمت براسوجريل)، وتجربة ISAR-REACT-5، والسجل الكبير SCAAR أن هذا البدء المبكر (upstream initiation) يزيد بدلاً من ذلك من خطر النزيف ولا يقلل من الأحداث الإقفارية حول PCI، خصوصًا عندما تُجرى القسطرة خلال بضع ساعات من العرض السريري ويُستخدم مضاد ADP سريع وقوي. في سجل SCAAR، استُخدم كلوبيدوغريل لدى نصف المرضى، وكان متوسط وقت الوصول للقسطرة 1.9 يوم، ومع ذلك، لم يكن التحميل المسبق (preloading) مفيدًا.</p>
+    <p>بناءً على تلك التجارب، يُوصى باستخدام الأسبرين ومضاد التخثر فقط قبل PCI، وتوصي إرشادات ESC ضد استخدام مضاد مستقبل ADP قبل القسطرة (توصية من الدرجة III). يتم تجنب مضاد مستقبل ADP upstream بشكل أسهل عندما يبدو أن هناك CAD واسع النطاق قد يتطلب CABG، على سبيل المثال: رجل لديه تروبونين مرتفع ومرض شرياني محيطي (PAD)، فشل قلبي (HF)، أو داء سكري معتمد على الإنسولين؛ أو مريض يعاني من انخفاضات واسعة في مقطع ST في ≥6 من المشتقات أو ارتفاع ST في aVR.</p>
+
+    <div class="card">
+      <strong>الجدول 1.7 — مقارنة بين ثلاثي مضادات مستقبل ADP الفموية:</strong>
+      <table style="margin-top:10px">
+        <thead><tr><th>الخاصية</th><th>كلوبيدوغريل (تحميل 300-600 ملغ، صيانة 75 ملغ)</th><th>براسوجريل (تحميل 60 ملغ، صيانة 10 ملغ)</th><th>تيكاغريلور (تحميل 180 ملغ، صيانة 90 ملغ مرتين/يوم)</th></tr></thead>
+        <tbody>
+          <tr><td>نسبة تثبيط تنشيط الصفيحات</td><td>35-40%</td><td>75%</td><td>75%</td></tr>
+          <tr><td>آلية التفعيل</td><td>دواء أولي (prodrug)، استقلاب غير كفء عبر CYP2C19 يفسر نقص استجابة ~30%</td><td>دواء أولي يصبح مستقلب نشط، دائمًا يُستقلب بكفاءة عبر السيتوكرومات</td><td>دواء نشط ومستقلب نشط مباشرة</td></tr>
+          <tr><td>بداية التأثير (للوصول لـ30% تثبيط)</td><td>300 ملغ: 6-24 ساعة؛ 600 ملغ: ساعتان</td><td>30 دقيقة</td><td>30 دقيقة</td></tr>
+          <tr><td>الذروة</td><td>300 ملغ: 6-8 ساعات؛ 600 ملغ: 2-4 ساعات</td><td>2-4 ساعات</td><td>2-4 ساعات</td></tr>
+          <tr><td>مدة زوال التأثير</td><td>5 أيام</td><td>7 أيام</td><td>3-4 أيام</td></tr>
+          <tr><td>الفئة المدروسة</td><td>ACS مع أو بدون ST elevation المُدار تحفظيًا أو تداخليًا</td><td>ACS مع أو بدون ST elevation المُدار بـPCI فقط (ليس تحفظيًا)، ولا يتفوق على كلوبيدوغريل في CAD المستقر</td><td>ACS مع أو بدون ST elevation المُدار تحفظيًا أو تداخليًا، وأي PCI (مستقر أو غير مستقر)</td></tr>
+          <tr><td>النقص المطلق في خطر الوفاة/MI/السكتة مقارنة بكلوبيدوغريل (سنة واحدة)</td><td>—</td><td>2%</td><td>2%</td></tr>
+          <tr><td>النقص في معدل الوفيات مقارنة بكلوبيدوغريل</td><td>—</td><td>لا شيء (عدا في مجموعة STEMI)</td><td>1%</td></tr>
+          <tr><td>النقص في خثرات الدعامة مقارنة بكلوبيدوغريل</td><td>—</td><td>1.3%</td><td>0.7%</td></tr>
+          <tr><td>الزيادة المطلقة في نزيف TIMI الكبير (غير المرتبط بCABG)</td><td>—</td><td>0.6%</td><td>0.6%</td></tr>
+          <tr><td>زيادة نزيف مرتبط بCABG / نزيف قاتل</td><td>—</td><td>نعم / نعم (4 أضعاف)</td><td>لا (لكن يزيد النزيف داخل الجمجمة) / لا</td></tr>
+          <tr><td>مجموعات عالية الخطورة يجب تجنبها</td><td>—</td><td>سكتة أو TIA سابقة (مضاد مطلق)؛ الوزن &lt;60 كغ؛ العمر &gt;75 سنة</td><td>لا توجد مجموعات محددة</td></tr>
+        </tbody>
+      </table>
+      <p class="tbl-caption">مدة التأثير تعتمد على نصف العمر الدوائي وكذلك على عكس ارتباط المستقبلات. تيكاغريلور يرتبط عكسيًا بمستقبل ADP لكنه يملك نصف عمر طويل نسبيًا (15 ساعة)، مما يعطيه تأثيرًا يدوم 3-4 أيام. كانغريلور يرتبط عكسيًا بمستقبل ADP وله نصف عمر قصير جدًا، لذا يعمل فقط لمدة ساعة واحدة تقريبًا.</p>
+    </div>
+
+    <h3 class="subhead">ب. مقاومة الكلوبيدوغريل (Clopidogrel resistance) — تُلاحظ لدى حوالي 30% من المرضى</h3>
+    <p>تُعرَّف مقاومة الكلوبيدوغريل بأنها: تثبيط أقل من 30% لتكدس الصفيحات المُستحث بـADP، أو تفاعل صفائحي مطلق مع ADP أقل من 208-230 وحدة تفاعل صفائحي (platelet reactivity units) باستخدام اختبار سريع في نقطة الرعاية مثل اختبار VerifyNow.</p>
+    <p>مقاومة الكلوبيدوغريل مرتبطة بضعف تفعيل الكلوبيدوغريل، ويرتبط ذلك جزئيًا بعوامل جينية، خاصة الطفرات في جينات إنزيمات السيتوكروم (خصوصًا CYP2C19). بالإضافة إلى العوامل الجينية، هناك عوامل أخرى تُساهم مثل: العرض السريري بمتلازمة الشريان التاجي الحادة (ACS)، السمنة، ومرض الكلى المزمن (CKD).</p>
+    <p><strong>تأثير المقاومة سريريًا:</strong> الاستجابة الضعيفة للكلوبيدوغريل مرتبطة بزيادة خطر الأحداث القلبية التاجية وحدوث خثرة الدعامة. لكن: لدى مرضى PCI بسبب مرض الشريان التاجي المستقر (stable CAD)، لم يُعطِ استخدام براسوجريل أو زيادة جرعة صيانة الكلوبيدوغريل (150 ملغ) فائدة سريرية (حسب تجربة TRIGGER-PCI). بمعنى آخر، إجراءات PCI لمرض الشريان التاجي المستقر مرتبطة أصلاً بخطر منخفض لخثرة الدعامة والنتائج السلبية، مما يُقلل من جدوى استراتيجيات مضادة للصفيحات أكثر قوة. حتى في حالات PCI مع ACS، حيث تكون الاستجابة الضعيفة للكلوبيدوغريل تنبؤية جدًا للنتائج السيئة، فإن العلاج المُخصص (tailored therapy) لم يكن متفوقًا على العلاج العشوائي بالكلوبيدوغريل.</p>
+    <p><strong>دليل إضافي من تجربة TAILOR-PCI:</strong> في هذه التجربة، تم توزيع مرضى PCI مع ACS (~85% من المشاركين) أو CAD مستقر بشكل عشوائي لتلقي: كلوبيدوغريل، أو علاج مضاد للصفيحات مُتصاعد بناءً على اختبار جيني لـCYP2C19 (حيث أُعطي تيكاغريلور لحاملي الطفرات، وكلوبيدوغريل لغير الحاملين). النتيجة؟ لم يكن العلاج المُخصص متفوقًا على الكلوبيدوغريل حتى بين حاملي الطفرات. ومع ذلك، قد يكون للاختبارات الجينية دور أفضل في خفض التصعيد (de-escalation) من تيكاغريلور/براسوجريل إلى كلوبيدوغريل في المرضى الذين يحملون أليلات فعّالة (حسب تجربة Popular Genetics).</p>
+
+    <h3 class="subhead">ج. العلاج بمضادات التخثر — الجدول 1.8</h3>
+    <h4 class="subsub">الهيبارين غير المجزأ الوريدي (IV UFH)</h4>
+    <p>أثبت أنه يُقلل الأحداث الإقفارية المبكرة واحتشاء العضلة القلبية (MI) لدى المرضى ذوي الخطورة المتوسطة أو العالية المصابين بNSTE-ACS. الجرعة الابتدائية (bolus) هي 60 وحدة/كغ، والتنقيط (drip) بمعدل 12 وحدة/كغ/ساعة، وهي جرعات أقل مما يُستخدم في الانصمام الرئوي، مع هدف PTT محافظ بين 46-70 ثانية أو 1.5-2×الطبيعي. يُفضَّل استخدام مضاد تخثر متوسط الشدة بدلاً من عالي الشدة لتحقيق تقليل الإقفار في ACS وتقليل خطر النزيف المقلق. بحسب توصيات ESC، يُعتبر UFH هو مضاد التخثر المفضل للمرضى الذين يُدارون بالتداخل الجراحي (class I).</p>
+
+    <h4 class="subsub">الإينوكسابارين تحت الجلد (SQ Enoxaparin)</h4>
+    <p>في NSTE-ACS المُدار دوائيًا، تُقلل الجرعة العلاجية من الإينوكسابارين تحت الجلد الأحداث الإقفارية مقارنة بUFH مع معدل نزيف كبير مماثل (1 ملغ/كغ تحت الجلد مرتين يوميًا، أو مرة يوميًا إذا كان GFR&lt;30). مع ذلك، لدى المرضى المُدارين تداخليًا، لم تُظهر تجربة SYNERGY أي تفوق للإينوكسابارين على UFH، بل زادت مخاطر النزيف الكبير مع الإينوكسابارين، خصوصًا لدى المرضى الذين انتقلوا بين الهيبارين والإينوكسابارين. لوحظت زيادة مماثلة في خطر النزيف مع الإينوكسابارين في المرضى المعالجين تداخليًا ضمن تجربة A-to-Z.</p>
+    <p>أظهرت الدراسات الدوائية أن تأثير الإينوكسابارين تحت الجلد لا يصل إلى ذروته إلا بعد إعطاء الجرعة الثانية. بالتالي، عندما يكون قد أُعطي بالفعل جرعتان، يمكن إجراء PCI خلال 8 ساعات دون الحاجة إلى مضاد تخثر إضافي. ومع ذلك، إذا تم إجراء PCI خلال ساعات قليلة من التقديم، فإن جرعة واحدة تحت الجلد لا توفر تخثيرًا مناسبًا وتتطلب إضافة 0.3 ملغ/كغ من الإينوكسابارين الوريدي. من الأفضل تجنب إعطاء جرعة واحدة فقط من الإينوكسابارين تحت الجلد عندما يُخطط لإجراء PCI خلال الساعات القادمة، ويُفضَّل في هذه الحالة استخدام UFH الوريدي.</p>
+
+    <h4 class="subsub">الفوندابارينوكس تحت الجلد (SQ Fondaparinux)</h4>
+    <p>الجرعة: 2.5 ملغ تحت الجلد يوميًا، نصف العمر ~20 ساعة. هذه الجرعة المنخفضة، المعادلة لجرعة الوقاية من تخثر الأوردة العميقة (DVT)، أثبتت أنها فعّالة مثل الجرعة القياسية من الإينوكسابارين (1 ملغ/كغ مرتين يوميًا) في تقليل الأحداث الإقفارية/MI في NSTE-ACS، مع تقليل كبير في مخاطر النزيف الكبير والمميت، ما يُترجم إلى تقليل في الوفيات (حسب تجربة OASIS 5، حيث خضع 40% من المرضى لـPCI). هذا يُعزز المفهوم بأن التخثير المعتدل فقط مطلوب في ACS، أقل مما هو مطلوب في حالات مثل الانصمام الرئوي (باستثناء أثناء PCI). المرضى الذين يُدارون تداخليًا بعد تلقي الفوندابارينوكس يجب أن يتلقوا مضاد تخثر كامل بجرعة هيبارين أو بيفاليرودين أثناء PCI، لأن جرعة الفوندابارينوكس الصغيرة لا توفر مستوى التخثير المطلوب خلال PCI. على عكس التبديل الضار بين الإينوكسابارين وUFH، فإن الانتقال من الفوندابارينوكس إلى UFH خلال PCI لا يُلغي فائدة الفوندابارينوكس في تقليل النزيف.</p>
+
+    <h4 class="subsub">ملاحظات على الفارماكوكينتيك</h4>
+    <p>نصف عمر UFH الوريدي يزيد مع الجرعة ويكون عادة ~1.0-1.5 ساعة. تأثير الإينوكسابارين تحت الجلد يصل ذروته خلال ~3-5 ساعات، ويمكن تسريعه بإعطاء جرعة واحدة وريدية من الإينوكسابارين (30 ملغ للمرضى المُدارين دوائيًا أو 0.3 ملغ/كغ في PCI). نصف عمر الإينوكسابارين هو 4.5-7.0 ساعات، ويزداد في حالات الفشل الكلوي. النصف العمر القصير للـUFH قد يُساهم في ظاهرة "ارتداد الهيبارين" (heparin rebound)، حيث يؤدي الإيقاف المفاجئ للـUFH إلى زيادة ارتدادية في الإقفار خلال 48 ساعة التالية لدى المرضى المُدارين دوائيًا (لكن لا ينطبق ذلك على PCI). التأثير المضاد للتخثر للإينوكسابارين يتلاشى ببطء أكبر بكثير مقارنة بالـUFH، إذ إنه يُثبط توليد الثرومبين إضافة إلى تأثيره على عمل الثرومبين، مما يُخفف تأثير ارتداد الهيبارين ويُفسر بعض الفوائد المضادة للإقفار للإينوكسابارين في المرضى المُدارين دوائيًا (ولكن ليس في PCI).</p>
+
+    <h4 class="subsub">البيفاليرودين الوريدي (IV Bivalirudin)</h4>
+    <p>على عكس الهيبارين غير المجزأ (UFH)، فإن البيفاليرودين لا يُفعِّل الصفيحات ويثبط كلاً من الثرومبين الحر والثرومبين المرتبط بالخثرة. البيفاليرودين قصير المفعول (نصف عمره 25 دقيقة)، وهذا يُعتبر ميزة (تقليل النزيف)، لكنه أيضًا يحمل خطرًا إقفاريًا، خصوصًا في المرضى الذين لم يتلقوا كلوبيدوغريل في الوقت المناسب.</p>
+    <p>أظهرت دراسات أُجريت عبر الوصول الفخذي (femoral access) أن البيفاليرودين يرتبط بنزيف كبير أقل مقارنةً بالUFH (حسب دراسة MATRIX)، لكن ذلك كان جزئيًا بسبب الاستخدام الأعلى لمثبطات GPI في ذراع الUFH. في المقابل، أظهرت دراسة عبر الوصول الكعبري (radial access) مع استخدام محدود ومتوازن لGPI (حسب دراسة VALIDATE-SWEDEHEART) أن خطر الإقفار والنزيف كان متماثلاً بين البيفاليرودين والUFH.</p>
+    <p>أظهرت بعض الدراسات أيضًا أن هناك خطرًا أعلى للتخثر الحاد في الدعامة (acute stent thrombosis) مع البيفاليرودين مقارنةً بUFH، لكن يمكن تعويض ذلك عبر تمديد تسريب البيفاليرودين لمدة 1-4 ساعات بعد PCI.</p>
+    <div class="callout warn">
+      من المهم ملاحظة أن البيفاليرودين، كونه مضاد تخثر، يُقارن بشكل أساسي مع UFH وحده، وليس مع تركيبة UFH+GPI. في الواقع، وعلى عكس تصميم الدراسات القديمة، فإن قرار إضافة GPI يجب ألا يُبنى على نوع مضاد التخثر المستخدم.
+    </div>
+    <p>يُعطى البيفاليرودين عبر تسريب وريدي خلال إجراء PCI. عند الدخول إلى المستشفى، يمكن للمرضى تلقي UFH ثم التحويل إلى البيفاليرودين خلال PCI، وهذا التحويل يُعتبر آمنًا (حسب دراسة VALIDATE-SWEDEHEART).</p>
+
+    <div class="card">
+      <strong>الجدول 1.8 — مقارنة بين مضادات التخثر:</strong>
+      <table style="margin-top:10px">
+        <thead><tr><th>الخاصية</th><th>UFH</th><th>إينوكسابارين</th><th>بيفاليرودين</th><th>فوندابارينوكس</th></tr></thead>
+        <tbody>
+          <tr><td>آلية العمل</td><td>يرتبط مع AT III ويثبط الثرومبين &gt; عامل Xa</td><td>مشتق صغير من الهيبارين، يرتبط مع AT III ويثبط Xa &gt; الثرومبين</td><td>مثبط مباشر للثرومبين، يثبط الثرومبين الحر والمربوط بالخثرة، ويثبط توليد الثرومبين</td><td>مشتق صغير من الهيبارين، يرتبط مع AT III ويثبط فقط عامل Xa</td></tr>
+          <tr><td>التأثير على الصفيحات</td><td>قد يُسبب التفعيل (Activation)</td><td>تأثير حيادي (Neutral)</td><td>تأثير حيادي إلى ± تثبيط</td><td>تأثير حيادي (Neutral)</td></tr>
+          <tr><td>الإطراح</td><td>عبر جهاز الشبكي البطاني (Reticulo-endothelial)</td><td>كلوي</td><td>كلوي جزئيًا</td><td>كلوي</td></tr>
+          <tr><td>نصف العمر</td><td>1.0-1.5 ساعة</td><td>4-7 ساعات، يزيد في الفشل الكلوي</td><td>25 دقيقة، يزيد إلى ساعة إذا GFR&lt;30</td><td>17-21 ساعة، يزيد في الفشل الكلوي</td></tr>
+          <tr><td>زمن الوصول للتأثير الأقصى</td><td>مباشرة بعد البلعة الوريدية</td><td>3-5 ساعات بعد الحقن تحت الجلد SQ</td><td>فوري عبر التسريب</td><td>2-3 ساعات بعد الحقن تحت الجلد SQ</td></tr>
+          <tr><td>الجرعة في ACS (خارج PCI)</td><td>60 وحدة/كغ بلعة وريدية، ثم 12 وحدة/كغ/ساعة تسريب، هدف PTT 46-70 ثانية</td><td>1 ملغ/كغ تحت الجلد مرتين يوميًا (BID)</td><td>—</td><td>2.5 ملغ تحت الجلد مرة واحدة يوميًا (QD)</td></tr>
+          <tr><td>الجرعة أثناء PCI</td><td>—</td><td>إذا أُعطيت جرعتان SQ خلال &lt;8 ساعات: لا حاجة لإضافة؛ وإلا أضف 0.3-0.75 ملغ/كغ وريدي</td><td>0.75 ملغ/كغ بلعة وريدية، ثم 1.75 ملغ/كغ/ساعة تسريب</td><td>يحتاج مضاد تخثر كامل إضافي (UFH أو بيفاليرودين)</td></tr>
+          <tr><td>تأثير الفشل الكلوي على الجرعة</td><td>لا شيء</td><td>تغيير من مرتين يوميًا لمرة واحدة إذا GFR&lt;30</td><td>الحذر إذا GFR&lt;30</td><td>يُمنع إذا GFR&lt;30</td></tr>
+        </tbody>
+      </table>
+      <p class="tbl-caption">فقط بيفاليرودين هو الذي يثبط الثرومبين المرتبط بالفيبرين (fibrin-bound thrombin) — الهيبارين والفوندابارينوكس لا يعملان على الثرومبين المرتبط بالفيبرين. بيفاليرودين لم تتم دراسته في حالات الفشل الكلوي المتقدم في تجربة ACUITY، لكنه ليس ممنوعًا تمامًا. إذا تم إعطاء جرعة واحدة فقط تحت الجلد من الإينوكسابارين قبل PCI، فيجب إعطاء 0.3 ملغ/كغ إضافية وريدية أثناء الإجراء. الجرعات تحت الجلد من الإينوكسابارين لم تُدرس بشكل جيد في المرضى الذين يزيد وزنهم عن 150 كغ، حيث تكون جرعة 1 ملغ/كغ مرتبطة بزيادة ملحوظة في خطر النزيف مقارنة بالمرضى ذوي الوزن الطبيعي.</p>
+    </div>
+    <div class="abbr">
+      <strong>شرح سريع للمصطلحات المذكورة:</strong> AT III → مضاد الثرومبين III (Antithrombin III)؛ SQ → تحت الجلد (Subcutaneous)؛ BID → مرتين يوميًا (Bis in die)؛ QD → مرة يوميًا (Quaque die)؛ IV → وريدية (Intravenous)؛ PCI → التدخل التاجي عبر الجلد (Percutaneous Coronary Intervention).
+    </div>
+  </section>
+
+  <!-- ============ ملحق 5 ============ -->
+  <section class="roman" id="c1t1app5">
+    <div class="roman-head"><div class="roman-badge">ملحق 5</div><h2>الفرق بين تمزق العصيدة (plaque rupture) وتآكل العصيدة (plaque erosion)</h2></div>
+
+    <p>العصيدة الضعيفة (vulnerable plaque) تُعرَّف بأنها عصيدة تحتوي على نواة نخرية غنية بالدهون (lipid-rich necrotic core)، مُحاطة بطبقة ليفية رقيقة (thin fibrous cap) مخترقة بخلايا التهابية، وخاصة البالعات الغنية بالميتالوبروتيناز (metalloproteinase-rich macrophages)، وتُسمى هذه البنية: thin-cap fibroatheroma. تنفجر الطبقة الليفية الرقيقة عادة عند "أكتاف" أو حواف العصيدة، حيث يكون الضغط الميكانيكي الأعلى، مما يؤدي إلى تكوّن الخثرة (thrombus). إذًا، يتميز تمزق العصيدة بوجود غطاء ممزق وخثرة متصلة مباشرة بالنواة النخرية. يتم التعرف على الغطاء الممزق كطية (flap) عبر التصوير بالموجات فوق الصوتية داخل الأوعية (IVUS) أو التصوير المقطعي البصري (OCT).</p>
+    <p>معظم حالات تمزق العصيدة لا تُسبب انسدادًا كاملاً وتبقى صامتة سريريًا، لكنها تساهم في تطور التضيق التاجي بطريقة تدريجية (stair-step progression). في مرض الشريان التاجي المستقر (stable CAD)، تكون التضيقات غالبًا عبارة عن طبقات متعددة من تمزقات العصيدة الملتئمة. عبر IVUS، يُشير وجود تصلب شرياني شديد وتمدد تعويضي للوعاء الدموي (positive remodeling) عادة ً إلى حدوث تمزقات سابقة، ووعاء توسَّع حتى الحد الأقصى، ما يجعله عرضة لتمزق أكثر أعراضية، إذ أن "اللويحة تنفد من طاقتها الإمدادية" (plaque running out of energy supply).</p>
+    <p><strong>تآكل العصيدة (plaque erosion):</strong> يُعرَّف بتكوّن الخثرة فوق غطاء سميك لم يتمزق (دون وجود تواصل مع النواة النخرية)، أو فوق عصيدة ليفية-باطنية (fibrointimal plaque) غنية بالخلايا العضلية الملساء (smooth muscle cells) دون وجود نواة نخرية (fibrotic plaque). يُشكل تآكل العصيدة حوالي 25% من حالات احتشاء عضلة القلب (MI)، ويُلاحظ بشكل أكبر لدى النساء، خصوصًا المدخنات الشابات (&lt;50 سنة). مقارنةً بتمزق العصيدة، يحدث تآكل العصيدة عادة ً في عصيدات أقل تضيقًا (less stenotic lesions).</p>
+    <p><strong>التشخيص عبر القسطرة (angiography):</strong> تمزق العصيدة يؤدي إلى شكل مورفولوجي معقد وغير متماثل (complex eccentric morphology)، مع حواف متدلية أو بارزة (overhanging borders). أما تآكل العصيدة، فيُظهر شكلاً بسيطًا وغير معقد عبر القسطرة، مع حواف ملساء (smooth borders).</p>
+  </section>
+
+  <!-- ============ ملحق 6 ============ -->
+  <section class="roman" id="c1t1app6">
+    <div class="roman-head"><div class="roman-badge">ملحق 6</div><h2>التشريح التلقائي للشريان التاجي (Spontaneous Coronary Artery Dissection, SCAD)</h2></div>
+
+    <p>التشريح التلقائي للشريان التاجي (SCAD) هو انقسام في جدار الشريان التاجي دون وجود تصلب شرياني (atheroma)، وينتج إما بسبب نزف داخل الطبقة الوسطى (media) أو نتيجة تمزق في الطبقة الداخلية (intimal tear). SCAD مسؤول عن ما يصل إلى 4% من حالات احتشاء عضلة القلب (MI)؛ ومع ذلك، فهو ناقص التشخيص (underdiagnosed)، وقد يكون السبب في ما يصل إلى 35% من حالات MI لدى النساء ≤50 عامًا.</p>
+    <p>أكثر ما يُصيب الطبقة الوسطى (media)، مما يؤدي إلى تضيق طويل وناعم &gt;30 ملم (بمتوسط 46 ملم)، دون ظهور طية (flap) أو صبغة (stain) على القسطرة، ويُشبه المظهر الناعم لتشنج الأوعية (vasospasm) أو تآكل اللويحة (plaque erosion). هذا يُسمى ورم دموي داخل الجدار (intramural hematoma) أو SCAD النوع 2 (~70% من الحالات). أما في حالات أقل شيوعًا، فيُصيب SCAD الطبقة الداخلية (intima)، وفي هذه الحالة تُشاهد طية أو صبغة عبر القسطرة (angiography)، ويُسمى هذا SCAD النوع 1 (~30% من الحالات).</p>
+    <p>وبما أن الطية الداخلية غائبة في 70% من المرضى، يُشتبه بSCAD لدى امرأة تُظهر آفة طويلة وناعمة لا تستجيب للنيتروغليسرين (NTG) وغير متكلسة، تُحاكي ما يُعرف بـ"تشنج وعائي طويل مقاوم" (long refractory vasospasm). يمكن استخدام التصوير داخل الأوعية (IVUS) أو التصوير المقطعي البصري (OCT) لتأكيد التشخيص، حيث يُظهران كتلة كبيرة ذات مظهر مبقع بالدم (blood-speckled) ومنخفضة الكثافة (hypodense، داكنة) خلف الطبقة الداخلية، تدفع الطبقة الداخلية السليمة والرقيقة نسبيًا إلى داخل تجويف الوعاء.</p>
+    <div class="callout warn">
+      مع ذلك، لا يُوصى باستخدام IVUS أو OCT بشكل روتيني، لأن أي تلاعب في الشريان قد يُفاقم التشريح ويدفعه إلى التوسع.
+    </div>
+
+    <h3 class="subhead">خصائص إضافية لـSCAD</h3>
+    <p>عادة ما يُصيب القطاعات الوسطى إلى البعيدة من الشرايين التاجية، وخاصة الشريان الأمامي النازل (LAD)، وقد يشمل عدة شرايين تاجية في نفس الوقت (~10-20%). أما إصابة الجزء القريب أو الجذع الرئيسي الأيسر (left main) فهي نادرة (~8%)، ولذلك فإن حدوث الصدمة (shock) في SCAD يُعتبر أمرًا نادرًا.</p>
+    <p>يظهر بشكل ساحق لدى النساء (95%)، وخاصة الشابات والنساء في منتصف العمر (كما هو الحال في تآكل اللويحة — plaque erosion)، لكنه يُرى أيضًا لدى النساء فوق 50 عامًا؛ وأشارت قاعدة بيانات كبيرة إلى أن متوسط عمر النساء المصابات بSCAD هو 61 عامًا. يُلاحظ SCAD نادرًا لدى الرجال. يُقدَّم سريريًا كـ: NSTEMI (حوالي 60%) أو STEMI (حوالي 40%).</p>
+    <p>يرتبط بقوة بتعرج الشرايين التاجية (coronary tortuosity) بنسبة 78%، بما في ذلك شكل الشرايين الذي يُشبه المفتاح الحلزوني (corkscrew coronary arteries)، وأيضًا التنسج العضلي الليفي المحيطي (peripheral fibromuscular dysplasia). نفس هشاشة الكولاجين التي تُعرِّض جدار الوعاء للتشقق، تُسهِّل أيضًا استطالة الشرايين (coronary elongation).</p>
+    <p>غالبًا ما يبدأ بسبب: تمرين بدني مكثف (خصوصًا التمارين الإيزومترية)، رفع أثقال ثقيلة، أو مناورة فالسالفا شديدة (Valsalva) مثل التقيؤ القوي. كما أن الضغط النفسي أو العاطفي الشديد قد يكون محفزًا أيضًا.</p>
+
+    <h3 class="subhead">العلاج: التدخل بالقسطرة (PCI) مقابل العلاج التحفظي (conservative management)</h3>
+    <p>SCAD يحمل معدل مضاعفات مرتفع نسبيًا أثناء القسطرة (PCI)، وهذا بسبب احتمال دخول السلك إلى التجويف الكاذب (false lumen) أو بسبب انتشار الورم الدموي الناتج عن البالون باتجاه القمة (distally) أو باتجاه الجذع الرئيسي الأيسر (proximally toward the left main). في الواقع، يُسجَّل فشل أو مضاعفات أثناء PCI في 50-70% من الحالات، ويحتاج 13% من الحالات إلى جراحة طارئة لتحويل مسار الشرايين التاجية (CABG)!</p>
+    <p>حتى مجرد إدخال القسطرة وحقن المادة الظليلة يحمل خطر حدوث تشريح عند منشأ الشريان (ostial dissection) أو في الجذع الرئيسي الأيسر، بما في ذلك التشريح الهيدروليكي (hydraulic dissection). تشير البيانات إلى أن التشريح يُعقِّد 3.4% من القساطر التشخيصية، ويصل إلى 8% في الدراسات داخل الأوعية (intracoronary imaging studies).</p>
+    <p>على عكس تمزق أو تآكل اللويحة، فإن الغالبية العظمى من حالات SCAD تلتئم تلقائيًا عند المتابعة بالقسطرة ≥35 يومًا، بنسبة 70-97%، مما يُبرر النهج التحفظي لدى المرضى الذين لا يعانون من: إقفار نشط، انسداد كامل، أو تدفق TIMI 2 أو 3.</p>
+    <div class="card point-num">
+      <strong>كيف يتم تأكيد التشخيص ومتابعته؟</strong> نظرًا لأن التشخيص يستند فقط إلى شكل الآفة عبر القسطرة والسياق السريري، قد يشعر بعض الأطباء بعدم الارتياح عند مراقبة تضيق شديد دون تأكيد تشخيصي واضح. لذلك، يمكن استخدام التصوير داخل الوعاء (IVUS) في الحالات المشكوك فيها. يتم مراقبة المريض عن كثب لمدة 5-7 أيام، ويُؤكَّد التشخيص في النهاية بأثر رجعي بإعادة التصوير بعد 6 أسابيع لإظهار الالتئام (إما عبر التصوير المقطعي المحوسب للشرايين التاجية CT أو عبر القسطرة التاجية).
+    </div>
+    <p><strong>العلاج التحفظي يتضمن:</strong> الأسبرين؛ كلوبيدوغريل؛ العلاج بحاصرات بيتا (β-blockers)؛ مع مراقبة في المستشفى لمدة 5-7 أيام. بعض درجة من العلاج المضاد للتخثر مطلوبة لمنع تخثر التجويف الحقيقي (compressed true lumen)، لكن الإفراط في مضادات التخثر قد يُخاطر بتمدد الورم الدموي في التجويف الكاذب؛ لذا يُستخدم عادة العلاج المضاد للصفيحات فقط وليس مضادات التخثر (anticoagulation).</p>
+    <p><strong>متى نلجأ إلى PCI؟</strong> في المرضى الذين يعانون من STEMI مستمر، أو انسداد كامل، أو عدم استقرار ديناميكي دموي (hemodynamic compromise)، يكون التدخل مبررًا. يمكن تجربة توسع البالون بضغط منخفض كاستراتيجية قائمة بذاتها لإعادة التدفق، مع تجنب وضع دعامات طويلة في مرض من المتوقع أن يلتئم تلقائيًا.</p>
+    <p><strong>متى نلجأ إلى الجراحة (CABG)؟</strong> في حالات SCAD التي تشمل الجذع الرئيسي الأيسر أو متعددة الشرايين (multivessel SCAD)، تكون الجراحة خيارًا. لكن CABG تعاني من تحديات مثل إصابة الأوعية الطرفية (distal vessel involvement) وارتفاع معدل إغلاق الطعوم (graft closure) عند المتابعة الطويلة (~70%) بسبب تراجع المرض الأصلي (regression of native disease).</p>
+
+    <h3 class="subhead">التطور والمتابعة (Progression and Follow-up)</h3>
+    <p>عادة ً ما يلتئم التشريح التلقائي للشريان التاجي (SCAD) تلقائيًا، ولكن يمكن رؤية امتداد حاد في حوالي 5-10% من الحالات خلال الأسبوع الأول قبل حدوث الالتئام النهائي؛ لذلك، فإن علامات الإقفار المستمر أو المتكرر على تخطيط القلب (ECG) قد تُبرر إعادة القسطرة التاجية أو إجراء التصوير الطبقي (CT). مع ملاحظة أن الألم المستمر وحده لا يعني بالضرورة وجود إقفار، إذ إن عملية التشريح بحد ذاتها قد تكون مؤلمة.</p>
+    <p>بدلاً من إعادة القسطرة، يمكن استخدام التصوير الطبقي التاجي (coronary CT) لتوثيق شفاء SCAD بعد 6 أسابيع. كما يمكن استخدامه عند المرضى الذين يعانون من أعراض متكررة، لاستبعاد الامتداد القريب للتشريح (proximal extension) الذي قد يتطلب تدخلاً. مع ذلك، لا يُعتبر التصوير الطبقي أداة تشخيص أولية جيدة، لأنه غير حساس لتشريح الأوعية البعيدة الصغيرة (&lt;2.5 ملم).</p>
+    <p><strong>البقاء داخل المستشفى والبقاء طويل الأمد:</strong> جيد جدًا في SCAD غير المرتبط بالحمل، مع معدل وفيات داخل المستشفى يتراوح بين 0-2%، ومعدل وفيات طويل الأمد 0% (بحسب السجل الكندي لSCAD). مع ذلك، أظهرت سلسلة تقارير معدلات وفاة مرتفعة، أعلى من احتشاء العضلة القلبية التقليدي، خاصة عند محاولة التدخل بالقسطرة (PCI) أو لدى النساء فوق سن 60 عامًا.</p>
+    <p><strong>خطر التكرار</strong> هو: 10-30% خلال 1-3 سنوات، و30% خلال 5 سنوات. <strong>التكرار يقل مع:</strong> استخدام حاصرات بيتا (β-blockers — يُقلل الخطر بمقدار الثلثين)؛ تجنب المحفزات العاطفية والجسدية مثل رفع الأثقال (&gt;30-50 باوند)؛ تجنب مناورة فالسالفا (Valsalva)؛ الانتباه لاستخدام العلاج الهرموني.</p>
+    <p><strong>الارتباط بحالات أخرى:</strong> يرتبط SCAD بانتشار مرتفع للتنسج العضلي الليفي المحيطي (peripheral fibromuscular dysplasia): الكلوي ~70%، الحرقفي ~50%، السباتي ~50%. كما يرتبط أيضًا بوجود أمهات دم داخل القحف (intracranial aneurysms) بنسبة ~15-20%. لذلك، غالبًا ما يُوصى بإجراء تصوير طبقي للبطن وتصوير شرياني سباتي-دماغي (carotid-cerebral CT angiography) للفحص الشامل.</p>
+    <p><strong>SCAD المرتبط بالحمل (Peripartum SCAD):</strong> سريريًا، يكون أكثر شدة من SCAD غير المرتبط بالحمل. وبشكل عام، حتى SCAD غير المرتبط بالحمل يُعتبر مضاد استطباب عام للحمل المستقبلي (generally contraindicated).</p>
+
+    <figure>
+      <img src="data:image/jpeg;base64,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" alt="Figure 1.10">
+      <figcaption><span class="fig-num">الشكل 1.10</span> — احتشاء عضلة قلب غير مرتفع ST (NSTEMI) لدى امرأة سليمة تبلغ من العمر 47 سنة. بدأ ألم الصدر أثناء ممارسة رياضة الكيك بوكسينغ. عدة سمات تشير إلى تشخيص التشريح التلقائي للشريان التاجي (SCAD) من النوع 2 وتدعم عدم إجراء التدخل عبر الجلد (PCI): (1) مرض طويل أملس &gt;30 ملم بدون تكلسات؛ (2) شرايين تاجية متطاولة ومتعرجة؛ (3) إصابة في الشرايين البعيدة؛ (4) امرأة عمرها أقل من 60 سنة. كان التدفق الدموي من نوع TIMI 2، ولم تكن تعاني من ذبحة صدرية مستمرة، لذلك تم اعتماد النهج المحافظ (conservative management). تم تجنب التصوير داخل الأوعية (intravascular imaging).</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ ملحق 7 ============ -->
+  <section class="roman" id="c1t1app7">
+    <div class="roman-head"><div class="roman-badge">ملحق 7</div><h2>الآثار الضارة لمضادات الالتهاب غير الستيرويدية (NSAIDs) ومثبطات COX-2 في مرض الشريان التاجي</h2></div>
+
+    <p>هناك نوعان من إنزيم السيكلوأوكسيجيناز (COX): <strong>COX-1</strong>، الموجود في الظهارة الطبيعية والصفائح الدموية، وهو المسؤول عن إنتاج البروستاغلاندينات المحافظة على التوازن (homeostatic prostaglandins)، لكنه أيضًا مسؤول عن إنتاج الثرومبوكسان A2 (thromboxane A2) وتنشيط الصفائح الدموية. <strong>COX-2</strong>، الموجود في الخلايا الالتهابية، وهو المسؤول عن إنتاج البروستانويدات الالتهابية (inflammatory prostanoids)، ولكن أيضًا عن إنتاج البروستاسيكلين (prostacyclin) ذو التأثيرات الواقية (موسِّع للأوعية ومضاد لتكدس الصفائح).</p>
+    <div class="callout warn">
+      <b>ملاحظة:</b> الجرعات المنخفضة من الأسبرين تثبط بشكل أساسي COX-1 مع تأثير أقل على COX-2.
+    </div>
+    <p>أضرار NSAIDs تأتي من عدة آليات: (i) ترتبط بموقع COX-1 (وهو نفسه موقع تأثير الأسبرين)، ولكن بخلاف الأسبرين، فإن ارتباطها يكون عكسيًا (reversible) ولا تُحدث تأثيرًا مضادًا طويل الأمد للصفائح؛ (ii) تثبط COX-2، وبالتالي تقلل إنتاج البروستاسيكلين الواقي. المثبطات الانتقائية أو السائدة لCOX-2 تكون أكثر ضررًا من ناحية الصفائح، لأنها تمنع البروستاسيكلين دون أي تقليل لإنتاج الثرومبوكسان من COX-1، وبالتالي تُخل بالتوازن بين البروستاسيكلين والثرومبوكسان بطريقة مؤذية.</p>
+    <p>علاوة على ذلك، إذا أُعطي الأسبرين بعد NSAID، فإن موقع COX-1 سيكون مشغولاً بالفعل بواسطة الـNSAID، وهذا يمنع الأسبرين من الارتباط به؛ ونظرًا لأن عمر نصف البلازما للأسبرين قصير جدًا (فقط 20 دقيقة)، فإنه سيُزال من الدورة الدموية قبل أن يحصل على فرصة للتأثير.</p>
+  </section>
+
+  <!-- ============ ملحق 8 ============ -->
+  <section class="roman" id="c1t1app8">
+    <div class="roman-head"><div class="roman-badge">ملحق 8</div><h2>أفكار إضافية حول فيزيولوجيا التروبونين عالي الحساسية (hs-troponin)</h2></div>
+
+    <h3 class="subhead">دور hs-troponin في الوقاية الأولية</h3>
+    <p>في حين أن ارتفاع التروبونين فوق عتبة احتشاء عضلة القلب (MI cutoff) يعكس نخر خلايا عضلة القلب، فإن المستويات المنخفضة ولكن القابلة للكشف من التروبونين عالي الحساسية (hs-troponin) عادة ما تمثل مستويات فيزيولوجية من تحرر التروبونين، أو نقص تروية بدون نخر. هذا قد ينتج عن إطلاق الحصة السيتوبلازمية (cytosolic pool) من التروبونين بدون موت خلوي؛ إذ إن معظم التروبونين موجود في الميوفيبريلات (myofibrils) ويتحلل خلال 12-24 ساعة بعد موت الخلية، لكن نحو 8% منه يكون سيتوبلازميًا وقد يُحرَّر فيزيولوجيًا أو مرضيًا بدون موت الخلية.</p>
+    <p>على سبيل المثال: شد العضلة القلبية (myocardial stretching)؛ نقص التروية (ischemia)؛ تسارع معدل ضربات القلب (fast heart rate) — هذه العوامل قد تزيد من نفاذية غشاء الخلية دون التسبب في نخر.</p>
+    <p>هذا يفسر لماذا، بعد تحفيز أذيني سريع (atrial pacing) لبضع دقائق، ترتفع مستويات hs-troponin، وأحيانًا تتضاعف أو تتضاعف ثلاث مرات (ولكن تبقى تحت عتبة MI)، حتى عند مرضى بدون مرض شريان تاجي (CAD) وأحيانًا بدون نقص تروية (بدليل غياب تحرر اللاكتات من الجيب التاجي). كما يفسر أيضًا لماذا، بعد اختبار إجهاد إيجابي (positive stress test)، يرتفع hs-troponin قليلاً، رغم بقائه أقل بكثير من عتبة MI، وهذا الارتفاع يرتبط في هذه الحالة بوجود وشدة عيوب التروية.</p>
+    <p>إذًا، يمكن أن تؤدي المطالب الفسيولوجية أو نقص التروية العابر المحرَّض إلى إطلاق التروبونين بدون حدوث نخر. التغير صغير جدًا بحيث لا يُكشف بواسطة اختبارات التروبونين التقليدية، ولا يرتفع التروبونين عادة فوق عتبة MI حتى لو كان نقص التروية المحرَّض بالإجهاد شديدًا. لا بد أن يكون النقص أو الأذية مستمرين لرفع التروبونين فوق عتبة MI.</p>
+    <p>من المرجح أن يكون hs-troponin قابلاً للكشف بشكل مزمن لدى مرضى CAD الكامن، ولدى مرضى يعانون من أمراض مصاحبة مثل ارتفاع ضغط الدم أو السكري. في الواقع، حتى في العيادات الخارجية، يرتبط عدم قابلية الكشف عن hs-troponin، أو وجوده بمستوى منخفض (الثلث الأدنى من الكشف)، بخطر منخفض جدًا من الأحداث القلبية على المدى الطويل (أقل حتى من خطر اختبار الإجهاد الطبيعي)، واحتمال منخفض لوجود CAD انسدادي.</p>
+    <p>في دراسة أخرى شملت مرضى خارجيين غير عرضيين بمتوسط عمر 62 عامًا، كان عدم الكشف عن التروبونين (&lt;0.003 نانوغرام/مل) مؤشرًا على خطر منخفض جدًا للأحداث القلبية: 0.5% سنويًا، مشابه لخطر المرضى الذين لديهم درجة كالسيوم = 0.</p>
+    <div class="callout info">
+      <b>الاستثناء الوحيد</b> الذي قد يتجاوز فيه التروبونين عتبة MI بشكل فيزيولوجي، دون نخر، هو: سباقات الماراثون عند الأفراد غير المدربين تدريبًا عاليًا. بعد الماراثون، يرتفع التروبونين فوق عتبة MI (~50% من المشاركين غير النخبة، &gt;0.03 حتى 0.8 نانوغرام/مل)، إلى جانب خلل عابر في الوظيفة الانبساطية للبطين الأيسر واتساع البطين الأيمن. ومع ذلك، فإن ارتفاع التروبونين يكون وجيزًا ويعود إلى الطبيعي خلال بضع ساعات، ولا توجد أدلة على تعزيز متأخر للجادولينيوم بالرنين المغناطيسي (مما يشير إلى تسرب التروبونين بسبب شد العضلة القلبية بدلاً من نخر الخلايا؟).
+    </div>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch1-part2.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 2</a>
+    <a href="practical-ch1-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch1-part4.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 4: أسئلة المراجعة وبداية STEMI ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 1، الجزء 3
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

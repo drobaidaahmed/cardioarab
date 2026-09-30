@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 3: الاضطرابات الصمامية | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch3-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 3</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 3 — الجزء 15</h3>
+  <div class="chgroup">
+    <span class="chtitle">القسم 8: الصمامات الصناعية (تابع)</span>
+    <a href="#c3thrombtreat">علاج التخثر، والشرفات الطفيف</a>
+    <a href="#c3leak">C. التسريب حول الصمام</a>
+    <a href="#c3endo">D. التهاب الشغاف</a>
+    <a href="#c3ppm">E. عدم توافق المريض-الصمام</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch3-part14.html">→ الجزء 14</a>
+    <a href="practical-ch3-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch3-part16.html">الجزء 16 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الثالث (الجزء 15)</span>
+    <h1>الاضطرابات الصمامية</h1>
+  </div>
+  <span class="chapno">3</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 3: الاضطرابات الصمامية — الجزء 15</h2>
+  </div>
+
+  <section class="roman" id="c3thrombtreat">
+    <div class="roman-head"><div class="roman-badge">V-B (تتمة)</div><h2>علاج تخثر الصمام الميكانيكي، وتخثر الشرفات الطفيف</h2></div>
+
+    <div class="card point-num">
+      <strong>العلاج الإسعافي لتخثر الميكانيكي (Class I لكل من الإذابة والجراحة):</strong>
+      <ul style="margin-top:8px">
+        <li><strong>تُفضَّل الجراحة</strong> (إزالة الخثرة أو الاستبدال) مع: خثرة كبيرة&gt;0.8 سم²/10 ملم، أو NYHA IV.</li>
+        <li><strong>تُفضَّل الإذابة</strong> مع: NYHA I-III، خثرة&lt;0.8 سم²، أو خطورة جراحية مرتفعة (مثل صدمة تحتاج عدة مقبضات أوعية).</li>
+      </ul>
+      <p style="margin-top:8px"><strong>المخاطر التاريخية للإذابة</strong> (جرعة عالية سريعة، 100 ملغ r-tPA خلال ساعتين): صمّات 13%، نزيف كبير 6%، نزيف دماغي 3%. <strong>لكن</strong> الإعطاء البطيء الموجَّه بـTEE (25 ملغ خلال 6-25 ساعة، يُكرَّر يوميًا حتى 6 مرات إن استمر&gt;25% من الخثرة/الانسداد) حقق: نجاح&gt;90%، صمّات&lt;2%، نزيف كبير&lt;2%. بديل بالأعراض الطفيفة/خثرة صغيرة: تسريب هيبارين وريدي لأيام قبل الإذابة.</p>
+      <p style="margin-top:8px"><strong>خثرة الجانب الأيمن:</strong> الإذابة خط أول حتى بخثرة كبيرة/أعراض متقدمة — نجاح مرتفع، الانصمام الجهازي غير شائع.</p>
+    </div>
+
+    <h3 class="subhead">ج. تخثر الصمام الحيوي الطفيف (Subclinical)</h3>
+    <p>دراستان بـCT: سماكة منخفضة الكثافة بالشرفات ±تقييد حركة، تحدث مبكرًا بـ4% من الجراحية، 13% من TAVR (بمتوسط 83 يومًا). يظهر كخلل مبكر مع زيادة تدرج&gt;10 أو&gt;20 ملم زئبقي. يرتبط بزيادة خطر سكتة/TIA (7.8% مقابل 2.3% سنويًا). حتى 10-18% من مرضى السماكة تحت السريرية يُصابون بتخثر انسدادي صريح؛ قد تتأثر متانة الصمام طويل الأمد.</p>
+    <div class="card point-num">
+      <strong>العلاج والوقاية:</strong> أقل شيوعًا بكثير مع مضاد التخثر مقارنة بالعلاج المزدوج بمضادات الصفيحات. يزول بالانتقال لمضاد تخثر (وارفارين أو NOAC متساويان)، لكن يستمر بالبقاء على العلاج المزدوج بمضادات الصفيحات. لذا أوصت ACC بوارفارين 3 أشهر لمرضى TAVR منخفضي خطر النزيف (IIb).
+    </div>
+    <div class="callout warn">
+      <b>دراستا GALILEO وATLANTIS:</b> مضاد تخثر روتيني بعد TAVR (ريفاروكسابان/أبيكسابان مقابل مضاد صفيحات) بمتوسط عمر 80: زاد الوفيات والأحداث القلبية الوعائية الكبرى، رغم تقليل تخثر الشرفات! حتى الأسبرين+كلوبيدوغريل لم يُقلل الأحداث الخثارية مقارنة بالأسبرين وحده. <strong>الخلاصة:</strong> مضاد التخثر الروتيني بعد TAVR غير مبرر (خصوصًا بالمسنين)، لكن المراقبة المبكرة الدقيقة ضرورية. بالمستقرين ديناميكيًا مع اشتباه/تأكيد تخثر حيوي وبلا موانع: وارفارين 3 أشهر (إن زال) أو أطول؛ NOAC بديل لكن ACC توصي بالوارفارين.
+    </div>
+  </section>
+
+  <!-- ============ C. التسريب حول الصمام ============ -->
+  <section class="roman" id="c3leak">
+    <div class="roman-head"><div class="roman-badge">V-C</div><h2>التسريب حول الصمام الصناعي (Paraprosthetic Leak)</h2></div>
+
+    <p>بالجراحية: غرز رخوة، أو تكلس شديد بالحلقة يمنع الالتصاق الكامل أو يُسبب انفصال الغرز لاحقًا. يُلاحَظ بكل من الميكانيكي والحيوي. نادرًا شديد/عرضي (~1.5%). قد يظهر مبكرًا (غرز رخوة) أو متأخرًا (انفصال مفاجئ من حلقة متكلسة، نضج قنوات حول الصمام، أو التهاب شغاف — مسؤول عن~50% من التسريبات المتأخرة ببعض الدراسات). التسريبات المتوسطة/الشديدة أكثر شيوعًا بعد TAVR (~3.5%).</p>
+    <p><strong>انفصال الصمام:</strong> شكل متطرف، يشمل&gt;30-40% من محيط حلقة الخياطة؛ يظهر كحركة متأرجحة بالإيكو/التنظير الفلوري. <strong>تسريبات صغيرة</strong> (&lt;10% من الحلقة): تُرى بـ&lt;10% بعد الجراحية، لكن~25% بعد TAVR — غالبًا تتراجع/تزول خلال أيام/أشهر مع الالتئام.</p>
+    <div class="callout warn">
+      <b>انحلال الدم الشديد:</b> مع التسريبات الكبيرة، أو المركزية بالحيوي المتنكس، أو نادرًا تسريبات صغيرة عالية التدفق حتى بدون قصور شديد. العلاج بالحديد قد يكون فعالاً.
+    </div>
+    <p><strong>الإصلاح:</strong> يُوصى به مع تسريب شديد+فشل قلب أو انحلال دم شديد يتطلب نقل متكرر (لحسن الحظ، غالبًا خفيفان). عبر القسطرة (سدادة) أو جراحيًا (غرز إضافية أو إعادة استبدال). <strong>تسريب شديد لاعرضي:</strong> لا دليل واضح على ضرورة الإصلاح؛ لكن حتى المتوسط يرتبط بزيادة الوفيات طويلة الأمد وتقدم فشل القلب (خاصة مع LV غير طبيعي) — قد يبرر إصلاحًا مبكرًا قبل ظهور HF. ينطبق على TAVR والجراحية.</p>
+  </section>
+
+  <!-- ============ D. التهاب الشغاف ============ -->
+  <section class="roman" id="c3endo">
+    <div class="roman-head"><div class="roman-badge">V-D</div><h2>التهاب شغاف القلب على الصمام الصناعي</h2></div>
+
+    <p>~0.5%/سنة، أعلى نسبة خلال أول 6-12 شهرًا بعد العملية.</p>
+    <div class="card">
+      <strong>أ. المبكر</strong> (&lt;60 يومًا-سنة): عادة مضاعفة لجراحة الصمام. الأشيع: مكورات عنقودية سلبية التجلط وموجبة التجلط؛ يليها معوية وسالبة الغرام.
+      <br><br><strong>ب. المتأخر</strong> (&gt;سنة): يشبه ميكروبيولوجيًا التهاب الشغاف الطبيعي. الأشيع: العقديات (المخضرة، البقرية)؛ يليها المكورات العنقودية والمعوية. قد تُلاحَظ العنقودية سلبية التجلط خاصة بعد قسطرة وريدية مركزية.
+    </div>
+  </section>
+
+  <!-- ============ E. عدم توافق المريض-الصمام ============ -->
+  <section class="roman" id="c3ppm">
+    <div class="roman-head"><div class="roman-badge">V-E</div><h2>عدم التوافق بين المريض والصمام الصناعي (PPM)</h2></div>
+
+    <p>الصمام الصناعي صغير الحجم وذو طبيعة انسدادية، شائع خاصة بحلقة أبهرية/تاجية صغيرة ومتحجرة تُجبر الجراح على وضع صمام صغير.</p>
+    <div class="card">
+      <strong>التعريف:</strong> أبهري: مساحة الفتحة الفعالة المُفهرسة (EOA)≤0.85 سم²/م². تاجي: EOA≤1.2 سم²/م². يُشاهد بـ30-50% من الصمامات التاجية والأبهرية على حد سواء (رغم ارتباطه تقليديًا بالأبهري). أشيع مع استبدال بسبب التضيق (حلقة متحجرة) أكثر من الارتجاع.
+    </div>
+    <p><strong>التأثير السريري:</strong> صمام متضيق نسبيًا، تدرج بالراحة يزداد بالجهد. نتائج متوسطة المدى جيدة غالبًا، لكن: قدرة وظيفية أقل، بقاء/إنذار أسوأ طويل الأمد، استمرار شائع لخلل LV/تضخم/PH. يؤثر خاصة على: الشباب النشطين، أو خلل LV سابق — خصوصًا مع PPM الشديد (أبهري EOA&lt;0.75، تاجي&lt;0.9 سم²/م²).</p>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch3-part14.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 14</a>
+    <a href="practical-ch3-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch3-part16.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 16 ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 3، الجزء 15
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

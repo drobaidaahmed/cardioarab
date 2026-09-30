@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 2: قصور القلب | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch2-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 2</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 2 — الجزء 3</h3>
+  <div class="chgroup">
+    <span class="chtitle">3. الفحوصات التشخيصية (تابع)</span>
+    <a href="#c2bnp">II. BNP</a>
+    <a href="#c2ecg">III. ECG</a>
+    <a href="#c2cath">IV. القسطرة واختبارات الإقفار</a>
+    <a href="#c2diastress">V. اختبار الجهد الانبساطي</a>
+    <a href="#c2biopsy">VI. خزعة عضلة القلب</a>
+    <a href="#c2mri">VII. الرنين المغناطيسي</a>
+  </div>
+  <div class="chgroup">
+    <span class="chtitle">4. العلاج المزمن</span>
+    <a href="#c2tx1">علاج قصور القلب الانقباضي — السبب وإعادة التروية</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch2-part2.html">→ الجزء 2</a>
+    <a href="practical-ch2-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch2-part4.html">الجزء 4 ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الثاني (الجزء 3)</span>
+    <h1>قصور القلب</h1>
+  </div>
+  <span class="chapno">2</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 2: قصور القلب — الجزء 3</h2>
+  </div>
+
+  <!-- ============ II. BNP ============ -->
+  <section class="roman" id="c2bnp">
+    <div class="roman-head"><div class="roman-badge">II</div><h2>الببتيد المدر للصوديوم الدماغي (BNP)</h2></div>
+
+    <p>يُصنَّع بعضلة القلب استجابةً لتمدد الخلايا العضلية القلبية (Cardiomyocyte Stretch). المحفز الرئيسي: إجهاد الجدار (خاصة LV) الناتج عن فرط الحجم أو الضغط. قد يُحفَّز أيضًا مباشرة بنقص التروية والهرمونات العصبية. تمدد RV أو الأذينين يرفع BNP بدرجة أقل (كتلة عضلية أقل).</p>
+    <div class="card">
+      <strong>BNP مقابل NT-proBNP:</strong> Pro-BNP (السلف غير النشط) يُشطَر إلى BNP (نشط بيولوجيًا) وNT-proBNP (غير نشط). عادة NT-proBNP≈4×BNP، وقد يتجاوز 6× بعمر&gt;65 أو قصور كلوي.
+    </div>
+
+    <h3 class="subhead">أ. التفسير السريري بالحالة الحادة (ضيق نفس حاد)</h3>
+    <div class="card point-num">
+      <ul>
+        <li><strong>BNP&gt;400-500 (أو NT-proBNP&gt;1200):</strong> مؤشر قوي على HF أيسر حاد؛ يتوافق مع ارتفاع LVEDP (رغم أن القيمة لا تتناسب دقيقًا مع درجة الارتفاع). عند ضغط مماثل، البطينات المتوسعة تُفرز BNP أكبر (شد جداري + كتلة أكبر) — يفسر ارتفاعه الأكبر بالانقباضي مقارنة بالانبساطي.</li>
+        <li><strong>BNP&lt;100 (أو NT-proBNP&lt;300):</strong> يستبعد HF أيسر حاد كسبب لضيق النفس الحاد. لكن قد يوجد خلل LV (انبساطي أو انقباضي معتدل) بلا أعراض واضحة أو بأعراض جهدية فقط — بدراسة، معظم مرضى الخلل الانقباضي اللاعرضي لديهم BNP&lt;50؛ وبخلل انبساطي، ~25% لديهم BNP&lt;50، لكن هذا نادر مع: تاريخ HF سابق، أعراض حالية، أو خلل انبساطي شديد بالإيكو (متوسط BNP&gt;300 بهؤلاء).</li>
+        <li><strong>بالأعراض المزمنة الجهدية:</strong> أفضل عتبة لاستبعاد HF المزمن: BNP&lt;35 أو NT-proBNP&lt;125 (ESC).</li>
+        <li><strong>النطاق المتوسط بالسياق الحاد (100-500):</strong> قد يكون HF أيسر حاد، مرض رئوي/رئوي وعائي حاد (تمدد RA/RV)، إنتان، فشل RV، قصور كلوي، أو نقص تروية.</li>
+        <li><strong>النطاق المتوسط بالسياق المزمن (35-100، حتى 240 بـAF):</strong> قد يكون HF مزمن أو مرض غير قلبي.</li>
+      </ul>
+    </div>
+
+    <h3 class="subhead">ب. تطور BNP والمتابعة</h3>
+    <p>ينخفض بالمدرات لكن لا يعود للطبيعي عادة (LV يبقى متوسعًا حتى بعد عودة LVEDP للطبيعي) — يُعرَف هذا بـ"BNP الجاف" (Residual/Dry BNP)، نادرًا يتجاوز 1000، ويعكس إعادة التشكيل. قد يتأخر انخفاضه بضعف الإطراح (قصور كلوي). <strong>لا يُوصى بقياسه يوميًا</strong> — يُفضَّل قياسه قبل الخروج بعد تحقيق الجفاف السريري كخط أساس. BNP مرتفع عند الخروج = مؤشر تنبؤي سلبي لإعادة الدخول؛ انخفاضه 30-50% أثناء العلاج ينبئ بانخفاض قوي بخطر إعادة الدخول.</p>
+    <div class="card point-num">
+      <strong>العلاج الموجَّه بـBNP:</strong> فعّال بمرضى&lt;75 سنة مع HF انقباضي، بهدف&lt;100-300، مع قياس كل 1-3 أشهر (IIa) — يُخفِّض دخول المستشفى ويُحسِّن البقاء. يُعطى الأولوية لتعديل ACE-I/حاصرات بيتا/مضادات الألدوستيرون قبل المدرات (ما لم يوجد احتقان سريري). <em>غير واضح الفعالية</em> بعمر&gt;75 أو الخلل الانبساطي — قد يُسبب دوخة/إرهاق بالمبالغة بالخفض.
+    </div>
+    <div class="card">
+      <strong>عوامل ترفع/تخفض BNP (بنفس درجة HF):</strong> يتضاعف بعمر&gt;75؛ يتضاعف ×3 بـAF (توسع الأذين نفسه يُفرز BNP، قد يصل لـ500 دون HF — العتبة بـAF: ~240 لـBNP، ~1000 لـNT-proBNP)؛ ينخفض للنصف بالسمنة (BMI&gt;35؛ عتبة مرجعية منخفضة 50 لاستبعاد HF الحاد بالبدينين). يرتفع أيضًا بـ: النساء، القصور الكلوي، تشمع الكبد. يعتمد الإطراح على: إنزيمات ببتيدية نسيجية (BNP) والكلى (أكثر لـNT-proBNP).
+    </div>
+    <div class="callout warn">
+      <b>حالات خاصة:</b> بالحالات الحرجة (إنتان شديد/صدمة)، لا يرتبط BNP جيدًا بضغوط الامتلاء — قد يتجاوز 1000 رغم PCWP طبيعي (يعكس القصور الكلوي أكثر). <strong>MS أو MR الحاد:</strong> BNP أقل من HF الناتج عن LV (LVEDP ليس مرتفعًا بالضرورة). <strong>الاستثناء الوحيد لـBNP طبيعي رغم JVD/وذمة واضحة: التهاب التأمور الانقباضي.</strong>
+    </div>
+  </section>
+
+  <!-- ============ III. ECG ============ -->
+  <section class="roman" id="c2ecg">
+    <div class="roman-head"><div class="roman-badge">III</div><h2>تخطيط القلب الكهربائي (ECG)</h2></div>
+
+    <p>ECG طبيعي تمامًا يكاد يستبعد HF، خاصة الانقباضي أو الحاد. <strong>موجات Q:</strong> أهم علامة نوعية، تشير بقوة لاعتلال إقفاري. باقي التغيرات غير نوعية لكن ذات قيمة إنذارية: LVH بنمط الشد، اضطرابات ST-T، RBBB/LBBB، AF واضطرابات نظم أخرى.</p>
+    <div class="card">
+      <strong>بلوك AV متقدم:</strong> أكثر شيوعًا بـ: التهاب عضلة القلب، الأمراض الترشيحية. <strong>جهد QRS مرتفع صدريًا مع منخفض بالأطراف:</strong> يشير لـLV متوسع منخفض EF. <strong>LBBB مع QRS&gt;130 ملي ثانية:</strong> يشير لاعتلال ناجم عن/متفاقم بـLBBB، وله أهمية علاجية (يستفيد من CRT).
+    </div>
+  </section>
+
+  <!-- ============ IV. القسطرة واختبارات الإقفار ============ -->
+  <section class="roman" id="c2cath">
+    <div class="roman-head"><div class="roman-badge">IV</div><h2>القسطرة التاجية وفحوصات أخرى للكشف عن الإقفار</h2></div>
+
+    <p><strong>تُوصى القسطرة (ESC، Class I) بحالات:</strong> الذبحة؛ أو التظاهرات الحادة والشديدة لـHF. غير ذلك، تُقصَر على HFrEF ذوي احتمال سريري مرتفع لـCAD (IIb). <strong>بدائل:</strong> اختبار الجهد الإقفاري (IIb)؛ تصوير الشرايين بالـCT (IIa).</p>
+    <div class="card point-num">
+      <ol>
+        <li><strong>التصوير النووي بالراحة والجهد:</strong> يبحث عن عيوب تروية قطاعية. <em>محدودية:</em> الندبات المتقطعة شائعة بالاعتلال غير الإقفاري؛ حتى 30% من CAD متعدد الأوعية يُظهرون إقفارًا متوازنًا (Balanced Ischemia) دون عيب واضح. <strong>خلاصة:</strong> غير حساس/نوعي بدرجة كافية لتشخيص CAD كسبب لاعتلال عضلة القلب.</li>
+        <li><strong>الإيكو الإجهادي بالدوبوتامين:</strong>
+          <ul style="margin-top:6px">
+            <li><strong>استجابة ثنائية الطور:</strong> تحسن مبدئي بجرعة منخفضة، ثم تراجع بجرعة عالية → عضلة حية لكن تُصاب بإقفار بالجهد العالي.</li>
+            <li><strong>استجابة أحادية الطور:</strong> تحسن تدريجي مستمر → اعتلال غير إقفاري، أو إقفاري مُعاد ترويته دون شفاء كامل (تليف تحت شغافي).</li>
+            <li><strong>غياب أي زيادة:</strong> غياب الاحتياطي التقلصي — لا يستبعد كليًا وجود عضلة قابلة للإنقاذ.</li>
+          </ul>
+        </li>
+        <li><strong>CT الشرايين التاجية:</strong> لنفي CAD، خاصة باحتمال منخفض-متوسط.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ V. اختبار الجهد الانبساطي ============ -->
+  <section class="roman" id="c2diastress">
+    <div class="roman-head"><div class="roman-badge">V</div><h2>اختبار الجهد الانبساطي (Diastolic Stress Testing)</h2></div>
+
+    <p>ضيق نفس مزمن مع EF طبيعي وغياب علامات HF قد يُشخَّص خطأً كضيق نفس غير قلبي. بعض هؤلاء لديهم ضغوط طبيعية بالراحة، لكن الجهد يرفع الضغط الأيسر بسبب LV صلب — خلل انبساطي "كامن" لا يظهر إلا بالجهد.</p>
+    <div class="card point-num">
+      <strong>القيمة السريرية:</strong> مفيد بـ: ضيق نفس مزمن غير مفسَّر؛ نتائج حدية بـBNP/إيكو الراحة (E' منخفضة، LA متوسع، LVH، لكن E/E' طبيعية).
+      <p style="margin-top:8px"><strong>يُعاد تقييم:</strong> E/E' بالذروة (&gt;14 يشير لارتفاع LA)؛ سرعة TR (&gt;3.4 م/ث يشير لارتفاع PH). يُقيَّم أيضًا: الإقفار، MR الديناميكي، القدرة الوظيفية الفعلية.</p>
+      <p style="margin-top:8px"><strong>الطريقة المثلى:</strong> دراجة نصف راقدة مع تصوير أثناء التمرين؛ أو جهاز مشي/دراجة واقفة مع تصوير خلال دقيقتين من الذروة. <strong>بديل:</strong> رفع الساقين السلبي (يُماثل~40% من ارتفاع PCWP النهائي). يمكن إجراؤه غازيًا بقثطار Swan-Ganz مع دراجة راقدة.</p>
+    </div>
+  </section>
+
+  <!-- ============ VI. خزعة عضلة القلب ============ -->
+  <section class="roman" id="c2biopsy">
+    <div class="roman-head"><div class="roman-badge">VI</div><h2>خزعة عضلة القلب (Endomyocardial Biopsy)</h2></div>
+
+    <p>تُجرى عند اشتباه التهاب عضلة قلب شديد متقدم، لتمييز:</p>
+    <div class="card point-num">
+      <ul>
+        <li><strong>التهاب لمفاوي حاد خاطف:</strong> قابل للعكس، يشفى خلال أسابيع، يحتاج دعمًا مكثفًا مبكرًا.</li>
+        <li><strong>حمضي بفرط التحسس:</strong> قابل للعلاج بالستيرويدات إن شُخِّص مبكرًا.</li>
+        <li><strong>خلايا عملاقة:</strong> سريع التدهور، قد يحتاج زراعة قلب/مثبط مناعة/LVAD مؤقت.</li>
+      </ul>
+    </div>
+    <p><strong>مبررات الخزعة:</strong> HF حاد غير مفسَّر&lt;أسبوعين مع اضطراب ديناميكي واضح؛ أو HF حديث (&lt;3 أشهر) مع استجابة ضعيفة للعلاج خلال 1-2 أسبوع، أو اضطرابات بطينية غير مسيطر عليها، أو بلوك AV متقدم. أيضًا: اشتباه تفاعل دوائي (خاصة بعدم تحسن سريع بعد الإيقاف — تشخيص التهاب حمضي، بدء ستيرويدات)؛ تأكيد أمراض ترشيحية (نشواني AL بعد نتائج إيجابية بتثبيت البروتينات المصلية؛ خزعة الوسادة الشحمية غير حاسمة. الساركويد القلبي دون تورط رئوي نموذجي).</p>
+  </section>
+
+  <!-- ============ VII. الرنين المغناطيسي ============ -->
+  <section class="roman" id="c2mri">
+    <div class="roman-head"><div class="roman-badge">VII</div><h2>التصوير بالرنين المغناطيسي للقلب (Cardiac MRI)</h2></div>
+
+    <p>الجادولينيوم لا يخترق خلايا عضلة القلب الطبيعية (محكمة الترابط)؛ يتجمع بمناطق النخر/التليف = "التحسين المتأخر" (LGE) بتسلسل T1.</p>
+    <div class="card point-num">
+      <strong>4 تطبيقات رئيسية:</strong>
+      <ol style="margin-top:8px">
+        <li><strong>تمييز أنماط LGE:</strong> تحت شغافي/شامل الجدار → إقفاري. تحت نخابي/منتصف الجدار بتوزيع لا يتوافق مع الشرايين → غير إقفاري.</li>
+        <li><strong>تشخيص التهاب عضلة القلب:</strong> خاصة مع اعتلال غير مفسَّر أو ارتفاع تروبونين بدون سبب.</li>
+        <li><strong>التمييز بين RCM وHCM</strong> عند وجود سماكة جدارية: LGE تحت شغافي شامل → الداء النشواني؛ LGE متقطع بمنتصف الجدار → HCM؛ LGE متقطع بالجدار السفلي-الجانبي → مرض فابري.</li>
+        <li><strong>تقييم حيوية العضلة</strong> بالاعتلال الإقفاري — تحديد قابلية الإنقاذ بإعادة التروية.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 4. العلاج المزمن ============ -->
+  <div class="topic-divider" id="topic4">
+    <span class="tnum">4</span>
+    <h2>العلاج المزمن لقصور القلب</h2>
+  </div>
+
+  <section class="roman" id="c2tx1">
+    <div class="roman-head"><div class="roman-badge">1-I</div><h2>علاج قصور القلب الانقباضي: معالجة السبب الكامن وإعادة التروية</h2></div>
+
+    <p>يجب ضبط ضغط الدم لهدف&lt;130/80. قد يكون الضغط طبيعيًا أو منخفضًا بالانقباضي (نتاج منخفض) — تُعطى أدوية HF بغض النظر عن الضغط طالما يُتحمَّل سريريًا، حتى SBP=90-100.</p>
+    <div class="card point-num">
+      <strong>إعادة التروية (CABG/PCI):</strong> يُنظَر بها لمرضى الاعتلال الإقفاري — أي أن يكون CAD واسعًا كفاية ليُفسِّر الاعتلال (لا إصابة عرضية بوعاء صغير واحد). كذلك تُفكَّر بالانبساطي مع CAD واسع.
+    </div>
+
+    <h3 class="subhead">دراسة STICH: قيمة إعادة التروية بالاعتلال الإقفاري</h3>
+    <p>عشوائية على مرضى اعتلال إقفاري بـEF≤35%، CABG مقابل علاج طبي فقط. معظمهم مرض ثلاثي الأوعية، غالبًا بإصابة LAD القريب.</p>
+
+    <div class="card point-num">
+      <strong>النتائج:</strong>
+      <ul style="margin-top:8px">
+        <li><strong>بعد 5 سنوات:</strong> اتجاه قوي لتقليل الوفيات بـCABG (~8%/سنة مقابل 6.5%/سنة، p=0.12).</li>
+        <li><strong>بعد 10 سنوات:</strong> أصبح الفرق ذا دلالة إحصائية — انخفاض بالوفيات القلبية الوعائية والاستشفاء. وفيات جراحية مبكرة منخفضة نسبيًا (3.6% خلال 30 يومًا).</li>
+      </ul>
+      <p style="margin-top:8px"><strong>الاستنتاج:</strong> تدعم CABG باعتلال إقفاري، خاصة مرض ثلاثي مع EF&lt;27%. <em>لكن:</em> الفائدة لم تظهر إلا بعد سنتين، وليست دراماتيكية — CABG ليست عاجلة بمعظم الحالات؛ IIb بإرشادات ESC كعلاج لـHF. نقطة غير محسومة: الفائدة غير مؤكدة بالأشد مرضًا أو الأكثر تقدمًا سريريًا (خطورة جراحية أعلى، قد لا يعيشوا لجني الفائدة المتأخرة).</p>
+    </div>
+
+    <h3 class="subhead">دور اختبار العيوشية (Viability) في STICH</h3>
+    <p>~50% خضعوا لاختبار عيوشية (إيكو أو SPECT)، ثم عُشوِّئوا بصرف النظر عن النتيجة. <strong>النتائج الرئيسية:</strong> CABG أظهرت فائدة وفيات بصرف النظر عن وجود العيوشية؛ اختبار الحيوية لم يُظهر قدرة تمييزية لتحديد المستفيدين. لكن وجود الحيوية ارتبط بتحسن لاحق بـEF (بدرجة متشابهة سواء CABG أو علاج طبي). <strong>لم يكن هناك ارتباط</strong> بين تحسن EF والوفيات، ولا بين العيوشية والوفيات خلال 10 سنوات.</p>
+    <div class="callout gold">
+      <b>الاستنتاج السريري:</b> بالاعتلال الإقفاري المزمن، تُقدِّم CABG فائدة بتقليل الوفيات بصرف النظر عن اختبار العيوشية أو تحسن EF لاحقًا. لذلك، ESC لا توصي بالعيوشية كشرط لقرار إعادة التروية.
+    </div>
+
+    <h3 class="subhead">أ. تعريف العيوشية واختباراتها</h3>
+    <p>العيوشية = منطقة خلل وظيفي لا تزال نشطة استقلابيًا (سبات Hibernation من إقفار مزمن شديد؛ أو صدمة Stunning بعد نوبة حادة عابرة).</p>
+    <div class="card point-num">
+      <ul>
+        <li><strong>العيوشية الموضعية:</strong> تحسن حركي بدرجة واحدة على الأقل بعد إعادة التروية (Akinesis→Hypokinesis، أو Hypokinesis→طبيعي).</li>
+        <li><strong>العيوشية العامة:</strong> تحسن EF&gt;5% بعد إعادة التروية.</li>
+      </ul>
+      <p style="margin-top:8px">لا تُؤكَّد إلا بأثر رجعي. ~70% من الاعتلال الإقفاري المزمن يُظهر تحسنًا ملحوظًا بعد إعادة التروية (81% بـSTICH).</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>أدوات تقييم العيوشية:</strong>
+      <ol style="margin-top:8px">
+        <li><strong>الثاليوم/التكنيشيوم النووي:</strong> امتصاص≥50% بالراحة أو إعادة التوزيع = عيوشة؛ تغير مطلق 12% بإعادة التوزيع كافٍ حتى لو بقي الامتصاص&lt;50%.</li>
+        <li><strong>إيكو الدوبوتامين منخفض الجرعة (&lt;10 ميكروغرام/كغ/د):</strong> تحسن حركي = احتياطي تقلصي. استجابة ثنائية الطور (تحسن ثم تراجع بجرعة أعلى) = مؤشر قوي على العيوشية. أحادية الطور = تدفق غير متأثر، لا فائدة من إعادة التوعية. 25-30% من القطاعات العيوشة لا تُظهر استجابة للدوبوتامين؛ الفحوصات النووية أكثر حساسية (أقل نوعية).</li>
+        <li><strong>PET:</strong> عدم توافق بين انخفاض التروية وارتفاع الامتصاص الأيضي (الغلوكوز) = عيوشية. أعلى حساسية (~90%)، أقل نوعية (~58%).</li>
+        <li><strong>MRI:</strong> LGE&gt;50% من سماكة الجدار = عدم عيوشية (قوي)؛ &lt;25% = عيوشية عالية؛ 25-50% أقل تحديدًا (عادة عيوشة).</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <strong>علامات مساعدة إضافية (محدودة القيمة):</strong>
+      <ol style="margin-top:8px">
+        <li>غياب موجات Q يتنبأ بقوة بالتعافي (لكن وجودها لا ينفي العيوشية — قد تظهر بعضلة خاملة).</li>
+        <li>Hypokinesis لا تعني بالضرورة تعافيًا أعلى من Akinesis (قد تتحسن الأخيرة أكثر مع نخر تحت شغافي محيط بها)؛ لكن Hypokinesis تدل على نسيج حي.</li>
+        <li>عضلة رقيقة لامعة≤5.5 ملم توحي بتليف، لكن 18% من هذه المناطق قد تحتفظ بعيوشية محدودة (MRI) وتستعيد السماكة/التقلص بعد التوعية.</li>
+        <li>توسع LV الشديد (EDV≥ضعف الطبيعي أو LVEDD≥70 ملم) يشير لتليف واسع وإعادة تشكيل سلبية غير قابلة للعكس — إنذار سيء بعد التوعية.</li>
+        <li>دوران جانبي جيد (رتبة 2-3) بشريان مغلق يتنبأ بتعافٍ وظيفي بـ81% من الحالات.</li>
+      </ol>
+    </div>
+
+    <h3 class="subhead">ب. تعريف العيوشية العامة — تفاوت بين الدراسات</h3>
+    <p>STICH: عيوشية≥65% من كل القطاعات (11 من 17، شاملة القطاعات الطبيعية). دراسات أخرى: تركز على القطاعات المختلة وظيفيًا فقط — إن كانت≥25% من حجم LV عيوشة (مثال:≥4 قطاعات مختلة عيوشة)، يُتوقَّع تحسن EF.</p>
+
+    <h3 class="subhead">ج. قيود اختبارات العيوشية</h3>
+    <div class="card">
+      <ul>
+        <li>القيمة التنبؤية 75-80% للنووي وإيكو الدوبوتامين (حساسية/نوعية: نووي~80%/60%؛ دوبوتامين 65%/85%). MRI أكثر موثوقية (حساسية/NPV~90%؛ PPV 60-80%).</li>
+        <li>لا تعريف موحَّد للعيوشية (موضعية لهدف تدخل محدد، أم عامة لتقييم شامل).</li>
+        <li>حتى بغياب أي علامة عيوشية/تحسن EF، تُحسِّن إعادة التوعية الأعراض والوفيات — عبر: تحسين إعادة التشكيل، منع تدهور إضافي، تقليل MI جديد، حفظ منطقة حول الاحتشاء، تقليل اضطرابات النظم.</li>
+      </ul>
+    </div>
+    <div class="callout gold">
+      <b>أكبر فائدة CABG (تحليل فرعي STICH):</b> بالاعتلال الإقفاري الأشد — تخفيض وفيات حتى 29% — يُعرَّف بوجود عاملين من ثلاثة: مرض ثلاثي الأوعية؛ EF&lt;27%؛ LV متوسع مع مؤشر حجم انقباضي نهائي&gt;79 مل/م². يشمل هذا كثيرًا من مرضى العيوشية المحدودة (لأن اعتلالهم أشد أصلاً).
+    </div>
+
+    <h3 class="subhead">د. الإقفار مقابل العيوشية</h3>
+    <p>الإقفار مؤشر تنبؤي أقوى من العيوشية وحدها لاستعادة الوظيفة. بالتصوير النووي: العيوشية = امتصاص ملحوظ بالراحة؛ الإقفار = تفاقم العيب بالجهد مقارنة بالراحة، أو انحرافات ST واضحة. وجود إقفار يعني أن المنطقة عيوشة؛ لكن قد تكون عيوشة دون إقفار.</p>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch2-part2.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 2</a>
+    <a href="practical-ch2-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch2-part4.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 4: العلاج الدوائي الكامل لـHFrEF ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 2، الجزء 3
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

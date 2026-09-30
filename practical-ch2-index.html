@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل 2: قصور القلب — الفهرس | Practical Cardiovascular Medicine | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.8; font-size:16px; padding-bottom:60px;
+  }
+  .theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+    border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+    font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+  .theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:16px 20px; text-align:center;
+  }
+  header.top .eyebrow{color:var(--teal); font-size:12.5px; letter-spacing:.5px; font-weight:600; display:block; margin-bottom:4px;}
+  header.top h1{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  main{max-width:900px; margin:0 auto; padding:28px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(251,191,36,.1), rgba(45,212,191,.04));
+    border:1px solid var(--border); border-radius:16px; padding:24px 26px; margin-bottom:30px;
+  }
+  .hero .num{
+    width:48px; height:48px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center; margin-bottom:12px;
+  }
+  .hero h2{margin:4px 0 8px; font-size:22px; color:var(--text);}
+  .hero p{color:var(--text-dim); font-size:14px; margin:0; line-height:1.8;}
+
+  .group-title{
+    color:var(--gold); font-size:14px; font-weight:700; margin:30px 0 14px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .group-title::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  .grid{display:grid; grid-template-columns:1fr; gap:12px;}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    padding:16px 18px; display:flex; align-items:flex-start; gap:14px;
+    text-decoration:none; color:var(--text); transition:.2s;
+  }
+  a.card:hover{border-color:var(--teal); transform:translateY(-2px); box-shadow:0 8px 20px -8px rgba(0,0,0,.4);}
+  .card.disabled{opacity:.55; cursor:default;}
+
+  .num{
+    flex:0 0 auto; width:40px; height:40px; border-radius:11px;
+    background:linear-gradient(135deg, rgba(45,212,191,.16), rgba(45,212,191,.04));
+    border:1px solid var(--teal-dim); color:var(--teal); font-weight:700; font-size:15px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card.disabled .num{
+    background:var(--panel2); border-color:var(--border); color:var(--text-dimmer);
+  }
+
+  .ctext{flex:1;}
+  .ctext .ctitle{font-weight:700; font-size:15px; margin-bottom:3px;}
+  .ctext .csub{color:var(--text-dim); font-size:12.5px; line-height:1.6;}
+  .badge{
+    flex:0 0 auto; font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px;
+    white-space:nowrap; align-self:center;
+  }
+  .badge.ready{background:rgba(45,212,191,.15); color:var(--teal);}
+  .badge.soon{background:rgba(148,163,184,.12); color:var(--text-dimmer);}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:50px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+
+<header class="top">
+  <span class="eyebrow">Practical Cardiovascular Medicine</span>
+  <h1>الفصل 2: قصور القلب</h1>
+</header>
+
+<main>
+
+  <div class="hero">
+    <div class="num">2</div>
+    <h2>قصور القلب (Heart Failure)</h2>
+    <p>النص الكامل بحسب الكتاب المصدر، بحروفه وصوره، دون حذف أو تلخيص — قصور القلب المزمن والحاد، اعتلالات عضلة القلب النوعية، قصور القلب المتقدم (الزراعة وLVAD)، والفيزيولوجيا المرضية الأساسية. ✅ الفصل مكتمل بالكامل (23 جزءًا).</p>
+  </div>
+
+  <div class="group-title">أجزاء الفصل</div>
+  <div class="grid">
+
+    <a class="card" href="practical-ch2-part1.html">
+      <div class="num">1</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 1 — التعريف، الأعراض والعلامات، وHFpEF</div>
+        <div class="csub">تعريف قصور القلب، الاحتقان سريريًا وشعاعيًا، تشخيص HFpEF (الشكلان 4.1، 4.2)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part2.html">
+      <div class="num">2</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 2 — أسباب DCM وHFpEF، قصور القلب الأيمن</div>
+        <div class="csub">DCM كاملاً، آليات HFpEF، RCM والداء النشواني، OSA، تسرع القلب (الشكل 4.3)، قصور RV</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part3.html">
+      <div class="num">3</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 3 — الفحوصات التشخيصية الكاملة، ودراسة STICH</div>
+        <div class="csub">BNP بالتفصيل، ECG، القسطرة واختبارات الإقفار، اختبار الجهد الانبساطي، الخزعة، MRI، STICH والعيوشية</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part4.html">
+      <div class="num">4</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 4 — إعادة التروية، آليات إعادة التشكيل، وACE-I/حاصرات بيتا</div>
+        <div class="csub">الشكلان 4.4، 4.5، الأدوية الست المؤثرة على البقاء، ACE-I/ARB وحاصرات بيتا بالتفصيل الكامل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part5.html">
+      <div class="num">5</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 5 — مضادات الألدوستيرون، ARNI، الهيدرالازين-النترات، وبداية المدرات</div>
+        <div class="csub">تتمة حاصرات بيتا العملية، PARADIGM-HF، A-HeFT، عتبة المدر والشكل 4.6</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part6.html">
+      <div class="num">6</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 6 — الديجوكسين، إيفابرادين، SGLT-2، والأجهزة (ICD/CRT)</div>
+        <div class="csub">تتمة المدرات العملية، الديجوكسين الكامل، SHIFT trial، DAPA-HF، ICD وCRT بالتفصيل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part7.html">
+      <div class="num">7</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 7 — نهاية علاج HFrEF، التنبؤ بالخطر، وعلاج HFpEF الكامل</div>
+        <div class="csub">مضادات التخثر، النوم والحديد، عوامل التنبؤ، علاج HFpEF الكامل (TOPCAT، CHARM-Preserved، فيريسيغوات)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part8.html">
+      <div class="num">8</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 8 — قصور القلب الحاد: المتلازمات، المحفزات، والأنماط السريرية</div>
+        <div class="csub">3 متلازمات حضور، محفزات التدهور الكاملة، الشكل 4.7، الأنماط الديناميكية الثلاثة، علاج المحفزات</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part9.html">
+      <div class="num">9</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 9 — المدرات الحادة بالتفصيل الكامل، ومتلازمة القلب-الكلى</div>
+        <div class="csub">بروتوكول الجرعة العتبية، الحصار المتسلسل للنفرون، الآثار الاستقلابية، الآليات الخمس لمتلازمة القلب-الكلى</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part10.html">
+      <div class="num">10</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 10 — الشكل 4.8، أهمية إزالة الاحتقان، والترشيح فوق الطبيعي</div>
+        <div class="csub">أنواع متلازمة القلب-الكلى الخمسة، تجربة DOSE، CARRESS-HF، التسريب المستمر مقابل البلعات</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part11.html">
+      <div class="num">11</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 11 — مقاومة المدرات، الموسِّعات، والإينوتروبات</div>
+        <div class="csub">آليات مقاومة المدرات، الموسِّعات الحادة، دوبوتامين/ميلرينون/ليفوزيميندان (الشكل 4.9)، ACE-I/حاصرات بيتا بالمستشفى</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part12.html">
+      <div class="num">12</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 12 — خلاصة العلاج، معايير الخروج، والمراقبة الخارجية (نهاية قسم HF الحاد)</div>
+        <div class="csub">ESCAPE trial، الجدول 4.2، معايير الخروج الكاملة، ADHERE، CardioMEMS/CHAMPION</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part13.html">
+      <div class="num">13</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 13 — ملحق: قصور البطين الأيمن الكامل (تشريح، فيزيولوجيا، علاج)</div>
+        <div class="csub">TAPSE/S'، PAPi، RV-PA coupling، الترابط البطيني، الشكل 4.10، علاج RV الحاد بالتفصيل الكامل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part14.html">
+      <div class="num">14</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 14 — أسئلة مراجعة شاملة (1-24 من 38)</div>
+        <div class="csub">حالات سريرية متكاملة: HFpEF، RV، التهاب عضلة القلب، النشواني، إدارة الأدوية أثناء ADHF</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part15.html">
+      <div class="num">15</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 15 — نهاية الأسئلة (25-38)، واعتلال عضلة القلب بسبب اضطراب النظم</div>
+        <div class="csub">Takotsubo، فابري، ساركويد؛ ثم 4 أنواع كاملة: تسرع القلب، PVC، AF، LBBB</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part16.html">
+      <div class="num">16</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 16 — التهاب عضلة القلب الفيروسي، الحمضي، HIV، شاغاس، الساركويد، وLVNC</div>
+        <div class="csub">أنواع الالتهاب الفيروسي الكاملة، خصائص كل اعتلال نوعي، دواعي ICD بالساركويد بالتفصيل</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part17.html">
+      <div class="num">17</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 17 — نهاية Takotsubo، والداء النشواني القلبي الكامل</div>
+        <div class="csub">أنواع النشواني الثلاثة (AL/TTR الوراثي/TTR البري)، التشخيص الكامل، الشكل 5.1</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part18.html">
+      <div class="num">18</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 18 — علاج النشواني، اعتلالات ارتشاحية أخرى، وبداية HF المتقدم</div>
+        <div class="csub">Tafamidis/ATTR-ACT، فابري، Loeffler، مراحل HF A-D، بداية زراعة القلب</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part19.html">
+      <div class="num">19</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 19 — زراعة القلب الكاملة، وأجهزة المساعدة البطينية (LVAD)</div>
+        <div class="csub">معايير VO2، الموانع، الرفض وCAV، أنواع/أجيال LVAD، REMATCH وMOMENTUM 3</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part20.html">
+      <div class="num">20</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 20 — دواعي LVAD، الجوانب التقنية، والمضاعفات</div>
+        <div class="csub">مؤشرات خطر فشل RV بعد الزرع، Power/PI/Flow، شفط LV، Ramp Test، المضاعفات الكاملة</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part21.html">
+      <div class="num">21</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 21 — نهاية LVAD، وملحق الفيزيولوجيا الأساسية (الضغط الانبساطي والعبء البعدي)</div>
+        <div class="csub">الشكلان 5.2 و5.3، S3/S4، قانون لابلاس، منحنى فرانك-ستارلينغ</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part22.html">
+      <div class="num">22</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 22 — محددات النتاج، الاستنتاجات العلاجية، ومعدل القلب الأمثل</div>
+        <div class="csub">الأشكال 5.4-5.6، PCWP الأهداف العلاجية، فشل انقباضي مقابل انبساطي</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+    <a class="card" href="practical-ch2-part23.html">
+      <div class="num">23</div>
+      <div class="ctext">
+        <div class="ctitle">الجزء 23 (الأخير) — حلقات الضغط-الحجم، خصائص HFpEF الإضافية، HF عالي النتاج، وأسئلة ختامية</div>
+        <div class="csub">الشكل 5.7 (Ees)، PH غير المتناسب، اعتلال الأذين، 18 حالة سريرية ختامية (نشواني، LVAD، PVC)</div>
+      </div>
+      <span class="badge ready">متاح</span>
+    </a>
+
+  </div>
+
+  <div class="hero" style="margin-top:30px; text-align:center;">
+    <div style="font-size:24px;">🎉</div>
+    <h2 style="font-size:18px;">الفصل 2 مكتمل بالكامل — 23 جزءًا</h2>
+    <p>قصور القلب، بحروفه وصوره كاملة (17 صورة) — التعريف والتشخيص، الأسباب، العلاج المزمن (HFrEF وHFpEF)، قصور القلب الحاد، اعتلالات عضلة القلب النوعية، قصور القلب المتقدم (الزراعة وLVAD)، والفيزيولوجيا المرضية الأساسية.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <a href="practical-index.html" style="color:var(--gold); text-decoration:none; font-weight:600;">↩ فهرس Practical Cardiovascular Medicine</a>
+    <br><br>
+    <span class="brand">CardioArab</span> — مرجع طب القلب باللغة العربية
+  </footer>
+
+</main>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script src="notes.js"></script>
+</body>
+</html>

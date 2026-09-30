@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Cardiovascular Medicine — الفصل 1 (الجزء 1): المتلازمة الإكليلية الحادة | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#556070; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%);
+    color:var(--text); font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif;
+    line-height:1.9; font-size:16px; padding-bottom:60px;
+  }
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    transition:padding .25s ease;
+  }
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .chapno{
+    background:linear-gradient(135deg,var(--teal),#14b8a6);
+    color:#04211d; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;
+  }
+  .toc-toggle{
+    background:var(--panel); border:1px solid var(--border); color:var(--gold);
+    padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toc-toggle:hover{border-color:var(--gold);}
+  #tocPanel{
+    position:fixed; top:0; left:0; height:100%; width:300px; max-width:84vw;
+    background:var(--panel2); border-left:1px solid var(--border);
+    transform:translateX(-105%); transition:transform .3s ease; z-index:60;
+    overflow-y:auto; padding:20px 16px 40px;
+  }
+  #tocPanel.open{transform:translateX(0);}
+  #tocPanel h3{color:var(--gold); font-size:14px; margin:0 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px;}
+  #tocPanel .chgroup{margin-bottom:6px;}
+  #tocPanel .chtitle{
+    color:var(--text); font-weight:700; font-size:13.5px; padding:8px 10px;
+    background:rgba(45,212,191,.06); border-radius:8px; margin-bottom:2px; display:block;
+  }
+  #tocPanel a{
+    display:block; color:var(--text-dim); text-decoration:none; font-size:13px;
+    padding:7px 10px 7px 10px; border-radius:8px; margin-bottom:1px; margin-right:8px;
+  }
+  #tocPanel a:hover, #tocPanel a.active{background:rgba(45,212,191,.12); color:var(--teal);}
+  #overlay{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  #overlay.show{display:block;}
+
+  main{max-width:840px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{
+    background:linear-gradient(135deg, rgba(45,212,191,.08), rgba(251,191,36,.04));
+    border:1px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:28px;
+  }
+  .hero .authors{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .hero .section-tag{color:var(--teal); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:24px; color:var(--text);}
+
+  .chapter-divider{
+    display:flex; align-items:center; gap:14px; margin:50px 0 24px;
+    scroll-margin-top:90px;
+  }
+  .chapter-divider .num{
+    flex:0 0 auto; width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg, rgba(251,191,36,.16), rgba(251,191,36,.04));
+    border:1px solid rgba(251,191,36,.4); color:var(--gold); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chapter-divider .txt .eyebrow{color:var(--teal); font-size:12px; font-weight:600; letter-spacing:.4px;}
+  .chapter-divider .txt h2{margin:2px 0 0; font-size:21px; color:var(--text);}
+  .chapter-divider .txt .authors{color:var(--text-dimmer); font-size:13px; margin-top:3px;}
+
+  .topic-divider{
+    margin:44px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--teal-dim);
+  }
+  .topic-divider .tnum{color:var(--gold); font-size:13px; font-weight:700; letter-spacing:.4px;}
+  .topic-divider h2{margin:4px 0 0; font-size:19px; color:var(--text);}
+
+  section.roman{margin:36px 0; scroll-margin-top:90px;}
+  .roman-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .roman-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--teal-dim);
+    color:var(--teal); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .roman-head h2{font-size:19px; margin:0; color:var(--text); font-weight:700;}
+
+  h3.subhead{
+    color:var(--gold); font-size:16.5px; margin:22px 0 10px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.subhead::before{content:""; width:4px; height:16px; background:var(--gold); border-radius:2px; display:inline-block;}
+
+  h4.subsub{color:var(--teal); font-size:15px; margin:16px 0 6px; font-weight:600;}
+
+  p{color:var(--text); margin:10px 0; text-align:justify;}
+  p.dim, li.dim{color:var(--text-dim);}
+
+  ul, ol{padding-inline-start:22px; margin:10px 0;}
+  li{margin-bottom:8px; color:var(--text);}
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; margin:14px 0;
+  }
+  .card.point-num{border-inline-start:3px solid var(--teal);}
+
+  .pill-list{list-style:none; padding:0; margin:10px 0;}
+  .pill-list li{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .pill-list li::before{content:"◆"; color:var(--teal); font-size:11px; margin-top:5px;}
+
+  table{
+    width:100%; border-collapse:collapse; margin:16px 0;
+    background:var(--panel); border-radius:10px; overflow:hidden;
+    border:1px solid var(--border); font-size:14.5px;
+  }
+  thead th{
+    background:linear-gradient(135deg, rgba(45,212,191,.18), rgba(45,212,191,.06));
+    color:var(--teal); font-weight:700; padding:10px 12px; text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+  .tbl-caption{
+    font-size:13px; color:var(--text-dimmer); margin:-8px 0 14px; line-height:1.7;
+  }
+  .tbl-num{color:var(--gold); font-weight:700;}
+
+  figure{margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center;}
+  figure img{max-width:100%; border-radius:8px; background:#e9e9e9;}
+  figcaption{color:var(--text-dim); font-size:13px; margin-top:10px; text-align:right; line-height:1.7;}
+  figcaption .fig-num{color:var(--gold); font-weight:700;}
+
+  .fig-grid{display:grid; grid-template-columns:1fr; gap:14px;}
+  @media(min-width:560px){ .fig-grid.two{grid-template-columns:1fr 1fr;} }
+
+  .callout{
+    border-radius:12px; padding:14px 16px; margin:16px 0; border:1px solid; font-size:14.5px;
+  }
+  .callout.warn{background:rgba(248,113,113,.08); border-color:rgba(248,113,113,.35); color:#fca5a5;}
+  .callout.info{background:rgba(45,212,191,.08); border-color:rgba(45,212,191,.35); color:#7fe8dc;}
+  .callout.gold{background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.35); color:#fcd34d;}
+  .callout b{color:inherit;}
+  html[data-theme="light"] .callout.warn{background:rgba(220,38,38,.08); color:#b91c1c;}
+  html[data-theme="light"] .callout.info{background:rgba(13,148,136,.08); color:#0f766e;}
+  html[data-theme="light"] .callout.gold{background:rgba(217,119,6,.1); color:#92400e;}
+
+  .abbr{color:var(--text-dimmer); font-size:13px; border-top:1px dashed var(--border); margin-top:10px; padding-top:8px;}
+
+  .refs{
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-top:40px;
+  }
+  .refs h3{color:var(--gold); font-size:15px; margin-top:0;}
+  .refs ul{padding-inline-start:18px;}
+  .refs li{color:var(--text-dimmer); font-size:12.5px; margin-bottom:8px; text-align:left; direction:ltr;}
+
+  footer.pagefoot{
+    text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+  }
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{
+    position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%;
+    background:var(--teal); color:#04211d; border:none; font-size:18px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,212,191,.35); display:none; align-items:center; justify-content:center; z-index:40;
+  }
+  #backTop.show{display:flex;}
+
+  strong{color:var(--gold);}
+  em.trial{color:var(--teal); font-style:normal; font-weight:600;}
+
+  header.top{transition:padding .25s ease, transform .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="practical-ch1-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس الفصل 1</a>
+
+<div id="overlay" onclick="toggleToc(false)"></div>
+<nav id="tocPanel">
+  <h3>الفصل 1 — الجزء 18</h3>
+  <div class="chgroup">
+    <span class="chtitle">القسم 3: CAD المزمن (تابع)</span>
+    <a href="#c1t3s9">IX. مقارنة PCI وCABG</a>
+    <a href="#c1t3s10">X-XIII. الخطورة الجراحية، الهجينة، EECP</a>
+    <a href="#c1t3s14">XIV. الوفيات</a>
+  </div>
+  <div class="chgroup">
+    <a href="practical-ch1-part17.html">→ الجزء 17</a>
+    <a href="practical-ch1-index.html" style="font-weight:700;color:var(--gold);">↩ فهرس الفصل الكامل</a>
+    <a href="practical-ch1-part19.html">الجزء 19 (الأخير) ←</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">Practical Cardiovascular Medicine — الفصل الأول (الجزء 18)</span>
+    <h1>المتلازمة الإكليلية الحادة</h1>
+  </div>
+  <span class="chapno">1</span>
+  <button class="toc-toggle" onclick="toggleToc(true)">☰ الفهرس</button>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="section-tag">CardioArab — Practical Cardiovascular Medicine</span>
+    <h2>الفصل 1: المتلازمة الإكليلية الحادة — الجزء 18</h2>
+  </div>
+
+  <!-- ============ IX. PCI vs CABG ============ -->
+  <section class="roman" id="c1t3s9">
+    <div class="roman-head"><div class="roman-badge">IX</div><h2>مقارنة PCI مقابل CABG بمرض متعدد الأوعية ومرض الرئيسي الأيسر</h2></div>
+
+    <div class="card">
+      <strong>الجدول 3.3 — أسباب تفوق CABG على PCI:</strong>
+      <ol style="margin-top:8px">
+        <li>نجاح CABG يتأثر بدرجة أقل بكثير بتعقيد التشريح الوعائي (CTO، انتشار المرض).</li>
+        <li>بينما PCI يعالج المرض البؤري فقط، الطعم الجراحي يُحسِّن الجريان لكامل الإقليم التاجي، بما فيه المقاطع ذات المرض المنتشر المعتدل، ويوفر حماية من MI الناتج عن الإغلاق الحاد بأول 6-8 سم من الشريان (حيث تحدث معظم تمزقات اللويحة).</li>
+        <li>عمر افتراضي طويل جدًا لطعم LIMA.</li>
+        <li>إعادة تروية أكثر شمولية؛ الأوعية ذات CTO تُترك أحيانًا دون علاج باستراتيجية PCI متعددة الأوعية.</li>
+      </ol>
+    </div>
+
+    <h3 class="subhead">نتائج الدراسات الكبرى</h3>
+    <p><strong>BARI وARTS (عصر البالون/BMS):</strong> بمرضى منتقَين جدًا ذوي CAD متعدد البؤر، قلَّل CABG الوفيات بنسبة مطلقة 16% خلال 5 سنوات بمرضى السكري (BARI)، وقلَّل الحاجة لإعادة التوعية بشكل كبير (ARTS)، رغم انتقاء حذر جدًا (&lt;10% من المفحوصين وُزِّعوا عشوائيًا).</p>
+    <p><strong>مرض LAD القريب المعزول:</strong> تحليل تلوي لم يُظهر فرقًا بالوفيات، لكن تكرار التوعية كان أقل بكثير مع CABG (عصر ما قبل DES).</p>
+
+    <div class="card point-num">
+      <strong>دراسة SYNTAX (عصر DES):</strong>
+      <p style="margin-top:8px">وزَّعت مرضى ثلاثي الأوعية و/أو رئيسي أيسر بين CABG وPCI مع DES. <strong>نتائج 5 سنوات:</strong> CABG خفَّض MI (~10% مقابل 4%) وإعادة التوعية (26% مقابل 14%)؛ لا فرق بالوفيات الكلية (13.9% مقابل 11.4%)؛ لكن بـSYNTAX عالٍ (&gt;32)، خفَّض CABG الوفيات بنسبة مطلقة 8%. بـSYNTAX منخفض (≤22)، كانت المعدلات متقاربة سواء بثلاثي الأوعية أو الرئيسي الأيسر. بوفيات 5-10 سنوات: تعادل CABG وPCI بمرضى الرئيسي الأيسر؛ لكن CABG خفَّض الوفيات بثلاثي الأوعية بدون رئيسي أيسر. نتائج CABG لم تتأثر بـSYNTAX score، بعكس PCI المتأثر بشدة بتعقيد التشريح. العيب الوحيد لـCABG: سكتة دماغية مبكرة أعلى (2.2% مقابل 0.6% بالسنة الأولى).</p>
+    </div>
+
+    <div class="card">
+      <strong>حساب SYNTAX score:</strong> رقم لكل موقع تضيق (الرئيسي الأيسر 5، LAD القريب 3.5، LCx القريب 1.5، OM 1، RCA 1) — يُضرب ×2 مع تضيق 50-99%، ×5 مع CTO؛ تُضاف نقاط للتفرعات، الطول، التكلس، وتعقيد CTO.
+    </div>
+
+    <div class="card point-num">
+      <strong>دراسة FREEDOM (مرضى السكري، مرض ثنائي/ثلاثي يشمل LAD):</strong>
+      <p style="margin-top:8px">بـ5 سنوات: CABG خفَّض الوفيات (16.3% مقابل 10.9%) وMI (~14% مقابل 6%)، على حساب سكتة دماغية بعد الجراحة ووفيات جراحية مبكرة طفيفة أعلى. الفائدة ثابتة عبر كل درجات SYNTAX، بما فيها المنخفضة.</p>
+    </div>
+
+    <div class="card point-num">
+      <strong>دراستا EXCEL وNOBLE (مرض الرئيسي الأيسر):</strong>
+      <p style="margin-top:8px">وزَّعتا مرضى الرئيسي الأيسر (81% distal left main، 15-29% سكري، معظمهم SYNTAX≤32) بين CABG وPCI. بعد 5 سنوات، CABG متفوق قليلاً بكلتا الدراستين. <strong>EXCEL:</strong> لا فرق بالمركب النهائي (وفاة/MI/سكتة)، لكن CABG قلَّل الوفيات (13% مقابل 9.9%، لصالح PCI فعليًا هنا حسب الأرقام)، MI غير المرتبط بالإجراء، وإعادة التوعية؛ المركب كان أعلى بـCABG أول 30 يومًا لكن انخفض لاحقًا (تقاطع المنحنيات عند سنة). <strong>NOBLE:</strong> قلَّل CABG النتيجة الأولية (28.9% مقابل 19% — لصالح PCI بالأرقام المذكورة) وMI غير المرتبط بالإجراء، لكن لم يُقلل الوفيات.</p>
+    </div>
+
+    <div class="card">
+      <strong>الخلاصة:</strong> بثلاثي الأوعية، SYNTAX وFREEDOM تدعمان CABG؛ PCI بديل فقط بـSYNTAX≤22 ودون سكري. بمرض الرئيسي الأيسر، EXCEL وNOBLE تدعمان PCI كبديل مناسب حتى بالحالات المعقدة (distal left main) — بل PCI يبدو خيارًا أكثر واقعية بالرئيسي الأيسر مقارنة بثلاثي الأوعية المعقد. <strong>خلاصة مقارنة:</strong> PCI = سكتة مبكرة أقل وMI حول الإجراء أقل؛ لكن MI متأخر وحاجة لإعادة توعية أعلى.
+    </div>
+    <div class="callout warn">
+      <b>محاذير تفسيرية:</b> هذه الدراسات لا تُثبت تفوق CABG بمرضى أكثر مرضًا (كبار السن، سكتة سابقة، عمر متوقع منخفض، خلل LV شديد). بـSYNTAX: المسنون (&gt;70) أظهروا وفيات متماثلة بـCABG وPCI حتى مع SYNTAX مرتفع؛ الأصغر من 70 أظهروا انخفاضًا بالوفيات مع CABG. بـVA-AWESOME (مرضى أكبر سنًا وأكثر مرضًا): بقاء أفضل مع PCI عند 6 أشهر، وتكافؤ عند 5 سنوات. <strong>الاستنتاج العملي:</strong> PCI يبقى مهمًا بالمرضى المرهقين (ill) ذوي خطورة جراحية عالية.
+    </div>
+  </section>
+
+  <!-- ============ X-XIII ============ -->
+  <section class="roman" id="c1t3s10">
+    <div class="roman-head"><div class="roman-badge">X-XIII</div><h2>المرضى عاليو الخطورة الجراحية، إعادة التوعية الكاملة، الاستراتيجية الهجينة، وEECP</h2></div>
+
+    <h3 class="subhead">X. المرضى ذوو الخطورة الجراحية العالية</h3>
+    <p>عند مرض متعدد الأوعية، يُستخدم SYNTAX score لتحديد نتائج PCI المتوقعة، وSTS score أو EuroSCORE لتقييم وفيات الجراحة (الجدول 3.4). متوسط وفيات CABG: 1.5-2%، يرتفع لـ&gt;5% مع: جراحة مزدوجة (CABG+صمام)، إعادة CABG، عمر&gt;80، سكتة معيقة سابقة، مرض رئوي شديد، MI حاد، أو عدم استقرار ديناميكي. <strong>بالخطورة العالية (&gt;5%):</strong> PCI قد يكون أفضل، خصوصًا بالرئيسي الأيسر منخفض SYNTAX (IIa) أو ثلاثي منخفض SYNTAX (IIb). أسباب أخرى لعدم الترشح لـCABG: أوعية صغيرة ومرض منتشر بعيد (خاصة تعذر تطعيم LAD)؛ غياب طعوم مناسبة (دوالي، قصور وريدي).</p>
+
+    <div class="card">
+      <strong>الجدول 3.4 — متغيرات خطورة الجراحة (STS/EuroSCORE):</strong>
+      <p style="margin-top:8px">عوامل المريض: العمر (يتضاعف الخطر كل 10 سنوات فوق 60)؛ الجنس الأنثوي (+50%)؛ COPD متوسط/شديد؛ CKD شديد؛ سكتة/مرض عصبي سابق؛ مرض سباتي/محيطي. وظيفة LV: EF&lt;50% (خفيف)، &lt;30% (شديد)؛ HF فئة IV. جراحات سابقة (خاصة إعادة CABG). نوع الإجراء: CABG معزول &lt; صمام معزول &lt; مزدوج. الحالة الحالية: MI حديث؛ ذبحة غير مستقرة؛ عدم استقرار مع حاجة لـIABP/إينوتروب.</p>
+    </div>
+
+    <h3 class="subhead">XI. إعادة التوعية الوظيفية الكاملة</h3>
+    <p>تُعرَّف بعلاج كل التضيقات المهمة وظيفيًا بأوعية ≥1.5 ملم تغذي عضلة حية. CABG يحقق إعادة توعية أكثر شمولية (67% مقابل 53% بـSYNTAX) لأنه أقل تأثرًا بالتعقيد (CTO). الإعادة غير الكاملة ترتبط بنتائج أسوأ فقط بعد PCI (لا CABG) — قد يعكس بقاء المرض نفسه، أو مؤشرًا على تصلب عصيدي واسع ونشط. مع ذلك، الإفراط بمحاولة إعادة توعية أوعية صغيرة/ضعيفة غير LAD قد يرتبط بنتائج أسوأ ("الإعادة غير الكاملة المعقولة").</p>
+
+    <h3 class="subhead">XII. الاستراتيجية الهجينة (Hybrid CABG-PCI)</h3>
+    <p>تجمع تطعيم LIMA-LAD بجراحة دون مضخة (off-pump)، متبوعًا بـPCI بدعامات DES لبقية التضيقات (نفس الاستشفاء)، مع تحميل كلوبيدوغريل بعد الجراحة. <strong>المزايا:</strong> تجنب التلاعب بالأبهر، وقت جراحي أقصر، فقدان دم أقل، تجنب توقف القلب والدورة الصناعية. <strong>التطبيقات:</strong> أبهر متكلس بشدة (porcelain aorta)؛ أو هدف جيد بـLAD لكن أهداف ضعيفة بـLCx/RCA رغم مرض قريب حرج فيهما (يُعالَج بـPCI).</p>
+
+    <h3 class="subhead">XIII. العلاج بالتضخم الخارجي المعزز (EECP)</h3>
+    <p>أصفاد حول الأطراف السفلية، تنتفخ بالانبساط وتُفرَّغ بالانقباض (يُشبه تأثير IABP) — يُخفِّض العبء اللاحق ويُقلل استهلاك الأكسجين، مع تأثير مستدام مُفترَض على الوظيفة البطانية والدوران الجانبي والإجهاد التأكسدي. البروتوكول: 35 جلسة، ساعة لكل جلسة. الأدلة محدودة لكنها تُشير لتقليل الذبحة وعلامات الإقفار. تصنيف IIb للذبحة المقاومة للعلاج.</p>
+  </section>
+
+  <!-- ============ XIV. الوفيات ============ -->
+  <section class="roman" id="c1t3s14">
+    <div class="roman-head"><div class="roman-badge">XIV</div><h2>الوفيات في مرض الشريان التاجي — مع ملاحظة خاصة على الرئيسي الأيسر</h2></div>
+
+    <p>لم يُقيَّم العلاج الطبي كخيار وحيد لمرض الرئيسي الأيسر بأي تجربة حديثة. بيانات قديمة (VA-CABG، سجل CASS): وفيات مرضى الرئيسي الأيسر غير المعالَجين جراحيًا ~10% سنويًا (بصرف النظر عن الأعراض)؛ بعد CABG، ينخفض لـ2% سنويًا — أكبر انخفاض وفيات تحققه CABG بين كل فئات المرضى.</p>
+
+    <div class="card">
+      <strong>الجدول 3.5 — معدل الوفيات بـCAD:</strong>
+      <p style="margin-top:8px"><strong>بيانات قديمة (CASS، علاج طبي):</strong> وعاء/وعاءين: 1.5-2%/سنة؛ ثلاثي مع EF طبيعي: 4.5%/سنة؛ متعدد الأوعية مع EF&lt;35%: 10%/سنة.</p>
+      <p><strong>بيانات حديثة (COURAGE، BARI 2D-PCI؛ CAD غير واسع):</strong> 1.5%/سنة وفيات؛ 8-10% أحداث بالسنة الأولى ثم 2%/سنة.</p>
+      <p><strong>CAD متعدد مع EF طبيعي (SYNTAX، FREEDOM، BARI 2D-CABG):</strong> 2-3%/سنة (3.5% بالسنة الأولى)؛ 12.5% إجمالي أحداث/وفاة بالسنة الأولى ثم ~3%/سنة (27% CABG مقابل ~37% PCI خلال 5 سنوات بالمرضى المعقدين).</p>
+      <p><strong>متعدد الأوعية مع EF&lt;35% دون HF شديد (STICH):</strong> 6.5%/سنة مع CABG؛ 8%/سنة مع العلاج الطبي.</p>
+      <p class="tbl-caption">معدل الوفيات أعلى مع: ACS، EF منخفض، HF عرضي، وأمراض مرافقة.</p>
+    </div>
+
+    <div class="card">
+      <strong>الجدول 3.6 — أسباب وفيزيولوجيا فشل الطعوم الوريدية (SVG):</strong>
+      <p style="margin-top:8px">🕐 <strong>&lt;شهر:</strong> تخثر الطعم (غالبًا قبل الخروج) — بسبب مرض بعيد بعد المفاغرة، أو مشاكل تقنية (تضيق المفاغرة، انثناء/شد الطعم).</p>
+      <p>🕑 <strong>شهر-3 سنوات:</strong> فرط التنسج الليفي البطني — أذية بطانية من الضغط الشرياني على الوريد.</p>
+      <p>🕒 <strong>&gt;1-3 سنوات:</strong> تصلب عصيدي (عوامل خطورة مشابهة للأوعية الأصلية)، لكنه أكثر انتشارًا وهشاشة بـSVG (خلايا رغوية أكثر، بلا غطاء ليفي، قد يختلط بخثرات). خفض الدهون العدواني يُبطئ العملية.</p>
+      <p class="tbl-caption">معدلات انسداد SVG: ~10% بالشهر الأول؛ 15-25% بالسنة الأولى؛ 2-4%/سنة بعدها. بعد 10 سنوات، 50% من طعوم SVG مسدودة.</p>
+    </div>
+  </section>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:50px 0 20px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:14px; gap:10px; flex-wrap:wrap;">
+    <a href="practical-ch1-part17.html" style="color:var(--text-dim); text-decoration:none; font-size:14px;">→ الجزء 17</a>
+    <a href="practical-ch1-index.html" style="color:var(--text-dim); text-decoration:none; font-size:13px;">↩ فهرس الفصل</a>
+    <a href="practical-ch1-part19.html" style="color:var(--teal); text-decoration:none; font-weight:700; font-size:14.5px;">الجزء 19 (الأخير): الملاحق وأسئلة المراجعة ←</a>
+  </div>
+
+  <footer class="pagefoot">
+    <span class="brand">CardioArab</span> — Practical Cardiovascular Medicine — الفصل 1، الجزء 18
+  </footer>
+
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(async function(){
+  if (typeof session === 'undefined') return;
+  if (!session.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+  const ok = await session.isSubscribed();
+  if (!ok) {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
+      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '</div>';
+  }
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function updateIcon(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+    toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+    updateIcon();
+  });
+});
+</script>
+<script>
+function toggleToc(show){
+  var panel = document.getElementById('tocPanel');
+  var overlay = document.getElementById('overlay');
+  if(!panel) return;
+  if(show){
+    panel.classList.add('open');
+    if(overlay) overlay.classList.add('show');
+  } else {
+    panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('show');
+  }
+}
+</script>
+<script src="notes.js"></script>
+</body>
+</html>
