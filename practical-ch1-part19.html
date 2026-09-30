@@ -223,6 +223,53 @@
   header.top.shrink .eyebrow{font-size:10px;}
   header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
 </style>
+
+<style id="ca-chq-style">
+/* ===== Interactive closing quiz (chapters) ===== */
+:root{--ok:#22c55e;--ok-bg:rgba(34,197,94,.12);--bad:#ef4444;--bad-bg:rgba(239,68,68,.12);--qgold-dim:rgba(251,191,36,.45);}
+:root[data-theme="light"]{--ok:#15803d;--ok-bg:rgba(21,128,61,.10);--bad:#b91c1c;--bad-bg:rgba(185,28,28,.09);--qgold-dim:rgba(168,121,31,.5);}
+#qbBar{position:sticky;top:62px;z-index:45;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:6px 14px;margin:18px 0 14px;box-shadow:0 4px 12px rgba(0,0,0,.18);}
+#qbBar .qb-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;}
+#qbBar .qb-stats{display:flex;gap:14px;align-items:center;white-space:nowrap;}
+#qbBar b{font-weight:800;}
+#qbBar .qb-ok{color:var(--ok);} #qbBar .qb-bad{color:var(--bad);} #qbBar .qb-pct{color:var(--gold);}
+#qbBar .qb-prog{margin-top:5px;height:5px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;overflow:hidden;display:flex;}
+#qbBar .qb-prog i{display:block;height:100%;width:0;transition:width .25s;}
+#qbBar .qb-prog .f-ok{background:var(--ok);} #qbBar .qb-prog .f-bad{background:var(--bad);} #qbBar .qb-prog .f-neu{background:var(--qgold-dim);}
+#qbReset{background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:3px 12px;white-space:nowrap;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;}
+#qbReset:hover{border-color:var(--gold);color:var(--gold);}
+.qblock{scroll-margin-top:130px;}
+.qblock .qhead{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.qblock .qnum{background:var(--gold);color:#111;font-weight:800;font-size:12.5px;border-radius:8px;padding:2px 10px;}
+.qblock .qhint{font-size:12px;color:var(--text-dim);}
+.qblock .qstatus{margin-inline-start:auto;font-size:12.5px;font-weight:700;}
+.qblock.is-ok .qstatus{color:var(--ok);} .qblock.is-bad .qstatus{color:var(--bad);}
+.qblock .qstem{line-height:1.95;}
+.qopts{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.qopt{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:right;background:var(--panel2);border:1.5px solid var(--border);color:var(--text);border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit;font-size:14.6px;line-height:1.8;transition:border-color .15s,background .15s;}
+.qopt:hover:not(:disabled){border-color:var(--qgold-dim);}
+.qopt .qol{flex:none;width:26px;height:26px;border-radius:50%;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12.5px;color:var(--gold);margin-top:2px;}
+.qopt .qot{flex:1;}
+.qopt.sel{border-color:var(--gold);background:rgba(251,191,36,.10);}
+.qopt:disabled{cursor:default;}
+.qopt.is-right{border-color:var(--ok);background:var(--ok-bg);}
+.qopt.is-right .qol{background:var(--ok);border-color:var(--ok);color:#fff;}
+.qopt.is-right .qot::after{content:" ✓";color:var(--ok);font-weight:800;}
+.qopt.is-wrong{border-color:var(--bad);background:var(--bad-bg);}
+.qopt.is-wrong .qol{background:var(--bad);border-color:var(--bad);color:#fff;}
+.qopt.is-wrong .qot::after{content:" ✗";color:var(--bad);font-weight:800;}
+.qopt.is-missed{border:1.5px dashed var(--ok);background:transparent;}
+.qopt.is-missed .qol{border-color:var(--ok);color:var(--ok);}
+.qopt.is-missed .qot::after{content:" ← الصحيحة";color:var(--ok);font-weight:700;font-size:12.5px;}
+.qact{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.qbtn{background:var(--teal);color:#04211d;border:0;border-radius:9px;padding:8px 18px;cursor:pointer;font:inherit;font-weight:700;font-size:14px;}
+.qbtn:disabled{opacity:.45;cursor:not-allowed;}
+.qbtn.okb{background:var(--ok);color:#fff;} .qbtn.badb{background:var(--bad);color:#fff;}
+.qans[hidden]{display:none;}
+.qans{margin-top:12px;border-top:1px dashed var(--border);padding-top:10px;}
+.qrate{margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--text-dim);}
+@media (max-width:600px){#qbBar{padding:5px 10px;} #qbBar .qb-row{font-size:12.5px;} #qbBar .qb-stats{gap:10px;} #qbReset .rs-t{display:none;} #qbReset{padding:2px 10px;font-size:15px;} .qopt{padding:9px 10px;font-size:14.2px;}}
+</style>
 </head>
 <body>
 <button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
@@ -382,123 +429,256 @@
   </section>
 
   <!-- ============ Final Q&A ============ -->
-  <section class="roman" id="c1t3qa">
+  <div id="qbBar">
+  <div class="qb-row">
+    <div class="qb-stats">
+      <span title="الأسئلة المُجابة">المُجاب <b id="qbDone">0</b>/<b id="qbTot">0</b></span>
+      <span class="qb-ok" title="إجابات صحيحة">✔ <b id="qbOk">0</b></span>
+      <span class="qb-bad" title="إجابات خاطئة">✖ <b id="qbBad">0</b></span>
+      <span class="qb-pct" title="الدقة"><b id="qbPct">—</b></span>
+    </div>
+    <button id="qbReset" type="button" title="تصفير العداد وكل الإجابات" aria-label="تصفير">↺<span class="rs-t"> تصفير</span></button>
+  </div>
+  <div class="qb-prog"><i id="qbFOk" class="f-ok"></i><i id="qbFBad" class="f-bad"></i><i id="qbFNeu" class="f-neu"></i></div>
+</div>
+
+<section class="roman" id="c1t3qa">
     <div class="roman-head"><div class="roman-badge">؟</div><h2>أسئلة ختامية — مرض الشريان التاجي المزمن (23 سؤالًا)</h2></div>
-
-    <div class="card point-num">
-      <strong>السؤال 1:</strong> رجل 67 عامًا، ارتفاع ضغط وسكري، ذبحة جهدية (CCS III) منذ 3-4 أشهر، تخف بالراحة/NTG. عرج متقطع بالطرف السفلي الأيسر، لا نبضات بعيدة. ECG: LVH مع انخفاض ST 0.5 ملم. ما الخطوة التالية؟ <br>A. قسطرة تاجية. B. اختبار جهد ECG. C. اختبار جهد SPECT. D. أدينوزين SPECT.
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> حسب Hubbard، خطر المريض &gt;40% لمرض تاجي شديد نظرًا للعمر، الجنس، السكري، الذبحة النمطية، ووجود PAD (مؤشر إضافي على شدة CAD). شدة الذبحة تزيد الحاجة لقسطرة تشخيصية وربما إعادة توعية مباشرة.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 2:</strong> رجل 67 عامًا، دعامة LAD منذ سنتين، ذبحة خفيفة بجهد شديد (CCS I). أتينولول+أملوديبين+أسبرين+أتورفاستاتين. اختبار جهد: 8 دقائق، DTS=+4، إقفار قمي-جانبي صغير (مجموع درجة+3). القسطرة: 60% LCx القريب، 30% LAD، 40% RCA. ما الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D.</strong> مريض نموذجي لتجربة COURAGE — ذبحة خفيفة، قدرة وظيفية جيدة، اختبار جهد منخفض الخطورة. العلاج الدوائي وحده يكافئ PCI+علاج دوائي ما لم تستمر الأعراض؛ عندها يدعم تحليل COURAGE الفرعي استخدام PCI لتقليل الأعراض. لا حاجة لـFFR هنا لأن الإقفار بمنطقة LCx مثبت فعلاً بالتصوير النووي.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 3:</strong> رجل 76 عامًا، ذبحة بنشاط شديد، إقفار أمامي خفيف-متوسط، تضيق 80% منتصف LAD. ما الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> باستثناء الرئيسي الأيسر، المريض بذبحة مستقرة خفيفة يُعالَج بالعلاج الدوائي فقط بصرف النظر عن شدة الإقفار. تجربة MASS: لتضيق LAD معزول (&gt;80%)، لا فرق بالوفيات بين CABG وPCI والعلاج الطبي، لكن تحسن أعراض أكبر مع CABG.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 4:</strong> نفس السيناريو، لكن إقفار أمامي شديد وتضيق 80% بالجزء القريب من LAD. ما الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> مريض بذبحة خفيفة دون قيود وظيفية شديدة لا يحتاج إعادة توعية (نمط ISCHEMIA وCOURAGE وMASS). فائدة إعادة التوعية بـCAD المستقر عرضية فقط، ومحدودة إن لم تكن الأعراض شديدة/مقاومة.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 5:</strong> رجل 76 عامًا، ذبحة بجهد شديد فقط. إقفار أمامي متوسط. القسطرة: 80% LAD القريب، 75% RCA، 75% LCx (ثلاثي الأوعية). ما الخطوة؟ <br>A. علاج طبي. B. PCI. C. CABG. D. A أو C. E. B أو C.
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D.</strong> مرض ثلاثي الأوعية (&gt;70%) يجعل إعادة التوعية مقبولة (خاصة CABG بالتجارب القديمة)، لكن حسب ISCHEMIA وBARI 2D ليست ضرورية دومًا إن لم توجد أعراض شديدة أو اختبار جهد عالي الخطورة. ملاحظة: اختبار الجهد قد يستهين بشدة الإقفار الحقيقي (المقارنة بأفضل منطقة إرواء). إن تقررت إعادة التوعية، يُفضَّل FFR لـRCA وLCx بدقة.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 6:</strong> رجل 47 عامًا، لاعرضي، بدأ رياضة، اختبار جهد طلبه طبيب العائلة: 5 دقائق، انخفاض ST 1.5 ملم بلا ألم. تصوير نووي: عيب انعكاسي واسع أمامي-جانبي، EF طبيعي، TID طبيعي. ما الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D (B أو C).</strong> قد يكون مؤهلاً لإعادة توعية إذا وُجد مرض ثلاثي أو ثنائي يشمل LAD القريب (بالتجارب القديمة). CTA بديل مناسب للقسطرة حتى بعد اختبار جهد عالي الخطورة (ISCHEMIA). رغم التساؤل حول قيمة فحص مريض لاعرضي، استبعاد الرئيسي الأيسر يصبح معقولاً بعد إثبات إقفار.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 7:</strong> رجل 56 عامًا، ذبحة CCS III، بلا علاج مضاد للذبحة. إقفار سفلي شديد. CTO بـRCA (غير متكلس، طوله 2 سم — خصائص مناسبة). صح أم خطأ: PCI غير مناسب لأن المريض لا يتلقى أقصى علاج طبي؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ صحيح.</strong> PCI بـCTO أكثر تعقيدًا (مضاعفات 2-3 أضعاف)؛ يُوصى به فقط بذبحة شديدة مقاومة للعلاج الدوائي، ويُفضَّل خصائص تشريحية مناسبة (طول&lt;2سم، غياب تكلس شديد، طرف قريب جيد).</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 8:</strong> امرأة 50 عامًا مدخنة، ألم صدري متغير (جهد/راحة، ~45 دقيقة). ضغط 160/95، نبض 78. اختبار جهد نووي: 5 دقائق، بلا ألم، بلا تغيّر ST. عيب انعكاسي واسع أمامي، مجموع درجة+10. تفضل العلاج الطبي أولاً. الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة B.</strong> DTS=+5 (خطر منخفض) لكن هذا لا ينفي CAD خطيرًا (10% من DTS المنخفض لديهم رئيسي أيسر/ثلاثي). نتيجة التصوير عالية الخطورة تتفوق على DTS المنخفض. ابدأ أسبرين+ستاتين+β-blocker+أملوديبين، ويُوصى بـCTA لأن الخطر السنوي&gt;5%.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 9:</strong> رجل 65 عامًا سكري، سيخضع لاستئصال مرارة اختياري. ضيق نفس خفيف (&gt;4 METs)، لا ذبحة. SPECT: إقفار سفلي شديد، EF طبيعي. القسطرة: 80% منتصف RCA. الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A أو B</strong> (حسب تقدير الخطورة الجراحية). لا أعراض ذبحة واضحة؛ إعادة التوعية قبل الجراحة لا تُقلل مضاعفات القلب بعدها إلا بالرئيسي الأيسر أو ثلاثي شامل. التوصية: ستاتين وحاصر بيتا قبل الجراحة بأسبوع+، مع مراقبة دقيقة أثناء وبعدها.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 10:</strong> امرأة 58 عامًا، ألم بالجهد والتوتر. اختبار جهد: ألم شديد+ارتفاع ST سفلي+NSVT، زال خلال 5 دقائق راحة. القسطرة: تضيق ناعم 80% منتصف RCA، تحسَّن لـ25% بعد NTG. الإنذار والعلاج؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> حتى بغياب CAD انسدادي، الذبحة التشنجية ترتبط بخطر قلبي ~20% خلال سنوات، خاصة مع تغيرات ST واسعة/اضطرابات نظم. CCB (أملوديبين) يخفض الخطر لـ&lt;1%؛ الستاتين مفيد إضافيًا؛ IVUS يُنصح به إن كان التضيق≥50% أو المظهر مقلقًا.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 11:</strong> امرأة 55 عامًا مدخنة، ذبحة جهدية. تصوير نووي: عيب انعكاسي أمامي. القسطرة: لا تضيق انسدادي، جسر عضلي متوسط بمنتصف LAD (50%). التشخيص؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D (أي مما سبق).</strong> الجسر العضلي غالبًا عرضي (بالمصادفة) حتى لو واضحًا، لكن قد يكون السبب مع أعراض نمطية وإقفار أمامي مطابق. التشخيص التفريقي يشمل أيضًا التشنج السطحي وخلل الأوعية الدقيقة.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 12:</strong> ما الاختبارات المساعدة لتأكيد تشخيص مريضة السؤال 11؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة F (B، C، D، وE).</strong> أفضل وسيلتين غير غازيتين لخلل الأوعية الدقيقة: Stress MRI وStress PET (يليهما SPECT بإيجابيات كاذبة أعلى بالنساء). غازيًا: أستيل كولين للتشنج الميكروي، أدينوزين لضعف التوسع. إعطاء NTG قد يزيد شدة تضيق الجسر العضلي، داعمًا التشخيص.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 13:</strong> رجل 50 عامًا، ألم راحة مع ارتفاع ST سفلي. القسطرة: تضيق ناعم 90% منتصف RCA، تحسَّن بـNTG. أي عبارة غير صحيحة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A (خاطئة).</strong> "الذبحة التشنجية أكثر شيوعًا لدى النساء بالضعف" — التشنج السطحي أكثر شيوعًا قليلاً فقط لدى النساء، بينما خلل الأوعية الدقيقة أكثر شيوعًا بـ4 أضعاف لديهن.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 14:</strong> رجل 69 عامًا، ذبحة CCS III مزمنة. القسطرة: 90% RCA القريب. أي عبارة صحيحة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C.</strong> بـCAD المستقر، PCI يُحسِّن فقط أعراض الذبحة، لا خطر MI أو الوفيات، حتى مع تضيق شديد. CABG يُقلل الوفيات فقط بالرئيسي الأيسر، الثلاثي، أو الثنائي مع LAD القريب — لا بوعاء واحد (BARI 2D: قد تُقلل CABG خطر MI فقط بمرض متعدد بدون رئيسي أيسر، لا الوفيات).</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 15:</strong> امرأة 59 عامًا، ألم غير نمطي وغير جهدي. اختبار جهد: عيب أمامي كبير. القسطرة: 80% LAD القريب، FFR=0.67. أي العبارات صحيحة (متعددة)؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C وE فقط.</strong> PCI يُحسِّن أعراض الذبحة (C) فقط، لا يُقلل MI أو الوفيات (A وB خاطئتان بـCAD المستقر). لا علاقة لقسطرة LAD بتقليل MI حول جراحة غير قلبية مستقبلية (D خاطئة). CABG لوعاء واحد قد تُقلل الوفاة/MI فقط بحالات محددة كالرئيسي الأيسر أو مرض ثلاثي (E قد تصح حسب السياق التشريحي الأوسع).</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 16:</strong> بعد إعادة التوعية، أي عبارة غير صحيحة؟ A. بعد PCI لوعاء/وعاءين، خطر إعادة تداخل ~20% خلال 5 سنوات. B. بعد توعية متعددة، خطر أحداث ~27% مع CABG و~37% مع PCI خلال 5 سنوات. C. بعد PCI عالي الخطورة (LAD قريب معقد)، يُوصى باختبار جهد روتيني كل 6-12 شهرًا.
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C (خاطئة).</strong> التضيق المتكرر اللاعرضي ليس مؤشرًا مؤكدًا لسوء الإنذار؛ لا دليل على أن PCI للتضيقات المتكررة اللاعرضية يُحسِّن النتائج — الاختبارات الروتينية غير مبررة. ملاحظة: كل طعم SVG لديه خطر انسداد ~30% خلال 5 سنوات، معظمها لاعرضي.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 17:</strong> رجل 70 عامًا، PCI بدعامة DES منذ سنة بمنتصف LAD، ذبحة خفيفة متكررة الآن. القسطرة: 90% تضيق داخل الدعامة. الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D (PCI أو CABG).</strong> ISCHEMIA استبعدت مرضى PCI/CABG خلال السنة الماضية؛ COURAGE استبعدت تضيق الدعامة العائد. التوصية: PCI متكرر عادة، مع IVUS/OCT لتقييم تمدد الدعامة (عدم التمدد سبب &gt;50% من التضيقات العائدة) — بالون عالي ضغط إن كانت المشكلة تمددية، أو دعامة داخل دعامة إن كانت فرط تنسج/تضيق منتشر. CABG بديل مقبول إن كان التضيق بـLAD.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 18:</strong> امرأة 51 عامًا، ذبحة جهدية. اختبار جهد كهربائي: 7 دقائق، ذبحة معتادة، بلا تغيّر ST. الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> اختبار الجهد لا يُظهر علامات عالية الخطورة، وقدرة وظيفية جيدة. العلاج الدوائي مناسب لمرض تاجي منخفض الخطورة أو احتمال خلل بالأوعية الدقيقة. CTA/تصوير إضافي ممكن لكن غير ضروري بهذه المرحلة.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 19:</strong> قسطرة مريضة السؤال 18 لم تُظهر مرضًا هامًا. الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C.</strong> نصف النساء بذبحة نمطية لا يُظهرن CAD انسداديًا — الأرجح خلل بطاني/عدم توسع أوعية دقيقة أثناء الجهد (لا تشنج كبير، الذي يظهر كألم راحة لا جهد كما هنا). يُشخَّص بمقارنة PET/MRI بالراحة وبعد الأدينوزين. العلاج: ميتوبرولول الخط الأول (CorMicA) — يختلف عن علاج التشنج الكبير المعتمد على CCBs.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 20:</strong> رجل 50 عامًا سكري، ذبحة CCS I. الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> نموذج مريض ISCHEMIA — ذبحة خفيفة وحد وظيفي طفيف؛ PCI لم يُظهر فائدة بالوفيات أو الاحتشاء بهذه الحالات. التأهل لإعادة التوعية يتطلب ذبحة شديدة مستمرة رغم دواءين، أو مرض رئيسي أيسر/ثلاثي/ثنائي مع LAD قريب.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 21:</strong> بمريض سكري وCAD مستقر، أي عبارة غير صحيحة؟ A. حاصرات بيتا تُقلل الوفيات بـCAD المستقر دون MI سابق. B. ميتوبرولول يرفع HbA1c، كارفيديلول لا يؤثر ويُحسِّن مقاومة الإنسولين. C. كلما ارتفع HbA1c، زادت فعالية رانولازين بتقليل الذبحة. D. رانولازين يُحسِّن HbA1c حتى 1%.
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A (خاطئة).</strong> حاصرات بيتا لا تُثبت تقليل الوفيات بـCAD المستقر دون MI سابق أو فشل قلب — فائدتها الأساسية عرضية (تخفيف الذبحة) بهذا السياق.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 22:</strong> رجل 60 عامًا سكري، ضيق نفس جهدي وألم راحة عرضي. ECG: موجات Q سفلية هامشية. اختبار جهد إيكو: 8 دقائق، انخفاض ST 1 ملم، ضيق نفس بلا ألم، انعدام حركة سفلي، EF 35-40% دون تدهور بالجهد. القسطرة: CTO منتصف RCA، 50% LAD القريب. الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C.</strong> إعادة التروية لا تُبرَّر إلا بذبحة شديدة أو HF ناتج عن ضعف LV؛ إن لم تتحسن الأعراض دوائيًا، يُفكَّر بـPCI لـRCA. الأفضل: FFR لـLAD أولاً — إن كانت مهمة، تُحال لـCABG لكلا الشريانين؛ إن لم تكن، PCI لـRCA. ملاحظة تقنية: يُفضَّل تأجيل FFR لـLAD حتى إعادة فتح RCA، لأن LAD قد يُغذي جانبيًا RCA فيُخفِّض FFR كاذبًا.</p>
-    </div>
-
-    <div class="card point-num">
-      <strong>السؤال 23:</strong> في CAD المستقر، ما العاملان الأساسيان اللذان يوجهان قرار إعادة التوعية؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة:</strong> (1) شدة الذبحة الصدرية (خصوصًا الشديدة والمستمرة رغم العلاج الدوائي)؛ (2) وجود مرض الرئيسي الأيسر، أو صفات تشريحية عالية الخطورة كمرض ثلاثي الأوعية أو مرض ثنائي يشمل LAD القريب. <strong>ملاحظة ختامية من ISCHEMIA:</strong> شدة الإقفار التي كانت تُستخدم سابقًا وحدها لتحديد الحاجة للتداخل، ليست كافية بمفردها لاتخاذ القرار.</p>
-    </div>
+    <div class="card point-num qblock" data-qid="c1p19-q1" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س1</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 67 عامًا، ارتفاع ضغط وسكري، ذبحة جهدية (CCS III) منذ 3-4 أشهر، تخف بالراحة/NTG. عرج متقطع بالطرف السفلي الأيسر، لا نبضات بعيدة. ECG: LVH مع انخفاض ST 0.5 ملم. ما الخطوة التالية؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">قسطرة تاجية.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">اختبار جهد ECG.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">اختبار جهد SPECT.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">أدينوزين SPECT.</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> حسب Hubbard، خطر المريض &gt;40% لمرض تاجي شديد نظرًا للعمر، الجنس، السكري، الذبحة النمطية، ووجود PAD (مؤشر إضافي على شدة CAD). شدة الذبحة تزيد الحاجة لقسطرة تشخيصية وربما إعادة توعية مباشرة.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q2" data-mode="single" data-correct="D">
+  <div class="qhead"><span class="qnum">س2</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 67 عامًا، دعامة LAD منذ سنتين، ذبحة خفيفة بجهد شديد (CCS I). أتينولول+أملوديبين+أسبرين+أتورفاستاتين. اختبار جهد: 8 دقائق، DTS=+4، إقفار قمي-جانبي صغير (مجموع درجة+3). القسطرة: 60% LCx القريب، 30% LAD، 40% RCA. ما الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">إجراء PCI على LCx. الحاجة لـFFR لأن التضيق واضح بالأنجيوغرافيا</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">إجراء PCI على LCx. الحاجة لـFFR لأن اختبار الجهد إيجابي</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">قياس FFR في LCx. إجراء الدعامة إذا كان FFR < 0.80</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">الاستمرار بالعلاج الطبي، دون الحاجة إلى PCI</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D.</strong> مريض نموذجي لتجربة COURAGE — ذبحة خفيفة، قدرة وظيفية جيدة، اختبار جهد منخفض الخطورة. العلاج الدوائي وحده يكافئ PCI+علاج دوائي ما لم تستمر الأعراض؛ عندها يدعم تحليل COURAGE الفرعي استخدام PCI لتقليل الأعراض. لا حاجة لـFFR هنا لأن الإقفار بمنطقة LCx مثبت فعلاً بالتصوير النووي.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q3" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س3</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 76 عامًا، ذبحة بنشاط شديد، إقفار أمامي خفيف-متوسط، تضيق 80% منتصف LAD. ما الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">العلاج الطبي. اليوجد فرق في الوفيات بين CABG و PCI والعلاج الطبي لهذه الآفة</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">إجراء PCI</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">إجراء CABG لأنه يوفر فائدة في خفض الوفيات مقارنة بـPCI أو العلاج الطبي</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> باستثناء الرئيسي الأيسر، المريض بذبحة مستقرة خفيفة يُعالَج بالعلاج الدوائي فقط بصرف النظر عن شدة الإقفار. تجربة MASS: لتضيق LAD معزول (&gt;80%)، لا فرق بالوفيات بين CABG وPCI والعلاج الطبي، لكن تحسن أعراض أكبر مع CABG.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q4" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س4</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">نفس السيناريو، لكن إقفار أمامي شديد وتضيق 80% بالجزء القريب من LAD. ما الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">العلاج الطبي</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">إجراء PCI</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">إجراء CABG لأنه يوفر فائدة في خفض الوفيات مقارنة بـPCI</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> مريض بذبحة خفيفة دون قيود وظيفية شديدة لا يحتاج إعادة توعية (نمط ISCHEMIA وCOURAGE وMASS). فائدة إعادة التوعية بـCAD المستقر عرضية فقط، ومحدودة إن لم تكن الأعراض شديدة/مقاومة.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q5" data-mode="single" data-correct="D">
+  <div class="qhead"><span class="qnum">س5</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 76 عامًا، ذبحة بجهد شديد فقط. إقفار أمامي متوسط. القسطرة: 80% LAD القريب، 75% RCA، 75% LCx (ثلاثي الأوعية). ما الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">علاج طبي.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">PCI.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">CABG.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">A أو C.</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">B أو C.</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D.</strong> مرض ثلاثي الأوعية (&gt;70%) يجعل إعادة التوعية مقبولة (خاصة CABG بالتجارب القديمة)، لكن حسب ISCHEMIA وBARI 2D ليست ضرورية دومًا إن لم توجد أعراض شديدة أو اختبار جهد عالي الخطورة. ملاحظة: اختبار الجهد قد يستهين بشدة الإقفار الحقيقي (المقارنة بأفضل منطقة إرواء). إن تقررت إعادة التوعية، يُفضَّل FFR لـRCA وLCx بدقة.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q6" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س6</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 47 عامًا، لاعرضي، بدأ رياضة، اختبار جهد طلبه طبيب العائلة: 5 دقائق، انخفاض ST 1.5 ملم بلا ألم. تصوير نووي: عيب انعكاسي واسع أمامي-جانبي، EF طبيعي، TID طبيعي. ما الخطوة؟</div>
+  <ul class="qstatic" style="list-style:none;padding:0;margin:10px 0 0">
+    <li style="margin:6px 0"><b style="color:var(--gold)">A.</b> البدء بالعلاج الطبي فقط</li>
+    <li style="margin:6px 0"><b style="color:var(--gold)">B.</b> إجراء قسطرة تاجية، لكن اليتم التدخل إلا إذا وجد مرض في الجذع الرئيسي الأيسر أو مرض ثلاثي الأوعية</li>
+    <li style="margin:6px 0"><b style="color:var(--gold)">C.</b> إجراء تصوير CTA D. B أو C</li>
+  </ul>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D (B أو C).</strong> قد يكون مؤهلاً لإعادة توعية إذا وُجد مرض ثلاثي أو ثنائي يشمل LAD القريب (بالتجارب القديمة). CTA بديل مناسب للقسطرة حتى بعد اختبار جهد عالي الخطورة (ISCHEMIA). رغم التساؤل حول قيمة فحص مريض لاعرضي، استبعاد الرئيسي الأيسر يصبح معقولاً بعد إثبات إقفار.</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q7" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س7</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 56 عامًا، ذبحة CCS III، بلا علاج مضاد للذبحة. إقفار سفلي شديد. CTO بـRCA (غير متكلس، طوله 2 سم — خصائص مناسبة). صح أم خطأ: PCI غير مناسب لأن المريض لا يتلقى أقصى علاج طبي؟</div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ صحيح.</strong> PCI بـCTO أكثر تعقيدًا (مضاعفات 2-3 أضعاف)؛ يُوصى به فقط بذبحة شديدة مقاومة للعلاج الدوائي، ويُفضَّل خصائص تشريحية مناسبة (طول&lt;2سم، غياب تكلس شديد، طرف قريب جيد).</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q8" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س8</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة 50 عامًا مدخنة، ألم صدري متغير (جهد/راحة، ~45 دقيقة). ضغط 160/95، نبض 78. اختبار جهد نووي: 5 دقائق، بلا ألم، بلا تغيّر ST. عيب انعكاسي واسع أمامي، مجموع درجة+10. تفضل العلاج الطبي أولاً. الخطوة؟</div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة B.</strong> DTS=+5 (خطر منخفض) لكن هذا لا ينفي CAD خطيرًا (10% من DTS المنخفض لديهم رئيسي أيسر/ثلاثي). نتيجة التصوير عالية الخطورة تتفوق على DTS المنخفض. ابدأ أسبرين+ستاتين+β-blocker+أملوديبين، ويُوصى بـCTA لأن الخطر السنوي&gt;5%.</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q9" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س9</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 65 عامًا سكري، سيخضع لاستئصال مرارة اختياري. ضيق نفس خفيف (&gt;4 METs)، لا ذبحة. SPECT: إقفار سفلي شديد، EF طبيعي. القسطرة: 80% منتصف RCA. الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">نظام علاجي طبي مكثف. اليوصى بإعادة التوعية (revascularization). مخاطره الجراحية متوسطة لكن إعادة التوعية لن تحسنها</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">نظام علاجي طبي مكثف. اليوصى بإعادة التوعية. مخاطره الجراحية منخفضة وإعادة التوعية لن تحسنها</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">نظام علاجي طبي مكثف مع PCI للشريان التاجي الأيمن باستخدام دعامة معدنية عارية (BMS)</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">نظام علاجي طبي مكثف مع PCI للشريان التاجي الأيمن باستخدام دعامة دوائية (DES)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A أو B</strong> (حسب تقدير الخطورة الجراحية). لا أعراض ذبحة واضحة؛ إعادة التوعية قبل الجراحة لا تُقلل مضاعفات القلب بعدها إلا بالرئيسي الأيسر أو ثلاثي شامل. التوصية: ستاتين وحاصر بيتا قبل الجراحة بأسبوع+، مع مراقبة دقيقة أثناء وبعدها.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q10" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س10</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة 58 عامًا، ألم بالجهد والتوتر. اختبار جهد: ألم شديد+ارتفاع ST سفلي+NSVT، زال خلال 5 دقائق راحة. القسطرة: تضيق ناعم 80% منتصف RCA، تحسَّن لـ25% بعد NTG. الإنذار والعلاج؟</div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> حتى بغياب CAD انسدادي، الذبحة التشنجية ترتبط بخطر قلبي ~20% خلال سنوات، خاصة مع تغيرات ST واسعة/اضطرابات نظم. CCB (أملوديبين) يخفض الخطر لـ&lt;1%؛ الستاتين مفيد إضافيًا؛ IVUS يُنصح به إن كان التضيق≥50% أو المظهر مقلقًا.</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q11" data-mode="single" data-correct="D">
+  <div class="qhead"><span class="qnum">س11</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة 55 عامًا مدخنة، ذبحة جهدية. تصوير نووي: عيب انعكاسي أمامي. القسطرة: لا تضيق انسدادي، جسر عضلي متوسط بمنتصف LAD (50%). التشخيص؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">الجسر العضلي القلبي (Myocardial bridging)</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">التشنج الوعائي الشرياني التاجي (Coronary epicardial vasospasm)</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">خلل وظيفي ميكروي وعائي (Microvascular dysfunction)</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">أي مما سبق (Any of the above)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D (أي مما سبق).</strong> الجسر العضلي غالبًا عرضي (بالمصادفة) حتى لو واضحًا، لكن قد يكون السبب مع أعراض نمطية وإقفار أمامي مطابق. التشخيص التفريقي يشمل أيضًا التشنج السطحي وخلل الأوعية الدقيقة.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q12" data-mode="single" data-correct="F">
+  <div class="qhead"><span class="qnum">س12</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">ما الاختبارات المساعدة لتأكيد تشخيص مريضة السؤال 11؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">تخطيط صدى القلب مع الجهد (Stress echo)</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">التصوير بالرنين المغناطيسي مع الجهد (Stress MRI)</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">اختبار الأسيتيل كولين داخل الشريان (Intracoronary acetylcholine testing)</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">اختبار الأدينوزين داخل الشريان أو بالحقن الوريدي (Intracoronary or intravenous adenosine testing)</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">إعطاء النتروجليسرين أثناء القسطرة حتى لو لم يظهر تشنج (Administer NTG during coronary )angiography</span></button>
+    <button type="button" class="qopt" data-l="F" aria-pressed="false"><span class="qol">F</span><span class="qot">الخيارات ,B, C, D و E</span></button>
+    <button type="button" class="qopt" data-l="G" aria-pressed="false"><span class="qol">G</span><span class="qot">جميع ما سبق (All of the above)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة F (B، C، D، وE).</strong> أفضل وسيلتين غير غازيتين لخلل الأوعية الدقيقة: Stress MRI وStress PET (يليهما SPECT بإيجابيات كاذبة أعلى بالنساء). غازيًا: أستيل كولين للتشنج الميكروي، أدينوزين لضعف التوسع. إعطاء NTG قد يزيد شدة تضيق الجسر العضلي، داعمًا التشخيص.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q13" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س13</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 50 عامًا، ألم راحة مع ارتفاع ST سفلي. القسطرة: تضيق ناعم 90% منتصف RCA، تحسَّن بـNTG. أي عبارة غير صحيحة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">الذبحة التشنجية (ذبحة برينزميتال) أكثر شيوعًا من التشنج في الأوعية الكبيرة (الظاهرة)</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">اختلال وظيفة الأوعية الدقيقة أكثر شيو</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">في حال عدم استخدام مثبطات قنوات الكالسيوم (CCB)، يتكرر حدوث احتشاء عضلة القلب بنسبة تقارب 20% لدى مرضى الذبحة التشنجية</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">يتطلب التشخيص المؤكد وجود توثيق متزامن للخصائص الثالث التالية: التشنج الوعائي في القسطرة، الألم الصدري، وتغيرات في مقطع ST</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">بين المرضى الذين يعانون من ألم صدري جهدي، واختبار جهد غير طبيعي، ولكن مع شرايين تاجية غير مسدودة، تبلغ نسبة وجود اضطرابات الحركة الوعائية التاجية (تشنج أو اضطراب دقيق) حوالي 50–70%</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A (خاطئة).</strong> "الذبحة التشنجية أكثر شيوعًا لدى النساء بالضعف" — التشنج السطحي أكثر شيوعًا قليلاً فقط لدى النساء، بينما خلل الأوعية الدقيقة أكثر شيوعًا بـ4 أضعاف لديهن.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q14" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س14</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 69 عامًا، ذبحة CCS III مزمنة. القسطرة: 90% RCA القريب. أي عبارة صحيحة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">التداخل القسطري الأولي (PCI) مقارنة بالعلاج الدوائي فقط يقلل من خطر الإصابة باحتشاء عضلة القلب</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">التداخل القسطري الأولي يقلل من الوفيات القلبية الوعائية</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">التداخل القسطري الأولي يقلل من أعراض الذبحة الصدرية</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">جراحة المجازة التاجية (CABG) لشريان واحد تقلل من خطر الوفاة أو احتشاء عضلة القلب</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C.</strong> بـCAD المستقر، PCI يُحسِّن فقط أعراض الذبحة، لا خطر MI أو الوفيات، حتى مع تضيق شديد. CABG يُقلل الوفيات فقط بالرئيسي الأيسر، الثلاثي، أو الثنائي مع LAD القريب — لا بوعاء واحد (BARI 2D: قد تُقلل CABG خطر MI فقط بمرض متعدد بدون رئيسي أيسر، لا الوفيات).</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q15" data-mode="open" data-correct="">
+  <div class="qhead"><span class="qnum">س15</span><span class="qhint">اضغط أي خيار لعرض الشرح</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة 59 عامًا، ألم غير نمطي وغير جهدي. اختبار جهد: عيب أمامي كبير. القسطرة: 80% LAD القريب، FFR=0.67. أي العبارات صحيحة (متعددة)؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">التداخل القسطري الأولي يقلل من خطر الإصابة باحتشاء عضلة القلب</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">التداخل القسطري الأولي يقلل من الوفيات القلبية الوعائية</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">التداخل القسطري الأولي يقلل من أعراض الذبحة الصدرية</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">إذا كانت المريضة ستخضع لجراحة غير قلبية، فإن إجراء قسطرة LAD يقلل من خطر الإصابة باحتشاء عضلة القلب المحيط بالجراحة</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">جراحة المجازة التاجية لشريان واحد قد تقلل من خطر الوفاة أو الإصابة باحتشاء عضلة القلب</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C وE فقط.</strong> PCI يُحسِّن أعراض الذبحة (C) فقط، لا يُقلل MI أو الوفيات (A وB خاطئتان بـCAD المستقر). لا علاقة لقسطرة LAD بتقليل MI حول جراحة غير قلبية مستقبلية (D خاطئة). CABG لوعاء واحد قد تُقلل الوفاة/MI فقط بحالات محددة كالرئيسي الأيسر أو مرض ثلاثي (E قد تصح حسب السياق التشريحي الأوسع).</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q16" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س16</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">بعد إعادة التوعية، أي عبارة غير صحيحة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">بعد PCI لوعاء/وعاءين، خطر إعادة تداخل ~20% خلال 5 سنوات.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">بعد توعية متعددة، خطر أحداث ~27% مع CABG و~37% مع PCI خلال 5 سنوات.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">بعد PCI عالي الخطورة (LAD قريب معقد)، يُوصى باختبار جهد روتيني كل 6-12 شهرًا.</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C (خاطئة).</strong> التضيق المتكرر اللاعرضي ليس مؤشرًا مؤكدًا لسوء الإنذار؛ لا دليل على أن PCI للتضيقات المتكررة اللاعرضية يُحسِّن النتائج — الاختبارات الروتينية غير مبررة. ملاحظة: كل طعم SVG لديه خطر انسداد ~30% خلال 5 سنوات، معظمها لاعرضي.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q17" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س17</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 70 عامًا، PCI بدعامة DES منذ سنة بمنتصف LAD، ذبحة خفيفة متكررة الآن. القسطرة: 90% تضيق داخل الدعامة. الخطوة؟</div>
+  <ul class="qstatic" style="list-style:none;padding:0;margin:10px 0 0">
+    <li style="margin:6px 0"><b style="color:var(--gold)">A.</b> العلاج الدوائي</li>
+    <li style="margin:6px 0"><b style="color:var(--gold)">B.</b> التداخل القسطري (PCI)</li>
+    <li style="margin:6px 0"><b style="color:var(--gold)">C.</b> جراحة المجازة التاجية (CABG D. PCI) أو CABG</li>
+  </ul>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة D (PCI أو CABG).</strong> ISCHEMIA استبعدت مرضى PCI/CABG خلال السنة الماضية؛ COURAGE استبعدت تضيق الدعامة العائد. التوصية: PCI متكرر عادة، مع IVUS/OCT لتقييم تمدد الدعامة (عدم التمدد سبب &gt;50% من التضيقات العائدة) — بالون عالي ضغط إن كانت المشكلة تمددية، أو دعامة داخل دعامة إن كانت فرط تنسج/تضيق منتشر. CABG بديل مقبول إن كان التضيق بـLAD.</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q18" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س18</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة 51 عامًا، ذبحة جهدية. اختبار جهد كهربائي: 7 دقائق، ذبحة معتادة، بلا تغيّر ST. الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">تعديل عوامل الخطورة، والأسبرين، والستاتين، والعلاج المضاد للذبحة الصدرية</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">القسطرة القلبية</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">التصوير الطبقي المحوري للشرايين التاجية (CTA)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> اختبار الجهد لا يُظهر علامات عالية الخطورة، وقدرة وظيفية جيدة. العلاج الدوائي مناسب لمرض تاجي منخفض الخطورة أو احتمال خلل بالأوعية الدقيقة. CTA/تصوير إضافي ممكن لكن غير ضروري بهذه المرحلة.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q19" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س19</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">قسطرة مريضة السؤال 18 لم تُظهر مرضًا هامًا. الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">طمأنة المريضة بأن الألم ليس من منشأ قلبي. فكر في علاج الارتجاع المعدي المريئي</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">من المرجح أن المريضة تعاني من تشنج تاجي. أوصف أملوديبين</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">إجراء تصوير PET باستخدام الأدينوزين. وإذا تم تأكيد التشخيص، أضف الميتوبرولول و-L أرجينين</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">إجراء تصوير PET باستخدام الأدينوزين. وإذا تم تأكيد التشخيص، أضف النترات</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C.</strong> نصف النساء بذبحة نمطية لا يُظهرن CAD انسداديًا — الأرجح خلل بطاني/عدم توسع أوعية دقيقة أثناء الجهد (لا تشنج كبير، الذي يظهر كألم راحة لا جهد كما هنا). يُشخَّص بمقارنة PET/MRI بالراحة وبعد الأدينوزين. العلاج: ميتوبرولول الخط الأول (CorMicA) — يختلف عن علاج التشنج الكبير المعتمد على CCBs.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q20" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س20</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 50 عامًا سكري، ذبحة CCS I. الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">تحسين العلاج الدوائي</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">إجراء تداخل قسطري على RCA</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">إجراء FFR ل،RCA ثم التداخل إذا كانت النتيجة تشير إلى أهمية وظيفية</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A.</strong> نموذج مريض ISCHEMIA — ذبحة خفيفة وحد وظيفي طفيف؛ PCI لم يُظهر فائدة بالوفيات أو الاحتشاء بهذه الحالات. التأهل لإعادة التوعية يتطلب ذبحة شديدة مستمرة رغم دواءين، أو مرض رئيسي أيسر/ثلاثي/ثنائي مع LAD قريب.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q21" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س21</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">بمريض سكري وCAD مستقر، أي عبارة غير صحيحة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">حاصرات بيتا تُقلل الوفيات بـCAD المستقر دون MI سابق.</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">ميتوبرولول يرفع HbA1c، كارفيديلول لا يؤثر ويُحسِّن مقاومة الإنسولين.</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">كلما ارتفع HbA1c، زادت فعالية رانولازين بتقليل الذبحة.</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">رانولازين يُحسِّن HbA1c حتى 1%.</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة A (خاطئة).</strong> حاصرات بيتا لا تُثبت تقليل الوفيات بـCAD المستقر دون MI سابق أو فشل قلب — فائدتها الأساسية عرضية (تخفيف الذبحة) بهذا السياق.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q22" data-mode="open" data-correct="">
+  <div class="qhead"><span class="qnum">س22</span><span class="qhint">اضغط أي خيار لعرض الشرح</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 60 عامًا سكري، ضيق نفس جهدي وألم راحة عرضي. ECG: موجات Q سفلية هامشية. اختبار جهد إيكو: 8 دقائق، انخفاض ST 1 ملم، ضيق نفس بلا ألم، انعدام حركة سفلي، EF 35-40% دون تدهور بالجهد. القسطرة: CTO منتصف RCA، 50% LAD القريب. الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">علاج دوائي مكثف بالستاتين ومضادات الذبحة. دون إعادة تروية للشريان المسدود (RCA CTO)</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">إعادة التروية للشريان ( RCA انسداد مزمن تام )CTO -</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">إجراء FFR ل LAD. إذا كانت النتيجة مهمة، يحال إلى الجراحة (CABG) للشريانين. إذا لم تكن مهمة، يجرى PCI لـRCA</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">إجراء FFR ل LAD. إذا كانت النتيجة مهمة، يحال إلى الجراحة. إذا لم تكن مهمة، علاج دوائي فقط</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">إجراء FFR ل LAD. إذا كانت النتيجة مهمة، إجراء PCI ل ( LAD وليس.)RCA إذا لم تكن مهمة، علاج دوائي فقط</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة C.</strong> إعادة التروية لا تُبرَّر إلا بذبحة شديدة أو HF ناتج عن ضعف LV؛ إن لم تتحسن الأعراض دوائيًا، يُفكَّر بـPCI لـRCA. الأفضل: FFR لـLAD أولاً — إن كانت مهمة، تُحال لـCABG لكلا الشريانين؛ إن لم تكن، PCI لـRCA. ملاحظة تقنية: يُفضَّل تأجيل FFR لـLAD حتى إعادة فتح RCA، لأن LAD قد يُغذي جانبيًا RCA فيُخفِّض FFR كاذبًا.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c1p19-q23" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س23</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">في CAD المستقر، ما العاملان الأساسيان اللذان يوجهان قرار إعادة التوعية؟</div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ الإجابة:</strong> (1) شدة الذبحة الصدرية (خصوصًا الشديدة والمستمرة رغم العلاج الدوائي)؛ (2) وجود مرض الرئيسي الأيسر، أو صفات تشريحية عالية الخطورة كمرض ثلاثي الأوعية أو مرض ثنائي يشمل LAD القريب. <strong>ملاحظة ختامية من ISCHEMIA:</strong> شدة الإقفار التي كانت تُستخدم سابقًا وحدها لتحديد الحاجة للتداخل، ليست كافية بمفردها لاتخاذ القرار.</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
   </section>
 
   <div style="text-align:center; margin:50px 0 20px; padding:28px 20px; background:linear-gradient(135deg, rgba(45,212,191,.12), rgba(251,191,36,.08)); border:1px solid var(--teal-dim); border-radius:16px;">
@@ -578,6 +758,105 @@ function toggleToc(show){
     if(overlay) overlay.classList.remove('show');
   }
 }
+</script>
+<script id="ca-chq-script">
+(function(){
+  var KEY='cardioarab-qb:'+(location.pathname.split('/').pop()||'page');
+  var blocks=[].slice.call(document.querySelectorAll('.qblock'));
+  var state={};
+  try{ state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ state={}; }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+  function sameSet(a,b){ if(a.length!==b.length) return false; return a.every(function(x){return b.indexOf(x)>-1;}); }
+
+  function render(q){
+    var id=q.dataset.qid, mode=q.dataset.mode, st=state[id]||{sel:[],done:false,ok:null};
+    var corr=(q.dataset.correct||'').split(',').filter(Boolean);
+    var opts=[].slice.call(q.querySelectorAll('.qopt'));
+    var ans=q.querySelector('.qans'), status=q.querySelector('.qstatus');
+    var chk=q.querySelector('.qcheck'), show=q.querySelector('.qshow'), rate=q.querySelector('.qrate');
+    q.classList.remove('is-ok','is-bad');
+    opts.forEach(function(o){
+      var l=o.dataset.l, isSel=st.sel.indexOf(l)>-1, isCorr=corr.indexOf(l)>-1;
+      o.classList.remove('sel','is-right','is-wrong','is-missed');
+      o.disabled=!!st.done;
+      o.setAttribute('aria-pressed',isSel?'true':'false');
+      if(st.done && mode==='open'){
+        if(isSel) o.classList.add('sel');
+      } else if(st.done){
+        if(isSel&&isCorr) o.classList.add('is-right');
+        else if(isSel&&!isCorr) o.classList.add('is-wrong');
+        else if(!isSel&&isCorr) o.classList.add('is-missed');
+      } else if(isSel){ o.classList.add('sel'); }
+    });
+    if(chk){ chk.hidden=!!st.done; chk.disabled=!st.sel.length; }
+    if(show){ show.hidden=!!st.done; }
+    if(ans){ ans.hidden=!st.done; }
+    if(rate){ rate.hidden=!(mode==='reveal'&&st.done); }
+    if(st.done){
+      if(st.ok===true){ q.classList.add('is-ok'); status.textContent='✔ إجابة صحيحة'; }
+      else if(st.ok===false){ q.classList.add('is-bad'); status.textContent='✖ إجابة خاطئة'; }
+      else { status.textContent=(mode==='open')?'👁 تم عرض الشرح':'👁 تم عرض الإجابة'; }
+    } else { status.textContent=''; }
+  }
+
+  function updateBar(){
+    var tot=blocks.length, done=0, ok=0, bad=0;
+    blocks.forEach(function(q){
+      var st=state[q.dataset.qid]; if(!st||!st.done) return;
+      done++; if(st.ok===true) ok++; else if(st.ok===false) bad++;
+    });
+    var neu=done-ok-bad;
+    function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+    set('qbDone',done); set('qbTot',tot); set('qbOk',ok); set('qbBad',bad);
+    var graded=ok+bad;
+    set('qbPct', graded? (Math.round(ok*100/graded)+'%') : '—');
+    function w(id,n){ var e=document.getElementById(id); if(e) e.style.width=(tot?(n*100/tot):0)+'%'; }
+    w('qbFOk',ok); w('qbFBad',bad); w('qbFNeu',neu);
+  }
+
+  function finish(q,st,ok){ st.done=true; st.ok=ok; state[q.dataset.qid]=st; save(); render(q); updateBar(); }
+
+  blocks.forEach(function(q){
+    var id=q.dataset.qid, mode=q.dataset.mode;
+    var corr=(q.dataset.correct||'').split(',').filter(Boolean);
+    q.addEventListener('click',function(ev){
+      var st=state[id]||{sel:[],done:false,ok:null};
+      if(st.done && !ev.target.closest('.qrate')) return;
+      var opt=ev.target.closest('.qopt');
+      if(opt && !st.done){
+        var l=opt.dataset.l;
+        if(mode==='single'){ st.sel=[l]; finish(q,st,corr[0]===l); }
+        else if(mode==='open'){ st.sel=[l]; finish(q,st,null); }
+        else if(mode==='multi'){
+          var i=st.sel.indexOf(l); if(i>-1) st.sel.splice(i,1); else st.sel.push(l);
+          state[id]=st; save(); render(q);
+        }
+        return;
+      }
+      if(ev.target.closest('.qcheck') && !st.done){ finish(q,st,sameSet(st.sel,corr)); return; }
+      if(ev.target.closest('.qshow') && !st.done){ finish(q,st,null); return; }
+      var r=ev.target.closest('.qrate [data-rate]');
+      if(r && st.done){ st.ok=(r.dataset.rate==='ok'); state[id]=st; save(); render(q); updateBar(); }
+    });
+    render(q);
+  });
+  updateBar();
+
+  var rs=document.getElementById('qbReset');
+  if(rs) rs.addEventListener('click',function(){
+    if(!confirm('تصفير كل إجابات هذه الصفحة والبدء من جديد؟')) return;
+    state={}; save();
+    blocks.forEach(render); updateBar();
+    var bar=document.getElementById('qbBar');
+    if(bar) bar.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
+  function fixBar(){
+    var h=document.querySelector('header.top'), b=document.getElementById('qbBar');
+    if(h&&b) b.style.top=(h.offsetHeight+6)+'px';
+  }
+  fixBar(); window.addEventListener('resize',fixBar); window.addEventListener('load',fixBar);
+})();
 </script>
 <script src="notes.js"></script>
 </body>

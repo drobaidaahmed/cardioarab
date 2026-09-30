@@ -223,6 +223,53 @@
   header.top.shrink .eyebrow{font-size:10px;}
   header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
 </style>
+
+<style id="ca-chq-style">
+/* ===== Interactive closing quiz (chapters) ===== */
+:root{--ok:#22c55e;--ok-bg:rgba(34,197,94,.12);--bad:#ef4444;--bad-bg:rgba(239,68,68,.12);--qgold-dim:rgba(251,191,36,.45);}
+:root[data-theme="light"]{--ok:#15803d;--ok-bg:rgba(21,128,61,.10);--bad:#b91c1c;--bad-bg:rgba(185,28,28,.09);--qgold-dim:rgba(168,121,31,.5);}
+#qbBar{position:sticky;top:62px;z-index:45;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:6px 14px;margin:18px 0 14px;box-shadow:0 4px 12px rgba(0,0,0,.18);}
+#qbBar .qb-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;}
+#qbBar .qb-stats{display:flex;gap:14px;align-items:center;white-space:nowrap;}
+#qbBar b{font-weight:800;}
+#qbBar .qb-ok{color:var(--ok);} #qbBar .qb-bad{color:var(--bad);} #qbBar .qb-pct{color:var(--gold);}
+#qbBar .qb-prog{margin-top:5px;height:5px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;overflow:hidden;display:flex;}
+#qbBar .qb-prog i{display:block;height:100%;width:0;transition:width .25s;}
+#qbBar .qb-prog .f-ok{background:var(--ok);} #qbBar .qb-prog .f-bad{background:var(--bad);} #qbBar .qb-prog .f-neu{background:var(--qgold-dim);}
+#qbReset{background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:3px 12px;white-space:nowrap;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;}
+#qbReset:hover{border-color:var(--gold);color:var(--gold);}
+.qblock{scroll-margin-top:130px;}
+.qblock .qhead{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.qblock .qnum{background:var(--gold);color:#111;font-weight:800;font-size:12.5px;border-radius:8px;padding:2px 10px;}
+.qblock .qhint{font-size:12px;color:var(--text-dim);}
+.qblock .qstatus{margin-inline-start:auto;font-size:12.5px;font-weight:700;}
+.qblock.is-ok .qstatus{color:var(--ok);} .qblock.is-bad .qstatus{color:var(--bad);}
+.qblock .qstem{line-height:1.95;}
+.qopts{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.qopt{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:right;background:var(--panel2);border:1.5px solid var(--border);color:var(--text);border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit;font-size:14.6px;line-height:1.8;transition:border-color .15s,background .15s;}
+.qopt:hover:not(:disabled){border-color:var(--qgold-dim);}
+.qopt .qol{flex:none;width:26px;height:26px;border-radius:50%;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12.5px;color:var(--gold);margin-top:2px;}
+.qopt .qot{flex:1;}
+.qopt.sel{border-color:var(--gold);background:rgba(251,191,36,.10);}
+.qopt:disabled{cursor:default;}
+.qopt.is-right{border-color:var(--ok);background:var(--ok-bg);}
+.qopt.is-right .qol{background:var(--ok);border-color:var(--ok);color:#fff;}
+.qopt.is-right .qot::after{content:" ✓";color:var(--ok);font-weight:800;}
+.qopt.is-wrong{border-color:var(--bad);background:var(--bad-bg);}
+.qopt.is-wrong .qol{background:var(--bad);border-color:var(--bad);color:#fff;}
+.qopt.is-wrong .qot::after{content:" ✗";color:var(--bad);font-weight:800;}
+.qopt.is-missed{border:1.5px dashed var(--ok);background:transparent;}
+.qopt.is-missed .qol{border-color:var(--ok);color:var(--ok);}
+.qopt.is-missed .qot::after{content:" ← الصحيحة";color:var(--ok);font-weight:700;font-size:12.5px;}
+.qact{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.qbtn{background:var(--teal);color:#04211d;border:0;border-radius:9px;padding:8px 18px;cursor:pointer;font:inherit;font-weight:700;font-size:14px;}
+.qbtn:disabled{opacity:.45;cursor:not-allowed;}
+.qbtn.okb{background:var(--ok);color:#fff;} .qbtn.badb{background:var(--bad);color:#fff;}
+.qans[hidden]{display:none;}
+.qans{margin-top:12px;border-top:1px dashed var(--border);padding-top:10px;}
+.qrate{margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--text-dim);}
+@media (max-width:600px){#qbBar{padding:5px 10px;} #qbBar .qb-row{font-size:12.5px;} #qbBar .qb-stats{gap:10px;} #qbReset .rs-t{display:none;} #qbReset{padding:2px 10px;font-size:15px;} .qopt{padding:9px 10px;font-size:14.2px;}}
+</style>
 </head>
 <body>
 <button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
@@ -260,63 +307,129 @@
     <h2>الفصل 9: أمراض قلبية وعائية أخرى — الجزء 31</h2>
   </div>
 
-  <div class="topic-divider" id="c9qafinalph">
+  <div id="qbBar">
+  <div class="qb-row">
+    <div class="qb-stats">
+      <span title="الأسئلة المُجابة">المُجاب <b id="qbDone">0</b>/<b id="qbTot">0</b></span>
+      <span class="qb-ok" title="إجابات صحيحة">✔ <b id="qbOk">0</b></span>
+      <span class="qb-bad" title="إجابات خاطئة">✖ <b id="qbBad">0</b></span>
+      <span class="qb-pct" title="الدقة"><b id="qbPct">—</b></span>
+    </div>
+    <button id="qbReset" type="button" title="تصفير العداد وكل الإجابات" aria-label="تصفير">↺<span class="rs-t"> تصفير</span></button>
+  </div>
+  <div class="qb-prog"><i id="qbFOk" class="f-ok"></i><i id="qbFBad" class="f-bad"></i><i id="qbFNeu" class="f-neu"></i></div>
+</div>
+
+<div class="topic-divider" id="c9qafinalph">
     <span class="tnum">؟</span>
     <h2>أسئلة وأجوبة ختامية (10 أسئلة) — تُغلق قسم "25: ارتفاع ضغط الدم الرئوي" بأكمله</h2>
   </div>
 
   <section class="roman" id="c9phq1to4">
     <div class="roman-head"><div class="roman-badge">؟</div><h2>الأسئلة 1-4</h2></div>
-
-    <div class="card point-num">
-      <strong>س1:</strong> التشخيص الأكثر إغفالاً بمسنين مُحالين لتقييم PH؟ <strong>✅ C(HFpEF).</strong>
-    </div>
-    <div class="card point-num">
-      <strong>س2:</strong> امرأة57، بدينة، NYHA III، HTN، ضغط=136/85. إيكو: PA انقباضي=75+نمط حمل ضغطي على RV، إعادة تشكيل مركزية خفيفة LV، توسع خفيف LA بضغط أذيني طبيعي. <strong>الخطوة التالية؟</strong>
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ C(قسطرة قلب يمنى ويسرى مع اختبار التفاعلية+اختبار الجهد).</strong> قد PH قبل شعيري أو مرتبط بخلل انبساطي خفي. <strong>بغياب فرط حجم/HTN غير مضبوط ودون إثبات↑PCWP، المدر غير مناسب.</strong> <strong>لا يُوصَف سيلدينافيل قبل تأكيد الأصل قبل الشعيري بالقسطرة.</strong> إن PCWP/LVEDP طبيعيان بالراحة → اختبار جهد(خاصة+توسع LA وإعادة تشكيل مركزية). <strong>اختبار التفاعلية أيضًا اختبار إجهاد للقلب الأيسر.</strong> دراسة النوم مهمة لكن ليست الأولوية(لا تُفسِّر PH شديدًا بذاتها).</p>
-    </div>
-    <div class="card point-num">
-      <strong>س3:</strong> PH شديد(75/35، متوسط45)، PCWP/LVEDP=13راحة/19جهد، لا استجابة لأدينوزين. بوسنتان+سيليكسيباغ→تحسن NYHA II لكن ضغط PA=75 مستمرًا. <strong>الخطوة التالية؟✅ C(إضافة سيلدينافيل).</strong>
-      <p style="margin-top:8px">باستثناء استجابة درامية نادرة للتفاعلية، علاجات PAH تخفض PA فقط~10% — <strong>لا يُستخدَم PA كهدف.</strong> نقاط النهاية=تحسُّن الدرجة الوظيفية+RV+RA. الموسِّعات ↓PVR+↑CO(كلاهما مرغوب) — <strong>PA(≈PVR×CO) قد يبقى كما هو رغم تحسن حقيقي بالمكوِّنات.</strong></p>
-    </div>
-    <div class="card point-num">
-      <strong>س4(معايير نقاط النهاية، ما عدا؟):</strong>
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ D خاطئة</strong> — ↓ضغط PA بنسبة20% <strong>ليس</strong> نقطة نهاية(للسبب أعلاه). باقي المعايير(NYHA I-II، RA&lt;8، مسافة380-440+، توسع RV طبيعي، مؤشر قلبي2.5-3، BNP طبيعي) صحيحة.</p>
-    </div>
+    <div class="card point-num qblock" data-qid="c9p31-q1" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س1</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">التشخيص الأكثر إغفالاً بمسنين مُحالين لتقييم PH؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">انقطاع النفس أثناء النوم</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">مرض رئوي مزمن</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">قصور القلب مع الكسر القذفي المحفوظ (HFpEF)</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">الانصمام الرئوي (PE)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin:0"><strong>✅ C(HFpEF).</strong></p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c9p31-q2" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س2</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة57، بدينة، NYHA III، HTN، ضغط=136/85. إيكو: PA انقباضي=75+نمط حمل ضغطي على RV، إعادة تشكيل مركزية خفيفة LV، توسع خفيف LA بضغط أذيني طبيعي. <strong>الخطوة التالية؟</strong></div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">وصف مدر بولي وإعادة تقييم ضغط الشريان الرئوي</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">دراسة نوم</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">قسطرة قلب يمنى ويسرى مع اختبار التفاعلية الوعائية واختبار الجهد</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">وصف السيلدينافيل</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ C(قسطرة قلب يمنى ويسرى مع اختبار التفاعلية+اختبار الجهد).</strong> قد PH قبل شعيري أو مرتبط بخلل انبساطي خفي. <strong>بغياب فرط حجم/HTN غير مضبوط ودون إثبات↑PCWP، المدر غير مناسب.</strong> <strong>لا يُوصَف سيلدينافيل قبل تأكيد الأصل قبل الشعيري بالقسطرة.</strong> إن PCWP/LVEDP طبيعيان بالراحة → اختبار جهد(خاصة+توسع LA وإعادة تشكيل مركزية). <strong>اختبار التفاعلية أيضًا اختبار إجهاد للقلب الأيسر.</strong> دراسة النوم مهمة لكن ليست الأولوية(لا تُفسِّر PH شديدًا بذاتها).</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c9p31-q3" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س3</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">PH شديد(75/35، متوسط45)، PCWP/LVEDP=13راحة/19جهد، لا استجابة لأدينوزين. بوسنتان+سيليكسيباغ→تحسن NYHA II لكن ضغط PA=75 مستمرًا. <strong>الخطوة التالية؟</strong></div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin:0"><strong>✅ C(إضافة سيلدينافيل).</strong></p>
+<p style="margin-top:8px">باستثناء استجابة درامية نادرة للتفاعلية، علاجات PAH تخفض PA فقط~10% — <strong>لا يُستخدَم PA كهدف.</strong> نقاط النهاية=تحسُّن الدرجة الوظيفية+RV+RA. الموسِّعات ↓PVR+↑CO(كلاهما مرغوب) — <strong>PA(≈PVR×CO) قد يبقى كما هو رغم تحسن حقيقي بالمكوِّنات.</strong></p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c9p31-q4" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س4</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem"><strong>(معايير نقاط النهاية، ما عدا؟):</strong></div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ D خاطئة</strong> — ↓ضغط PA بنسبة20% <strong>ليس</strong> نقطة نهاية(للسبب أعلاه). باقي المعايير(NYHA I-II، RA&lt;8، مسافة380-440+، توسع RV طبيعي، مؤشر قلبي2.5-3، BNP طبيعي) صحيحة.</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
   </section>
 
   <section class="roman" id="c9phq5to7">
     <div class="roman-head"><div class="roman-badge">؟</div><h2>الأسئلة 5-7</h2></div>
-
-    <div class="card point-num">
-      <strong>س5:</strong> امرأة55، NYHA III، PAH. <strong>أفضل علاج خط أول؟✅ D(تاداالفيل-أمبريسينتان مزدوج).</strong>
-      <p style="margin-top:8px">العلاج المبدئي المزدوج تفوَّق على الأحادي(تجربة AMBITION). <strong>البروستاسيكلينات=خط أول فقط بـNYHA IV أو خطورة عالية أخرى/فشل RV</strong> — لا بهذه المريضة(III).</p>
-    </div>
-    <div class="card point-num">
-      <strong>س6:</strong> رجل49، CTEPH+فشل RV سابق(RA=25، PA=95/55، PCWP=20-22، PVR=11). على بوسنتان+سيلدينافيل+تريبروستينيل(أُضيف لتفاقم الأعراض) — استمر التفاقم. قسطرة معادة: RA=14، CO=8(تمديد حراري)، PA/PCWP بالشكل25.3(فرق ضغط نبضي واسع، تقارب من البطيني). <strong>الخطوة التالية؟✅ C(خفض جرعة الموسِّع+النظر بفوروسيميد).</strong>
-      <p style="margin-top:8px">أوليًا: PAH شديد قبل شعيري+فشل RV+↑↑RA، PCWP مرتفع طفيفًا بسبب تساوي الضغوط الانبساطية(RA أعلى قليلاً من PCWP)+غير متناسب مع شدة PVR. <strong>حاليًا:</strong> فرق ضغط نبضي PA واسع+تقارب من البطيني → <strong>قصور رئوي شديد أو حالة نتاج مرتفع</strong> — CO المرتفع بالتمديد الحراري يُرجِّح الثاني(بالقصور الرئوي، محلول التمديد يُعاود الدوران بعيدًا عن الحساس → CO مقاس منخفض/غير قابل للقياس). <strong>PCWP=35(موجة V=50)</strong> يشير لفشل LV شديد. <strong>PCWP&gt;&gt;RA يدل بوضوح أن فشل LV هو العملية الأساسية حاليًا</strong>(لا ↑PVR — محسوب~2.5وحدة وود فقط). <strong>PH الحالي ثانوي لفشل LV+حالة نتاج مرتفع</strong>(ناتج عن إفراط علاج بالموسِّعات → HF عالي النتاج بحمل حجمي مفرط).</p>
-    </div>
-    <div class="card point-num">
-      <strong>س7:</strong> امرأة35، PAH شديد(PA=100، PVR=9)، ASD=1سم بتحويلة R-L، RV متوسع خفيفًا بحمل ضغطي رئيسي. <strong>التشخيص والخطوة؟✅ C(PAH ثانوي لـASD لكن ليس آيزنمنغر صريح؛ اختبار التفاعلية — إن↓PVR+تحوَّلت التحويلة L-R يمكن إغلاق ASD).</strong>
-      <p style="margin-top:8px">عيب صغير(VSD&lt;1سم أو ASD&lt;2سم)+PH شديد+↑↑PVR = <strong>اكتشاف عرضي غالبًا لا سبب PAH</strong>(ESC2015) — <strong>يسمح بتخفيف الضغط عن الحجرات اليمنى، لا يُغلَق.</strong> <strong>شدة PVR غير متناسبة مع حجم ASD</strong>(نادرًا يُسبب ASD وحده آيزنمنغر، وإن حدث فالعيب كبير&gt;2سم عادة+فشل RV سابق التطور). <strong>الإغلاق مناسب فقط إن العيب كبير.</strong></p>
-    </div>
+    <div class="card point-num qblock" data-qid="c9p31-q5" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س5</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة55، NYHA III، PAH. <strong>أفضل علاج خط أول؟</strong></div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin:0"><strong>✅ D(تاداالفيل-أمبريسينتان مزدوج).</strong></p>
+<p style="margin-top:8px">العلاج المبدئي المزدوج تفوَّق على الأحادي(تجربة AMBITION). <strong>البروستاسيكلينات=خط أول فقط بـNYHA IV أو خطورة عالية أخرى/فشل RV</strong> — لا بهذه المريضة(III).</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c9p31-q6" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س6</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل49، CTEPH+فشل RV سابق(RA=25، PA=95/55، PCWP=20-22، PVR=11). على بوسنتان+سيلدينافيل+تريبروستينيل(أُضيف لتفاقم الأعراض) — استمر التفاقم. قسطرة معادة: RA=14، CO=8(تمديد حراري)، PA/PCWP بالشكل25.3(فرق ضغط نبضي واسع، تقارب من البطيني). <strong>الخطوة التالية؟</strong></div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">فرط ضغط الدم الرئوي لدى المريض مقاوم للعلاج. زد جرعة لا تريبروستينيل</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">الاستمرار على النظام العلاجي الحالي. ضغط الأذين الأيمن، النتاج القلبي، و PVR قد تحسنوا</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">خفض جرعة العلاج الموسع للأوعية والنظر في إضافة فوروسيميد (Furosemide)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin:0"><strong>✅ C(خفض جرعة الموسِّع+النظر بفوروسيميد).</strong></p>
+<p style="margin-top:8px">أوليًا: PAH شديد قبل شعيري+فشل RV+↑↑RA، PCWP مرتفع طفيفًا بسبب تساوي الضغوط الانبساطية(RA أعلى قليلاً من PCWP)+غير متناسب مع شدة PVR. <strong>حاليًا:</strong> فرق ضغط نبضي PA واسع+تقارب من البطيني → <strong>قصور رئوي شديد أو حالة نتاج مرتفع</strong> — CO المرتفع بالتمديد الحراري يُرجِّح الثاني(بالقصور الرئوي، محلول التمديد يُعاود الدوران بعيدًا عن الحساس → CO مقاس منخفض/غير قابل للقياس). <strong>PCWP=35(موجة V=50)</strong> يشير لفشل LV شديد. <strong>PCWP&gt;&gt;RA يدل بوضوح أن فشل LV هو العملية الأساسية حاليًا</strong>(لا ↑PVR — محسوب~2.5وحدة وود فقط). <strong>PH الحالي ثانوي لفشل LV+حالة نتاج مرتفع</strong>(ناتج عن إفراط علاج بالموسِّعات → HF عالي النتاج بحمل حجمي مفرط).</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c9p31-q7" data-mode="open" data-correct="">
+  <div class="qhead"><span class="qnum">س7</span><span class="qhint">اضغط أي خيار لعرض الشرح</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة35، PAH شديد(PA=100، PVR=9)، ASD=1سم بتحويلة R-L، RV متوسع خفيفًا بحمل ضغطي رئيسي. <strong>التشخيص والخطوة؟</strong></div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">متلازمة آيزنمنغر (Eisenmenger syndrome). إغلاق الـASD مضاد لالستطباب في هذه المرحلة</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">فرط ضغط دم شرياني رئوي مجهول السبب (Idiopathic PAH). الـASD وجد بالصدفة واليجب إغلاقه</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">فرط ضغط دم شرياني رئوي ثانوي ل، ASD لكنه ليس آيزنمنغر صريح. يجب إجراء اختبار التفاعلية الوعائية: إذا وتحولت التحويلة من يمين-إلى-يسار إلى يسار-إلى-يمين أثناء الاختبار، يمكن إغلاق ال ASD. انخفضت PVR</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin:0"><strong>✅ C(PAH ثانوي لـASD لكن ليس آيزنمنغر صريح؛ اختبار التفاعلية — إن↓PVR+تحوَّلت التحويلة L-R يمكن إغلاق ASD).</strong></p>
+<p style="margin-top:8px">عيب صغير(VSD&lt;1سم أو ASD&lt;2سم)+PH شديد+↑↑PVR = <strong>اكتشاف عرضي غالبًا لا سبب PAH</strong>(ESC2015) — <strong>يسمح بتخفيف الضغط عن الحجرات اليمنى، لا يُغلَق.</strong> <strong>شدة PVR غير متناسبة مع حجم ASD</strong>(نادرًا يُسبب ASD وحده آيزنمنغر، وإن حدث فالعيب كبير&gt;2سم عادة+فشل RV سابق التطور). <strong>الإغلاق مناسب فقط إن العيب كبير.</strong></p></div>
+</div>
   </section>
 
   <section class="roman" id="c9phq8to10">
     <div class="roman-head"><div class="roman-badge">؟</div><h2>الأسئلة 8-10</h2></div>
-
-    <div class="card point-num">
-      <strong>س8(مقارنة أدوية PAH):</strong>
-      <p style="margin-top:8px; color:var(--teal)">أعلى سمية كبدية+أكثر تداخلات CYP450+يُقلِّل موانع الحمل الفموية = <strong>بوسنتان.</strong> الأكثر ارتباطًا بوذمة محيطية = <strong>أمبريسينتان.</strong></p>
-    </div>
-    <div class="card point-num">
-      <strong>س9:</strong> رجل71، بدين، HTN، فوروسيميد لضيق نفس/وذمة. إيكو: EF طبيعي، LVH متوسط، توسع LA، PA انقباضي=65. قسطرة: PA=60/32(متوسط41)، PCWP=14. <strong>الخطوة التالية؟✅ C(500مل سالين/5دقائق+إعادة فحص PCWP).</strong>
-      <p style="margin-top:8px">اشتباه سريري مرتفع بـHFpEF(العمر، البدانة، HTN، LVH، توسع LA). <strong>PCWP قد منخفض بالراحة جزئيًا بتأثير الفوروسيميد</strong> — اختبار الجهد/تحميل الحجم قد يكشف ارتفاعًا مفرطًا(&gt;18بعد500مل، أو&gt;25بالجهد=قصور قلب أيسر). <strong>LVEDP غالبًا أعلى من PCWP</strong> بخلل LV كامن، <strong>لكن ليس الإجراء الأكثر فائدة</strong>(أكثر فائدة إن السياق يشير لـPAH+موجة PCWP مخمَّدة مشكوك بها).</p>
-    </div>
-    <div class="card point-num">
-      <strong>س10:</strong> امرأة41، توسع RV+TR شديد. قسطرة: RA=15، متوسط PA=43، PCWP=19، CO=5.4(تمديد حراري). <strong>تصنيف PH؟✅ C(مختلط قبل وبعد شعيري).</strong>
-      <p style="margin-top:8px">PVR=(43-19)/5.4≈4.4وحدة وود. <strong>PCWP&gt;15=مكوِّن بعد شعيري؛ PVR≥3=مكوِّن قبل شعيري</strong> → مختلط. <strong>رغم اعتبار التمديد الحراري تقليديًا أقل دقة بـTR شديد،</strong> يبقى متفوقًا على طريقة فيك غير المباشرة حتى بـTR شديد، ويحافظ على ترابط جيد مع فيك المباشر.</p>
-    </div>
+    <div class="card point-num qblock" data-qid="c9p31-q8" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س8</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem"><strong>(مقارنة أدوية PAH):</strong></div>
+  <ul class="qstatic" style="list-style:none;padding:0;margin:10px 0 0">
+    <li style="margin:6px 0"><b style="color:var(--gold)">A.</b> سيلدينافيل (Sildenafil)</li>
+    <li style="margin:6px 0"><b style="color:var(--gold)">B.</b> بوسنتان (Bosentan)</li>
+    <li style="margin:6px 0"><b style="color:var(--gold)">C.</b> أمبريسينتان (Ambrisentan)</li>
+    <li style="margin:6px 0"><b style="color:var(--gold)">D.</b> ماكيتينتان (Macitentan)</li>
+  </ul>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)">أعلى سمية كبدية+أكثر تداخلات CYP450+يُقلِّل موانع الحمل الفموية = <strong>بوسنتان.</strong> الأكثر ارتباطًا بوذمة محيطية = <strong>أمبريسينتان.</strong></p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c9p31-q9" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س9</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل71، بدين، HTN، فوروسيميد لضيق نفس/وذمة. إيكو: EF طبيعي، LVH متوسط، توسع LA، PA انقباضي=65. قسطرة: PA=60/32(متوسط41)، PCWP=14. <strong>الخطوة التالية؟</strong></div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin:0"><strong>✅ C(500مل سالين/5دقائق+إعادة فحص PCWP).</strong></p>
+<p style="margin-top:8px">اشتباه سريري مرتفع بـHFpEF(العمر، البدانة، HTN، LVH، توسع LA). <strong>PCWP قد منخفض بالراحة جزئيًا بتأثير الفوروسيميد</strong> — اختبار الجهد/تحميل الحجم قد يكشف ارتفاعًا مفرطًا(&gt;18بعد500مل، أو&gt;25بالجهد=قصور قلب أيسر). <strong>LVEDP غالبًا أعلى من PCWP</strong> بخلل LV كامن، <strong>لكن ليس الإجراء الأكثر فائدة</strong>(أكثر فائدة إن السياق يشير لـPAH+موجة PCWP مخمَّدة مشكوك بها).</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c9p31-q10" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س10</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">امرأة41، توسع RV+TR شديد. قسطرة: RA=15، متوسط PA=43، PCWP=19، CO=5.4(تمديد حراري). <strong>تصنيف PH؟</strong></div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">فرط ضغط دم رئوي قبل الشعيرات (Pre-capillary PH)</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">فرط ضغط دم رئوي بعد الشعيرات (Post-capillary PH)</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">فرط ضغط دم رئوي مختلط (قبل وبعد الشعيرات) Combined pre- and post-capillary PH</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">اليمكن قياس المقاومة الوعائية الرئوية (PVR) بدقة. طريقة فيك غير المباشرة (Indirect Fick method) أفضل من التمديد الحراري في حالات القصور الشديد في الصمام ثلاثي الشرف (TR).</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin:0"><strong>✅ C(مختلط قبل وبعد شعيري).</strong></p>
+<p style="margin-top:8px">PVR=(43-19)/5.4≈4.4وحدة وود. <strong>PCWP&gt;15=مكوِّن بعد شعيري؛ PVR≥3=مكوِّن قبل شعيري</strong> → مختلط. <strong>رغم اعتبار التمديد الحراري تقليديًا أقل دقة بـTR شديد،</strong> يبقى متفوقًا على طريقة فيك غير المباشرة حتى بـTR شديد، ويحافظ على ترابط جيد مع فيك المباشر.</p></div>
+</div>
   </section>
 
   <div style="text-align:center; margin:50px 0 30px; padding:28px 24px; background:linear-gradient(135deg, rgba(45,212,191,.12), rgba(212,175,55,.08)); border:1.5px solid var(--gold); border-radius:16px;">
@@ -398,6 +511,105 @@ function toggleToc(show){
     if(overlay) overlay.classList.remove('show');
   }
 }
+</script>
+<script id="ca-chq-script">
+(function(){
+  var KEY='cardioarab-qb:'+(location.pathname.split('/').pop()||'page');
+  var blocks=[].slice.call(document.querySelectorAll('.qblock'));
+  var state={};
+  try{ state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ state={}; }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+  function sameSet(a,b){ if(a.length!==b.length) return false; return a.every(function(x){return b.indexOf(x)>-1;}); }
+
+  function render(q){
+    var id=q.dataset.qid, mode=q.dataset.mode, st=state[id]||{sel:[],done:false,ok:null};
+    var corr=(q.dataset.correct||'').split(',').filter(Boolean);
+    var opts=[].slice.call(q.querySelectorAll('.qopt'));
+    var ans=q.querySelector('.qans'), status=q.querySelector('.qstatus');
+    var chk=q.querySelector('.qcheck'), show=q.querySelector('.qshow'), rate=q.querySelector('.qrate');
+    q.classList.remove('is-ok','is-bad');
+    opts.forEach(function(o){
+      var l=o.dataset.l, isSel=st.sel.indexOf(l)>-1, isCorr=corr.indexOf(l)>-1;
+      o.classList.remove('sel','is-right','is-wrong','is-missed');
+      o.disabled=!!st.done;
+      o.setAttribute('aria-pressed',isSel?'true':'false');
+      if(st.done && mode==='open'){
+        if(isSel) o.classList.add('sel');
+      } else if(st.done){
+        if(isSel&&isCorr) o.classList.add('is-right');
+        else if(isSel&&!isCorr) o.classList.add('is-wrong');
+        else if(!isSel&&isCorr) o.classList.add('is-missed');
+      } else if(isSel){ o.classList.add('sel'); }
+    });
+    if(chk){ chk.hidden=!!st.done; chk.disabled=!st.sel.length; }
+    if(show){ show.hidden=!!st.done; }
+    if(ans){ ans.hidden=!st.done; }
+    if(rate){ rate.hidden=!(mode==='reveal'&&st.done); }
+    if(st.done){
+      if(st.ok===true){ q.classList.add('is-ok'); status.textContent='✔ إجابة صحيحة'; }
+      else if(st.ok===false){ q.classList.add('is-bad'); status.textContent='✖ إجابة خاطئة'; }
+      else { status.textContent=(mode==='open')?'👁 تم عرض الشرح':'👁 تم عرض الإجابة'; }
+    } else { status.textContent=''; }
+  }
+
+  function updateBar(){
+    var tot=blocks.length, done=0, ok=0, bad=0;
+    blocks.forEach(function(q){
+      var st=state[q.dataset.qid]; if(!st||!st.done) return;
+      done++; if(st.ok===true) ok++; else if(st.ok===false) bad++;
+    });
+    var neu=done-ok-bad;
+    function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+    set('qbDone',done); set('qbTot',tot); set('qbOk',ok); set('qbBad',bad);
+    var graded=ok+bad;
+    set('qbPct', graded? (Math.round(ok*100/graded)+'%') : '—');
+    function w(id,n){ var e=document.getElementById(id); if(e) e.style.width=(tot?(n*100/tot):0)+'%'; }
+    w('qbFOk',ok); w('qbFBad',bad); w('qbFNeu',neu);
+  }
+
+  function finish(q,st,ok){ st.done=true; st.ok=ok; state[q.dataset.qid]=st; save(); render(q); updateBar(); }
+
+  blocks.forEach(function(q){
+    var id=q.dataset.qid, mode=q.dataset.mode;
+    var corr=(q.dataset.correct||'').split(',').filter(Boolean);
+    q.addEventListener('click',function(ev){
+      var st=state[id]||{sel:[],done:false,ok:null};
+      if(st.done && !ev.target.closest('.qrate')) return;
+      var opt=ev.target.closest('.qopt');
+      if(opt && !st.done){
+        var l=opt.dataset.l;
+        if(mode==='single'){ st.sel=[l]; finish(q,st,corr[0]===l); }
+        else if(mode==='open'){ st.sel=[l]; finish(q,st,null); }
+        else if(mode==='multi'){
+          var i=st.sel.indexOf(l); if(i>-1) st.sel.splice(i,1); else st.sel.push(l);
+          state[id]=st; save(); render(q);
+        }
+        return;
+      }
+      if(ev.target.closest('.qcheck') && !st.done){ finish(q,st,sameSet(st.sel,corr)); return; }
+      if(ev.target.closest('.qshow') && !st.done){ finish(q,st,null); return; }
+      var r=ev.target.closest('.qrate [data-rate]');
+      if(r && st.done){ st.ok=(r.dataset.rate==='ok'); state[id]=st; save(); render(q); updateBar(); }
+    });
+    render(q);
+  });
+  updateBar();
+
+  var rs=document.getElementById('qbReset');
+  if(rs) rs.addEventListener('click',function(){
+    if(!confirm('تصفير كل إجابات هذه الصفحة والبدء من جديد؟')) return;
+    state={}; save();
+    blocks.forEach(render); updateBar();
+    var bar=document.getElementById('qbBar');
+    if(bar) bar.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
+  function fixBar(){
+    var h=document.querySelector('header.top'), b=document.getElementById('qbBar');
+    if(h&&b) b.style.top=(h.offsetHeight+6)+'px';
+  }
+  fixBar(); window.addEventListener('resize',fixBar); window.addEventListener('load',fixBar);
+})();
 </script>
 <script src="notes.js"></script>
 </body>

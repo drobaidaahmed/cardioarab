@@ -223,6 +223,53 @@
   header.top.shrink .eyebrow{font-size:10px;}
   header.top.shrink .chapno{padding:4px 10px; font-size:11px;}
 </style>
+
+<style id="ca-chq-style">
+/* ===== Interactive closing quiz (chapters) ===== */
+:root{--ok:#22c55e;--ok-bg:rgba(34,197,94,.12);--bad:#ef4444;--bad-bg:rgba(239,68,68,.12);--qgold-dim:rgba(251,191,36,.45);}
+:root[data-theme="light"]{--ok:#15803d;--ok-bg:rgba(21,128,61,.10);--bad:#b91c1c;--bad-bg:rgba(185,28,28,.09);--qgold-dim:rgba(168,121,31,.5);}
+#qbBar{position:sticky;top:62px;z-index:45;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:6px 14px;margin:18px 0 14px;box-shadow:0 4px 12px rgba(0,0,0,.18);}
+#qbBar .qb-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;}
+#qbBar .qb-stats{display:flex;gap:14px;align-items:center;white-space:nowrap;}
+#qbBar b{font-weight:800;}
+#qbBar .qb-ok{color:var(--ok);} #qbBar .qb-bad{color:var(--bad);} #qbBar .qb-pct{color:var(--gold);}
+#qbBar .qb-prog{margin-top:5px;height:5px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;overflow:hidden;display:flex;}
+#qbBar .qb-prog i{display:block;height:100%;width:0;transition:width .25s;}
+#qbBar .qb-prog .f-ok{background:var(--ok);} #qbBar .qb-prog .f-bad{background:var(--bad);} #qbBar .qb-prog .f-neu{background:var(--qgold-dim);}
+#qbReset{background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:3px 12px;white-space:nowrap;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;}
+#qbReset:hover{border-color:var(--gold);color:var(--gold);}
+.qblock{scroll-margin-top:130px;}
+.qblock .qhead{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.qblock .qnum{background:var(--gold);color:#111;font-weight:800;font-size:12.5px;border-radius:8px;padding:2px 10px;}
+.qblock .qhint{font-size:12px;color:var(--text-dim);}
+.qblock .qstatus{margin-inline-start:auto;font-size:12.5px;font-weight:700;}
+.qblock.is-ok .qstatus{color:var(--ok);} .qblock.is-bad .qstatus{color:var(--bad);}
+.qblock .qstem{line-height:1.95;}
+.qopts{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.qopt{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:right;background:var(--panel2);border:1.5px solid var(--border);color:var(--text);border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit;font-size:14.6px;line-height:1.8;transition:border-color .15s,background .15s;}
+.qopt:hover:not(:disabled){border-color:var(--qgold-dim);}
+.qopt .qol{flex:none;width:26px;height:26px;border-radius:50%;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12.5px;color:var(--gold);margin-top:2px;}
+.qopt .qot{flex:1;}
+.qopt.sel{border-color:var(--gold);background:rgba(251,191,36,.10);}
+.qopt:disabled{cursor:default;}
+.qopt.is-right{border-color:var(--ok);background:var(--ok-bg);}
+.qopt.is-right .qol{background:var(--ok);border-color:var(--ok);color:#fff;}
+.qopt.is-right .qot::after{content:" ✓";color:var(--ok);font-weight:800;}
+.qopt.is-wrong{border-color:var(--bad);background:var(--bad-bg);}
+.qopt.is-wrong .qol{background:var(--bad);border-color:var(--bad);color:#fff;}
+.qopt.is-wrong .qot::after{content:" ✗";color:var(--bad);font-weight:800;}
+.qopt.is-missed{border:1.5px dashed var(--ok);background:transparent;}
+.qopt.is-missed .qol{border-color:var(--ok);color:var(--ok);}
+.qopt.is-missed .qot::after{content:" ← الصحيحة";color:var(--ok);font-weight:700;font-size:12.5px;}
+.qact{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.qbtn{background:var(--teal);color:#04211d;border:0;border-radius:9px;padding:8px 18px;cursor:pointer;font:inherit;font-weight:700;font-size:14px;}
+.qbtn:disabled{opacity:.45;cursor:not-allowed;}
+.qbtn.okb{background:var(--ok);color:#fff;} .qbtn.badb{background:var(--bad);color:#fff;}
+.qans[hidden]{display:none;}
+.qans{margin-top:12px;border-top:1px dashed var(--border);padding-top:10px;}
+.qrate{margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--text-dim);}
+@media (max-width:600px){#qbBar{padding:5px 10px;} #qbBar .qb-row{font-size:12.5px;} #qbBar .qb-stats{gap:10px;} #qbReset .rs-t{display:none;} #qbReset{padding:2px 10px;font-size:15px;} .qopt{padding:9px 10px;font-size:14.2px;}}
+</style>
 </head>
 <body>
 <button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
@@ -285,70 +332,161 @@
   </section>
 
   <!-- ============ أسئلة ختامية AF ============ -->
-  <div class="topic-divider" id="c5afqa">
+  <div id="qbBar">
+  <div class="qb-row">
+    <div class="qb-stats">
+      <span title="الأسئلة المُجابة">المُجاب <b id="qbDone">0</b>/<b id="qbTot">0</b></span>
+      <span class="qb-ok" title="إجابات صحيحة">✔ <b id="qbOk">0</b></span>
+      <span class="qb-bad" title="إجابات خاطئة">✖ <b id="qbBad">0</b></span>
+      <span class="qb-pct" title="الدقة"><b id="qbPct">—</b></span>
+    </div>
+    <button id="qbReset" type="button" title="تصفير العداد وكل الإجابات" aria-label="تصفير">↺<span class="rs-t"> تصفير</span></button>
+  </div>
+  <div class="qb-prog"><i id="qbFOk" class="f-ok"></i><i id="qbFBad" class="f-bad"></i><i id="qbFNeu" class="f-neu"></i></div>
+</div>
+
+<div class="topic-divider" id="c5afqa">
     <span class="tnum">؟</span>
     <h2>أسئلة ختامية شاملة (14 سؤالًا) — نهاية القسم 10 (الرجفان الأذيني)</h2>
   </div>
 
   <section class="roman" id="c5afqasection">
     <div class="roman-head"><div class="roman-badge">؟</div><h2>حالات سريرية متكاملة</h2></div>
-
-    <div class="card point-num">
-      <strong>س1:</strong> رجل 54، صدمة (75/50، فاقد وعي)، AF بمعدل 120. الخطوة التالية؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ AF على الأرجح ثانوي للصدمة لا سببها</strong> (معدل&lt;150، أو&lt;130 بانقباضي HF). لا حاجة لـDCCV فوري — يُبحَث عن أسباب أخرى (حمى، عدوى، رضوض، نزيف، MI كبير).</p>
-    </div>
-    <div class="card point-num">
-      <strong>س2:</strong> رجل 54، HF+EF=25%، AF جديد بمعدل 125+تفاقم HF. التدبير؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ إدرار+موسِّعات أولاً</strong> (Atrial kick ضئيل بالتفاقم — التقويم الفوري لن يُحسِّن فورًا ولن ينجح/يستمر على الأرجح). ديجوكسين أو أميودارون لضبط حاد&lt;110. بالاستقرار: حاصرات بيتا+ديجوكسين لهدف80-100. DCCV اختياري لاحقًا إن اعتُقد AF محفزًا رئيسيًا؛ فشله/نكسه المبكر → استئصال AF أو AV+BiV.</p>
-    </div>
-    <div class="card point-num">
-      <strong>س3:</strong> رجل 72، HTN، لاعرضي، AF بمعدل 110 صدفة. الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ ضبط معدل فقط</strong> (حاصرات بيتا/ديلتيازيم، هدف&lt;100-110) — لا إشارة لـDCCV/ضبط نظم (لاعرضي). CHA2DS2-VASc=2 → مضاد تخثر مُبرَّر.</p>
-    </div>
-    <div class="card point-num">
-      <strong>س4:</strong> رجل 69، AF انتيابي متكرر عرضي، HTN+سكري+كحول يومي، CAD+دعامة، CKD(GFR48)، إيكو: EF طبيعي، LA=4.3سم، LVH خفيف(12ملم)، قرحة نازفة قبل شهرين، ديلتيازيم فشل (معدل الآن 58). الخيار التالي؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ B (إضافة درونيدارون).</strong> عرضي→ضبط نظم. فئة Ic ممنوعة (CAD). بـCAD: درونيدارون/سوتالول أولاً، أميودارون ثانيًا. CKD→درونيدارون أفضل من سوتالول. LVH خفيف لا يمنع B-D. عند بدء درونيدارون: قلِّل الديلتيازيم (يرفع مستوياته، خطر بطء مفرط).</p>
-    </div>
-    <div class="card point-num">
-      <strong>س5:</strong> هل يحتاج مريض س4 مضاد تخثر (على أسبرين 81 لـCAD)؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ B (CHA2DS2-VASc=4، ابدأ مضاد تخثر رغم خطر النزيف).</strong> HAS-BLED المرتفع (=5) لا يستبعد العلاج، بل يستدعي تصحيح العوامل القابلة للتعديل (PPI، H.pylori، إيقاف كحول، ضبط HTN، تحسين الكلى). بعد سنة من الدعامة، يمكن إيقاف الأسبرين مع مضاد التخثر.</p>
-    </div>
-    <div class="card point-num">
-      <strong>س6:</strong> على درونيدارون — أي مضاد تخثر؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ C (أبيكسابان).</strong> تجنَّب دابيغاتران/ريفاروكسابان مع درونيدارون؛ أبيكسابان أقل تداخلاً+أقل تأثرًا بـCKD+يُقلل النزف الكلي (بخلاف الآخرين اللذين يزيدان الهضمي بلا نقص إجمالي).</p>
-    </div>
-    <div class="card point-num">
-      <strong>س7:</strong> رجل 62، خفقان أيام، HTN فقط، BP=115/65، ضيق نفس خفيف+خرخرات، AF بمعدل140، EF=35%، LA=4سم. مع فوروسيميد، الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ D (أميودارون أو ديجوكسين وريدي).</strong> HF خفيف على الأرجح بسبب AF. لا DCCV عاجل (ليس&gt;130+صدمة/وذمة هائلة). ديلتيازيم ممنوع بـHFrEF؛ ميتوبرولول وريدي يُتجنَّب حادًّا. TEE+DCCV لاحقًا بعد إدرار كافٍ.</p>
-    </div>
-    <div class="card point-num">
-      <strong>س8:</strong> نفس السيناريو لكن EF طبيعي+LVH. الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ B (ميتوبرولول أو ديلتيازيم وريدي).</strong> HFpEF — كلاهما مناسب هنا (بخلاف س7). AF على الأرجح سبب تفاقم HFpEF بمريض LVH+خلل انبساطي.</p>
-    </div>
-    <div class="card point-num">
-      <strong>س9:</strong> مريض س8، أُبطئ لـ80 وأصبح لاعرضيًا. هل يُفكَّر بـDCCV؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ C (نعم، مع TEE بعد 24 ساعة).</strong> AF حديث+أعراض شديدة أولية+عمر&lt;65+HF+LA غير متوسع شديدًا = عوامل نجاح جيدة. احتمال تحويل تلقائي 50-60% خلال 24 ساعة → الانتظار قبل DCCV منطقي.</p>
-    </div>
-    <div class="card point-num">
-      <strong>س10:</strong> رجل 78، PPM لحصار AV، HTN مضبوط، فحص الجهاز: 3 نوبات AF غير عرضية (1-2 ساعة كل). الخطوة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ (لا حاجة لمضاد نظم؛ لا حاجة لمضاد تخثر لأن كل نوبة&lt;24 ساعة — أقرب لخيار C، مع مراعاة أن AF&lt;5.5 ساعة الفائدة مشكوكة).</strong> يتماشى مع بيانات TRENDS/ASSERT — AF تحت سريري قصير لا يستدعي تدخلاً روتينيًا.</p>
-    </div>
-    <div class="card point-num">
-      <strong>س11:</strong> الأكثر فعالية لتحويل AF الحاد المقيَّم بعد 8 ساعات؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ A (فليكاينيد فموي تحميل، ~70% خلال 6-8 ساعات).</strong> إيبوتيليد أسرع (~ساعة) لكن أقل فعالية(30-50%). أميودارون وريدي تأثير حاد محدود(≥24س). دوفيتياليد غير فعّال حادًّا. بروكاييناميد بديل جيد(50-60%/ساعة).</p>
-    </div>
-    <div class="card point-num">
-      <strong>س12:</strong> رجل 55، BMI=44، HTN+HFpEF، AF سابق+DCCV+سوتالول، الآن AF بمعدل135+HF خفيف. بعد الضبط، إيكو: EF=60%، LVH(14ملم)، LA=4.7سم، PH خفيف. العبارة غير الصحيحة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ E خاطئة (الأميودارون ليس الوحيد الممكن — درونيدارون/سوتالول أيضًا مقبولان بـHFpEF).</strong> باقي العبارات صحيحة: نجاح ضبط النظم منخفض هنا (يدعم قبول AF)؛ فقدان&gt;10% وزن ضروري للنجاح؛ السمنة+LA الضخم أهم عاملي نكس؛ نجاح الاستئصال طويل الأمد~70% (بشرط فقدان الوزن).</p>
-    </div>
-    <div class="card point-num">
-      <strong>س13:</strong> فشل ضبط المعدل والنظم (حتى بالاستئصال) بمريض س12 — الحل النهائي؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ استئصال العقدة AV+تحفيز بطيني (ثنائي البطين إن EF انخفض ولو طفيفًا لـ&lt;50%).</strong></p>
-    </div>
-    <div class="card point-num">
-      <strong>س14:</strong> فيزيولوجيا AF — أي عبارة خاطئة؟
-      <p style="margin-top:8px; color:var(--teal)"><strong>✅ C خاطئة.</strong> فترة الجموح الأذينية <strong>تقصر</strong> بـAF (إعادة التشكيل الكهربائي)، لا تطول. الأشيع نسيجيًا: التليف الأذيني (أكثر من التوسع)؛ فترة الجموح غير متجانسة؛ إعادة التشكيل التشريحية = توسع تدريجي لـLA — كلها صحيحة.</p>
-    </div>
+    <div class="card point-num qblock" data-qid="c5p20-q1" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س1</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 54، صدمة (75/50، فاقد وعي)، AF بمعدل 120. الخطوة التالية؟</div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ AF على الأرجح ثانوي للصدمة لا سببها</strong> (معدل&lt;150، أو&lt;130 بانقباضي HF). لا حاجة لـDCCV فوري — يُبحَث عن أسباب أخرى (حمى، عدوى، رضوض، نزيف، MI كبير).</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q2" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س2</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 54، HF+EF=25%، AF جديد بمعدل 125+تفاقم HF. التدبير؟</div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ إدرار+موسِّعات أولاً</strong> (Atrial kick ضئيل بالتفاقم — التقويم الفوري لن يُحسِّن فورًا ولن ينجح/يستمر على الأرجح). ديجوكسين أو أميودارون لضبط حاد&lt;110. بالاستقرار: حاصرات بيتا+ديجوكسين لهدف80-100. DCCV اختياري لاحقًا إن اعتُقد AF محفزًا رئيسيًا؛ فشله/نكسه المبكر → استئصال AF أو AV+BiV.</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q3" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س3</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 72، HTN، لاعرضي، AF بمعدل 110 صدفة. الخطوة؟</div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ ضبط معدل فقط</strong> (حاصرات بيتا/ديلتيازيم، هدف&lt;100-110) — لا إشارة لـDCCV/ضبط نظم (لاعرضي). CHA2DS2-VASc=2 → مضاد تخثر مُبرَّر.</p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q4" data-mode="single" data-correct="B">
+  <div class="qhead"><span class="qnum">س4</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 69، AF انتيابي متكرر عرضي، HTN+سكري+كحول يومي، CAD+دعامة، CKD(GFR48)، إيكو: EF طبيعي، LA=4.3سم، LVH خفيف(12ملم)، قرحة نازفة قبل شهرين، ديلتيازيم فشل (معدل الآن 58). الخيار التالي؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">إضافة فليكينايد أو بروبافينون</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">إضافة درونيدارون</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">إضافة أميودارون</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">إضافة سوتالول</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">استئصال الرجفان الأذيني بالقسطرة (AF ablation)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ B (إضافة درونيدارون).</strong> عرضي→ضبط نظم. فئة Ic ممنوعة (CAD). بـCAD: درونيدارون/سوتالول أولاً، أميودارون ثانيًا. CKD→درونيدارون أفضل من سوتالول. LVH خفيف لا يمنع B-D. عند بدء درونيدارون: قلِّل الديلتيازيم (يرفع مستوياته، خطر بطء مفرط).</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q5" data-mode="single" data-correct="B">
+  <div class="qhead"><span class="qnum">س5</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">هل يحتاج مريض س4 مضاد تخثر (على أسبرين 81 لـCAD)؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">درجة HAS-BLED هي.5 يجب تجنب مضاد التخثر. الاستمرار على الأسبرين</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">درجة CHA₂DS₂-VASc هي.4 يجب البدء بمضاد التخثر رغم خطر النزيف</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">استخدام علاج مضاد للصفيحات مزدوج بدلا من مضاد التخثر لتقليل خطر النزيف</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">إغلاق الزائدة الأذينية اليسرى عبر الجلد</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ B (CHA2DS2-VASc=4، ابدأ مضاد تخثر رغم خطر النزيف).</strong> HAS-BLED المرتفع (=5) لا يستبعد العلاج، بل يستدعي تصحيح العوامل القابلة للتعديل (PPI، H.pylori، إيقاف كحول، ضبط HTN، تحسين الكلى). بعد سنة من الدعامة، يمكن إيقاف الأسبرين مع مضاد التخثر.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q6" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س6</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">على درونيدارون — أي مضاد تخثر؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">دابيغاتران (Dabigatran)</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">ريفاروكسابان (Rivaroxaban)</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">أبيكسابان (Apixaban)</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">وارفارين (Warfarin)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ C (أبيكسابان).</strong> تجنَّب دابيغاتران/ريفاروكسابان مع درونيدارون؛ أبيكسابان أقل تداخلاً+أقل تأثرًا بـCKD+يُقلل النزف الكلي (بخلاف الآخرين اللذين يزيدان الهضمي بلا نقص إجمالي).</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q7" data-mode="single" data-correct="D">
+  <div class="qhead"><span class="qnum">س7</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 62، خفقان أيام، HTN فقط، BP=115/65، ضيق نفس خفيف+خرخرات، AF بمعدل140، EF=35%، LA=4سم. مع فوروسيميد، الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">تقويم نظم كهربائي عاجل (Urgent DC cardioversion)</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">ميتوبرولول وريدي (IV metoprolol)</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">ديلتيازيم وريدي (IV diltiazem)</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">أميودارون وريدي أو ديجوكسين وريدي (IV amiodarone or IV digoxin)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ D (أميودارون أو ديجوكسين وريدي).</strong> HF خفيف على الأرجح بسبب AF. لا DCCV عاجل (ليس&gt;130+صدمة/وذمة هائلة). ديلتيازيم ممنوع بـHFrEF؛ ميتوبرولول وريدي يُتجنَّب حادًّا. TEE+DCCV لاحقًا بعد إدرار كافٍ.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q8" data-mode="single" data-correct="B">
+  <div class="qhead"><span class="qnum">س8</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">نفس السيناريو لكن EF طبيعي+LVH. الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">تقويم نظم كهربائي عاجل (Urgent DC cardioversion)</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">ميتوبرولول وريدي أو ديلتيازيم وريدي (IV metoprolol or IV diltiazem)</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">أميودارون وريدي أو ديجوكسين وريدي (IV amiodarone or IV digoxin)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ B (ميتوبرولول أو ديلتيازيم وريدي).</strong> HFpEF — كلاهما مناسب هنا (بخلاف س7). AF على الأرجح سبب تفاقم HFpEF بمريض LVH+خلل انبساطي.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q9" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س9</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">مريض س8، أُبطئ لـ80 وأصبح لاعرضيًا. هل يُفكَّر بـDCCV؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">ال. تفضل استراتيجية ضبط المعدل (Rate-control strategy)</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">نعم. تقويم النظم الكهربائي مع تصوير المريء عبر الإيكو (TEE) ليس عاجلا ولكن يمكن إجراؤه في نفس اليوم إذا أمكن</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">نعم. يجب التفكير في تقويم النظم الكهربائي مع TEE بعد 24 ساعة</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ C (نعم، مع TEE بعد 24 ساعة).</strong> AF حديث+أعراض شديدة أولية+عمر&lt;65+HF+LA غير متوسع شديدًا = عوامل نجاح جيدة. احتمال تحويل تلقائي 50-60% خلال 24 ساعة → الانتظار قبل DCCV منطقي.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q10" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س10</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 78، PPM لحصار AV، HTN مضبوط، فحص الجهاز: 3 نوبات AF غير عرضية (1-2 ساعة كل). الخطوة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">أميودارون (Amiodarone)</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">درونيدارون أو سوتالول (Dronedarone or sotalol)</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">الحاجة لمضاد اضطراب النظم. الحاجة لمضاد التخثر، لأن كل نوبة AF استمرت أقل من 24 ساعة</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">مضاد تخثر، ويفضل أبيكسابان (Anticoagulation, preferably with apixaban)</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">مضاد تخثر بالوارفارين (Anticoagulation with warfarin)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ (لا حاجة لمضاد نظم؛ لا حاجة لمضاد تخثر لأن كل نوبة&lt;24 ساعة — أقرب لخيار C، مع مراعاة أن AF&lt;5.5 ساعة الفائدة مشكوكة).</strong> يتماشى مع بيانات TRENDS/ASSERT — AF تحت سريري قصير لا يستدعي تدخلاً روتينيًا.</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q11" data-mode="single" data-correct="A">
+  <div class="qhead"><span class="qnum">س11</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">الأكثر فعالية لتحويل AF الحاد المقيَّم بعد 8 ساعات؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">جرعة تحميل فموية من فليكينايد (Oral flecainide load)</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">جرعة تحميل وريدية من أميودارون (IV amiodarone load)</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">إيبوتياليد وريدي (IV ibutilide)</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">دوفيتياليد فموي (Oral dofetilide)</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ A (فليكاينيد فموي تحميل، ~70% خلال 6-8 ساعات).</strong> إيبوتيليد أسرع (~ساعة) لكن أقل فعالية(30-50%). أميودارون وريدي تأثير حاد محدود(≥24س). دوفيتياليد غير فعّال حادًّا. بروكاييناميد بديل جيد(50-60%/ساعة).</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q12" data-mode="open" data-correct="">
+  <div class="qhead"><span class="qnum">س12</span><span class="qhint">اضغط أي خيار لعرض الشرح</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">رجل 55، BMI=44، HTN+HFpEF، AF سابق+DCCV+سوتالول، الآن AF بمعدل135+HF خفيف. بعد الضبط، إيكو: EF=60%، LVH(14ملم)، LA=4.7سم، PH خفيف. العبارة غير الصحيحة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">احتمال نجاح ضبط النظم منخفض. ورغم الأعراض الأولية المرتبطة ب،AF فإن السماح باستمرار AF واعتماد استراتيجية ضبط المعدل مناسب</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">لكي تنجح استراتيجية ضبط النظم، عليه أن يخسر أكثر من 10% من وزنه</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">السمنة وتوسع الأذين الأيسر الشديد هما المؤشران الرئيسيان لتكرار AF في حالته</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">استئصال AF بالقسطرة له معدل نجاح طويل الأمد يبلغ 70% في هذه الحالة</span></button>
+    <button type="button" class="qopt" data-l="E" aria-pressed="false"><span class="qol">E</span><span class="qot">إذا تم اعتماد ضبط النظم، فإن الأميودارون هو الدواء الوحيد المضاد لاضطراب النظم الذي يمكن استخدامه</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ E خاطئة (الأميودارون ليس الوحيد الممكن — درونيدارون/سوتالول أيضًا مقبولان بـHFpEF).</strong> باقي العبارات صحيحة: نجاح ضبط النظم منخفض هنا (يدعم قبول AF)؛ فقدان&gt;10% وزن ضروري للنجاح؛ السمنة+LA الضخم أهم عاملي نكس؛ نجاح الاستئصال طويل الأمد~70% (بشرط فقدان الوزن).</p></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q13" data-mode="reveal" data-correct="">
+  <div class="qhead"><span class="qnum">س13</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">فشل ضبط المعدل والنظم (حتى بالاستئصال) بمريض س12 — الحل النهائي؟</div>
+  <div class="qact"><button type="button" class="qbtn qshow">👁 إظهار الإجابة</button></div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ استئصال العقدة AV+تحفيز بطيني (ثنائي البطين إن EF انخفض ولو طفيفًا لـ&lt;50%).</strong></p><div class="qrate" hidden><span>قيّم إجابتك (اختياري):</span><button type="button" class="qbtn okb" data-rate="ok">✔ عرفتها</button><button type="button" class="qbtn badb" data-rate="bad">✖ أخطأت</button></div></div>
+</div>
+    <div class="card point-num qblock" data-qid="c5p20-q14" data-mode="single" data-correct="C">
+  <div class="qhead"><span class="qnum">س14</span><span class="qstatus" aria-live="polite"></span></div>
+  <div class="qstem">فيزيولوجيا AF — أي عبارة خاطئة؟</div>
+  <div class="qopts">
+    <button type="button" class="qopt" data-l="A" aria-pressed="false"><span class="qol">A</span><span class="qot">أكثر الموجودات النسيجية شيو</span></button>
+    <button type="button" class="qopt" data-l="B" aria-pressed="false"><span class="qol">B</span><span class="qot">في،AF تكون فترة الجموح الأذينية (atrial refractory period) غير متجانسة</span></button>
+    <button type="button" class="qopt" data-l="C" aria-pressed="false"><span class="qol">C</span><span class="qot">إعادة التشكيل الكهربائي في AF تتميز بطول تدريجي في فترة الجموح الأذينية</span></button>
+    <button type="button" class="qopt" data-l="D" aria-pressed="false"><span class="qol">D</span><span class="qot">إعادة التشكيل التشريحية في AF تتميز بتوسع تدريجي في الأذين الأيسر</span></button>
+  </div>
+  <div class="qans" hidden><p style="margin-top:8px; color:var(--teal)"><strong>✅ C خاطئة.</strong> فترة الجموح الأذينية <strong>تقصر</strong> بـAF (إعادة التشكيل الكهربائي)، لا تطول. الأشيع نسيجيًا: التليف الأذيني (أكثر من التوسع)؛ فترة الجموح غير متجانسة؛ إعادة التشكيل التشريحية = توسع تدريجي لـLA — كلها صحيحة.</p></div>
+</div>
   </section>
 
   <div style="text-align:center; margin:40px 0 20px; padding:16px; background:rgba(45,212,191,.08); border:1px solid var(--teal-dim); border-radius:12px; color:var(--teal); font-size:14px; font-weight:600;">
@@ -462,6 +600,105 @@ function toggleToc(show){
     if(overlay) overlay.classList.remove('show');
   }
 }
+</script>
+<script id="ca-chq-script">
+(function(){
+  var KEY='cardioarab-qb:'+(location.pathname.split('/').pop()||'page');
+  var blocks=[].slice.call(document.querySelectorAll('.qblock'));
+  var state={};
+  try{ state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ state={}; }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+  function sameSet(a,b){ if(a.length!==b.length) return false; return a.every(function(x){return b.indexOf(x)>-1;}); }
+
+  function render(q){
+    var id=q.dataset.qid, mode=q.dataset.mode, st=state[id]||{sel:[],done:false,ok:null};
+    var corr=(q.dataset.correct||'').split(',').filter(Boolean);
+    var opts=[].slice.call(q.querySelectorAll('.qopt'));
+    var ans=q.querySelector('.qans'), status=q.querySelector('.qstatus');
+    var chk=q.querySelector('.qcheck'), show=q.querySelector('.qshow'), rate=q.querySelector('.qrate');
+    q.classList.remove('is-ok','is-bad');
+    opts.forEach(function(o){
+      var l=o.dataset.l, isSel=st.sel.indexOf(l)>-1, isCorr=corr.indexOf(l)>-1;
+      o.classList.remove('sel','is-right','is-wrong','is-missed');
+      o.disabled=!!st.done;
+      o.setAttribute('aria-pressed',isSel?'true':'false');
+      if(st.done && mode==='open'){
+        if(isSel) o.classList.add('sel');
+      } else if(st.done){
+        if(isSel&&isCorr) o.classList.add('is-right');
+        else if(isSel&&!isCorr) o.classList.add('is-wrong');
+        else if(!isSel&&isCorr) o.classList.add('is-missed');
+      } else if(isSel){ o.classList.add('sel'); }
+    });
+    if(chk){ chk.hidden=!!st.done; chk.disabled=!st.sel.length; }
+    if(show){ show.hidden=!!st.done; }
+    if(ans){ ans.hidden=!st.done; }
+    if(rate){ rate.hidden=!(mode==='reveal'&&st.done); }
+    if(st.done){
+      if(st.ok===true){ q.classList.add('is-ok'); status.textContent='✔ إجابة صحيحة'; }
+      else if(st.ok===false){ q.classList.add('is-bad'); status.textContent='✖ إجابة خاطئة'; }
+      else { status.textContent=(mode==='open')?'👁 تم عرض الشرح':'👁 تم عرض الإجابة'; }
+    } else { status.textContent=''; }
+  }
+
+  function updateBar(){
+    var tot=blocks.length, done=0, ok=0, bad=0;
+    blocks.forEach(function(q){
+      var st=state[q.dataset.qid]; if(!st||!st.done) return;
+      done++; if(st.ok===true) ok++; else if(st.ok===false) bad++;
+    });
+    var neu=done-ok-bad;
+    function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+    set('qbDone',done); set('qbTot',tot); set('qbOk',ok); set('qbBad',bad);
+    var graded=ok+bad;
+    set('qbPct', graded? (Math.round(ok*100/graded)+'%') : '—');
+    function w(id,n){ var e=document.getElementById(id); if(e) e.style.width=(tot?(n*100/tot):0)+'%'; }
+    w('qbFOk',ok); w('qbFBad',bad); w('qbFNeu',neu);
+  }
+
+  function finish(q,st,ok){ st.done=true; st.ok=ok; state[q.dataset.qid]=st; save(); render(q); updateBar(); }
+
+  blocks.forEach(function(q){
+    var id=q.dataset.qid, mode=q.dataset.mode;
+    var corr=(q.dataset.correct||'').split(',').filter(Boolean);
+    q.addEventListener('click',function(ev){
+      var st=state[id]||{sel:[],done:false,ok:null};
+      if(st.done && !ev.target.closest('.qrate')) return;
+      var opt=ev.target.closest('.qopt');
+      if(opt && !st.done){
+        var l=opt.dataset.l;
+        if(mode==='single'){ st.sel=[l]; finish(q,st,corr[0]===l); }
+        else if(mode==='open'){ st.sel=[l]; finish(q,st,null); }
+        else if(mode==='multi'){
+          var i=st.sel.indexOf(l); if(i>-1) st.sel.splice(i,1); else st.sel.push(l);
+          state[id]=st; save(); render(q);
+        }
+        return;
+      }
+      if(ev.target.closest('.qcheck') && !st.done){ finish(q,st,sameSet(st.sel,corr)); return; }
+      if(ev.target.closest('.qshow') && !st.done){ finish(q,st,null); return; }
+      var r=ev.target.closest('.qrate [data-rate]');
+      if(r && st.done){ st.ok=(r.dataset.rate==='ok'); state[id]=st; save(); render(q); updateBar(); }
+    });
+    render(q);
+  });
+  updateBar();
+
+  var rs=document.getElementById('qbReset');
+  if(rs) rs.addEventListener('click',function(){
+    if(!confirm('تصفير كل إجابات هذه الصفحة والبدء من جديد؟')) return;
+    state={}; save();
+    blocks.forEach(render); updateBar();
+    var bar=document.getElementById('qbBar');
+    if(bar) bar.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
+  function fixBar(){
+    var h=document.querySelector('header.top'), b=document.getElementById('qbBar');
+    if(h&&b) b.style.top=(h.offsetHeight+6)+'px';
+  }
+  fixBar(); window.addEventListener('resize',fixBar); window.addEventListener('load',fixBar);
+})();
 </script>
 <script src="notes.js"></script>
 </body>
