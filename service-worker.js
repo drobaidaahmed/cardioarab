@@ -1,11 +1,13 @@
 /**
  * CardioArab — Service Worker
- * service-worker.js — v1.0
- * تخزين مؤقت خفيف لصفحات الواجهة فقط، بدون تخزين أي طلبات Supabase
- * (حتى تبقى حالة الاشتراك وتسجيل الدخول محدّثة دائماً من الخادم)
+ * service-worker.js — v1.1
+ * تخزين مؤقت خفيف لصفحات الواجهة الأساسية فقط (SHELL_URLS).
+ * لا يُخزَّن أي محتوى طبي (فصول، إرشادات، PCI...) ولا أي طلبات Supabase،
+ * حتى تبقى حالة الاشتراك وتسجيل الدخول محدّثة دائماً من الخادم،
+ * ولا تبقى نسخة من المحتوى المدفوع على جهاز المستخدم.
  */
 
-const CACHE_NAME = 'cardioarab-shell-v2';
+const CACHE_NAME = 'cardioarab-shell-v3';
 
 // الصفحات الأساسية التي يتم تخزينها لتحميل أسرع (لا تشمل صفحات الإرشادات الطبية)
 const SHELL_URLS = [
@@ -26,6 +28,7 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
+  // يحذف كل النسخ القديمة (ومنها أي صفحات محتوى كانت مخزّنة سابقاً)
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
@@ -35,21 +38,31 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  const url = event.request.url;
+  const req = event.request;
+
+  // فقط طلبات GET
+  if (req.method !== 'GET') return;
+
+  const url = new URL(req.url);
 
   // لا تتدخل أبداً بطلبات Supabase (اشتراكات، تسجيل دخول، بيانات حية)
-  if (url.includes('supabase.co')) return;
+  if (url.hostname.includes('supabase.co')) return;
 
-  // فقط طلبات GET قابلة للتخزين
-  if (event.request.method !== 'GET') return;
+  // لا تتدخل بأي طلب من خارج الموقع
+  if (url.origin !== self.location.origin) return;
 
+  // لا تخزّن إلا الصفحات الأساسية؛ أي صفحة أخرى (محتوى طبي) تذهب للشبكة مباشرة
+  const file = url.pathname.split('/').pop() || 'index.html';
+  if (!SHELL_URLS.includes(file)) return;
+
+  // الصفحات الأساسية: الشبكة أولاً، والنسخة المخزّنة عند انقطاع الاتصال
   event.respondWith(
-    fetch(event.request)
+    fetch(req)
       .then(response => {
         const clone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        caches.open(CACHE_NAME).then(cache => cache.put(req, clone));
         return response;
       })
-      .catch(() => caches.match(event.request))
+      .catch(() => caches.match(req))
   );
 });

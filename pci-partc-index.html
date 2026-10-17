@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- ca-theme-toggle:v1 -->
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style>
+.theme-toggle{position:fixed;top:14px;left:14px;z-index:60;width:38px;height:38px;
+  border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.theme-toggle:hover{border-color:var(--teal);transform:scale(1.06)}
+@media(max-width:600px){.theme-toggle{top:10px;left:10px;width:34px;height:34px;font-size:14px}}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فهرس المضاعفات — الجزء الثالث (Part C) | CardioArab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1524; --bg-glow:#0f1c33;
+    --header-bg1:rgba(10,14,26,.98); --header-bg2:rgba(10,14,26,.94);
+    --panel:#111a2e; --panel2:#0d1526; --border:#1e2c47;
+    --teal:#2dd4bf; --teal-dim:#1a7f74; --gold:#fbbf24;
+    --text:#e6ecf5; --text-dim:#93a2bd; --text-dimmer:#5f7093; --danger:#f87171;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6fb; --bg2:#eef1f8; --bg-glow:#e6edf8;
+    --header-bg1:rgba(255,255,255,.98); --header-bg2:rgba(255,255,255,.94);
+    --panel:#ffffff; --panel2:#eef1f8; --border:#e1e6f0;
+    --teal:#0d9488; --teal-dim:#14ceb0; --gold:#a8791f;
+    --text:#1b2434; --text-dim:#4b5568; --text-dimmer:#6b7385; --danger:#89241a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, var(--bg) 45%); color:var(--text);
+    font-family:'IBM Plex Sans Arabic', Tahoma, sans-serif; line-height:1.9; font-size:16px; padding-bottom:60px;}
+  header.top{position:sticky; top:0; z-index:50; background:linear-gradient(180deg, var(--header-bg1), var(--header-bg2));
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border); padding:14px 20px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px; transition:padding .25s ease;}
+  header.top.shrink{padding:8px 20px;}
+  header.top.shrink h1{font-size:14px;}
+  header.top.shrink .eyebrow{font-size:10px;}
+  header.top .title-block{display:flex; flex-direction:column; gap:2px;}
+  header.top .eyebrow{color:var(--teal); font-size:12px; letter-spacing:.5px; font-weight:600;}
+  header.top h1{font-size:18px; margin:0; color:var(--text); font-weight:700;}
+  header.top .badge{background:linear-gradient(135deg,var(--danger),#b91c1c); color:#fff; font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:20px; white-space:nowrap;}
+
+  main{max-width:900px; margin:0 auto; padding:24px 20px 10px;}
+
+  .hero{background:linear-gradient(135deg, rgba(248,113,113,.1), rgba(45,212,191,.04)); border:1px solid var(--border);
+    border-radius:16px; padding:22px 24px; margin-bottom:30px;}
+  .hero .section-tag{color:var(--danger); font-size:12.5px; font-weight:600; letter-spacing:.4px;}
+  .hero h2{margin:6px 0 8px; font-size:23px; color:var(--text);}
+  .hero p{color:var(--text-dim); margin:8px 0 0;}
+
+  .index-grid{display:grid; grid-template-columns:1fr; gap:14px; margin:20px 0 40px;}
+  @media(min-width:640px){ .index-grid{grid-template-columns:1fr 1fr;} }
+
+  a.chcard{
+    display:flex; gap:14px; align-items:flex-start; text-decoration:none;
+    background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:16px 18px;
+    transition:.2s;
+  }
+  a.chcard:hover{border-color:var(--teal-dim); transform:translateY(-2px);}
+  a.chcard .num{
+    flex:0 0 auto; width:42px; height:42px; border-radius:12px;
+    background:linear-gradient(135deg, rgba(248,113,113,.16), rgba(248,113,113,.04));
+    border:1px solid rgba(248,113,113,.4); color:var(--danger); font-weight:700; font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  a.chcard .txt h3{margin:0 0 4px; font-size:15.5px; color:var(--text); font-weight:700;}
+  a.chcard .txt p{margin:0; font-size:13px; color:var(--text-dim); line-height:1.7;}
+  a.chcard .txt .en{color:var(--teal); font-size:11.5px; font-weight:600;}
+
+  footer.pagefoot{text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);}
+  footer.pagefoot .brand{color:var(--teal); font-weight:600;}
+
+  #backTop{position:fixed; bottom:22px; right:22px; width:44px; height:44px; border-radius:50%; background:var(--teal);
+    color:#04211d; border:none; font-size:18px; cursor:pointer; box-shadow:0 6px 18px rgba(45,212,191,.35);
+    display:none; align-items:center; justify-content:center; z-index:40;}
+  #backTop.show{display:flex;}
+  strong{color:var(--gold);}
+</style>
+<style id="pci-gate-style">html:not(.pci-ok) body{visibility:hidden!important}</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<a href="pci-index.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ فهرس خطوات PCI</a>
+
+<header class="top">
+  <div class="title-block">
+    <span class="eyebrow">دليل خطوات القسطرة والتداخل الإكليلي (PCI)</span>
+    <h1>الجزء الثالث: المضاعفات (Part C)</h1>
+  </div>
+  <span class="badge">5 فصول</span>
+</header>
+
+<main>
+  <div class="hero">
+    <span class="section-tag">CardioArab</span>
+    <h2>فهرس المضاعفات — Part C</h2>
+    <p>يغطي هذا القسم التعرف على مضاعفات القسطرة والتداخل الإكليلي والتعامل معها: الانغلاق الحاد للوعاء، الانثقاب، فقدان أو انحشار الأجهزة داخل الوعاء، مضاعفات أخرى كانخفاض الضغط والإصابة الإشعاعية، ومضاعفات موقع الوصول الوعائي.</p>
+  </div>
+
+  <div class="index-grid">
+
+    <a class="chcard" href="pci-ch25-acute-vessel-closure.html">
+      <div class="num">25</div>
+      <div class="txt">
+        <span class="en">Acute Vessel Closure</span>
+        <h3>الانغلاق الحاد للوعاء</h3>
+        <p>التسلّخ، الانصمام باللويحة/الخثرة، الانصمام الهوائي، تسلّخ الأبهر التاجي.</p>
+      </div>
+    </a>
+
+    <a class="chcard" href="pci-ch26-perforation.html">
+      <div class="num">26</div>
+      <div class="txt">
+        <span class="en">Perforation</span>
+        <h3>الانثقاب</h3>
+        <p>خوارزمية التعامل مع الانثقاب، انثقاب الأوعية الكبيرة والبعيدة.</p>
+      </div>
+    </a>
+
+    <a class="chcard" href="pci-ch27-equipment-entrapment.html">
+      <div class="num">27</div>
+      <div class="txt">
+        <span class="en">Equipment Loss &amp; Entrapment</span>
+        <h3>فقدان وانحشار الأجهزة</h3>
+        <p>فقدان الدعامة، انحشار/كسر القثطار المجهري أو السلك أو البالون.</p>
+      </div>
+    </a>
+
+    <a class="chcard" href="pci-ch28-other-complications.html">
+      <div class="num">28</div>
+      <div class="txt">
+        <span class="en">Other Complications</span>
+        <h3>مضاعفات أخرى</h3>
+        <p>انخفاض الضغط، الإصابة الإشعاعية الجلدية، الوقاية من الاعتلال الكلوي الناجم عن التباين.</p>
+      </div>
+    </a>
+
+    <a class="chcard" href="pci-ch29-vascular-access-complications.html">
+      <div class="num">29</div>
+      <div class="txt">
+        <span class="en">Vascular Access Complications</span>
+        <h3>مضاعفات موقع الوصول الوعائي</h3>
+        <p>نزف الموقع الفخذي، الورم الدموي خلف الصفاق، الأم الدموي الكاذب والناسور الشرياني الوريدي، مضاعفات الوصول الكعبري.</p>
+      </div>
+    </a>
+
+  </div>
+
+  <footer class="pagefoot"><span class="brand">CardioArab</span> — مرجع طب القلب باللغة العربية</footer>
+</main>
+
+<button id="backTop">↑</button>
+
+<script src="supabase.js"></script>
+<script src="protection.js"></script>
+<script>
+(function () {
+  var de = document.documentElement;
+  function lock() {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
+      'direction:rtl;padding:2rem;gap:1rem;">' +
+      '<div style="font-size:2.6rem;">🔒</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;line-height:1.8;">' +
+      'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:.5rem;">' +
+      '<a href="subscription.html" style="background:#8b5cf6;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '<a href="index.html" style="background:#1a2235;color:#9aa5bd;padding:10px 22px;border-radius:8px;text-decoration:none;border:1px solid #1e2d45;">الرئيسية</a>' +
+      '</div></div>';
+    de.classList.add('pci-ok');
+  }
+  (async function () {
+    try {
+      if (typeof session === 'undefined') { lock(); return; }
+      if (!session.isLoggedIn()) { location.replace('login.html'); return; }
+      var u = null;
+      try { u = JSON.parse(localStorage.getItem('currentUser')); } catch (e) {}
+      var ok = !!(u && u.is_admin) || (await session.isSubscribed());
+      if (!ok) { lock(); return; }
+      de.classList.add('pci-ok');
+    } catch (e) { lock(); }
+  })();
+})();
+</script>
+<script src="presence-tracker.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(toggle){
+    function updateIcon(){
+      var current = document.documentElement.getAttribute('data-theme') || 'dark';
+      toggle.textContent = current === 'light' ? '🌙' : '☀️';
+      toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+    }
+    updateIcon();
+    toggle.addEventListener('click', function(){
+      var current = document.documentElement.getAttribute('data-theme') || 'dark';
+      var next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+      updateIcon();
+    });
+  }
+  var header = document.querySelector('header.top');
+  var backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY || document.documentElement.scrollTop;
+    if(y > 60){ header.classList.add('shrink'); } else { header.classList.remove('shrink'); }
+    if(y > 400){ backTop.classList.add('show'); } else { backTop.classList.remove('show'); }
+  });
+  backTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+});
+</script>
+</body>
+</html>

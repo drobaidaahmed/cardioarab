@@ -84,7 +84,7 @@
   footer.pagefoot{text-align:center; color:var(--text-dimmer); font-size:13px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);}
   footer.pagefoot .brand{color:var(--teal); font-weight:600;}
 
-  #backTop{position:fixed; bottom:22px; left:22px; width:44px; height:44px; border-radius:50%; background:var(--teal);
+  #backTop{position:fixed; bottom:22px; right:22px; width:44px; height:44px; border-radius:50%; background:var(--teal);
     color:#04211d; border:none; font-size:18px; cursor:pointer; box-shadow:0 6px 18px rgba(45,212,191,.35);
     display:none; align-items:center; justify-content:center; z-index:40;}
   #backTop.show{display:flex;}
@@ -95,6 +95,7 @@
   a.chcard .txt h3{font-size:17px;}
   strong{color:var(--gold);}
 </style>
+<style id="pci-gate-style">html:not(.pci-ok) body{visibility:hidden!important}</style>
 </head>
 <body>
 <button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
@@ -152,30 +153,39 @@
 </main>
 
 <button id="backTop">↑</button>
+<a href="investigations.html" style="position:fixed;bottom:18px;left:18px;z-index:99999;background:var(--panel);color:var(--gold);border:1px solid #d4af37;padding:9px 16px;border-radius:24px;font-size:13px;font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.45);">↩ الاستقصاءات</a>
 
 <script src="supabase.js"></script>
 <script src="protection.js"></script>
 <script>
-(async function(){
-  if (typeof session === 'undefined') return;
-  if (!session.isLoggedIn()) {
-    location.href = 'login.html';
-    return;
-  }
-  const ok = await session.isSubscribed();
-  if (!ok) {
+(function () {
+  var de = document.documentElement;
+  function lock() {
     document.body.innerHTML =
       '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
       'background:#0a0e1a;color:#e5e9f2;font-family:\'IBM Plex Sans Arabic\',sans-serif;text-align:center;' +
       'direction:rtl;padding:2rem;gap:1rem;">' +
-      '<div style="font-size:2.4rem;">🔒</div>' +
+      '<div style="font-size:2.6rem;">🔒</div>' +
       '<div style="font-size:1.15rem;font-weight:700;">هذا المحتوى متاح للمشتركين فقط</div>' +
-      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;">' +
+      '<div style="font-size:.9rem;color:#9aa5bd;max-width:340px;line-height:1.8;">' +
       'يبدو أنّ اشتراكك غير مُفعّل أو انتهى. فعّل اشتراكك للوصول الكامل لمحتوى CardioArab.</div>' +
-      '<a href="subscription.html" style="margin-top:.5rem;background:#b91c4c;color:#fff;padding:10px 22px;' +
-      'border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
-      '</div>';
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:.5rem;">' +
+      '<a href="subscription.html" style="background:#8b5cf6;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;">عرض خطط الاشتراك</a>' +
+      '<a href="index.html" style="background:#1a2235;color:#9aa5bd;padding:10px 22px;border-radius:8px;text-decoration:none;border:1px solid #1e2d45;">الرئيسية</a>' +
+      '</div></div>';
+    de.classList.add('pci-ok');
   }
+  (async function () {
+    try {
+      if (typeof session === 'undefined') { lock(); return; }
+      if (!session.isLoggedIn()) { location.replace('login.html'); return; }
+      var u = null;
+      try { u = JSON.parse(localStorage.getItem('currentUser')); } catch (e) {}
+      var ok = !!(u && u.is_admin) || (await session.isSubscribed());
+      if (!ok) { lock(); return; }
+      de.classList.add('pci-ok');
+    } catch (e) { lock(); }
+  })();
 })();
 </script>
 <script src="presence-tracker.js"></script>
