@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الجزء 2: تقييم عدم التزامن بالإيكو | أساسيات الإيكو</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#050a12;--bg-panel:#0b131f;--bg-panel-2:#0e1826;--line:#1b2836;--cyan:#3fd8e0;--cyan-dim:#1d5a5f;--amber:#f2b45c;--text:#dbe6ee;--text-dim:#7e93a3;--radius:2px;}
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;font-size:16px;line-height:2;}
+  nav{position:sticky;top:0;z-index:20;background:var(--nav-bg);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  nav a.back{color:var(--text-dim);text-decoration:none;font-size:13px;font-weight:500;}
+  nav a.back:hover{color:var(--cyan);}
+  nav .lesson-tag{font-family:'Tajawal',sans-serif;font-weight:700;font-size:13px;color:var(--cyan);}
+  main{max-width:760px;margin:0 auto;padding:36px 22px 20px;}
+  .eyebrow{color:var(--cyan);font-size:13px;font-weight:600;margin-bottom:10px;}
+  h1{font-family:'Tajawal',sans-serif;font-weight:900;font-size:clamp(22px,5vw,32px);margin:0 0 8px;color:var(--strong);}
+  .intro{color:var(--text-dim);font-size:15.5px;margin-bottom:8px;}
+  .sonar-rule{height:1px;margin:28px 0;background:linear-gradient(90deg, transparent, var(--cyan-dim) 15%, var(--cyan-dim) 85%, transparent);}
+  h2{font-family:'Tajawal',sans-serif;font-weight:700;font-size:22px;color:var(--strong);margin:44px 0 14px;padding-right:14px;border-right:3px solid var(--cyan);}
+  h3{font-family:'Tajawal',sans-serif;font-weight:700;font-size:16.5px;color:var(--cyan);margin:26px 0 10px;}
+  p{margin:0 0 16px;}
+  ul, ol{margin:0 0 16px;padding-right:22px;}
+  li{margin-bottom:8px;}
+  .key{color:var(--strong);font-weight:600;}
+  .note{background:var(--bg-panel);border:1px solid var(--line);border-right:3px solid var(--amber);border-radius:var(--radius);padding:14px 18px;font-size:14.5px;color:var(--text);margin:20px 0;}
+  .note b{color:var(--amber);}
+  .valve-box{background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--radius);padding:4px 22px 8px;margin:18px 0 34px;}
+  table{width:100%;border-collapse:collapse;margin:14px 0 20px;font-size:13.5px;}
+  th, td{text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--cyan);font-weight:600;font-family:'Tajawal',sans-serif;}
+  td.num-cell{color:var(--text-dim);}
+  .fig-figure{margin:22px 0 24px;text-align:center;}
+  .fig-figure img,.fig-figure svg{max-width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--line);}
+  .fig-figure figcaption{font-size:13.5px;color:var(--text-dim);margin-top:8px;line-height:1.9;}
+  .img-slot{border:1.5px dashed var(--cyan-dim);border-radius:var(--radius);background:var(--bg-panel-2);padding:32px 16px;text-align:center;margin:18px 0 8px;color:var(--text-dim);}
+  .img-slot .fname{font-family:monospace;font-size:12.5px;color:var(--cyan);display:block;margin-top:8px;}
+  .glossary{background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--radius);padding:6px 20px;margin:24px 0;}
+  .glossary dt{font-family:'Tajawal',sans-serif;font-weight:700;color:var(--strong);margin-top:14px;}
+  .glossary dd{margin:4px 0 14px;color:var(--text-dim);font-size:14.5px;}
+  .pager{display:flex;justify-content:space-between;align-items:center;max-width:760px;margin:50px auto 60px;padding:0 22px;gap:14px;}
+  .pager a, .pager span{flex:1;padding:16px 18px;border:1px solid var(--line);border-radius:var(--radius);text-decoration:none;color:var(--text);font-size:14px;background:var(--bg-panel);}
+  .pager a:hover{border-color:var(--cyan-dim);}
+  .pager .label{display:block;font-size:11.5px;color:var(--text-dim);margin-bottom:4px;}
+  .pager .title{font-family:'Tajawal',sans-serif;font-weight:700;color:var(--cyan);}
+</style>
+<!-- ca-theme-toggle:v1 -->
+<script>/*eb-ui*/
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style id="eb-ui-css">
+:root{--strong:#f2f7fa;--nav-bg:rgba(5,10,18,0.92);color-scheme:dark;}
+:root[data-theme="light"]{--bg:#f4f7fa;--bg-panel:#ffffff;--bg-panel-2:#edf2f6;--line:#d3dde6;--cyan:#0b7d88;--cyan-dim:#8cc7cd;--amber:#a05e00;--text:#1c2a35;--text-dim:#566876;--strong:#0c1a25;--nav-bg:rgba(244,247,250,0.94);color-scheme:light;}
+body{transition:background .2s,color .2s;}
+.theme-toggle{position:fixed;bottom:16px;left:16px;z-index:60;width:40px;height:40px;border-radius:50%;background:var(--bg-panel);border:1px solid var(--line);color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.35)}
+.theme-toggle:hover{border-color:var(--cyan);transform:scale(1.06)}
+.eb-back{position:fixed;bottom:16px;right:16px;z-index:60;display:flex;align-items:center;gap:6px;padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:var(--bg-panel);color:var(--text);font:600 13px 'Tajawal','IBM Plex Sans Arabic',sans-serif;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.eb-back:hover{border-color:var(--cyan);color:var(--cyan)}
+@media print{.theme-toggle,.eb-back{display:none}}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<button type="button" class="eb-back" id="ebBack"><span aria-hidden="true">→</span> رجوع</button>
+
+<nav>
+  <a class="back" href="echo-basics-17.html">→ الفصل 17: العلاج بإعادة التزامن القلبي (CRT)</a>
+  <span class="lesson-tag">الجزء 2 / 3</span>
+</nav>
+
+<main>
+  <div class="eyebrow">الفصل السابع عشر — الجزء الثاني</div>
+  <h1>تقييم عدم التزامن بالإيكو</h1>
+  <p class="intro">الإيكو قدّم عشرات "مقاييس عدم التزامن"، لكن الدرس الأهم من التجارب الكبرى أن أغلبها لا يصلح وحده لاختيار المريض. خلينا نشوف شو تقيس وليش بقيت مفيدة رغم هيك.</p>
+
+  <div class="sonar-rule"></div>
+
+
+  <h2>١. M-mode وثنائي البعد</h2>
+  <p>الإيكو الطريقة العملية الأكثر لتقييم عدم التزامن، لكن <span class="key">لا تقنية مثالية</span> وتُستخدم عادةً بالجمع بينها، ولا يُعتمد معيار واحد لتقرير الزرع. معظم الدراسات ترجّح أن عدم التزامن <span class="key">داخل البطين الأيسر</span> أفضل تنبؤاً من عدم التزامن بين البطينين.</p>
+  <ul>
+    <li><span class="key">التأخر الحاجزي–الخلفي (septal-to-posterior wall motion delay):</span> بالمقطع جانب القص المحور القصير، يُقاس الفارق الزمني بين ذروة حركة الحاجز وذروة حركة الجدار الخلفي؛ قيمة ≥ 130 ms تُعدّ دلالة على عدم تزامن، لكن القياس يصعب بالأمراض الإقفارية وندبات الجدر.</li>
+    <li><span class="key">تحليل حدود البطين شبه الآلي:</span> بالمنظر القمي رباعي الحجرات تُرسم منحنيات حركة الجدران (الحاجز مقابل الجانبي)، ويُحسّن الإيكو الظليل تحديد الحدود الباطنة، وتُحلَّل المنحنيات رياضياً (تحويل فورييه) لقياس مدى عدم التزامن؛ وبعض المرضى بتأخر واضح يظهر عندهم تحسن فوري بالهيموديناميكا بعد CRT.</li>
+    <li><span class="key">وميض الحاجز (septal flash):</span> حركة سريعة قصيرة للحاجز نحو الداخل بمرحلة ما قبل القذف، ثم يتأخر انقباضه — علامة تُرى بسهولة بالنمط ثنائي البعد وترتبط بالاستجابة الجيدة.</li>
+    <li><span class="key">التمايل القمي (apical rocking):</span> حركة جانبية للقمة بين الحاجز والجدار الجانبي بتوقيت مختلف؛ علامة أخرى على تعارض النشاط الميكانيكي.</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2>٢. الدوبلر النبضي والمستمر</h2>
+  <p>المقصود بـ"الدوبلر" هنا أزمنة بدء الجريان مقارنةً ببداية QRS (تأخر كهروميكانيكي، EMD):</p>
+  <ul>
+    <li><span class="key">تأخر ما قبل القذف بين البطينين (IVMD):</span> الفارق بين زمن ما قبل القذف الأبهري (من بداية QRS حتى بداية جريان LVOT) وزمن ما قبل القذف الرئوي (من بداية QRS حتى بداية جريان RVOT). فارق &gt; 40 ms يشير إلى تأخر بين البطينين.</li>
+    <li><span class="key">تقييم التزامن الأذيني البطيني:</span> من جريان الدخول التاجي، قصر زمن الامتلاء الكلي (من بداية E حتى نهاية A؛ الطبيعي &gt; 40% من الدورة القلبية؛ لا يتنبأ بالاستجابة وحده لكنه مفيد كخط أساس ومتابعة) مع تداخل موجتَي E وA دليل على تأخر AV، وقد يُرى قلس تاجي انبساطي.</li>
+    <li><span class="key">زمن ما قبل القذف الأبهري (A-PEP):</span> من بداية QRS حتى بداية الجريان عبر LVOT؛ الطبيعي &lt; 140 ms، لكن ارتفاعه وحده لا يتنبأ بالاستجابة. الفارق A-PEP − P-PEP هو IVMD (طبيعياً &lt; 40 ms).</li>
+    <li><span class="key">مدة القلس التاجي:</span> كلما طالت مدة القلس ضمن الدورة دلّ ذلك على اختلال توقيت الانقباض.</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2>٣. دوبلر الأنسجة (TDI)</h2>
+  <ul>
+    <li><span class="key">الدوبلر النسيجي النبضي:</span> تُقاس لحظة بلوغ ذروة سرعة الانقباض s' لأكثر من جدار (نماذج 2 أو 4 أو 12 قطعة). مثلاً فارق ≥ 65 ms بين جدارين متقابلين يُعدّ دلالة على عدم تزامن.</li>
+    <li><span class="key">مؤشر Yu:</span> الانحراف المعياري لزمن بلوغ الذروة عبر 12 قطعة؛ قيمة ≥ 33 ms اقترحت كمعيار، لكن تقنيته مرهقة وتتأثر بالإضاءة والزاوية.</li>
+    <li><span class="key">الدوبلر النسيجي الملوّن:</span> يحتاج معالجة لاحقة لاستخراج منحنيات السرعة؛ بالمنظر رباعي الحجرات يتنبأ فارق &gt; 60 ms بين القاعدة الحاجزية والجانبية بالاستجابة الحادة، وبنموذج الأربع قطع القاعدية (حاجزي، جانبي، سفلي، أمامي) يتنبأ فارق &gt; 65 ms. يتأثر القياس بمعدل القلب والحمل والتنفس، ولا يفرّق بين الحركة الفعلية والسلبية.</li>
+    <li><span class="key">تتبع النسيج (tissue tracking):</span> تكامل منحنى السرعة مع الزمن لإظهار الإزاحة وتلوين المنطقة الأخيرة تنشيطاً؛ لا يفرّق بين الحركة الفعلية والسلبية.</li>
+    <li><span class="key">معدّل الإجهاد (strain rate = dv/ds):</span> يحدد توقيت الأحداث بدقة أكبر من بقية طرق TDI، لكنه يعتمد على الزاوية ويتأثر بالضجيج. <span class="key">والإجهاد (strain)</span> (تكامل معدّله) يفرّق الانقباض الفعلي عن الحركة السلبية، وهذا مهم بالاعتلال الإقفاري مع الندبة، ويحتاج تحليلاً لاحقاً.</li>
+    <li><span class="key">التصوير بمزامنة النسيج (TSI):</span> خوارزمية تعالج إشارة الدوبلر النسيجي وتلوّن القطع بحسب زمن بلوغ الذروة؛ تُظهر بصرياً المنطقة الأخيرة تنشيطاً.</li>
+  </ul>
+
+  <h3>الإجهاد (Strain) وتتبع البقع</h3>
+  <p>يتفوق على السرعة لأنه يميّز الانقباض الفعلي للقطعة عن حركتها بالتبعية. من تحليل الإجهاد الشعاعي بتقنية تتبع البقع تُقاس الفروق الزمنية بين الجدارين الأمامي الحاجزي والخلفي (فارق ≥ 130 ms اقترح كمعيار)، كما يُفرَّق بين الانقباض الفعّال والتمدد السلبي. ويفيد الإجهاد أيضاً بتحديد <span class="key">مناطق الندبة</span> (إجهاد منخفض جداً أو بلا حركة) التي لا ينبغي وضع السلك عليها.</p>
+
+  <div class="sonar-rule"></div>
+
+  <h2>٤. الإيكو ثلاثي الأبعاد</h2>
+  <p>إضافة لما سبق، يُستعمل 3-D لتقدير الأحجام وEF والقلس التاجي، ولتوجيه المختص بالنظم نحو <span class="key">أفضل موضع للسلك</span> عبر خرائط قطبية (polar maps) تبين تأخر الانقباض. لا توجد بيانات واسعة تثبت تنبؤه بالاستجابة بعد.</p>
+  <p>يقيس زمن بلوغ أصغر حجم لكل قطعة من البطين (16 أو 17 قطعة) ويحسب <span class="key">مؤشر عدم التزامن الانقباضي (SDI)</span> كانحراف معياري لهذه الأزمنة. يتفوق بعدم تأثره بزاوية المقطع، لكنه يتطلب جودة صور ونظم جيبي منتظم، ويبقى جزءاً من البحث والتقييم الإضافي أكثر منه معياراً لاختيار المريض.</p>
+
+  <div class="sonar-rule"></div>
+
+  <h2>٥. حدود هذه المقاييس: ماذا علّمتنا الدراسات؟</h2>
+  <div class="note"><b>الدراسات الكبرى:</b> في دراسة PROSPECT أظهرت معايير عدم التزامن الإيكوية المتعددة قدرة ضعيفة على التنبؤ بالاستجابة وتفاوتاً كبيراً بين المراقبين. وفي دراسة EchoCRT لم يفِد CRT (وربما ضرّ) عند مرضى QRS الضيق رغم وجود عدم تزامن بالإيكو. لذلك لا تُستعمل مقاييس الإيكو لاختيار المرضى أو استبعادهم، بل يُعتمد على QRS وشكل الحصار.</div>
+  <p>أين يبقى الإيكو مفيداً قبل الزرع؟</p>
+  <ul>
+    <li>قياس EF وأبعاد البطين وتقييم القلس التاجي وضغط الشريان الرئوي.</li>
+    <li>تحديد <span class="key">الندبة الخلفية الجانبية</span> التي تمنع استجابة السلك الإكليلي (منطقة رقيقة بلا حركة).</li>
+    <li>رصد علامات مقوّية للاستجابة: وميض الحاجز والتمايل القمي وغياب الندبة.</li>
+    <li>استبعاد أسباب قابلة للعلاج أو عوامل تنبئ بسوء الاستجابة (تضيق دسام شديد، توسع بطين أيمن شديد وهبوط وظيفته).</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2>خلاصة الجزء</h2>
+  <dl class="glossary">
+    <dt>IVMD</dt>
+    <dd>الفارق بين زمن ما قبل القذف الأبهري والرئوي؛ قيمة &gt; 40 ms تدل على تأخر بين البطينين</dd>
+    <dt>وميض الحاجز</dt>
+    <dd>حركة حاجزية سريعة قصيرة قبل القذف؛ علامة بصرية على عدم التزامن وترتبط باستجابة أفضل</dd>
+    <dt>TSI</dt>
+    <dd>تلوين لزمن بلوغ ذروة سرعة الانقباض لكل قطعة بدوبلر الأنسجة لإظهار آخر المناطق تنشيطاً</dd>
+    <dt>الرسالة الأساسية</dt>
+    <dd>مقاييس الإيكو لا تحدد من يُزرع له CRT؛ QRS هو المعيار، والإيكو يقيّم الأساس والندبة والاستجابة</dd>
+  </dl>
+
+</main>
+
+<div class="pager">
+  <a href="echo-basics-17-1.html">
+    <span class="label">السابق</span>
+    <span class="title">→ الجزء 1: أساس CRT: عدم التزامن والاستطبابات</span>
+  </a>
+  <a href="echo-basics-17-3.html">
+    <span class="label">التالي</span>
+    <span class="title">الجزء 3: تحسين CRT ومتابعته وتحديد المستجيبين ←</span>
+  </a>
+</div>
+
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+<script src="notes.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(console.warn);
+  });
+}
+</script>
+<script src="pwa-install.js"></script>
+<script src="presence-tracker.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(toggle){
+    var updateIcon = function(){
+      var current = document.documentElement.getAttribute('data-theme') || 'dark';
+      toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+      toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+    };
+    updateIcon();
+    toggle.addEventListener('click', function(){
+      var current = document.documentElement.getAttribute('data-theme') || 'dark';
+      var next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+      updateIcon();
+    });
+  }
+  var b = document.getElementById('ebBack');
+  if(b){ b.addEventListener('click', function(){
+    var a = document.querySelector('nav a.back'), same = false;
+    try{ same = document.referrer && new URL(document.referrer).origin === location.origin; }catch(e){}
+    if(same && history.length > 1){ history.back(); }
+    else if(a){ location.href = a.getAttribute('href'); }
+    else { location.href = 'echo-basics-index.html'; }
+  }); }
+});
+</script>
+</body>
+</html>
