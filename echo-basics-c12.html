@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التقرير وجودة القياس | أساسيات الإيكو</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#050a12;--bg-panel:#0b131f;--bg-panel-2:#0e1826;--line:#1b2836;--cyan:#3fd8e0;--cyan-dim:#1d5a5f;--amber:#f2b45c;--text:#dbe6ee;--text-dim:#7e93a3;--radius:2px;}
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;font-size:16px;line-height:2;}
+  nav{position:sticky;top:0;z-index:20;background:var(--nav-bg);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  nav a.back{color:var(--text-dim);text-decoration:none;font-size:13px;font-weight:500;}
+  nav a.back:hover{color:var(--cyan);}
+  nav .lesson-tag{font-family:'Tajawal',sans-serif;font-weight:700;font-size:13px;color:var(--cyan);}
+  main{max-width:760px;margin:0 auto;padding:36px 22px 20px;}
+  .eyebrow{color:var(--cyan);font-size:13px;font-weight:600;margin-bottom:10px;}
+  h1{font-family:'Tajawal',sans-serif;font-weight:900;font-size:clamp(22px,5vw,32px);margin:0 0 8px;color:var(--strong);}
+  .intro{color:var(--text-dim);font-size:15.5px;margin-bottom:8px;}
+  .sonar-rule{height:1px;margin:28px 0;background:linear-gradient(90deg, transparent, var(--cyan-dim) 15%, var(--cyan-dim) 85%, transparent);}
+  h2{font-family:'Tajawal',sans-serif;font-weight:700;font-size:22px;color:var(--strong);margin:44px 0 14px;padding-right:14px;border-right:3px solid var(--cyan);}
+  h3{font-family:'Tajawal',sans-serif;font-weight:700;font-size:16.5px;color:var(--cyan);margin:26px 0 10px;}
+  p{margin:0 0 16px;}
+  ul, ol{margin:0 0 16px;padding-right:22px;}
+  li{margin-bottom:8px;}
+  .key{color:var(--strong);font-weight:600;}
+  .note{background:var(--bg-panel);border:1px solid var(--line);border-right:3px solid var(--amber);border-radius:var(--radius);padding:14px 18px;font-size:14.5px;color:var(--text);margin:20px 0;}
+  .note b{color:var(--amber);}
+  .valve-box{background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--radius);padding:4px 22px 8px;margin:18px 0 34px;}
+  table{width:100%;border-collapse:collapse;margin:14px 0 20px;font-size:13.5px;}
+  th, td{text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--cyan);font-weight:600;font-family:'Tajawal',sans-serif;}
+  td.num-cell{color:var(--text-dim);}
+  .fig-figure{margin:22px 0 24px;text-align:center;}
+  .fig-figure img,.fig-figure svg{max-width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--line);}
+  .fig-figure figcaption{font-size:13.5px;color:var(--text-dim);margin-top:8px;line-height:1.9;}
+  .img-slot{border:1.5px dashed var(--cyan-dim);border-radius:var(--radius);background:var(--bg-panel-2);padding:32px 16px;text-align:center;margin:18px 0 8px;color:var(--text-dim);}
+  .img-slot .fname{font-family:monospace;font-size:12.5px;color:var(--cyan);display:block;margin-top:8px;}
+  .glossary{background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--radius);padding:6px 20px;margin:24px 0;}
+  .glossary dt{font-family:'Tajawal',sans-serif;font-weight:700;color:var(--strong);margin-top:14px;}
+  .glossary dd{margin:4px 0 14px;color:var(--text-dim);font-size:14.5px;}
+  .pager{display:flex;justify-content:space-between;align-items:center;max-width:760px;margin:50px auto 60px;padding:0 22px;gap:14px;}
+  .pager a, .pager span{flex:1;padding:16px 18px;border:1px solid var(--line);border-radius:var(--radius);text-decoration:none;color:var(--text);font-size:14px;background:var(--bg-panel);}
+  .pager a:hover{border-color:var(--cyan-dim);}
+  .pager .label{display:block;font-size:11.5px;color:var(--text-dim);margin-bottom:4px;}
+  .pager .title{font-family:'Tajawal',sans-serif;font-weight:700;color:var(--cyan);}
+</style>
+<style id="toc-css">
+  .toc{background:var(--bg-panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:6px 0 22px;font-size:14px}
+  .toc b{color:var(--cyan);display:block;margin-bottom:6px;font-size:13px}
+  .toc ol{margin:0;padding:0 18px 0 0;line-height:2}
+  .toc a{color:var(--text);text-decoration:none}
+  .toc a:hover{color:var(--cyan)}
+  .sec-label{font-size:12.5px;color:var(--text-dim);margin-bottom:4px}
+</style>
+<!-- ca-theme-toggle:v1 -->
+<script>/*eb-ui*/
+(function(){
+  try{
+    var t = localStorage.getItem('cardioarab-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<style id="eb-ui-css">
+:root{--strong:#f2f7fa;--nav-bg:rgba(5,10,18,0.92);color-scheme:dark;}
+:root[data-theme="light"]{--bg:#f4f7fa;--bg-panel:#ffffff;--bg-panel-2:#edf2f6;--line:#d3dde6;--cyan:#0b7d88;--cyan-dim:#8cc7cd;--amber:#a05e00;--text:#1c2a35;--text-dim:#566876;--strong:#0c1a25;--nav-bg:rgba(244,247,250,0.94);color-scheme:light;}
+body{transition:background .2s,color .2s;}
+.theme-toggle{position:fixed;bottom:16px;left:16px;z-index:60;width:40px;height:40px;border-radius:50%;background:var(--bg-panel);border:1px solid var(--line);color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;box-shadow:0 4px 10px -4px rgba(0,0,0,.35)}
+.theme-toggle:hover{border-color:var(--cyan);transform:scale(1.06)}
+.eb-back{position:fixed;bottom:16px;right:16px;z-index:60;display:flex;align-items:center;gap:6px;padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:var(--bg-panel);color:var(--text);font:600 13px 'Tajawal','IBM Plex Sans Arabic',sans-serif;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.eb-back:hover{border-color:var(--cyan);color:var(--cyan)}
+@media print{.theme-toggle,.eb-back{display:none}}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="theme-toggle" title="تبديل المظهر" aria-label="تبديل الوضع الداكن/الفاتح">☀️</button>
+<button type="button" class="eb-back" id="ebBack"><span aria-hidden="true">→</span> رجوع</button>
+
+
+<nav>
+  <a class="back" href="echo-basics-index.html">→ فهرس الدليل</a>
+  <span class="lesson-tag">القسم الأول</span>
+</nav>
+
+<main>
+  <div class="sec-label">القسم الأول: الأدوات والتقنيات</div>
+  <div class="eyebrow">الفصل 12</div>
+  <h1>التقرير وجودة القياس</h1>
+  <p class="intro">هيكل التقرير وكتابته، وجمل جاهزة لنتائجه، والخلاصة والنتائج الحرجة، ومصادر الخطأ وتحسين الدقة.</p>
+  <div class="toc"><b>محتويات هذه الصفحة</b><ol><li><a href="#s1">أقسام التقرير بالترتيب</a></li><li><a href="#s2">مصطلحات الشدة الموحّدة</a></li><li><a href="#s3">قواعد أساسية</a></li><li><a href="#s4">بنية جملة النتيجة</a></li><li><a href="#s5">مصادر الخطأ الشائعة</a></li><li><a href="#s6">هل التغيّر حقيقي؟ (تقريبي)</a></li><li><a href="#s7">تحسين دقة قياساتك</a></li><li><a href="#s8">حالة طبيعية</a></li><li><a href="#s9">البطين الأيسر</a></li><li><a href="#s10">الدسامات</a></li><li><a href="#s11">التامور والبطين الأيمن والضغوط</a></li><li><a href="#s12">الأبهر والكتل والأجهزة</a></li><li><a href="#s13">كتابة الخلاصة (Impression)</a></li><li><a href="#s14">التوصيات</a></li><li><a href="#s15">النتائج الحرجة (تستدعي إبلاغاً فورياً)</a></li><li><a href="#s16">نماذج تقارير مختصرة</a></li></ol></div>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s1">١. أقسام التقرير بالترتيب</h2>
+<ol>
+    <li><span class="key">البيانات:</span> اسم المريض والعمر والجنس والطول والوزن وسطح الجسم، والتاريخ، سبب الفحص، نوع الإيكو (عبر الصدر/المريء/جهد/مركّز)، ضغط الدم ومعدل القلب والنظم، جودة النوافذ.</li>
+    <li><span class="key">البطين الأيسر:</span> الأبعاد، سماكة الجدران، الكتلة/النمط عند الحاجة، EF (والطريقة)، الحركة الجدارية، GLS إن وُجد.</li>
+    <li><span class="key">الوظيفة الانبساطية وضغط الامتلاء:</span> الدرجة أو «طبيعية» أو «غير حاسمة» مع القياسات.</li>
+    <li><span class="key">البطين الأيمن:</span> الحجم، الوظيفة (TAPSE وS′ وFAC)، السماكة.</li>
+    <li><span class="key">الأذينان:</span> الحجم (LAVI، مساحة RA)، الحاجز بين الأذينين (PFO/ASD).</li>
+    <li><span class="key">الدسامات الأربعة:</span> الشكل والحركة، الشدة بأرقام (تضيّق/قلس)، الآلية.</li>
+    <li><span class="key">الأبهر والشريان الرئوي:</span> الأقطار.</li>
+    <li><span class="key">التامور:</span> انصباب (الحجم والموضع) وعلامات السطام.</li>
+    <li><span class="key">الضغوط:</span> IVC، RAP، PASP، ضغط الامتلاء.</li>
+    <li><span class="key">أخرى:</span> كتل، خثرات، أجهزة، مقارنة بفحص سابق.</li>
+    <li><span class="key">الخلاصة (Impression)</span> والتوصيات.</li>
+  </ol>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s2">٢. مصطلحات الشدة الموحّدة</h2>
+<table>
+    <tr><th>الوصف</th><th>الاستعمال</th></tr>
+    <tr><td class="key">طبيعي / ضمن الحدود الطبيعية</td><td>القيمة داخل المرجع</td></tr>
+    <tr><td class="key">خفيف</td><td>انحراف بسيط (مثلاً قلس خفيف، توسع خفيف)</td></tr>
+    <tr><td class="key">متوسط</td><td>انحراف ذو دلالة متوسطة</td></tr>
+    <tr><td class="key">شديد</td><td>يستدعي إجراءً أو متابعة لصيقة</td></tr>
+    <tr><td class="key">حدّي</td><td>قريب من الحد الفاصل؛ يُذكر مع الأرقام</td></tr>
+    <tr><td class="key">غير حاسم</td><td>قياسات متناقضة أو جودة ضعيفة</td></tr>
+  </table>
+  <p>يُفضَّل ذكر <span class="key">الرقم مع الوصف</span> (مثال: «ممال وسطي 42 ملم زئبق، تضيّق شديد») بدل الوصف وحده.</p>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s3">٣. قواعد أساسية</h2>
+<ul>
+    <li><span class="key">الدقة:</span> ما لا يُقاس لا يُكتب بصيغة مؤكدة؛ يُكتب «لم يُقيَّم» أو «غير مرئي بوضوح».</li>
+    <li><span class="key">الطريقة والمرجع:</span> ذكر طريقة EF (Simpson/خطي)، الفهرسة (BSA)، والمرجعية (ASE/EACVI).</li>
+    <li><span class="key">المقارنة:</span> مع فحص سابق (تاريخه) مع ذكر التغيّر الحقيقي (انظر الأقسام الأخرى من هذا الفصل).</li>
+    <li><span class="key">الإفصاح عن الحدود:</span> نافذة صوتية ضعيفة، رجفان، تحفيز بطيني.</li>
+    <li><span class="key">الربط بالسؤال السريري:</span> أن تُجاب صراحةً سبب الطلب (مثلاً: «لا يوجد دليل على خثرة بالبطين»).</li>
+    <li>لغة مختصرة وجمل مفهومة، وتجنب الإسهاب والتناقض.</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s4">٤. بنية جملة النتيجة</h2>
+<p>النمط الجيد: <span class="key">[البنية] + [الصفة] + [الرقم] + [التفسير]</span>.</p>
+  <ul>
+    <li>«البطين الأيسر متوسع بشكل خفيف (LVIDd 6.0 سم)، مع نقص تقلص عام شديد (EF 28% بطريقة Simpson).»</li>
+    <li>«الدسام الأبهري ثلاثي الشرف متكلس بحركة محدودة؛ سرعة ذروة 4.4 م/ث وممال وسطي 48 ملم زئبق وAVA 0.8 سم²: تضيّق أبهري شديد.»</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s5">٥. مصادر الخطأ الشائعة</h2>
+<table>
+    <tr><th>المصدر</th><th>الأثر</th><th>الحل</th></tr>
+    <tr><td class="key">زاوية الدوبلر</td><td>ضعف السرعة مع الزاوية الكبيرة</td><td>محاذاة الشعاع مع الجريان (&lt; 20°) ومسح عدة نوافذ</td></tr>
+    <tr><td class="key">تقصير المحور (foreshortening)</td><td>أحجام وEF أقل من الواقع</td><td>أطول مقطع للبطين، وتقارب طول المنظرين (&lt; 10%)</td></tr>
+    <tr><td class="key">رسم الحدود</td><td>تفاوت بين الفاحصين</td><td>قاعدة ثابتة (استبعاد الحليمية)، وظليل عند الحاجة</td></tr>
+    <tr><td class="key">قطر LVOT</td><td>يُربَّع بحساب المساحة</td><td>قياس دقيق بنهاية الانقباض الباكرة بالموضع نفسه</td></tr>
+    <tr><td class="key">المرور بالنظم غير المنتظم</td><td>تذبذب القياسات بين النبضات</td><td>متوسط عدة نبضات (انظر فصل الفحص الطبيعي والفئات الخاصة)</td></tr>
+    <tr><td class="key">الكسب والفلاتر</td><td>تحديد حدود خاطئة، إشارات ضعيفة</td><td>ضبط الكسب وTGC وPRF والفلاتر</td></tr>
+    <tr><td class="key">التنفس ومعدل القلب</td><td>تغيّر التدفقات والسرعات</td><td>التقاط بنهاية الزفير الهادئ، وذكر HR</td></tr>
+  </table>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s6">٦. هل التغيّر حقيقي؟ (تقريبي)</h2>
+<p>لكل مقياس تفاوت طبيعي بين فحصين (متكرر أو بمراقب مختلف)، ويُعدّ التغيّر ذا معنى فقط إن تجاوزه:</p>
+  <table>
+    <tr><th>القياس</th><th>التغيّر المعتبر تقريباً</th></tr>
+    <tr><td class="key">EF</td><td class="num-cell">≥ نحو 8–10 نقاط مئوية</td></tr>
+    <tr><td class="key">أحجام البطين</td><td class="num-cell">≥ نحو 15–20%</td></tr>
+    <tr><td class="key">GLS</td><td class="num-cell">≥ نحو 2–3 نقاط مئوية (أو &gt; 15% نسبي)</td></tr>
+    <tr><td class="key">قطر الجذر الأبهري</td><td class="num-cell">≥ نحو 3 ملم بين فحصين بالتقنية نفسها</td></tr>
+    <tr><td class="key">السرعة الأبهرية (AS)</td><td class="num-cell">≥ نحو 0.3 م/ث</td></tr>
+  </table>
+  <div class="note"><b>القاعدة:</b> قارن بنفس المقياس والمنظر والتقنية (وبنفس الجهاز إن أمكن)، وأعد القياس القديم عند الشك.</div>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s7">٧. تحسين دقة قياساتك</h2>
+<ul>
+    <li><span class="key">بروتوكول ثابت</span> لكل فحص (ترتيب المناظر والقياسات).</li>
+    <li>خذ <span class="key">3 نبضات</span> بالنظم المنتظم، و<span class="key">5–10 نبضات</span> بالرجفان (أو نبضات ذات فاصل RR متقارب ويُحدَّد بـ«نبضة المؤشر»).</li>
+    <li>وثّق <span class="key">التوقيت من ECG</span> وحدّد نهاية الانبساط/الانقباض بنفس القاعدة.</li>
+    <li>استخدم الظليل عند عدم وضوح الحدود؛ وTOE عند الحاجة.</li>
+    <li>سجّل الطريقة والمرجع بالتقرير (Simpson، خطي، BSA، مرجعية ASE...).</li>
+    <li>راجع الصور بعد الفحص قبل إصدار التقرير.</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s8">٨. حالة طبيعية</h2>
+<p>«بطين أيسر بأبعاد طبيعية (LVIDd [ ] سم) وسماكة جدران طبيعية، ووظيفة انقباضية طبيعية (EF [ ]%) بلا اضطراب حركة موضعي. وظيفة انبساطية طبيعية. أذينان طبيعيان. بطين أيمن بحجم ووظيفة طبيعيين (TAPSE [ ] ملم). الدسامات الأربعة طبيعية الشكل والحركة، قلس طفيف فيزيولوجي بالتاجي/الثلاثي. أبهر طبيعي القطر. لا انصباب تاموري. PASP [ ] ملم زئبق.»</p>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s9">٩. البطين الأيسر</h2>
+<ul>
+    <li><span class="key">ضخامة مركزية:</span> «ضخامة مركزية للبطين الأيسر (سماكة الحاجز [ ] ملم، RWT [ ])، كتلة مفهرسة [ ] غ/م².»</li>
+    <li><span class="key">توسع مع ضعف شامل:</span> «بطين أيسر متوسع (LVIDd [ ] سم) مع نقص تقلص عام [خفيف/متوسط/شديد] (EF [ ]% بطريقة Simpson).»</li>
+    <li><span class="key">اضطراب موضعي:</span> «لاحركية بالجدار [ ] (القطع: [ ]) بما يتفق مع احتشاء بمنطقة [LAD/RCA/LCx]، مع نقص حركية بالجدار [ ]. EF [ ]%.»</li>
+    <li><span class="key">خثرة:</span> «كتلة [ ] × [ ] ملم بقمة البطين الأيسر مجاورة للجدار اللاحركي، تتفق مع خثرة (تُرى بمنظرين).»</li>
+    <li><span class="key">انبساط:</span> «خلل وظيفي انبساطي [من الدرجة I/II/III] مع مؤشرات ارتفاع ضغط الامتلاء (E/e′ [ ]، LAVI [ ]).»</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s10">١٠. الدسامات</h2>
+<ul>
+    <li><span class="key">تضيّق أبهري:</span> «دسام أبهري [ثلاثي/ثنائي] الشرف، [سماكة وتكلس]؛ سرعة الذروة [ ] م/ث، ممال [أعظمي/وسطي] [ ]/[ ] ملم زئبق، AVA [ ] سم² (مفهرسة [ ])، DVI [ ]: تضيّق أبهري [خفيف/متوسط/شديد].»</li>
+    <li><span class="key">قصور أبهري:</span> «قصور أبهري [خفيف/متوسط/شديد]، النفاثة [مركزية/لامركزية]، vena contracta [ ] ملم، PHT [ ] م ث، [مع/بدون] انعكاس انبساطي بالأبهر النازل.»</li>
+    <li><span class="key">تضيّق تاجي:</span> «تضيّق تاجي رثوي: تقبّب الوريقة الأمامية وسماكة بالوريقات والأوتار؛ ممال وسطي [ ] ملم زئبق عند معدل قلب [ ]، PHT [ ] م ث، MVA [ ] سم²؛ Wilkins [ ]. الأذين الأيسر [متوسع]؛ [لا خثرة ظاهرة].»</li>
+    <li><span class="key">قلس تاجي:</span> «قلس تاجي [خفيف/متوسط/شديد] بآلية [تدلٍّ/انفلات/وظيفي/رثوي]، vena contracta [ ] ملم، EROA [ ] ملم²، RVol [ ] مل، [انعكاس انقباضي بالوريد الرئوي].»</li>
+    <li><span class="key">قلس ثلاثي:</span> «قلس ثلاثي [ ] بآلية [ثانوية لتوسع الحلقة/أولية]، حلقة [ ] ملم، PASP [ ] ملم زئبق.»</li>
+    <li><span class="key">دسام صنعي:</span> «دسام [نوع] بالوضع [ ]، حركة [طبيعية/محدودة]، سرعة [ ] م/ث، ممال وسطي [ ] ملم زئبق، DVI [ ]؛ [لا قلس حول الدسام / قلس حول الدسام بمقدار [ ]].»</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s11">١١. التامور والبطين الأيمن والضغوط</h2>
+<ul>
+    <li><span class="key">انصباب تاموري:</span> «انصباب تاموري [صغير/متوسط/كبير] ([ ] ملم)، [شامل/موضعي]، [بدون/مع] علامات سطام (انهيار الأذين/البطين الأيمن، IVC متسع).»</li>
+    <li><span class="key">البطين الأيمن:</span> «بطين أيمن [متوسع/طبيعي]، وظيفة [طبيعية/منخفضة] (TAPSE [ ] ملم، S′ [ ] سم/ث).»</li>
+    <li><span class="key">فرط توتر رئوي:</span> «سرعة قلس الثلاثي [ ] م/ث، PASP تقديري [ ] ملم زئبق (RAP [ ])، [بالإضافة إلى علامات: تسطّح الحاجز، توسع الأذين الأيمن] ـ احتمال فرط توتر رئوي [منخفض/متوسط/مرتفع].»</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s12">١٢. الأبهر والكتل والأجهزة</h2>
+<ul>
+    <li><span class="key">توسع الأبهر:</span> «الجيوب [ ] ملم، الوصل الجيبي الأنبوبي [ ] ملم، الأبهر الصاعد [ ] ملم (Z-score [ ])؛ [مقارنة بفحص سابق: ثابت/زيادة [ ] ملم].»</li>
+    <li><span class="key">كتلة:</span> «كتلة [ ] × [ ] ملم بـ[الموضع]، [ذات ساق/عريضة القاعدة]، [متحركة/ثابتة]، بكثافة [ ]، [بدون/مع] أثر هيموديناميكي؛ يُنصح بـ[TOE/CMR].»</li>
+    <li><span class="key">ASD/PFO:</span> «ثقب [ثانوي] بالحاجز بين الأذينين [ ] ملم، حواف [كافية/ناقصة]، تحويلة [يسار–يمين]، Qp:Qs [ ]، توسع القلب الأيمن [ ]، PASP [ ].»</li>
+    <li><span class="key">جهاز:</span> «سلك [ ] بالأذين/البطين الأيمن، [لا كتل ظاهرة عليه]، [قلس ثلاثي مرافق].»</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s13">١٣. كتابة الخلاصة (Impression)</h2>
+<ul>
+    <li>ابدأ <span class="key">بالنتيجة الأهم سريرياً</span> وليس بترتيب التشريح.</li>
+    <li>عدد محدود من النقاط (3–6)، كل نقطة بجملة وبرقم عند اللزوم.</li>
+    <li>اربط النتائج بالسؤال السريري: «لا دليل على…»، «يتفق مع…»، «لا يمكن استبعاد…».</li>
+    <li>اذكر <span class="key">التغيّر عن الفحص السابق</span> إن وُجد.</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s14">١٤. التوصيات</h2>
+<ul>
+    <li>إيكو متابعة بعد [ ] أشهر (بحسب شدة الآفة).</li>
+    <li>TOE لـ[تنبتة/خثرة الأذين/التسرب حول الدسام] عند الشك.</li>
+    <li>CMR/CT لـ[الأبهر/التامور/الندبة].</li>
+    <li>تقييم قلبي تداخلي أو جراحي (فريق القلب) عند تحقق الاستطباب.</li>
+    <li>تصوير الشرايين أو إيكو إجهاد عند اضطراب الحركة الموضعي.</li>
+  </ul>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s15">١٥. النتائج الحرجة (تستدعي إبلاغاً فورياً)</h2>
+<table>
+    <tr><th>النتيجة</th><th>لماذا؟</th></tr>
+    <tr><td class="key">سطام تاموري أو انصباب مع تأثير هيموديناميكي</td><td>يحتاج تفريغاً عاجلاً</td></tr>
+    <tr><td class="key">شريحة تسلخ بالصاعد أو تمدد حاد</td><td>جراحة طارئة</td></tr>
+    <tr><td class="key">خثرة متحركة بالأذين أو البطين، أو ورم مخاطي معيق</td><td>خطر انصمام أو انسداد</td></tr>
+    <tr><td class="key">قلس تاجي أو أبهري حاد شديد، أو تمزق عضلة حليمية أو VSD بعد الاحتشاء</td><td>جراحة عاجلة وتثبيت الحالة</td></tr>
+    <tr><td class="key">صمّة رئوية كبيرة مع فشل RV</td><td>علاج فوري</td></tr>
+    <tr><td class="key">أم دم كاذبة بالبطين، تنبتة كبيرة بمضاعفات، خراج جذر</td><td>تدخل مستعجل</td></tr>
+    <tr><td class="key">خلل شديد جديد بالـ EF أو تضيّق أبهري شديد عَرَضي</td><td>تغيّر بالتدبير</td></tr>
+  </table>
+  <p>يُوثَّق <span class="key">وقت الإبلاغ واسم المستلم</span> بالتقرير.</p>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="s16">١٦. نماذج تقارير مختصرة</h2>
+<h3>أ) قصور قلب جديد</h3>
+  <p>«بطين أيسر متوسع (LVIDd [6.3] سم) مع نقص تقلص عام شديد (EF [25]% Simpson). قلس تاجي وظيفي [متوسط]. أذين أيسر متوسع (LAVI [48]). بطين أيمن [طبيعي الوظيفة]. PASP [45] ملم زئبق. لا انصباب تاموري. <span class="key">الخلاصة:</span> اعتلال عضلة توسعي/إقفاري يُنصح بالتقييم الإكليلي. لا خثرة بالقمة.»</p>
+  <h3>ب) بعد احتشاء أمامي</h3>
+  <p>«لاحركية قمية وأمامية ([القطع]) بتروية LAD، EF [35]%. [لا خثرة قمية ظاهرة]، لا قلس تاجي حاد، لا VSD، لا انصباب. <span class="key">الخلاصة:</span> احتشاء أمامي بدرجة [متوسطة]، يُنصح بإيكو متابعة بعد 6–12 أسبوعاً لتقدير EF لقرار ICD.»</p>
+  <h3>ج) تضيّق أبهري شديد قبل الجراحة</h3>
+  <p>«تضيّق أبهري شديد (ذروة [4.6] م/ث، ممال وسطي [52] ملم زئبق، AVA [0.7] سم²، DVI [0.2]). ضخامة مركزية خفيفة، EF [55]%. <span class="key">الخلاصة:</span> تضيّق أبهري شديد يتفق مع الأعراض؛ يُنصح بتقييم فريق القلب.»</p>
+  <h3>د) قبل جراحة غير قلبية</h3>
+  <p>«EF [60]% بلا اضطراب حركة موضعي. لا آفة دسامية ذات دلالة. PASP [28]. <span class="key">الخلاصة:</span> لا مانع قلبي من الإيكو للجراحة المقترحة.»</p>
+
+  <div class="sonar-rule"></div>
+
+  <h2 id="sum">خلاصة الفصل</h2>
+<dl class="glossary">
+    <dt>التغيّر الحقيقي</dt>
+    <dd>EF ≥ 8–10 نقاط، الأحجام ≥ 15–20%، GLS ≥ 2–3 نقاط (نحو)</dd>
+    <dt>أخطاء شائعة</dt>
+    <dd>زاوية الدوبلر، التقصير، رسم الحدود، قطر LVOT، النظم غير المنتظم</dd>
+    <dt>الترتيب</dt>
+    <dd>بيانات → LV → الانبساط → RV → الأذينان → الدسامات → الأبهر → التامور → الضغوط → أخرى → الخلاصة</dd>
+    <dt>القاعدة</dt>
+    <dd>رقم + وصف + طريقة + مقارنة، وإجابة سؤال الطلب صراحة</dd>
+    <dt>الأسلوب</dt>
+    <dd>جمل قصيرة بأرقام وأوصاف موحدة؛ اترك القوسين للقيمة ولا تُكمل ما لم يُقَس</dd>
+    <dt>الخلاصة</dt>
+    <dd>3–6 نقاط مرتبة بالأهمية، مرتبطة بالسؤال، ومع ذكر التغير عن السابق</dd>
+    <dt>النتائج الحرجة</dt>
+    <dd>تُبلَّغ فوراً مع تسجيل الوقت والمستلم</dd>
+</dl>
+
+</main>
+
+<div class="pager">
+  <a href="echo-basics-c11.html">
+    <span class="label">السابق</span>
+    <span class="title">→ الفصل 11: الإيكو الرئوي وتقييم السوائل</span>
+  </a>
+  <a href="echo-basics-c13.html">
+    <span class="label">التالي</span>
+    <span class="title">الفصل 13: الفحص الطبيعي والمتغيرات والفئات الخاصة ←</span>
+  </a>
+</div>
+
+<script>
+(function(){
+  try{
+    var p=new URLSearchParams(location.search).get('h'); if(!p) return;
+    var main=document.querySelector('main'); if(!main) return;
+    var CL={'ا':'[اأإآٱ]','أ':'[اأإآٱ]','إ':'[اأإآٱ]','آ':'[اأإآٱ]','ي':'[يىئ]','ى':'[يىئ]','ئ':'[يىئ]','و':'[وؤ]','ؤ':'[وؤ]','ه':'[هة]','ة':'[هة]'};
+    var D='[\\u064B-\\u065F\\u0670\\u0640]*';
+    function rx(t){var s='';for(var i=0;i<t.length;i++){var c=t.charAt(i);s+=(CL[c]||c.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'))+D;}return s;}
+    var toks=[],m,re=/"([^"]+)"|(\S+)/g;while((m=re.exec(p))){toks.push(m[1]||m[2]);}
+    if(!toks.length) return;
+    var R=new RegExp(toks.map(rx).join('|'),'gi');
+    var w=document.createTreeWalker(main,NodeFilter.SHOW_TEXT,{acceptNode:function(n){var t=n.parentNode&&n.parentNode.nodeName;return (t==='SCRIPT'||t==='STYLE'||t==='MARK')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT;}});
+    var nodes=[],n;while((n=w.nextNode()))nodes.push(n);
+    var first=null;
+    nodes.forEach(function(nd){
+      var txt=nd.nodeValue;R.lastIndex=0;if(!R.test(txt))return;R.lastIndex=0;
+      var frag=document.createDocumentFragment(),last=0,mm;
+      while((mm=R.exec(txt))){
+        if(mm[0]==='')break;
+        frag.appendChild(document.createTextNode(txt.slice(last,mm.index)));
+        var k=document.createElement('mark');k.className='eb-hit';k.textContent=mm[0];frag.appendChild(k);if(!first)first=k;last=mm.index+mm[0].length;
+      }
+      frag.appendChild(document.createTextNode(txt.slice(last)));nd.parentNode.replaceChild(frag,nd);
+    });
+    var go=function(){var h=location.hash&&document.querySelector(location.hash);(h||first)&&(h||first).scrollIntoView({block:'start'});};
+    setTimeout(go,60);
+  }catch(e){}
+})();
+</script>
+<script src="supabase.js"></script>
+<script>
+(async function(){
+  try{
+    const u = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdmin = u && u.is_admin;
+    const isSubscribed = !isAdmin && u ? await session.isSubscribed() : false;
+    if(!isAdmin && !isSubscribed){
+      location.href = 'subscription.html';
+    }
+  }catch(e){
+    location.href = 'subscription.html';
+  }
+})();
+</script>
+<script src="protection.js"></script>
+<script src="notes.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(console.warn);
+  });
+}
+</script>
+<script src="pwa-install.js"></script>
+<script src="presence-tracker.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var toggle = document.getElementById('themeToggle');
+  if(toggle){
+    var updateIcon = function(){
+      var current = document.documentElement.getAttribute('data-theme') || 'dark';
+      toggle.textContent = current === 'light' ? '\ud83c\udf19' : '\u2600\ufe0f';
+      toggle.title = current === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح';
+    };
+    updateIcon();
+    toggle.addEventListener('click', function(){
+      var current = document.documentElement.getAttribute('data-theme') || 'dark';
+      var next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      try{ localStorage.setItem('cardioarab-theme', next); }catch(e){}
+      updateIcon();
+    });
+  }
+  var b = document.getElementById('ebBack');
+  if(b){ b.addEventListener('click', function(){
+    var a = document.querySelector('nav a.back'), same = false;
+    try{ same = document.referrer && new URL(document.referrer).origin === location.origin; }catch(e){}
+    if(same && history.length > 1){ history.back(); }
+    else if(a){ location.href = a.getAttribute('href'); }
+    else { location.href = 'echo-basics-index.html'; }
+  }); }
+});
+</script>
+</body>
+</html>
